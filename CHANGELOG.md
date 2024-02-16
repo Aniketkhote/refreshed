@@ -1,3 +1,7 @@
+## 1.0.1
+
+- Fixed pub points
+
 ## 1.0.0
 
 # Initial Release Changelog
