@@ -10,11 +10,11 @@ This is a refreshed version of GetX, aimed at enhancing the robustness, reliabil
 
 - **Performance Optimization**: Our team has worked on optimizing performance to ensure that GetX continues to deliver high performance and minimal resource consumption.
 
-- **Enhanced Documentation**: We've improved the documentation to make it more comprehensive and user-friendly, providing clearer instructions and examples to help you get started with GetX quickly.
+<!-- - **Enhanced Documentation**: We've improved the documentation to make it more comprehensive and user-friendly, providing clearer instructions and examples to help you get started with GetX quickly.
 
 - **Updated Dependency Injection**: The dependency injection feature has been updated to provide better decoupling of dependencies, making your codebase cleaner and easier to maintain.
 
-- **Simplified Routing**: We've simplified the routing mechanism to make it more intuitive and easier to use, allowing you to navigate between screens with minimal boilerplate code.
+- **Simplified Routing**: We've simplified the routing mechanism to make it more intuitive and easier to use, allowing you to navigate between screens with minimal boilerplate code. -->
 
 ## Why Choose Refreshed GetX?
 
@@ -25,8 +25,6 @@ This is a refreshed version of GetX, aimed at enhancing the robustness, reliabil
 - **Support for Latest Technologies**: By supporting the latest Flutter and Dart packages, refreshed GetX enables you to leverage the newest features and functionalities available in the ecosystem.
 
 - **Community-Driven Development**: We've listened to feedback from the community and incorporated many suggestions and improvements to make GetX even better.
-
-Apologies for the oversight. Let's include the note you requested at the end of the README:
 
 ---
 

@@ -134,8 +134,7 @@ void main() {
     const referenceValue = 200;
     const requestedValue = 100;
 
-    printValue(
-        '''
+    printValue('''
 referenceValue is ${calculePercentage(referenceValue, requestedValue)}% more than requestedValue''');
     expect(calculePercentage(referenceValue, requestedValue), 100);
   });
@@ -156,8 +155,7 @@ referenceValue is ${calculePercentage(referenceValue, requestedValue)}% more tha
     printValue('ValueNotifier delay $dart ms to made $times requests');
     printValue('GetValue delay $getx ms to made $times requests');
     printValue('-----------');
-    printValue(
-        '''
+    printValue('''
 GetValue is ${calculePercentage(dart, getx).round()}% faster than Default ValueNotifier with $times requests''');
   });
 
@@ -170,8 +168,7 @@ GetValue is ${calculePercentage(dart, getx).round()}% faster than Default ValueN
     var mini = await miniStream();
     var dart = await stream();
     printValue('-----------');
-    printValue(
-        '''
+    printValue('''
 GetStream is ${calculePercentage(dart, mini).round()}% faster than Default Stream with $times requests''');
     printValue('-----------');
 
@@ -189,8 +186,7 @@ GetStream is ${calculePercentage(dart, mini).round()}% faster than Default Strea
     // printValue('getx_stream delay $getx ms to made $times requests');
     printValue('getx_mini_stream delay $mini ms to made $times requests');
     printValue('-----------');
-    printValue(
-        '''
+    printValue('''
 GetStream is ${calculePercentage(dart, mini).round()}% faster than Default Stream with $times requests''');
   });
 }

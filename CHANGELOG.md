@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Fixed data type issues.
+
 ## 1.0.1
 
 - Fixed pub points

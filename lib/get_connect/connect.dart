@@ -268,13 +268,15 @@ class GetConnect extends GetConnectInterface {
   }) {
     _checkIfDisposed(isHttp: false);
 
-    final newSocket = GetSocket(_concatUrl(url)!, ping: ping);
+    final GetSocket newSocket = GetSocket(_concatUrl(url)!, ping: ping);
     sockets.add(newSocket);
     return newSocket;
   }
 
   String? _concatUrl(String? url) {
-    if (url == null) return baseUrl;
+    if (url == null) {
+      return baseUrl;
+    }
     return baseUrl == null ? url : baseUrl! + url;
   }
 
@@ -305,9 +307,9 @@ class GetConnect extends GetConnectInterface {
     Map<String, String>? headers,
   }) async {
     try {
-      final res = await post(
+      final Response res = await post(
         url,
-        {'query': query, 'variables': variables},
+        <String, Object?>{'query': query, 'variables': variables},
         headers: headers,
       );
 
@@ -316,16 +318,18 @@ class GetConnect extends GetConnectInterface {
         return GraphQLResponse<T>(
             graphQLErrors: listError
                 .map((e) => GraphQLError(
-                      code: (e['extensions'] != null ? e['extensions']['code'] ?? '' : '').toString(),
+                      code: (e['extensions'] != null
+                              ? e['extensions']['code'] ?? ''
+                              : '')
+                          .toString(),
                       message: (e['message'] ?? '').toString(),
                     ))
                 .toList());
       }
       return GraphQLResponse<T>.fromResponse(res);
     } on Exception catch (_) {
-      return GraphQLResponse<T>(graphQLErrors: [
+      return GraphQLResponse<T>(graphQLErrors: <GraphQLError>[
         GraphQLError(
-          code: null,
           message: _.toString(),
         )
       ]);
@@ -340,9 +344,9 @@ class GetConnect extends GetConnectInterface {
     Map<String, String>? headers,
   }) async {
     try {
-      final res = await post(
+      final Response res = await post(
         url,
-        {'query': mutation, 'variables': variables},
+        <String, Object?>{'query': mutation, 'variables': variables},
         headers: headers,
       );
 
@@ -358,9 +362,8 @@ class GetConnect extends GetConnectInterface {
       }
       return GraphQLResponse<T>.fromResponse(res);
     } on Exception catch (_) {
-      return GraphQLResponse<T>(graphQLErrors: [
+      return GraphQLResponse<T>(graphQLErrors: <GraphQLError>[
         GraphQLError(
-          code: null,
           message: _.toString(),
         )
       ]);
@@ -373,13 +376,13 @@ class GetConnect extends GetConnectInterface {
 
   void _checkIfDisposed({bool isHttp = true}) {
     if (_isDisposed) {
-      throw 'Can not emit events to disposed clients';
+      throw Exception('Can not emit events to disposed clients');
     }
   }
 
   void dispose() {
     if (_sockets != null) {
-      for (var socket in sockets) {
+      for (final GetSocket socket in sockets) {
         socket.close();
       }
       _sockets?.clear();

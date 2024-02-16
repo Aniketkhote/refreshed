@@ -20,6 +20,28 @@ typedef ResponseInterceptor<T> = Future<Response<T>?> Function(
     Request<T> request, Type targetType, HttpClientResponse response);
 
 class GetHttpClient {
+  GetHttpClient({
+    this.userAgent = 'getx-client',
+    this.timeout = const Duration(seconds: 8),
+    this.followRedirects = true,
+    this.maxRedirects = 5,
+    this.sendUserAgent = false,
+    this.sendContentLength = true,
+    this.maxAuthRetries = 1,
+    bool allowAutoSignedCert = false,
+    this.baseUrl,
+    List<TrustedCertificate>? trustedCertificates,
+    bool withCredentials = false,
+    String Function(Uri url)? findProxy,
+    IClient? customClient,
+  })  : _httpClient = customClient ??
+            createHttp(
+              allowAutoSignedCert: allowAutoSignedCert,
+              trustedCertificates: trustedCertificates,
+              withCredentials: withCredentials,
+              findProxy: findProxy,
+            ),
+        _modifier = GetModifier();
   String userAgent;
   String? baseUrl;
 
@@ -45,29 +67,6 @@ class GetHttpClient {
 
   String Function(Uri url)? findProxy;
 
-  GetHttpClient({
-    this.userAgent = 'getx-client',
-    this.timeout = const Duration(seconds: 8),
-    this.followRedirects = true,
-    this.maxRedirects = 5,
-    this.sendUserAgent = false,
-    this.sendContentLength = true,
-    this.maxAuthRetries = 1,
-    bool allowAutoSignedCert = false,
-    this.baseUrl,
-    List<TrustedCertificate>? trustedCertificates,
-    bool withCredentials = false,
-    String Function(Uri url)? findProxy,
-    IClient? customClient,
-  })  : _httpClient = customClient ??
-            createHttp(
-              allowAutoSignedCert: allowAutoSignedCert,
-              trustedCertificates: trustedCertificates,
-              withCredentials: withCredentials,
-              findProxy: findProxy,
-            ),
-        _modifier = GetModifier();
-
   void addAuthenticator<T>(RequestModifier<T> auth) {
     _modifier.authenticator = auth as RequestModifier;
   }
@@ -92,7 +91,7 @@ class GetHttpClient {
     if (baseUrl != null) {
       url = baseUrl! + url!;
     }
-    final uri = Uri.parse(url!);
+    final Uri uri = Uri.parse(url!);
     if (query != null) {
       return uri.replace(queryParameters: query);
     }
@@ -111,7 +110,7 @@ class GetHttpClient {
   ) async {
     List<int>? bodyBytes;
     Stream<List<int>>? bodyStream;
-    final headers = <String, String>{};
+    final Map<String, String> headers = <String, String>{};
 
     if (sendUserAgent) {
       headers['user-agent'] = userAgent;
@@ -125,17 +124,17 @@ class GetHttpClient {
     } else if (contentType != null &&
         contentType.toLowerCase() == 'application/x-www-form-urlencoded' &&
         body is Map) {
-      var parts = [];
-      (body as Map<String, dynamic>).forEach((key, value) {
+      final List parts = <dynamic>[];
+      (body as Map<String, dynamic>).forEach((String key, value) {
         parts.add('${Uri.encodeQueryComponent(key)}='
             '${Uri.encodeQueryComponent(value.toString())}');
       });
-      var formData = parts.join('&');
+      final String formData = parts.join('&');
       bodyBytes = utf8.encode(formData);
       _setContentLength(headers, bodyBytes.length);
       headers['content-type'] = contentType;
     } else if (body is Map || body is List) {
-      var jsonString = json.encode(body);
+      final String jsonString = json.encode(body);
       bodyBytes = utf8.encode(jsonString);
       _setContentLength(headers, bodyBytes.length);
       headers['content-type'] = contentType ?? defaultContentType;
@@ -157,7 +156,7 @@ class GetHttpClient {
       bodyStream = _trackProgress(bodyBytes, uploadProgress);
     }
 
-    final uri = createUri(url, query);
+    final Uri uri = createUri(url, query);
     return Request<T>(
         method: method,
         url: uri,
@@ -180,15 +179,17 @@ class GetHttpClient {
     List<int> bodyBytes,
     Progress? uploadProgress,
   ) {
-    var total = 0;
-    var length = bodyBytes.length;
+    int total = 0;
+    final int length = bodyBytes.length;
 
-    var byteStream =
-        Stream.fromIterable(bodyBytes.map((i) => [i])).transform<List<int>>(
-      StreamTransformer.fromHandlers(handleData: (data, sink) {
+    final Stream<List<int>> byteStream =
+        Stream.fromIterable(bodyBytes.map((int i) => <int>[i]))
+            .transform<List<int>>(
+      StreamTransformer.fromHandlers(
+          handleData: (List<int> data, EventSink<List<int>> sink) {
         total += data.length;
         if (uploadProgress != null) {
-          var percent = total / length * 100;
+          final double percent = total / length * 100;
           uploadProgress(percent);
         }
         sink.add(data);
@@ -213,20 +214,20 @@ class GetHttpClient {
     int requestNumber = 1,
     Map<String, String>? headers,
   }) async {
-    var request = await handler();
+    final Request<T> request = await handler();
 
-    headers?.forEach((key, value) {
+    headers?.forEach((String key, String value) {
       request.headers[key] = value;
     });
 
     if (authenticate) await _modifier.authenticator!(request);
-    final newRequest = await _modifier.modifyRequest<T>(request);
+    final Request<T> newRequest = await _modifier.modifyRequest<T>(request);
 
     _httpClient.timeout = timeout;
     try {
-      var response = await _httpClient.send<T>(newRequest);
+      final Response<T> response = await _httpClient.send<T>(newRequest);
 
-      final newResponse =
+      final Response<T> newResponse =
           await _modifier.modifyResponse<T>(newRequest, response);
 
       if (HttpStatus.unauthorized == newResponse.statusCode &&
@@ -262,9 +263,7 @@ class GetHttpClient {
         return Response<T>(
           request: newRequest,
           headers: null,
-          statusCode: null,
-          body: null,
-          statusText: "$err",
+          statusText: '$err',
         );
       }
     }
@@ -277,9 +276,9 @@ class GetHttpClient {
     Decoder<T>? decoder,
     ResponseInterceptor<T>? responseInterceptor,
   ) {
-    final headers = <String, String>{};
+    final Map<String, String> headers = <String, String>{};
     _setSimpleHeaders(headers, contentType);
-    final uri = createUri(url, query);
+    final Uri uri = createUri(url, query);
 
     return Future.value(Request<T>(
       method: 'get',
@@ -296,9 +295,10 @@ class GetHttpClient {
   ResponseInterceptor<T>? _responseInterceptor<T>(
       ResponseInterceptor<T>? actual) {
     if (actual != null) return actual;
-    final defaultInterceptor = defaultResponseInterceptor;
+    final ResponseInterceptor? defaultInterceptor = defaultResponseInterceptor;
     return defaultInterceptor != null
-        ? (request, targetType, response) async =>
+        ? (Request<T> request, Type targetType,
+                HttpClientResponse response) async =>
             await defaultInterceptor(request, targetType, response)
                 as Response<T>?
         : null;
@@ -307,12 +307,12 @@ class GetHttpClient {
   Future<Request<T>> _request<T>(
     String? url,
     String method, {
-    String? contentType,
     required dynamic body,
     required Map<String, dynamic>? query,
+    required Progress? uploadProgress,
+    String? contentType,
     Decoder<T>? decoder,
     ResponseInterceptor<T>? responseInterceptor,
-    required Progress? uploadProgress,
   }) {
     return _requestWithBody<T>(
       url,
@@ -333,9 +333,9 @@ class GetHttpClient {
     Decoder<T>? decoder,
     ResponseInterceptor<T>? responseInterceptor,
   ) {
-    final headers = <String, String>{};
+    final Map<String, String> headers = <String, String>{};
     _setSimpleHeaders(headers, contentType);
-    final uri = createUri(url, query);
+    final Uri uri = createUri(url, query);
 
     return Request<T>(
       method: 'delete',
@@ -348,7 +348,8 @@ class GetHttpClient {
 
   Future<Response<T>> send<T>(Request<T> request) async {
     try {
-      var response = await _performRequest<T>(() => Future.value(request));
+      final Response<T> response =
+          await _performRequest<T>(() => Future.value(request));
       return response;
     } on Exception catch (e) {
       if (!errorSafety) {
@@ -372,7 +373,7 @@ class GetHttpClient {
     // List<MultipartFile> files,
   }) async {
     try {
-      var response = await _performRequest<T>(
+      final Response<T> response = await _performRequest<T>(
         () => _request<T>(
           url,
           'patch',
@@ -408,7 +409,7 @@ class GetHttpClient {
     // List<MultipartFile> files,
   }) async {
     try {
-      var response = await _performRequest<T>(
+      final Response<T> response = await _performRequest<T>(
         () => _request<T>(
           url,
           'post',
@@ -444,7 +445,7 @@ class GetHttpClient {
     Progress? uploadProgress,
   }) async {
     try {
-      var response = await _performRequest<T>(
+      final Response<T> response = await _performRequest<T>(
         () => _request<T>(
           url,
           method,
@@ -479,7 +480,7 @@ class GetHttpClient {
     Progress? uploadProgress,
   }) async {
     try {
-      var response = await _performRequest<T>(
+      final Response<T> response = await _performRequest<T>(
         () => _request<T>(
           url,
           'put',
@@ -512,7 +513,7 @@ class GetHttpClient {
     ResponseInterceptor<T>? responseInterceptor,
   }) async {
     try {
-      var response = await _performRequest<T>(
+      final Response<T> response = await _performRequest<T>(
         () => _get<T>(url, contentType, query, decoder, responseInterceptor),
         headers: headers,
       );
@@ -534,7 +535,7 @@ class GetHttpClient {
       Decoder<T>? decoder,
       ResponseInterceptor<T>? responseInterceptor}) async {
     try {
-      var response = await _performRequest<T>(
+      final Response<T> response = await _performRequest<T>(
         () async =>
             _delete<T>(url, contentType, query, decoder, responseInterceptor),
         headers: headers,

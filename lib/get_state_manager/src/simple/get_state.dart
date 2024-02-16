@@ -77,7 +77,7 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
       lazy: false,
       didChangeDependencies: didChangeDependencies,
       didUpdateWidget: didUpdateWidget,
-      child: Builder(builder: (context) {
+      child: Builder(builder: (BuildContext context) {
         final controller = Bind.of<T>(context, rebuild: true);
         return builder(controller);
       }),
@@ -188,16 +188,16 @@ abstract class Bind<T> extends StatelessWidget {
   static bool isPrepared<S>({String? tag}) => Get.isPrepared<S>(tag: tag);
 
   static void replace<P>(P child, {String? tag}) {
-    final info = Get.getInstanceInfo<P>(tag: tag);
-    final permanent = (info.isPermanent ?? false);
+    final InstanceInfo info = Get.getInstanceInfo<P>(tag: tag);
+    final bool permanent = info.isPermanent ?? false;
     delete<P>(tag: tag, force: permanent);
     Get.put(child, tag: tag, permanent: permanent);
   }
 
   static void lazyReplace<P>(InstanceBuilderCallback<P> builder,
       {String? tag, bool? fenix}) {
-    final info = Get.getInstanceInfo<P>(tag: tag);
-    final permanent = (info.isPermanent ?? false);
+    final InstanceInfo info = Get.getInstanceInfo<P>(tag: tag);
+    final bool permanent = info.isPermanent ?? false;
     delete<P>(tag: tag, force: permanent);
     Get.lazyPut(builder, tag: tag, fenix: fenix ?? permanent);
   }
@@ -239,7 +239,7 @@ abstract class Bind<T> extends StatelessWidget {
     bool rebuild = false,
     // Object Function(T value)? filter,
   }) {
-    final inheritedElement =
+    final BindElement<T>? inheritedElement =
         context.getElementForInheritedWidgetOfExactType<Binder<T>>()
             as BindElement<T>?;
 
@@ -361,8 +361,8 @@ class Binds extends StatelessWidget {
   }) : assert(binds.isNotEmpty);
 
   @override
-  Widget build(BuildContext context) =>
-      binds.reversed.fold(child, (widget, e) => e._copyWithChild(widget));
+  Widget build(BuildContext context) => binds.reversed
+      .fold(child, (Widget widget, Bind e) => e._copyWithChild(widget));
 }
 
 class Binder<T> extends InheritedWidget {
@@ -422,7 +422,7 @@ class BindElement<T> extends InheritedElement {
     initState();
   }
 
-  final disposers = <Disposer>[];
+  final List<Disposer> disposers = <Disposer>[];
 
   InitBuilder<T>? _controllerBuilder;
 
@@ -450,7 +450,7 @@ class BindElement<T> extends InheritedElement {
   void initState() {
     widget.initState?.call(this);
 
-    var isRegistered = Get.isRegistered<T>(tag: widget.tag);
+    final bool isRegistered = Get.isRegistered<T>(tag: widget.tag);
 
     if (widget.global) {
       if (isRegistered) {
@@ -463,7 +463,7 @@ class BindElement<T> extends InheritedElement {
         _controllerBuilder = () => Get.find<T>(tag: widget.tag);
       } else {
         _controllerBuilder =
-            () => (widget.create?.call(this) ?? widget.init?.call());
+            () => (widget.create?.call(this) ?? widget.init?.call()) as T;
         _isCreator = true;
         if (widget.lazy) {
           Get.lazyPut<T>(_controllerBuilder!, tag: widget.tag);
@@ -473,14 +473,15 @@ class BindElement<T> extends InheritedElement {
       }
     } else {
       if (widget.create != null) {
-        _controllerBuilder = () => widget.create!.call(this);
+        _controllerBuilder = () => widget.create!.call(this) as T;
         Get.spawn<T>(_controllerBuilder!, tag: widget.tag, permanent: false);
       } else {
         _controllerBuilder = widget.init;
       }
-      _controllerBuilder =
-          (widget.create != null ? () => widget.create!.call(this) : null) ??
-              widget.init;
+      _controllerBuilder = (widget.create != null
+              ? () => widget.create!.call(this) as T
+              : null) ??
+          widget.init;
       _isCreator = true;
       _needStart = true;
     }
@@ -493,7 +494,7 @@ class BindElement<T> extends InheritedElement {
     if (widget.filter != null) {
       _filter = widget.filter!(_controller as T);
     }
-    final filter = _filter != null ? _filterUpdate : getUpdate;
+    final void Function() filter = _filter != null ? _filterUpdate : getUpdate;
     final localController = _controller;
 
     if (_needStart == true && localController is GetLifeCycleMixin) {
@@ -513,13 +514,14 @@ class BindElement<T> extends InheritedElement {
       _remove = () => localController.removeListener(filter);
     } else if (localController is StreamController) {
       _remove?.call();
-      final stream = localController.stream.listen((_) => filter());
+      final StreamSubscription stream =
+          localController.stream.listen((_) => filter());
       _remove = () => stream.cancel();
     }
   }
 
   void _filterUpdate() {
-    var newFilter = widget.filter!(_controller as T);
+    final Object newFilter = widget.filter!(_controller as T);
     if (newFilter != _filter) {
       _filter = newFilter;
       getUpdate();
@@ -534,7 +536,7 @@ class BindElement<T> extends InheritedElement {
       }
     }
 
-    for (final disposer in disposers) {
+    for (final Disposer disposer in disposers) {
       disposer();
     }
 
@@ -553,12 +555,12 @@ class BindElement<T> extends InheritedElement {
   @override
   Binder<T> get widget => super.widget as Binder<T>;
 
-  var _dirty = false;
+  bool _dirty = false;
 
   @override
   void update(Binder<T> newWidget) {
-    final oldNotifier = widget.id;
-    final newNotifier = newWidget.id;
+    final Object? oldNotifier = widget.id;
+    final Object? newNotifier = newWidget.id;
     if (oldNotifier != newNotifier && _wasStarted) {
       _subscribeToController();
     }
