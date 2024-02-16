@@ -3,9 +3,9 @@ name: build
 # Trigger the workflow on push or pull request
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 #A workflow run is made up of one or more jobs. Jobs run in parallel by default.
 jobs:
   test:
@@ -23,7 +23,7 @@ jobs:
       # https://github.com/marketplace/actions/flutter-action
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.13.1"
+          flutter-version: "3.16.9"
           channel: "stable"
       - run: flutter pub get
       #- run: flutter analyze
