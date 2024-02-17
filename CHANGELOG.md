@@ -8,7 +8,7 @@
 
 ## 1.0.0
 
-# Initial Release Changelog
+## Initial Release Changelog
 
 ### Features:
 
