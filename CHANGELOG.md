@@ -1,3 +1,7 @@
+## 1.1.1
+
+- Fixed issues related to pub points and package metadata.
+
 ## 1.1.0
 
 - Added documentation comments for improved code documentation.
