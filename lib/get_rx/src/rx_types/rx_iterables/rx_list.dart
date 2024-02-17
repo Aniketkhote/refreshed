@@ -1,35 +1,48 @@
 part of '../rx_types.dart';
 
-/// Create a list similar to `List<T>`
+/// A reactive list that extends functionality similar to `List<T>` and provides automatic notifications on changes.
 class RxList<E> extends GetListenable<List<E>>
     with ListMixin<E>, RxObjectMixin<List<E>> {
+  /// Constructs an RxList.
+  ///
+  /// Optionally, an initial list can be provided.
   RxList([super.initial = const []]);
 
+  /// Constructs an RxList filled with a [fill] value.
   factory RxList.filled(int length, E fill, {bool growable = false}) {
     return RxList(List.filled(length, fill, growable: growable));
   }
 
+  /// Constructs an empty RxList.
+  ///
+  /// If [growable] is true, the list is growable; otherwise, it's fixed-length.
   factory RxList.empty({bool growable = false}) {
     return RxList(List.empty(growable: growable));
   }
 
-  /// Creates a list containing all [elements].
+  /// Constructs an RxList containing all [elements].
+  ///
+  /// If [growable] is true, the list is growable; otherwise, it's fixed-length.
   factory RxList.from(Iterable elements, {bool growable = true}) {
     return RxList(List.from(elements, growable: growable));
   }
 
-  /// Creates a list from [elements].
+  /// Constructs an RxList from [elements].
+  ///
+  /// If [growable] is true, the list is growable; otherwise, it's fixed-length.
   factory RxList.of(Iterable<E> elements, {bool growable = true}) {
     return RxList(List.of(elements, growable: growable));
   }
 
-  /// Generates a list of values.
+  /// Constructs an RxList by generating values.
+  ///
+  /// If [growable] is true, the list is growable; otherwise, it's fixed-length.
   factory RxList.generate(int length, E Function(int index) generator,
       {bool growable = true}) {
     return RxList(List.generate(length, generator, growable: growable));
   }
 
-  /// Creates an unmodifiable list containing all [elements].
+  /// Constructs an unmodifiable RxList containing all [elements].
   factory RxList.unmodifiable(Iterable elements) {
     return RxList(List.unmodifiable(elements));
   }
@@ -43,8 +56,7 @@ class RxList<E> extends GetListenable<List<E>>
     refresh();
   }
 
-  /// Special override to push() element(s) in a reactive way
-  /// inside the List,
+  /// Special override to push element(s) in a reactive way inside the list.
   @override
   RxList<E> operator +(Iterable<E> val) {
     addAll(val);
@@ -91,13 +103,6 @@ class RxList<E> extends GetListenable<List<E>>
   @override
   int get length => value.length;
 
-  // @override
-  // @protected
-  // List<E> get value {
-  //   RxInterface.proxy?.addListener(subject);
-  //   return subject.value;
-  // }
-
   @override
   set length(int newLength) {
     value.length = newLength;
@@ -112,12 +117,6 @@ class RxList<E> extends GetListenable<List<E>>
 
   @override
   Iterable<E> get reversed => value.reversed;
-
-  // @override
-  // set value(List<E> val) {
-  //   value = val;
-  //   refresh();
-  // }
 
   @override
   Iterable<E> where(bool Function(E) test) {
@@ -137,43 +136,45 @@ class RxList<E> extends GetListenable<List<E>>
 }
 
 extension ListExtension<E> on List<E> {
+  /// Converts a List<E> into an RxList<E>.
   RxList<E> get obs => RxList<E>(this);
 
   /// Add [item] to [List<E>] only if [item] is not null.
+  ///
+  /// If [item] is not null, it is added to the list.
   void addNonNull(E item) {
     if (item != null) add(item);
   }
 
-  // /// Add [Iterable<E>] to [List<E>] only if [Iterable<E>] is not null.
-  // void addAllNonNull(Iterable<E> item) {
-  //   if (item != null) addAll(item);
-  // }
-
   /// Add [item] to List<E> only if [condition] is true.
+  ///
+  /// If [condition] is a boolean value and evaluates to true, [item] is added to the list.
   void addIf(dynamic condition, E item) {
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) add(item);
   }
 
   /// Adds [Iterable<E>] to [List<E>] only if [condition] is true.
+  ///
+  /// If [condition] is a boolean value and evaluates to true, [items] are added to the list.
   void addAllIf(dynamic condition, Iterable<E> items) {
     if (condition is Condition) condition = condition();
     if (condition is bool && condition) addAll(items);
   }
 
-  /// Replaces all existing items of this list with [item]
+  /// Replaces all existing items of this list with [item].
+  ///
+  /// Clears the list and adds [item].
   void assign(E item) {
-    // if (this is RxList) {
-    //   (this as RxList)._value;
-    // }
-
     if (this is RxList) {
       (this as RxList).value.clear();
     }
     add(item);
   }
 
-  /// Replaces all existing items of this list with [items]
+  /// Replaces all existing items of this list with [items].
+  ///
+  /// Clears the list and adds all elements from [items].
   void assignAll(Iterable<E> items) {
     if (this is RxList) {
       (this as RxList).value.clear();

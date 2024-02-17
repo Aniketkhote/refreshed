@@ -53,8 +53,9 @@ class HttpRequestImpl implements IClient {
       reader.onLoad.first.then((_) async {
         var bodyBytes = (reader.result as List<int>).toStream();
 
-        if (request.responseInterceptor != null)
+        if (request.responseInterceptor != null) {
           throw 'response interception not implemented for web yet!';
+        }
 
         /*
         TODO to be implemented like in http_request_io.dart

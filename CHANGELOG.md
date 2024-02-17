@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Fixed minor issues.
+
 ## 1.0.2
 
 - Fixed data type issues.
