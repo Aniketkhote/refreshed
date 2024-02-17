@@ -2,13 +2,35 @@ library equality;
 
 import 'dart:collection';
 
+/// A mixin for implementing equality based on a list of properties.
+///
+/// This mixin provides an implementation of the equality operator `==` and the hash code getter `hashCode`
+/// based on a list of properties (`props`). It ensures that objects are considered equal if they have the same
+/// runtime type and their corresponding properties in the `props` list are deeply equal.
+///
+/// Example usage:
+/// ```dart
+/// class MyClass with Equality {
+///   final int id;
+///   final String name;
+///
+///   MyClass(this.id, this.name);
+///
+///   @override
+///   List get props => [id, name];
+/// }
+/// ```
+/// In this example, two `MyClass` objects are considered equal if they have the same `id` and `name`.
+/// The `props` list specifies the properties that are used for determining equality.
 mixin Equality {
+  /// The list of properties used for determining equality.
   List get props;
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        runtimeType == other.runtimeType &&
+        other is Equality &&
+            runtimeType == other.runtimeType &&
             const DeepCollectionEquality().equals(props, other.props);
   }
 

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:refreshed/utils.dart';
+import 'package:refreshed/refreshed.dart';
 
 void main() {
   test('String test', () {

@@ -1,3 +1,7 @@
+/// Library providing a collection of utilities and modules for managing state, navigation, animations, and more.
+///
+/// This library exports various sub-modules and utilities that can be used to build Flutter applications
+/// with improved state management, navigation handling, animation effects, and other functionalities.
 library refreshed;
 
 export 'get_animations/index.dart';

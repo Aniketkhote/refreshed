@@ -1,14 +1,19 @@
+## 1.1.0
+
+- Added documentation comments for improved code documentation.
+- Corrected typos in code and documentation.
+
 ## 1.0.3
 
-- Fixed minor issues.
+- Addressed minor issues and optimizations.
 
 ## 1.0.2
 
-- Fixed data type issues.
+- Resolved data type inconsistencies for better compatibility.
 
 ## 1.0.1
 
-- Fixed pub points
+- Fixed issues related to pub points and package metadata.
 
 ## 1.0.0
 

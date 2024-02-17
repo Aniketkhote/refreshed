@@ -6,12 +6,19 @@ import 'package:flutter/material.dart';
 import '../../../get_core/get_core.dart';
 import '../../get_navigation.dart';
 
+/// Callback signature for tap events on a `GetSnackBar`.
 typedef OnTap = void Function(GetSnackBar snack);
+
+/// Callback signature for hover events on a `GetSnackBar`.
 typedef OnHover = void Function(
     GetSnackBar snack, SnackHoverState snackHoverState);
 
+/// Callback signature for status changes on a `GetSnackBar`.
 typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
 
+/// A custom `StatefulWidget` for displaying snack bars.
+///
+/// This widget provides functionality for displaying snack bars with customizable behavior and appearance.
 class GetSnackBar extends StatefulWidget {
   /// A callback for you to listen to the different Snack status
   final SnackbarStatusCallback? snackbarStatus;
@@ -22,8 +29,8 @@ class GetSnackBar extends StatefulWidget {
   /// The direction in which the SnackBar can be dismissed.
   ///
   /// Default is [DismissDirection.down] when
-  /// [snackPosition] == [SnackPosition.BOTTOM] and [DismissDirection.up]
-  /// when [snackPosition] == [SnackPosition.TOP]
+  /// [snackPosition] == [SnackPosition.bttom] and [DismissDirection.up]
+  /// when [snackPosition] == [SnackPosition.top]
   final DismissDirection? dismissDirection;
 
   /// The message displayed to the user.
@@ -562,24 +569,20 @@ You need to either use message[String], or messageText[Widget] or define a userI
   void _updateProgress() => setState(() {});
 }
 
-enum RowStyle {
-  icon,
-  action,
-  all,
-  none,
-}
+/// An enumeration representing different styles for rows.
+enum RowStyle { icon, action, all, none }
 
 /// Indicates Status of snackbar
-/// [SnackbarStatus.OPEN] Snack is fully open, [SnackbarStatus.CLOSED] Snackbar
+/// [SnackbarStatus.open] Snack is fully open, [SnackbarStatus.closed] Snackbar
 /// has closed,
-/// [SnackbarStatus.OPENING] Starts with the opening animation and ends
+/// [SnackbarStatus.opening] Starts with the opening animation and ends
 /// with the full
-/// snackbar display, [SnackbarStatus.CLOSING] Starts with the closing animation
+/// snackbar display, [SnackbarStatus.closing] Starts with the closing animation
 /// and ends
 /// with the full snackbar dispose
 enum SnackbarStatus { open, closed, opening, closing }
 
-/// Indicates if snack is going to start at the [TOP] or at the [BOTTOM]
+/// Indicates if snack is going to start at the [top] or at the [bottom]
 enum SnackPosition { top, bottom }
 
 /// Indicates if snack will be attached to the edge of the screen or not
