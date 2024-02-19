@@ -106,6 +106,8 @@ typedef VoidCallback = void Function();
 
 /// A class that provides listenable behavior similar to `ValueNotifier`.
 class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
+  T _value;
+
   GetListenable(T val) : _value = val;
 
   StreamController<T>? _controller;
@@ -138,8 +140,6 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
   Stream<T> get stream {
     return subject.stream;
   }
-
-  T _value;
 
   @override
   T get value {

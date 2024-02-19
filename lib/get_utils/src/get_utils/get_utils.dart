@@ -631,10 +631,18 @@ class GetUtils {
     return finalResult;
   }
 
+  /// Checks if a given [value] matches a [pattern] using a regular expression.
+  ///
+  /// Returns `true` if the [value] matches the [pattern], `false` otherwise.
   static bool hasMatch(String? value, String pattern) {
     return (value == null) ? false : RegExp(pattern).hasMatch(value);
   }
 
+  /// Creates a path by concatenating the provided [path] and [segments].
+  ///
+  /// If [segments] is `null` or empty, the original [path] is returned.
+  /// Otherwise, the [path] is concatenated with each segment from [segments]
+  /// separated by a forward slash ('/').
   static String createPath(String path, [Iterable? segments]) {
     if (segments == null || segments.isEmpty) {
       return path;
@@ -643,6 +651,9 @@ class GetUtils {
     return path + list.join();
   }
 
+  /// Prints a message with a specified [prefix], [value], and additional [info].
+  ///
+  /// If [isError] is `true`, the message is logged as an error; otherwise, it is logged as an information.
   static void printFunction(
     String prefix,
     dynamic value,
@@ -653,6 +664,7 @@ class GetUtils {
   }
 }
 
+/// A function signature for printing messages with optional error indication.
 typedef PrintFunctionCallback = void Function(
   String prefix,
   dynamic value,

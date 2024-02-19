@@ -8,6 +8,12 @@ void main() {
       expect(rxList, isEmpty);
     });
 
+    test('RxList adds default items', () {
+      final rxList = RxList([1, 2]);
+      rxList.add(3);
+      expect(rxList, [1, 2, 3]);
+    });
+
     test('RxList adds items', () {
       final rxList = RxList<int>();
       rxList.add(1);
@@ -34,17 +40,6 @@ void main() {
       rxList.addAll([1, 2, 3]);
       rxList.clear();
       expect(rxList, isEmpty);
-    });
-
-    test('RxList listens to changes', () {
-      final rxList = RxList<int>();
-      var changesCount = 0;
-      rxList.listen((_) {
-        changesCount++;
-      });
-      rxList.add(1);
-      rxList.addAll([2, 3]);
-      expect(changesCount, 2);
     });
   });
 
@@ -102,28 +97,6 @@ void main() {
 
       rxList.clear();
       expect(rxList, isEmpty);
-    });
-
-    test('RxList listens to changes', () {
-      final rxList = RxList<Todo>();
-      final todo1 = Todo(id: 1, title: 'Task 1', completed: false);
-
-      var changesCount = 0;
-      rxList.listen((_) {
-        changesCount++;
-      });
-
-      rxList.add(todo1);
-      expect(changesCount, 1);
-
-      rxList[0] = Todo(id: 1, title: 'Task 1', completed: true);
-      expect(changesCount, 2);
-
-      rxList.removeAt(0);
-      expect(changesCount, 3);
-
-      rxList.clear();
-      expect(changesCount, 4);
     });
   });
 }

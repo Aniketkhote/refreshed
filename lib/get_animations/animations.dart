@@ -92,25 +92,6 @@ class ScaleAnimation extends GetAnimatedBuilder<double> {
         );
 }
 
-// class SlideAnimation extends GetAnimatedBuilder<Offset> {
-//   SlideAnimation({
-//     super.key,
-//     required super.duration,
-//     required super.delay,
-//     required super.child,
-//     super.onComplete,
-//     required Offset begin,
-//     required Offset end,
-//     super.idleValue = const Offset(0, 0),
-//   }) : super(
-//           builder: (context, value, child) => Transform.translate(
-//             offset: value,
-//             child: child,
-//           ),
-//           tween: Tween(begin: begin, end: end),
-//         );
-// }
-
 class BounceAnimation extends GetAnimatedBuilder<double> {
   BounceAnimation({
     super.key,
@@ -341,24 +322,24 @@ class SlideAnimation extends GetAnimatedBuilder<double> {
         );
 }
 
-// class ZoomAnimation extends GetAnimatedBuilder<double> {
-//   ZoomAnimation({
-//     super.key,
-//     required super.duration,
-//     required super.delay,
-//     required super.child,
-//     super.onComplete,
-//     required double begin,
-//     required double end,
-//     super.idleValue = 0,
-//   }) : super(
-//           builder: (context, value, child) => Transform.scale(
-//             scale: lerpDouble(1, end, value)!,
-//             child: child,
-//           ),
-//           tween: Tween<double>(begin: begin, end: end),
-//         );
-// }
+class ZoomAnimation extends GetAnimatedBuilder<double> {
+  ZoomAnimation({
+    super.key,
+    required super.duration,
+    required super.delay,
+    required super.child,
+    super.onComplete,
+    required double begin,
+    required double end,
+    super.idleValue = 0,
+  }) : super(
+          builder: (context, value, child) => Transform.scale(
+            scale: lerpDouble(1, end, value)!,
+            child: child,
+          ),
+          tween: Tween<double>(begin: begin, end: end),
+        );
+}
 
 class ColorAnimation extends GetAnimatedBuilder<Color?> {
   ColorAnimation({

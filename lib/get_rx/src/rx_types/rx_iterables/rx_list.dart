@@ -6,7 +6,8 @@ class RxList<E> extends GetListenable<List<E>>
   /// Constructs an RxList.
   ///
   /// Optionally, an initial list can be provided.
-  RxList([super.initial = const []]);
+  RxList([List<E> initial = const []])
+      : super(initial.isNotEmpty ? initial : List<E>.empty(growable: true));
 
   /// Constructs an RxList filled with a [fill] value.
   factory RxList.filled(int length, E fill, {bool growable = false}) {

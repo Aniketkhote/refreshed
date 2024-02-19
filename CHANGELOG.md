@@ -1,6 +1,10 @@
+## 1.1.3
+
+- Fixed an issue in RxList where a type error occurred when initializing with an empty list.
+
 ## 1.1.2
 
-- Updated readme file and fixed some minor issues.
+- Updated the readme file and addressed various minor issues.
 
 ## 1.1.1
 
