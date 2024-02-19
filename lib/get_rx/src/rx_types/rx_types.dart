@@ -1,3 +1,24 @@
+/// The `rx_types` library provides a collection of reactive programming utilities
+/// for managing state and building reactive components in Flutter applications.
+///
+/// This library includes classes and utilities for creating and managing reactive
+/// objects such as Rx (reactive) variables, RxLists, RxMaps, and RxSets.
+///
+/// - [Rx]: The base class for reactive objects that enables listening to changes
+///   and updating state reactively.
+///
+/// - [RxList]: A reactive list that allows listening to changes in the list
+///   and automatically updating UI components when the list changes.
+///
+/// - [RxMap]: A reactive map that enables listening to changes in the map
+///   and automatically updating UI components when the map changes.
+///
+/// - [RxSet]: A reactive set that provides the ability to listen to changes
+///   in the set and update UI components reactively.
+///
+/// This library is part of the GetX state management solution for Flutter,
+/// providing a simple and efficient way to manage application state and build
+/// reactive user interfaces.
 library rx_types;
 
 import 'dart:async';

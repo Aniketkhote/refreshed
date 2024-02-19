@@ -208,49 +208,62 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
   }
 }
 
+/// An Rx object for managing boolean values.
 class RxBool extends Rx<bool> {
   RxBool(super.initial);
+
   @override
   String toString() {
     return value ? "true" : "false";
   }
 }
 
+/// An Rx object for managing nullable boolean values.
 class RxnBool extends Rx<bool?> {
   RxnBool([super.initial]);
+
   @override
   String toString() {
     return "$value";
   }
 }
 
+/// Extension on [Rx<bool>] providing methods for boolean operations.
 extension RxBoolExt on Rx<bool> {
+  /// Returns `true` if the value is `true`.
   bool get isTrue => value;
 
+  /// Returns `true` if the value is `false`.
   bool get isFalse => !isTrue;
 
+  /// Performs a logical AND operation between the Rx value and [other].
   bool operator &(bool other) => other && value;
 
+  /// Performs a logical OR operation between the Rx value and [other].
   bool operator |(bool other) => other || value;
 
+  /// Performs a logical XOR operation between the Rx value and [other].
   bool operator ^(bool other) => !other == value;
 
-  /// Toggles the bool [value] between false and true.
-  /// A shortcut for `flag.value = !flag.value;`
+  /// Toggles the boolean value of the Rx object between `true` and `false`.
   void toggle() {
     call(!value);
     // return this;
   }
 }
 
+/// Extension on [Rx<bool?>] providing methods for nullable boolean operations.
 extension RxnBoolExt on Rx<bool?> {
+  /// Returns `true` if the value is `true`.
   bool? get isTrue => value;
 
+  /// Returns `true` if the value is `false`.
   bool? get isFalse {
     if (value != null) return !isTrue!;
     return null;
   }
 
+  /// Performs a logical AND operation between the Rx value and [other].
   bool? operator &(bool other) {
     if (value != null) {
       return other && value!;
@@ -258,6 +271,7 @@ extension RxnBoolExt on Rx<bool?> {
     return null;
   }
 
+  /// Performs a logical OR operation between the Rx value and [other].
   bool? operator |(bool other) {
     if (value != null) {
       return other || value!;
@@ -265,10 +279,10 @@ extension RxnBoolExt on Rx<bool?> {
     return null;
   }
 
+  /// Performs a logical XOR operation between the Rx value and [other].
   bool? operator ^(bool other) => !other == value;
 
-  /// Toggles the bool [value] between false and true.
-  /// A shortcut for `flag.value = !flag.value;`
+  /// Toggles the boolean value of the Rx object between `true` and `false`.
   void toggle() {
     if (value != null) {
       call(!value!);
@@ -294,39 +308,31 @@ class Rx<T> extends _RxImpl<T> {
   }
 }
 
-class Rxn<T> extends Rx<T?> {
-  Rxn([super.initial]);
-
-  @override
-  dynamic toJson() {
-    try {
-      return (value as dynamic)?.toJson();
-    } on Exception catch (_) {
-      throw '$T has not method [toJson]';
-    }
-  }
-}
-
+/// Extension on [String] providing methods to create reactive strings.
 extension StringExtension on String {
   /// Returns a `RxString` with [this] `String` as initial value.
   RxString get obs => RxString(this);
 }
 
+/// Extension on [int] providing methods to create reactive integers.
 extension IntExtension on int {
   /// Returns a `RxInt` with [this] `int` as initial value.
   RxInt get obs => RxInt(this);
 }
 
+/// Extension on [double] providing methods to create reactive doubles.
 extension DoubleExtension on double {
   /// Returns a `RxDouble` with [this] `double` as initial value.
   RxDouble get obs => RxDouble(this);
 }
 
+/// Extension on [bool] providing methods to create reactive booleans.
 extension BoolExtension on bool {
   /// Returns a `RxBool` with [this] `bool` as initial value.
   RxBool get obs => RxBool(this);
 }
 
+/// Extension on [T] providing methods to create reactive instances of type [T].
 extension RxT<T extends Object> on T {
   /// Returns a `Rx` instance with [this] `T` as initial value.
   Rx<T> get obs => Rx<T>(this);

@@ -1,3 +1,7 @@
+## 1.1.2
+
+- Updated readme file and fixed some minor issues.
+
 ## 1.1.1
 
 - Fixed issues related to pub points and package metadata.

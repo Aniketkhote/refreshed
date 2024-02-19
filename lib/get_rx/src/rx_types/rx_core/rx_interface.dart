@@ -13,8 +13,11 @@ abstract class RxInterface<T> implements ValueListenable<T> {
       {Function? onError, void Function()? onDone, bool? cancelOnError});
 }
 
+/// Represents an error specific to the use of GetX or Obx.
 class ObxError {
   const ObxError();
+
+  /// Returns a formatted string describing the error.
   @override
   String toString() {
     return """

@@ -583,27 +583,6 @@ void main() {
         'Acuda cadela da Leda caduca.',
         'A dama admirou o rim da amada.',
         'A Daniela ama a lei? Nada!',
-
-        // TODO make isPalindrome regex support UTF8 characters
-        // 'Adias a data da saída.',
-        // 'A diva em Argel alegra-me a vida.',
-        // 'A droga do dote é todo da gorda.',
-        // 'A gorda ama a droga.',
-        // 'A grama é amarga.',
-        // 'Aí, Lima falou: “Olá, família!”.',
-        // 'anã',
-        // 'anilina',
-        // 'ata',
-        // 'arara',
-        // 'asa',
-        // 'ele',
-        // 'esse',
-        // 'mamam',
-        // 'matam',
-        // 'metem',
-        // 'mirim',
-        // 'oco',
-        // 'omissíssimo',
       ];
       for (final palindrom in palindroms) {
         // print("testing $palindrom");

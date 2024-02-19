@@ -6,21 +6,61 @@ import '../../../get_instance/src/extension_instance.dart';
 import '../../../get_instance/src/lifecycle.dart';
 import '../simple/list_notifier.dart';
 
+/// A typedef representing a builder function for GetX controllers.
+///
+/// This typedef defines a function signature for building widgets based on GetX controllers.
+/// It takes a single parameter of type [T], which is expected to be a subclass of [GetLifeCycleMixin],
+/// and returns a [Widget].
 typedef GetXControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
     T controller);
 
+/// A widget that manages the lifecycle of a controller and rebuilds its child widget whenever the controller changes.
+///
+/// The [GetX] widget is designed to work with controllers that extend [GetLifeCycleMixin].
+/// It can be used to manage the lifecycle of a controller and rebuild its child widget whenever the controller changes.
 class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
+  /// The builder function that creates the child widget based on the controller.
   final GetXControllerBuilder<T> builder;
+
+  /// Whether the controller should be registered globally.
+  ///
+  /// If set to `true`, the controller will be registered globally using [Get.put].
+  /// If set to `false`, the controller will not be registered globally.
   final bool global;
+
+  /// Whether the controller should be automatically removed when the widget is disposed.
+  ///
+  /// If set to `true`, the controller will be removed from the global registry when the widget is disposed.
+  /// If set to `false`, the controller will not be automatically removed.
   final bool autoRemove;
+
+  /// Whether to assign a unique ID to the controller when registering globally.
+  ///
+  /// If set to `true`, a unique ID will be assigned to the controller when registering it globally.
+  /// If set to `false`, no ID will be assigned.
   final bool assignId;
-  final void Function(GetXState<T> state)? initState,
-      dispose,
-      didChangeDependencies;
+
+  /// Callback function called when the widget is initialized.
+  final void Function(GetXState<T> state)? initState;
+
+  /// Callback function called when the widget is disposed.
+  final void Function(GetXState<T> state)? dispose;
+
+  /// Callback function called when the widget's dependencies change.
+  final void Function(GetXState<T> state)? didChangeDependencies;
+
+  /// Callback function called when the widget is updated with new data.
   final void Function(GetX oldWidget, GetXState<T> state)? didUpdateWidget;
+
+  /// The initial controller to use.
   final T? init;
+
+  /// An optional tag to identify the controller when registered globally.
   final String? tag;
 
+  /// Constructs a [GetX] widget.
+  ///
+  /// The [builder] argument is required and must not be null.
   const GetX({
     super.key,
     this.tag,
@@ -29,12 +69,10 @@ class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
     this.autoRemove = true,
     this.initState,
     this.assignId = false,
-    //  this.stream,
     this.dispose,
     this.didChangeDependencies,
     this.didUpdateWidget,
     this.init,
-    // this.streamController
   });
 
   @override
@@ -56,6 +94,9 @@ class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
   GetXState<T> createState() => GetXState<T>();
 }
 
+/// The state for the [GetX] widget.
+///
+/// Manages the lifecycle of the controller and rebuilds the child widget whenever the controller changes.
 class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   T? controller;
   bool? _isCreator = false;

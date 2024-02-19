@@ -10,9 +10,11 @@ import '../../get_state_manager.dart';
 import '../simple/list_notifier.dart';
 
 extension _Empty on Object {
+  /// Checks if the object is empty.
+  ///
+  /// Returns `true` if the object is `null`, an empty `Iterable`, an empty `String`, or an empty `Map`.
   bool _isEmpty() {
     final val = this;
-    // if (val == null) return true;
     var result = false;
     if (val is Iterable) {
       result = val.isEmpty;
@@ -25,6 +27,7 @@ extension _Empty on Object {
   }
 }
 
+/// A mixin that provides state management capabilities.
 mixin StateMixin<T> on ListNotifier {
   T? _value;
   GetStatus<T>? _status;
@@ -35,13 +38,16 @@ mixin StateMixin<T> on ListNotifier {
         : GetStatus<T>.success(_value as T);
   }
 
+  /// Gets the current status of the state.
   GetStatus<T> get status {
     reportRead();
     return _status ??= _status = GetStatus.loading();
   }
 
+  /// Gets the current state.
   T get state => value;
 
+  /// Sets the status of the state.
   set status(GetStatus<T> newStatus) {
     if (newStatus == status) return;
     _status = newStatus;
@@ -71,6 +77,9 @@ mixin StateMixin<T> on ListNotifier {
     }
   }
 
+  /// Fetches data asynchronously and updates the state accordingly.
+  ///
+  /// The [body] function should return a `Future` which resolves to the new state.
   void futurize(Future<T> Function() body,
       {T? initialData, String? errorMessage, bool useEmpty = true}) {
     final compute = body;
@@ -81,7 +90,6 @@ mixin StateMixin<T> on ListNotifier {
       } else {
         status = GetStatus<T>.success(newValue);
       }
-
       refresh();
     }, onError: (err) {
       status = GetStatus.error(errorMessage ?? err.toString());
@@ -90,15 +98,19 @@ mixin StateMixin<T> on ListNotifier {
   }
 }
 
+/// A callback that returns a `Future`.
 typedef FuturizeCallback<T> = Future<T> Function(VoidCallback fn);
 
+/// A typedef representing a void callback.
 typedef VoidCallback = void Function();
 
+/// A class that provides listenable behavior similar to `ValueNotifier`.
 class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
   GetListenable(T val) : _value = val;
 
   StreamController<T>? _controller;
 
+  /// The subject stream controller for broadcasting updates.
   StreamController<T> get subject {
     if (_controller == null) {
       _controller =
@@ -122,6 +134,7 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
     dispose();
   }
 
+  /// The stream of values.
   Stream<T> get stream {
     return subject.stream;
   }
@@ -169,6 +182,7 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
   String toString() => value.toString();
 }
 
+/// A class similar to `ValueNotifier` with additional state management capabilities.
 class Value<T> extends ListNotifier
     with StateMixin<T>
     implements ValueListenable<T?> {
@@ -208,13 +222,19 @@ class Value<T> extends ListNotifier
   dynamic toJson() => (value as dynamic)?.toJson();
 }
 
-/// GetNotifier has a native status and state implementation, with the
-/// Get Lifecycle
+/// A class representing a state notifier with a Get lifecycle.
+///
+/// Extends [Value] and implements [GetLifeCycleMixin].
 abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
   GetNotifier(super.initial);
 }
 
+/// Extension methods for the [StateMixin] class.
 extension StateExt<T> on StateMixin<T> {
+  /// Builds a widget based on the current state.
+  ///
+  /// This method provides a convenient way to build widgets based on the state's status.
+  /// It takes a [NotifierBuilder] function as a parameter, which defines the widget to be built based on the state's value.
   Widget obx(
     NotifierBuilder<T?> widget, {
     Widget Function(String? error)? onError,
@@ -228,7 +248,7 @@ extension StateExt<T> on StateMixin<T> {
       } else if (status.isError) {
         return onError != null
             ? onError(status.errorMessage)
-            : Center(child: Text('A error occurred: ${status.errorMessage}'));
+            : Center(child: Text('An error occurred: ${status.errorMessage}'));
       } else if (status.isEmpty) {
         return onEmpty ??
             const SizedBox.shrink(); // Also can be widget(null); but is risky
@@ -243,8 +263,10 @@ extension StateExt<T> on StateMixin<T> {
   }
 }
 
+/// A builder function for creating widgets based on a state.
 typedef NotifierBuilder<T> = Widget Function(T state);
 
+/// A class representing the status of a state.
 abstract class GetStatus<T> with Equality {
   const GetStatus();
 
@@ -259,25 +281,19 @@ abstract class GetStatus<T> with Equality {
   factory GetStatus.custom() => CustomStatus<T>();
 }
 
+/// A custom status indicating that the state is in a custom state.
 class CustomStatus<T> extends GetStatus<T> {
   @override
   List get props => [];
 }
 
+/// A status indicating that the state is currently loading.
 class LoadingStatus<T> extends GetStatus<T> {
   @override
   List get props => [];
 }
 
-class SuccessStatus<T> extends GetStatus<T> {
-  final T data;
-
-  const SuccessStatus(this.data);
-
-  @override
-  List get props => [data];
-}
-
+/// A status indicating that the state has encountered an error.
 class ErrorStatus<T, S> extends GetStatus<T> {
   final S? error;
 
@@ -287,22 +303,30 @@ class ErrorStatus<T, S> extends GetStatus<T> {
   List get props => [error];
 }
 
+/// A status indicating that the state is empty.
 class EmptyStatus<T> extends GetStatus<T> {
   @override
   List get props => [];
 }
 
+/// Extension methods for the [GetStatus] class.
 extension StatusDataExt<T> on GetStatus<T> {
+  /// Checks if the status indicates that the state is loading.
   bool get isLoading => this is LoadingStatus;
 
+  /// Checks if the status indicates that the state is successful.
   bool get isSuccess => this is SuccessStatus;
 
+  /// Checks if the status indicates that the state has encountered an error.
   bool get isError => this is ErrorStatus;
 
+  /// Checks if the status indicates that the state is empty.
   bool get isEmpty => this is EmptyStatus;
 
+  /// Checks if the status is a custom status.
   bool get isCustom => !isLoading && !isSuccess && !isError && !isEmpty;
 
+  /// Gets the error message associated with the status.
   String get errorMessage {
     final isError = this is ErrorStatus;
     if (isError) {
@@ -311,10 +335,10 @@ extension StatusDataExt<T> on GetStatus<T> {
         return err.error as String;
       }
     }
-
     return '';
   }
 
+  /// Gets the data associated with the status if it is a success status.
   T? get data {
     if (this is SuccessStatus<T>) {
       final success = this as SuccessStatus<T>;
@@ -322,4 +346,16 @@ extension StatusDataExt<T> on GetStatus<T> {
     }
     return null;
   }
+}
+
+/// A status indicating that the state has been successfully updated with data of type `T`.
+class SuccessStatus<T> extends GetStatus<T> {
+  /// The data associated with the success status.
+  final T data;
+
+  /// Constructs a [SuccessStatus] with the given [data].
+  const SuccessStatus(this.data);
+
+  @override
+  List get props => [data];
 }

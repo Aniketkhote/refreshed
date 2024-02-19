@@ -43,7 +43,7 @@ class RxList<E> extends GetListenable<List<E>>
   }
 
   /// Constructs an unmodifiable RxList containing all [elements].
-  factory RxList.unmodifiable(Iterable elements) {
+  factory RxList.unmodifiable(Iterable<E> elements) {
     return RxList(List.unmodifiable(elements));
   }
 

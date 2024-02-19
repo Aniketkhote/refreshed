@@ -198,8 +198,11 @@ extension ExtensionDialog on GetInterface {
                 borderRadius: BorderRadius.circular(radius)),
           ),
           onPressed: () {
-            onCancel?.call();
-            back();
+            if (onCancel == null) {
+              closeAllDialogs();
+            } else {
+              onCancel.call();
+            }
           },
           child: Text(
             textCancel ?? 'Cancel',

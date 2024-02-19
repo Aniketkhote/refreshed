@@ -3,9 +3,10 @@ import 'package:flutter/widgets.dart';
 import '../../../get_rx/src/rx_types/rx_types.dart';
 import '../simple/simple_builder.dart';
 
+/// Callback signature for a widget builder function.
 typedef WidgetCallback = Widget Function();
 
-/// The [ObxWidget] is the base for all GetX reactive widgets
+/// The [ObxWidget] is the base for all GetX reactive widgets.
 ///
 /// See also:
 /// - [Obx]
@@ -19,11 +20,15 @@ abstract class ObxWidget extends ObxStatelessWidget {
 /// Just pass your Rx variable in the root scope of the callback to have it
 /// automatically registered for changes.
 ///
+/// Example:
+/// ```dart
 /// final _name = "GetX".obs;
-/// Obx(() => Text( _name.value )),... ;
+/// Obx(() => Text(_name.value)),
+/// ```
 class Obx extends ObxWidget {
   final WidgetCallback builder;
 
+  /// Constructs an [Obx] widget with the given [builder].
   const Obx(this.builder, {super.key});
 
   @override
@@ -32,21 +37,25 @@ class Obx extends ObxWidget {
   }
 }
 
-/// Similar to Obx, but manages a local state.
-/// Pass the initial data in constructor.
+/// Similar to [Obx], but manages a local state.
+/// Pass the initial data in the constructor.
 /// Useful for simple local states, like toggles, visibility, themes,
 /// button states, etc.
-///  Sample:
-///    ObxValue((data) => Switch(
-///      value: data.value,
-///      onChanged: (flag) => data.value = flag,
-///    ),
-///    false.obs,
-///   ),
+///
+/// Example:
+/// ```dart
+/// ObxValue((data) => Switch(
+///   value: data.value,
+///   onChanged: (flag) => data.value = flag,
+/// ),
+/// false.obs,
+/// ),
+/// ```
 class ObxValue<T extends RxInterface> extends ObxWidget {
   final Widget Function(T) builder;
   final T data;
 
+  /// Constructs an [ObxValue] widget with the given [builder] and [data].
   const ObxValue(this.builder, this.data, {super.key});
 
   @override
