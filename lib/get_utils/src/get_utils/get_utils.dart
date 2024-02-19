@@ -1,5 +1,3 @@
-import '../../../get_core/get_core.dart';
-
 /// Returns whether a dynamic value PROBABLY
 /// has the isEmpty getter/method by checking
 /// standard dart types that contains it.
@@ -498,7 +496,7 @@ class GetUtils {
   }
 
   /// Capitalize each word inside string
-  /// Example: your name => Your Name, your name => Your name
+  /// Example: your name => Your Name
   static String capitalize(String value) {
     if (isBlank(value)!) return value;
     return value.split(' ').map(capitalizeFirst).join(' ');
@@ -650,24 +648,4 @@ class GetUtils {
     final list = segments.map((e) => '/$e');
     return path + list.join();
   }
-
-  /// Prints a message with a specified [prefix], [value], and additional [info].
-  ///
-  /// If [isError] is `true`, the message is logged as an error; otherwise, it is logged as an information.
-  static void printFunction(
-    String prefix,
-    dynamic value,
-    String info, {
-    bool isError = false,
-  }) {
-    Get.log('$prefix $value $info'.trim(), isError: isError);
-  }
 }
-
-/// A function signature for printing messages with optional error indication.
-typedef PrintFunctionCallback = void Function(
-  String prefix,
-  dynamic value,
-  String info, {
-  bool? isError,
-});
