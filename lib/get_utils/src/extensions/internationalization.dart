@@ -114,6 +114,9 @@ extension Trans on String {
     }
   }
 
+  /// Returns a translated string with arguments replaced.
+  ///
+  /// [args] is a list of strings representing arguments to be replaced in the translated string.
   String trArgs([List<String> args = const []]) {
     var key = tr;
     if (args.isNotEmpty) {
@@ -124,10 +127,16 @@ extension Trans on String {
     return key;
   }
 
+  /// Returns a translated string with pluralization support and arguments replaced.
+  ///
+  /// If [i] is 1, returns [trArgs] with [args] replaced. Otherwise, returns [pluralKey] translated string with [args] replaced.
   String trPlural([String? pluralKey, int? i, List<String> args = const []]) {
     return i == 1 ? trArgs(args) : pluralKey!.trArgs(args);
   }
 
+  /// Returns a translated string with parameters replaced.
+  ///
+  /// [params] is a map where keys represent parameter placeholders in the translated string (e.g., '@key') and values represent the replacement strings.
   String trParams([Map<String, String> params = const {}]) {
     var trans = tr;
     if (params.isNotEmpty) {
@@ -138,6 +147,9 @@ extension Trans on String {
     return trans;
   }
 
+  /// Returns a translated string with pluralization support and parameters replaced.
+  ///
+  /// If [i] is 1, returns [trParams] with [params] replaced. Otherwise, returns [pluralKey] translated string with [params] replaced.
   String trPluralParams(
       [String? pluralKey, int? i, Map<String, String> params = const {}]) {
     return i == 1 ? trParams(params) : pluralKey!.trParams(params);
