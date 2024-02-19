@@ -1,11 +1,11 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: jonataslaw
-
+title: ""
+labels: ""
+assignees: Aniketkhote
 ---
+
 **ATTENTION: DO NOT USE THIS FIELD TO ASK SUPPORT QUESTIONS. USE THE PLATFORM CHANNELS FOR THIS. THIS SPACE IS DEDICATED ONLY FOR BUGS DESCRIPTION.**
 **Fill in the template. Issues that do not respect the model will be closed.**
 
@@ -37,6 +37,7 @@ class Home extends StatelessWidget {
 
 **To Reproduce**
 Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
