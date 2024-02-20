@@ -682,7 +682,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     name = name.replaceAll('() => ', '');
 
     // Convert the route name to kebab case
-    name = name.paramCase!;
+    // name = name.paramCase!;
 
     if (!name.startsWith('/')) {
       name = '/$name';

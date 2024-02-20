@@ -2,7 +2,6 @@
 
 - Removed duplicate methods and extensions to improve code cleanliness and reduce redundancy.
 - Implemented stop behavior in the delay extension, allowing users to cancel the delay before it completes.
-- Addressed minor issues in route parsing to enhance the accuracy and reliability of route handling.
 
 ## 1.1.3
 

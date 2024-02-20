@@ -1099,7 +1099,7 @@ extension GetNavigationExt on GetInterface {
     name = name.replaceAll('() => ', '');
 
     // Convert the route name to kebab case
-    name = name.paramCase!;
+    // name = name.paramCase!;
 
     if (!name.startsWith('/')) {
       name = '/$name';
