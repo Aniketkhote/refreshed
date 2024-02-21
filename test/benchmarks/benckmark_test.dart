@@ -79,30 +79,6 @@ Future<int> stream() {
   return c.future;
 }
 
-// Future<int> getStream() {
-//   final c = Completer<int>();
-
-//   final value = GetStream<int>();
-//   final timer = Stopwatch();
-//   timer.start();
-
-//   value.listen((v) {
-//     if (times == v) {
-//       timer.stop();
-//       printValue(
-// """$v listeners notified |
-// [GET_STREAM] time: ${timer.elapsedMicroseconds}ms""");
-//       c.complete(timer.elapsedMicroseconds);
-//     }
-//   });
-
-//   for (var i = 0; i < times + 1; i++) {
-//     value.add(i);
-//   }
-
-//   return c.future;
-// }
-
 Future<int> miniStream() {
   final c = Completer<int>();
 

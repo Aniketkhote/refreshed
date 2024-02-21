@@ -641,36 +641,6 @@ void main() {
       expect(specialCaracters.isCurrency, false);
     });
 
-    test('var.isCpf', () {
-      final cpfs = [
-        '370.559.380-31',
-        '055.878.430-50',
-        '655.232.870-24',
-        '86497047000',
-        '12341309046',
-        '31496294033',
-      ];
-
-      for (final cpf in cpfs) {
-        expect(cpf.isCpf, true);
-      }
-
-      expect(specialCaracters.isCpf, false);
-    });
-    test('var.isCnpj', () {
-      final cnpjs = [
-        '11.066.893/0001-94',
-        '21.883.660/0001-38',
-        '59.705.218/0001-94',
-      ];
-
-      for (final cnpj in cnpjs) {
-        expect(cnpj.isCnpj, true);
-      }
-
-      expect(specialCaracters.isCnpj, false);
-    });
-
     test('var.isCaseInsensitiveContains(string)', () {
       const phrase = 'Back to Square One';
 

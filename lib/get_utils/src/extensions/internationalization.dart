@@ -10,27 +10,36 @@ class _IntlHost {
   Map<String, Map<String, String>> translations = {};
 }
 
+/// Extension methods for handling internationalization within GetX.
 extension LocalesIntl on GetInterface {
   static final _intlHost = _IntlHost();
 
+  /// Gets the current locale.
   Locale? get locale => _intlHost.locale;
 
+  /// Gets the fallback locale.
   Locale? get fallbackLocale => _intlHost.fallbackLocale;
 
+  /// Sets the current locale.
   set locale(Locale? newLocale) => _intlHost.locale = newLocale;
 
+  /// Sets the fallback locale.
   set fallbackLocale(Locale? newLocale) => _intlHost.fallbackLocale = newLocale;
 
+  /// Gets the translations.
   Map<String, Map<String, String>> get translations => _intlHost.translations;
 
+  /// Adds translations.
   void addTranslations(Map<String, Map<String, String>> tr) {
     translations.addAll(tr);
   }
 
+  /// Clears all translations.
   void clearTranslations() {
     translations.clear();
   }
 
+  /// Appends translations.
   void appendTranslations(Map<String, Map<String, String>> tr) {
     tr.forEach((key, map) {
       if (translations.containsKey(key)) {

@@ -6,10 +6,13 @@ import 'get_animated_builder.dart';
 const _defaultDuration = Duration(seconds: 2);
 const _defaultDelay = Duration.zero;
 
+/// Extension methods for applying animation effects to widgets.
 extension AnimationExtension on Widget {
+  /// Returns the current animated builder widget if the widget is a `GetAnimatedBuilder`, otherwise returns `null`.
   GetAnimatedBuilder? get _currentAnimation =>
       (this is GetAnimatedBuilder) ? this as GetAnimatedBuilder : null;
 
+  /// Adds a fade-in animation effect to the widget.
   GetAnimatedBuilder fadeIn({
     Duration duration = _defaultDuration,
     Duration delay = _defaultDelay,
@@ -27,6 +30,7 @@ extension AnimationExtension on Widget {
     );
   }
 
+  /// Adds a fade-out animation effect to the widget.
   GetAnimatedBuilder fadeOut({
     Duration duration = _defaultDuration,
     Duration delay = _defaultDelay,
@@ -44,6 +48,7 @@ extension AnimationExtension on Widget {
     );
   }
 
+  /// Adds a rotation animation effect to the widget.
   GetAnimatedBuilder rotate({
     required double begin,
     required double end,
@@ -62,6 +67,7 @@ extension AnimationExtension on Widget {
     );
   }
 
+  /// Adds a scaling animation effect to the widget.
   GetAnimatedBuilder scale({
     required double begin,
     required double end,
@@ -80,6 +86,7 @@ extension AnimationExtension on Widget {
     );
   }
 
+  /// Adds a sliding animation effect to the widget.
   GetAnimatedBuilder slide({
     required OffsetBuilder offset,
     double begin = 0,
@@ -100,6 +107,7 @@ extension AnimationExtension on Widget {
     );
   }
 
+  /// Adds a bouncing animation effect to the widget.
   GetAnimatedBuilder bounce({
     required double begin,
     required double end,
@@ -118,6 +126,7 @@ extension AnimationExtension on Widget {
     );
   }
 
+  /// Adds a spinning animation effect to the widget.
   GetAnimatedBuilder spin({
     Duration duration = _defaultDuration,
     Duration delay = _defaultDelay,
@@ -132,6 +141,7 @@ extension AnimationExtension on Widget {
     );
   }
 
+  /// Adds a resizing animation effect to the widget.
   GetAnimatedBuilder size({
     required double begin,
     required double end,
@@ -150,6 +160,7 @@ extension AnimationExtension on Widget {
     );
   }
 
+  /// Adds a blurring animation effect to the widget.
   GetAnimatedBuilder blur({
     double begin = 0,
     double end = 15,
@@ -168,6 +179,7 @@ extension AnimationExtension on Widget {
     );
   }
 
+  /// Adds a flipping animation effect to the widget.
   GetAnimatedBuilder flip({
     double begin = 0,
     double end = 1,
@@ -186,6 +198,7 @@ extension AnimationExtension on Widget {
     );
   }
 
+  /// Adds a waving animation effect to the widget.
   GetAnimatedBuilder wave({
     double begin = 0,
     double end = 1,
@@ -204,6 +217,7 @@ extension AnimationExtension on Widget {
     );
   }
 
+  /// Determines the delay to be applied based on whether the animation is sequential or not.
   Duration _getDelay(bool isSequential, Duration delay) {
     assert(!(isSequential && delay != Duration.zero),
         "Error: When isSequential is true, delay must be non-zero. Context: isSequential: $isSequential delay: $delay");

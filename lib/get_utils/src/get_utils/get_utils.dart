@@ -185,11 +185,6 @@ class GetUtils {
     return filePath.toLowerCase().endsWith(".txt");
   }
 
-  /// Checks if string is an chm file.
-  static bool isChm(String filePath) {
-    return filePath.toLowerCase().endsWith(".chm");
-  }
-
   /// Checks if string is a vector file.
   static bool isVector(String filePath) {
     return filePath.toLowerCase().endsWith(".svg");
@@ -267,38 +262,6 @@ class GetUtils {
     }
 
     return true;
-  }
-
-  /// Checks if all data have same value.
-  /// Example: 111111 -> true, wwwww -> true, 1,1,1,1 -> true
-  static bool isOneAKind(dynamic value) {
-    if ((value is String || value is List) && !isNullOrBlank(value)!) {
-      final first = value[0];
-      final len = value.length as num;
-
-      for (var i = 0; i < len; i++) {
-        if (value[i] != first) {
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    if (value is int) {
-      final stringValue = value.toString();
-      final first = stringValue[0];
-
-      for (var i = 0; i < stringValue.length; i++) {
-        if (stringValue[i] != first) {
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    return false;
   }
 
   /// Checks if string is Passport No.
@@ -396,106 +359,6 @@ class GetUtils {
 
   /// Checks if num a EQUAL than num b.
   static bool isEqual(num a, num b) => a == b;
-
-  // Checks if num is a cnpj
-  static bool isCnpj(String cnpj) {
-    // Get only the numbers from the CNPJ
-    final numbers = cnpj.replaceAll(RegExp(r'[^0-9]'), '');
-
-    // Test if the CNPJ has 14 digits
-    if (numbers.length != 14) {
-      return false;
-    }
-
-    // Test if all digits of the CNPJ are the same
-    if (RegExp(r'^(\d)\1*$').hasMatch(numbers)) {
-      return false;
-    }
-
-    // Divide digits
-    final digits = numbers.split('').map(int.parse).toList();
-
-    // Calculate the first check digit
-    var calcDv1 = 0;
-    var j = 0;
-    for (var i in Iterable<int>.generate(12, (i) => i < 4 ? 5 - i : 13 - i)) {
-      calcDv1 += digits[j++] * i;
-    }
-    calcDv1 %= 11;
-    final dv1 = calcDv1 < 2 ? 0 : 11 - calcDv1;
-
-    // Test the first check digit
-    if (digits[12] != dv1) {
-      return false;
-    }
-
-    // Calculate the second check digit
-    var calcDv2 = 0;
-    j = 0;
-    for (var i in Iterable<int>.generate(13, (i) => i < 5 ? 6 - i : 14 - i)) {
-      calcDv2 += digits[j++] * i;
-    }
-    calcDv2 %= 11;
-    final dv2 = calcDv2 < 2 ? 0 : 11 - calcDv2;
-
-    // Test the second check digit
-    if (digits[13] != dv2) {
-      return false;
-    }
-
-    return true;
-  }
-
-  /// Checks if the cpf is valid.
-  static bool isCpf(String cpf) {
-    // if (cpf == null) {
-    //   return false;
-    // }
-
-    // get only the numbers
-    final numbers = cpf.replaceAll(RegExp(r'[^0-9]'), '');
-    // Test if the CPF has 11 digits
-    if (numbers.length != 11) {
-      return false;
-    }
-    // Test if all CPF digits are the same
-    if (RegExp(r'^(\d)\1*$').hasMatch(numbers)) {
-      return false;
-    }
-
-    // split the digits
-    final digits = numbers.split('').map(int.parse).toList();
-
-    // Calculate the first verifier digit
-    var calcDv1 = 0;
-    for (var i in Iterable<int>.generate(9, (i) => 10 - i)) {
-      calcDv1 += digits[10 - i] * i;
-    }
-    calcDv1 %= 11;
-
-    final dv1 = calcDv1 < 2 ? 0 : 11 - calcDv1;
-
-    // Tests the first verifier digit
-    if (digits[9] != dv1) {
-      return false;
-    }
-
-    // Calculate the second verifier digit
-    var calcDv2 = 0;
-    for (var i in Iterable<int>.generate(10, (i) => 11 - i)) {
-      calcDv2 += digits[11 - i] * i;
-    }
-    calcDv2 %= 11;
-
-    final dv2 = calcDv2 < 2 ? 0 : 11 - calcDv2;
-
-    // Test the second verifier digit
-    if (digits[10] != dv2) {
-      return false;
-    }
-
-    return true;
-  }
 
   /// Capitalize each word inside string
   /// Example: your name => Your Name

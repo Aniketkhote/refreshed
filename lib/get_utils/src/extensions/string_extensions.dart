@@ -96,12 +96,6 @@ extension GetStringUtils on String {
   /// Discover if the String is a currency
   bool get isCurrency => GetUtils.isCurrency(this);
 
-  /// Discover if the String is a CPF number
-  bool get isCpf => GetUtils.isCpf(this);
-
-  /// Discover if the String is a CNPJ number
-  bool get isCnpj => GetUtils.isCnpj(this);
-
   /// Discover if the String is a case insensitive
   bool isCaseInsensitiveContains(String b) =>
       GetUtils.isCaseInsensitiveContains(this, b);

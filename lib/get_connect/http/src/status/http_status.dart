@@ -1,12 +1,18 @@
+/// A class for representing HTTP status codes and providing utility methods for handling them.
 class HttpStatus {
+  /// Constructs an instance of [HttpStatus] with the provided HTTP status [code].
   HttpStatus(this.code);
 
+  /// The HTTP status code.
   final int? code;
 
+  // Informational 1xx
   static const int continue_ = 100;
   static const int switchingProtocols = 101;
   static const int processing = 102;
   static const int earlyHints = 103;
+
+  // Success 2xx
   static const int ok = 200;
   static const int created = 201;
   static const int accepted = 202;
@@ -17,6 +23,8 @@ class HttpStatus {
   static const int multiStatus = 207;
   static const int alreadyReported = 208;
   static const int imUsed = 226;
+
+  // Redirection 3xx
   static const int multipleChoices = 300;
   static const int movedPermanently = 301;
   static const int found = 302;
@@ -27,6 +35,8 @@ class HttpStatus {
   static const int switchProxy = 306;
   static const int temporaryRedirect = 307;
   static const int permanentRedirect = 308;
+
+  // Client Error 4xx
   static const int badRequest = 400;
   static const int unauthorized = 401;
   static const int paymentRequired = 402;
@@ -58,6 +68,8 @@ class HttpStatus {
   static const int connectionClosedWithoutResponse = 444;
   static const int unavailableForLegalReasons = 451;
   static const int clientClosedRequest = 499;
+
+  // Server Error 5xx
   static const int internalServerError = 500;
   static const int notImplemented = 501;
   static const int badGateway = 502;
@@ -71,22 +83,30 @@ class HttpStatus {
   static const int networkAuthenticationRequired = 511;
   static const int networkConnectTimeoutError = 599;
 
+  /// Returns `true` if there is a connection error (code is null).
   bool get connectionError => code == null;
 
+  /// Returns `true` if the status code represents an unauthorized access error.
   bool get isUnauthorized => code == unauthorized;
 
+  /// Returns `true` if the status code represents a forbidden access error.
   bool get isForbidden => code == forbidden;
 
+  /// Returns `true` if the status code represents a not found error.
   bool get isNotFound => code == notFound;
 
+  /// Returns `true` if the status code represents a server error.
   bool get isServerError =>
       between(internalServerError, networkConnectTimeoutError);
 
+  /// Checks if the status code falls within the range specified by [begin] and [end].
   bool between(int begin, int end) {
     return !connectionError && code! >= begin && code! <= end;
   }
 
+  /// Returns `true` if the status code is within the range of successful status codes (200-299).
   bool get isOk => between(200, 299);
 
+  /// Returns `true` if the status code indicates an error (not within the successful range).
   bool get hasError => !isOk;
 }

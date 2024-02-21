@@ -7,6 +7,7 @@ import 'get_animated_builder.dart';
 
 typedef OffsetBuilder = Offset Function(BuildContext, double);
 
+/// An animation that adjusts the opacity of its child.
 class FadeInAnimation extends OpacityAnimation {
   FadeInAnimation({
     super.key,
@@ -20,6 +21,7 @@ class FadeInAnimation extends OpacityAnimation {
   });
 }
 
+/// An animation that adjusts the opacity of its child in reverse.
 class FadeOutAnimation extends OpacityAnimation {
   FadeOutAnimation({
     super.key,
@@ -33,27 +35,29 @@ class FadeOutAnimation extends OpacityAnimation {
   });
 }
 
+/// Base class for animations that manipulate opacity.
 class OpacityAnimation extends GetAnimatedBuilder<double> {
   OpacityAnimation({
     super.key,
     required super.duration,
     required super.delay,
     required super.child,
-    required super.onComplete,
+    super.onComplete,
     required double begin,
     required double end,
     required super.idleValue,
   }) : super(
-          tween: Tween<double>(begin: begin, end: end),
           builder: (context, value, child) {
             return Opacity(
               opacity: value,
               child: child!,
             );
           },
+          tween: Tween<double>(begin: begin, end: end),
         );
 }
 
+/// An animation that rotates its child.
 class RotateAnimation extends GetAnimatedBuilder<double> {
   RotateAnimation({
     super.key,
@@ -67,12 +71,13 @@ class RotateAnimation extends GetAnimatedBuilder<double> {
   }) : super(
           builder: (context, value, child) => Transform.rotate(
             angle: value,
-            child: child,
+            child: child!,
           ),
           tween: Tween<double>(begin: begin, end: end),
         );
 }
 
+/// An animation that scales its child.
 class ScaleAnimation extends GetAnimatedBuilder<double> {
   ScaleAnimation({
     super.key,
@@ -86,12 +91,13 @@ class ScaleAnimation extends GetAnimatedBuilder<double> {
   }) : super(
           builder: (context, value, child) => Transform.scale(
             scale: value,
-            child: child,
+            child: child!,
           ),
           tween: Tween<double>(begin: begin, end: end),
         );
 }
 
+/// An animation that simulates a bouncing effect on its child.
 class BounceAnimation extends GetAnimatedBuilder<double> {
   BounceAnimation({
     super.key,
@@ -99,19 +105,20 @@ class BounceAnimation extends GetAnimatedBuilder<double> {
     required super.delay,
     required super.child,
     super.onComplete,
-    super.curve = Curves.bounceOut,
     required double begin,
     required double end,
     super.idleValue = 0,
+    super.curve = Curves.bounceOut,
   }) : super(
           builder: (context, value, child) => Transform.scale(
             scale: 1 + value.abs(),
-            child: child,
+            child: child!,
           ),
           tween: Tween<double>(begin: begin, end: end),
         );
 }
 
+/// An animation that rotates its child continuously.
 class SpinAnimation extends GetAnimatedBuilder<double> {
   SpinAnimation({
     super.key,
@@ -123,12 +130,13 @@ class SpinAnimation extends GetAnimatedBuilder<double> {
   }) : super(
           builder: (context, value, child) => Transform.rotate(
             angle: value * pi / 180.0,
-            child: child,
+            child: child!,
           ),
           tween: Tween<double>(begin: 0, end: 360),
         );
 }
 
+/// An animation that adjusts the size of its child.
 class SizeAnimation extends GetAnimatedBuilder<double> {
   SizeAnimation({
     super.key,
@@ -136,18 +144,19 @@ class SizeAnimation extends GetAnimatedBuilder<double> {
     required super.delay,
     required super.child,
     super.onComplete,
-    super.idleValue = 0,
     required double begin,
     required double end,
+    super.idleValue = 0,
   }) : super(
           builder: (context, value, child) => Transform.scale(
             scale: value,
-            child: child,
+            child: child!,
           ),
           tween: Tween<double>(begin: begin, end: end),
         );
 }
 
+/// An animation that applies a blur effect to its child.
 class BlurAnimation extends GetAnimatedBuilder<double> {
   BlurAnimation({
     super.key,
@@ -170,6 +179,7 @@ class BlurAnimation extends GetAnimatedBuilder<double> {
         );
 }
 
+/// An animation that flips its child horizontally.
 class FlipAnimation extends GetAnimatedBuilder<double> {
   FlipAnimation({
     super.key,
@@ -193,6 +203,7 @@ class FlipAnimation extends GetAnimatedBuilder<double> {
         );
 }
 
+/// An animation that simulates a wave effect on its child.
 class WaveAnimation extends GetAnimatedBuilder<double> {
   WaveAnimation({
     super.key,
@@ -216,6 +227,7 @@ class WaveAnimation extends GetAnimatedBuilder<double> {
         );
 }
 
+/// An animation that simulates a wobble effect on its child.
 class WobbleAnimation extends GetAnimatedBuilder<double> {
   WobbleAnimation({
     super.key,
@@ -238,6 +250,7 @@ class WobbleAnimation extends GetAnimatedBuilder<double> {
         );
 }
 
+/// An animation that slides its child in from the left.
 class SlideInLeftAnimation extends SlideAnimation {
   SlideInLeftAnimation({
     super.key,
@@ -247,13 +260,14 @@ class SlideInLeftAnimation extends SlideAnimation {
     super.onComplete,
     required super.begin,
     required super.end,
-    super.idleValue = 0,
+    super.idleValue,
   }) : super(
           offsetBuild: (context, value) =>
               Offset(value * MediaQuery.of(context).size.width, 0),
         );
 }
 
+/// An animation that slides its child in from the right.
 class SlideInRightAnimation extends SlideAnimation {
   SlideInRightAnimation({
     super.key,
@@ -263,13 +277,14 @@ class SlideInRightAnimation extends SlideAnimation {
     super.onComplete,
     required super.begin,
     required super.end,
-    super.idleValue = 0,
+    super.idleValue,
   }) : super(
           offsetBuild: (context, value) =>
               Offset((1 - value) * MediaQuery.of(context).size.width, 0),
         );
 }
 
+/// An animation that slides its child in from the top.
 class SlideInUpAnimation extends SlideAnimation {
   SlideInUpAnimation({
     super.key,
@@ -279,13 +294,14 @@ class SlideInUpAnimation extends SlideAnimation {
     super.onComplete,
     required super.begin,
     required super.end,
-    super.idleValue = 0,
+    super.idleValue,
   }) : super(
           offsetBuild: (context, value) =>
               Offset(0, value * MediaQuery.of(context).size.height),
         );
 }
 
+/// An animation that slides its child in from the bottom.
 class SlideInDownAnimation extends SlideAnimation {
   SlideInDownAnimation({
     super.key,
@@ -295,13 +311,14 @@ class SlideInDownAnimation extends SlideAnimation {
     super.onComplete,
     required super.begin,
     required super.end,
-    super.idleValue = 0,
+    super.idleValue,
   }) : super(
           offsetBuild: (context, value) =>
               Offset(0, (1 - value) * MediaQuery.of(context).size.height),
         );
 }
 
+/// An animation that slides its child by applying a translation.
 class SlideAnimation extends GetAnimatedBuilder<double> {
   SlideAnimation({
     super.key,
@@ -322,6 +339,7 @@ class SlideAnimation extends GetAnimatedBuilder<double> {
         );
 }
 
+/// An animation that adjusts the scale of its child.
 class ZoomAnimation extends GetAnimatedBuilder<double> {
   ZoomAnimation({
     super.key,
@@ -341,6 +359,7 @@ class ZoomAnimation extends GetAnimatedBuilder<double> {
         );
 }
 
+/// An animation that adjusts the color of its child.
 class ColorAnimation extends GetAnimatedBuilder<Color?> {
   ColorAnimation({
     super.key,
@@ -359,7 +378,7 @@ class ColorAnimation extends GetAnimatedBuilder<Color?> {
             ),
             child: child,
           ),
-          idleValue: idleColor ?? begin,
           tween: ColorTween(begin: begin, end: end),
+          idleValue: idleColor ?? begin,
         );
 }

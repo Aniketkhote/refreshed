@@ -233,12 +233,10 @@ class _GetPerModalBottomSheet<T> extends StatefulWidget {
   final bool enableDrag;
 
   @override
-  // ignore: lines_longer_than_80_chars
   _GetPerModalBottomSheetState<T> createState() =>
       _GetPerModalBottomSheetState<T>();
 }
 
-// ignore: lines_longer_than_80_chars
 class _GetPerModalBottomSheetState<T>
     extends State<_GetPerModalBottomSheet<T>> {
   String _getRouteLabel(MaterialLocalizations localizations) {
@@ -273,15 +271,30 @@ class _GetPerModalBottomSheetState<T>
           explicitChildNodes: true,
           child: ClipRect(
             child: CustomSingleChildLayout(
-                delegate: _GetModalBottomSheetLayout(
-                    animationValue, widget.isScrollControlled),
-                child: widget.isPersistent == false
-                    ? BottomSheet(
+              delegate: _GetModalBottomSheetLayout(
+                  animationValue, widget.isScrollControlled),
+              child: widget.isPersistent == false
+                  ? BottomSheet(
+                      animationController: widget.route!._animationController,
+                      onClosing: () {
+                        if (widget.route!.isCurrent) {
+                          Navigator.pop(context);
+                        }
+                      },
+                      builder: widget.route!.builder!,
+                      backgroundColor: widget.backgroundColor,
+                      elevation: widget.elevation,
+                      shape: widget.shape,
+                      clipBehavior: widget.clipBehavior,
+                      enableDrag: widget.enableDrag,
+                    )
+                  : Scaffold(
+                      bottomSheet: BottomSheet(
                         animationController: widget.route!._animationController,
                         onClosing: () {
-                          if (widget.route!.isCurrent) {
-                            Navigator.pop(context);
-                          }
+                          // if (widget.route.isCurrent) {
+                          //   Navigator.pop(context);
+                          // }
                         },
                         builder: widget.route!.builder!,
                         backgroundColor: widget.backgroundColor,
@@ -289,24 +302,9 @@ class _GetPerModalBottomSheetState<T>
                         shape: widget.shape,
                         clipBehavior: widget.clipBehavior,
                         enableDrag: widget.enableDrag,
-                      )
-                    : Scaffold(
-                        bottomSheet: BottomSheet(
-                          animationController:
-                              widget.route!._animationController,
-                          onClosing: () {
-                            // if (widget.route.isCurrent) {
-                            //   Navigator.pop(context);
-                            // }
-                          },
-                          builder: widget.route!.builder!,
-                          backgroundColor: widget.backgroundColor,
-                          elevation: widget.elevation,
-                          shape: widget.shape,
-                          clipBehavior: widget.clipBehavior,
-                          enableDrag: widget.enableDrag,
-                        ),
-                      )),
+                      ),
+                    ),
+            ),
           ),
         );
       },
