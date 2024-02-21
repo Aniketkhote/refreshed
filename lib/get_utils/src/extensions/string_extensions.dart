@@ -7,6 +7,11 @@ extension GetStringUtils on String {
   /// Discover if the String is numeric only
   bool get isNumericOnly => GetUtils.isNumericOnly(this);
 
+  ///
+  /// Extract numeric value of string
+  /// Example: OTP 12312 27/04/2020 => 1231227042020ß If firstWordOnly is true,
+  /// then the example return is "12312" (first found numeric word)
+  ///
   String numericOnly({bool firstWordOnly = false}) =>
       GetUtils.numericOnly(this, firstWordOnly: firstWordOnly);
 
@@ -76,6 +81,7 @@ extension GetStringUtils on String {
   /// Discover if the String is a ipv4
   bool get isIPv4 => GetUtils.isIPv4(this);
 
+  /// Discover if the String is a ipv6
   bool get isIPv6 => GetUtils.isIPv6(this);
 
   /// Discover if the String is a Hexadecimal

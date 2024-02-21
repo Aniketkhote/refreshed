@@ -4,9 +4,14 @@ import 'package:flutter/widgets.dart';
 
 import 'list_notifier.dart';
 
+/// A callback function that is called when the value builder updates its value.
 typedef ValueBuilderUpdateCallback<T> = void Function(T snapshot);
+
+/// A function that builds a widget based on the current value and an updater function.
 typedef ValueBuilderBuilder<T> = Widget Function(
-    T snapshot, ValueBuilderUpdateCallback<T> updater);
+  T snapshot,
+  ValueBuilderUpdateCallback<T> updater,
+);
 
 /// Manages a local state like ObxValue, but uses a callback instead of
 /// a Rx value.
@@ -18,15 +23,22 @@ typedef ValueBuilderBuilder<T> = Widget Function(
 ///    builder: (value, update) => Switch(
 ///    value: value,
 ///    onChanged: (flag) {
-///       update( flag );
+///       update(flag);
 ///    },),
 ///    onUpdate: (value) => print("Value updated: $value"),
 ///  ),
 ///  ```
 class ValueBuilder<T> extends StatefulWidget {
+  /// The initial value of the state managed by the ValueBuilder.
   final T initialValue;
+
+  /// The builder function that constructs the widget based on the current value and an updater function.
   final ValueBuilderBuilder<T> builder;
+
+  /// A function that is called when the ValueBuilder is disposed.
   final void Function()? onDispose;
+
+  /// A function that is called when the value managed by the ValueBuilder is updated.
   final void Function(T)? onUpdate;
 
   const ValueBuilder({
@@ -41,23 +53,26 @@ class ValueBuilder<T> extends StatefulWidget {
   ValueBuilderState<T> createState() => ValueBuilderState<T>();
 }
 
+/// The state associated with the ValueBuilder widget.
 class ValueBuilderState<T> extends State<ValueBuilder<T>> {
-  late T value;
+  late T _value;
+
   @override
   void initState() {
-    value = widget.initialValue;
+    _value = widget.initialValue;
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) => widget.builder(value, updater);
+  Widget build(BuildContext context) => widget.builder(_value, _updater);
 
-  void updater(T newValue) {
+  /// An updater function that updates the value managed by the ValueBuilder.
+  void _updater(T newValue) {
     if (widget.onUpdate != null) {
       widget.onUpdate!(newValue);
     }
     setState(() {
-      value = newValue;
+      _value = newValue;
     });
   }
 
@@ -65,17 +80,12 @@ class ValueBuilderState<T> extends State<ValueBuilder<T>> {
   void dispose() {
     super.dispose();
     widget.onDispose?.call();
-    if (value is ChangeNotifier) {
-      (value as ChangeNotifier?)?.dispose();
-    } else if (value is StreamController) {
-      (value as StreamController?)?.close();
-    }
   }
 }
 
 class ObxElement = StatelessElement with StatelessObserverComponent;
 
-// It's a experimental feature
+/// It's an experimental feature.
 class Observer extends ObxStatelessWidget {
   final WidgetBuilder builder;
 
@@ -85,40 +95,38 @@ class Observer extends ObxStatelessWidget {
   Widget build(BuildContext context) => builder(context);
 }
 
-/// A StatelessWidget than can listen reactive changes.
+/// A stateless widget that can listen to reactive changes.
 abstract class ObxStatelessWidget extends StatelessWidget {
   /// Initializes [key] for subclasses.
   const ObxStatelessWidget({super.key});
+
   @override
   StatelessElement createElement() => ObxElement(this);
 }
 
-/// a Component that can track changes in a reactive variable
+/// A component that can track changes in a reactive variable.
 mixin StatelessObserverComponent on StatelessElement {
-  List<Disposer>? disposers = <Disposer>[];
+  List<Disposer>? _disposers = <Disposer>[];
 
-  void getUpdate() {
-    // if (disposers != null && !dirty) {
-    //   markNeedsBuild();
-    // }
-    if (disposers != null) {
-      scheduleMicrotask(markNeedsBuild);
-    }
+  void _getUpdate() {
+    scheduleMicrotask(markNeedsBuild);
   }
 
   @override
   Widget build() {
     return Notifier.instance.append(
-        NotifyData(disposers: disposers!, updater: getUpdate), super.build);
+      NotifyData(disposers: _disposers!, updater: _getUpdate),
+      super.build,
+    );
   }
 
   @override
   void unmount() {
     super.unmount();
-    for (final disposer in disposers!) {
+    for (final disposer in _disposers!) {
       disposer();
     }
-    disposers!.clear();
-    disposers = null;
+    _disposers!.clear();
+    _disposers = null;
   }
 }

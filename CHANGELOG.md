@@ -1,3 +1,7 @@
+## 1.3.0
+
+- Removed unused methods and extensions to enhance code cleanliness.
+
 ## 1.2.0
 
 - Removed duplicate methods and extensions to improve code cleanliness and reduce redundancy.
