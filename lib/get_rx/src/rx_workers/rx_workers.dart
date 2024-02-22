@@ -5,6 +5,11 @@ import '../../../get_state_manager/src/rx_flutter/rx_notifier.dart';
 import '../rx_types/rx_types.dart';
 import 'utils/debouncer.dart';
 
+/// A utility function to evaluate a condition and return a boolean value.
+///
+/// If [condition] is `null`, returns `true`. If [condition] is already a boolean value,
+/// returns it as is. If [condition] is a function that returns a boolean value, invokes
+/// the function and returns its result. Otherwise, returns `true`.
 bool _conditional(dynamic condition) {
   if (condition == null) return true;
   if (condition is bool) return condition;
@@ -12,12 +17,21 @@ bool _conditional(dynamic condition) {
   return true;
 }
 
+/// A typedef representing a callback function used by workers.
+///
+/// The [WorkerCallback] typedef defines a function signature that takes
+/// a callback of type [T] as input.
 typedef WorkerCallback<T> = Function(T callback);
 
+/// A class for managing a collection of workers and disposing them when necessary.
 class Workers {
-  Workers(this.workers);
+  /// The list of workers to manage.
   final List<Worker> workers;
 
+  /// Constructs a new [Workers] instance with the provided [workers].
+  Workers(this.workers);
+
+  /// Disposes all workers in the collection that have not already been disposed.
   void dispose() {
     for (final worker in workers) {
       if (!worker._disposed) {
@@ -241,24 +255,31 @@ Worker debounce<T>(
   return Worker(sub.cancel, '[debounce]');
 }
 
+/// A class representing a worker for executing asynchronous tasks with disposal functionality.
 class Worker {
-  Worker(this.worker, this.type);
-
-  /// subscription.cancel() callback
+  /// Callback function representing the asynchronous task to be executed.
   final Future<void> Function() worker;
 
-  /// type of worker (debounce, interval, ever)..
+  /// Type of the worker (e.g., debounce, interval, ever).
   final String type;
+
   bool _disposed = false;
 
+  /// Constructs a new [Worker] with the provided [worker] callback and [type].
+  Worker(this.worker, this.type);
+
+  /// Indicates whether the worker has been disposed.
   bool get disposed => _disposed;
 
-  //final bool _verbose = true;
+  /// Internal logging method for debugging purposes.
   void _log(String msg) {
     //  if (!_verbose) return;
     Get.log('$runtimeType $type $msg');
   }
 
+  /// Disposes of the worker, cancelling its associated asynchronous task.
+  ///
+  /// If the worker has already been disposed, this method does nothing.
   void dispose() {
     if (_disposed) {
       _log('already disposed');
@@ -269,5 +290,6 @@ class Worker {
     _log('disposed');
   }
 
+  /// Alias for the [dispose] method, allowing the [Worker] instance to be called directly for disposal.
   void call() => dispose();
 }
