@@ -1,3 +1,10 @@
+## 2.0.0
+
+### Major Update
+
+- Extracted the get_connect module from the package and published it as refreshed_connect.
+- Removed infrequently used string extension methods
+
 ## 1.3.0
 
 - Removed unused methods and extensions to enhance code cleanliness.
