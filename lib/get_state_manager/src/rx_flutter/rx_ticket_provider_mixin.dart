@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-import '../../../get_instance/src/lifecycle.dart';
 import '../../get_state_manager.dart';
 
 /// Used like `SingleTickerProviderMixin` but only with Get Controllers.
@@ -174,30 +173,4 @@ class _WidgetTicker extends Ticker {
     _creator._removeTicker(this);
     super.dispose();
   }
-}
-
-@Deprecated('use GetSingleTickerProviderStateMixin')
-
-/// Used like `SingleTickerProviderMixin` but only with Get Controllers.
-/// Simplifies AnimationController creation inside GetxController.
-///
-/// Example:
-///```
-///class SplashController extends GetxController with
-///    SingleGetTickerProviderMixin {
-///  AnimationController _ac;
-///
-///  @override
-///  void onInit() {
-///    final dur = const Duration(seconds: 2);
-///    _ac = AnimationController.unbounded(duration: dur, vsync: this);
-///    _ac.repeat();
-///    _ac.addListener(() => print("Animation Controller value: ${_ac.value}"));
-///  }
-///  ...
-/// ```
-mixin SingleGetTickerProviderMixin on GetLifeCycleMixin
-    implements TickerProvider {
-  @override
-  Ticker createTicker(TickerCallback onTick) => Ticker(onTick);
 }

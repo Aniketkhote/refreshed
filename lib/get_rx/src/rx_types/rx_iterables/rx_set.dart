@@ -108,16 +108,6 @@ extension SetExtension<E> on Set<E> {
     return RxSet<E>(<E>{})..addAll(this);
   }
 
-  // /// Add [item] to [List<E>] only if [item] is not null.
-  // void addNonNull(E item) {
-  //   if (item != null) add(item);
-  // }
-
-  // /// Add [Iterable<E>] to [List<E>] only if [Iterable<E>] is not null.
-  // void addAllNonNull(Iterable<E> item) {
-  //   if (item != null) addAll(item);
-  // }
-
   /// Add [item] to [List<E>] only if [condition] is true.
   void addIf(dynamic condition, E item) {
     if (condition is Condition) condition = condition();
@@ -132,19 +122,12 @@ extension SetExtension<E> on Set<E> {
 
   /// Replaces all existing items of this list with [item]
   void assign(E item) {
-    // if (this is RxSet) {
-    //   (this as RxSet)._value;
-    // }
-
     clear();
     add(item);
   }
 
   /// Replaces all existing items of this list with [items]
   void assignAll(Iterable<E> items) {
-    // if (this is RxSet) {
-    //   (this as RxSet)._value;
-    // }
     clear();
     addAll(items);
   }

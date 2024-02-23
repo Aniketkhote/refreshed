@@ -169,16 +169,3 @@ extension ContextExt on BuildContext {
     return strictValues.firstOrNull ?? looseValues.first;
   }
 }
-
-/// Extension providing utility methods for iterable collections.
-extension IterableExt<T> on Iterable<T> {
-  /// Returns the first element of the iterable, or `null` if the iterable is empty.
-  ///
-  /// If the iterable is not empty, this method returns the first element.
-  /// If the iterable is empty, it returns `null`.
-  T? get firstOrNull {
-    var iterator = this.iterator;
-    if (iterator.moveNext()) return iterator.current;
-    return null;
-  }
-}

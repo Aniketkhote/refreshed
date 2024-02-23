@@ -2,6 +2,7 @@ import 'dart:async';
 
 import '../../../utils.dart';
 
+/// Extension providing utility functions for numerical values.
 extension GetNumUtils on num {
   /// Checks if this number is lower than the given [b].
   bool isLowerThan(num b) => GetUtils.isLowerThan(this, b);

@@ -98,12 +98,6 @@ mixin StateMixin<T> on ListNotifier {
   }
 }
 
-/// A callback that returns a `Future`.
-typedef FuturizeCallback<T> = Future<T> Function(VoidCallback fn);
-
-/// A typedef representing a void callback.
-typedef VoidCallback = void Function();
-
 /// A class that provides listenable behavior similar to `ValueNotifier`.
 class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
   T _value;
@@ -266,18 +260,23 @@ extension StateExt<T> on StateMixin<T> {
 /// A builder function for creating widgets based on a state.
 typedef NotifierBuilder<T> = Widget Function(T state);
 
-/// A class representing the status of a state.
+/// Represents the status of an asynchronous operation, such as loading, error, empty, success, or custom.
 abstract class GetStatus<T> with Equality {
   const GetStatus();
 
+  /// Creates a loading status.
   factory GetStatus.loading() => LoadingStatus<T>();
 
+  /// Creates an error status with the given error [message].
   factory GetStatus.error(String message) => ErrorStatus<T, String>(message);
 
+  /// Creates an empty status.
   factory GetStatus.empty() => EmptyStatus<T>();
 
+  /// Creates a success status with the provided [data].
   factory GetStatus.success(T data) => SuccessStatus<T>(data);
 
+  /// Creates a custom status.
   factory GetStatus.custom() => CustomStatus<T>();
 }
 

@@ -1,3 +1,11 @@
+## 1.5.0
+
+**Major Update**
+
+- Removed the animation module as it is no longer relevant to the project's scope and requirements.
+- Removed the WidgetPaddingX, WidgetMarginX, and WidgetSliverBoxX extensions from the codebase as they were irrelevant.
+- Introduced the quickly package to facilitate the use of similar extensions for padding, margin, and lot more.
+
 ## 1.4.0
 
 - **Major Update** Extracted the get_connect module from the package and published it as refreshed_connect.

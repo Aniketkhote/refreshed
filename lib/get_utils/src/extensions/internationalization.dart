@@ -2,11 +2,16 @@ import 'dart:ui';
 
 import '../../../get_core/get_core.dart';
 
+/// Internal class for managing internationalization settings and translations.
 class _IntlHost {
+  /// The current locale being used for translations.
   Locale? locale;
 
+  /// The fallback locale to use if a translation for the current locale is not available.
   Locale? fallbackLocale;
 
+  /// Map containing translation data for different languages.
+  /// The outer map's keys are language codes, and the inner map's keys are translation keys.
   Map<String, Map<String, String>> translations = {};
 }
 
@@ -51,7 +56,8 @@ extension LocalesIntl on GetInterface {
   }
 }
 
-extension Trans on String {
+/// Extension providing localization capabilities to strings.
+extension TranslationExtension on String {
   // Checks whether the language code and country code are present, and
   // whether the key is also present.
   bool get _fullLocaleAndKey {

@@ -1,3 +1,4 @@
+/// Library for providing reactive stream functionalities.
 library rx_stream;
 
 import 'dart:async';

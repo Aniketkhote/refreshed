@@ -49,14 +49,6 @@ class RxMap<K, V> extends GetListenable<Map<K, V>>
     refresh();
     return val;
   }
-
-  // @override
-  // @protected
-  // Map<K, V> get value {
-  //   return subject.value;
-  //   // RxInterface.proxy?.addListener(subject);
-  //   // return _value;
-  // }
 }
 
 extension MapExtension<K, V> on Map<K, V> {

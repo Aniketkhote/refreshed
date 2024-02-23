@@ -13,7 +13,7 @@ assignees: Aniketkhote
 A clear and concise description of what the bug is.
 
 **Reproduction code
-NOTE: THIS IS MANDATORY, IF YOUR ISSUE DOES NOT CONTAIN IT, IT WILL BE CLOSED PRELIMINARY)**
+NOTE: THIS IS MANDATORY, IF YOUR ISSUE DOES NOT CONTAIN IT, IT WILL BE CLOSED PRELIMINARY**
 
 example:
 
@@ -52,11 +52,11 @@ If applicable, add screenshots to help explain your problem.
 **Flutter Version:**
 Enter the version of the Flutter you are using
 
-**Getx Version:**
-Enter the version of the Getx you are using
+**Refreshed Version:**
+Enter the version of the Refreshed you are using
 
 **Describe on which device you found the bug:**
-ex: Moto z2 - Android.
+ex: Moto Edge 30 - Android.
 
 **Minimal reproduce code**
 Provide a minimum reproduction code for the problem

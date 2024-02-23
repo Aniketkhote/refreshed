@@ -6,13 +6,27 @@ import '../../get_core/get_core.dart';
 import '../../get_navigation/src/router_report.dart';
 import 'lifecycle.dart';
 
+/// A class that holds information about an instance.
 class InstanceInfo {
+  /// Indicates whether the instance is permanent.
   final bool? isPermanent;
+
+  /// Indicates whether the instance is a singleton.
   final bool? isSingleton;
+
+  /// Indicates whether the instance is created.
   bool get isCreate => !isSingleton!;
+
+  /// Indicates whether the instance is registered.
   final bool isRegistered;
+
+  /// Indicates whether the instance is prepared.
   final bool isPrepared;
+
+  /// Indicates whether the instance is initialized.
   final bool? isInit;
+
+  /// Creates an InstanceInfo object with the given parameters.
   const InstanceInfo({
     required this.isPermanent,
     required this.isSingleton,
@@ -27,14 +41,15 @@ class InstanceInfo {
   }
 }
 
+/// Extension on GetInterface providing a method to reset all registered instances.
 extension ResetInstance on GetInterface {
-  /// Clears all registered instances (and/or tags).
-  /// Even the persistent ones.
-  /// This should be used at the end or tearDown of unit tests.
+  /// Clears all registered instances and/or tags.
+  /// This method is particularly useful for cleaning up resources at the end or tearDown of unit tests.
   ///
-  /// `clearFactory` clears the callbacks registered by [lazyPut]
-  /// `clearRouteBindings` clears Instances associated with routes.
+  /// [clearRouteBindings] specifies whether to clear instances associated with routes.
+  /// If set to `true`, instances associated with routes will be cleared.
   ///
+  /// Returns `true` if the reset operation is successful.
   bool resetInstance({bool clearRouteBindings = true}) {
     //  if (clearFactory) _factory.clear();
     // deleteAll(force: true);
@@ -69,7 +84,6 @@ extension Inst on GetInterface {
   //     // permanent: permanent,
   //   );
   // }
-
   S put<S>(
     S dependency, {
     String? tag,
@@ -413,10 +427,19 @@ extension Inst on GetInterface {
     }
   }
 
-  /// Delete all registered Class Instances and, closes any open
-  /// controllers `DisposableInterface`, cleans up the memory
+  /// Deletes all registered class instances and closes any open controllers that implement `DisposableInterface`.
   ///
-  /// - [force] Will delete the Instances even if marked as `permanent`.
+  /// This method clears the memory by removing all registered instances. If [force] is set to true,
+  /// instances marked as `permanent` will also be deleted.
+  ///
+  /// Example:
+  /// ```dart
+  /// // Deletes all instances.
+  /// Get.deleteAll();
+  ///
+  /// // Deletes all instances, including permanent ones.
+  /// Get.deleteAll(force: true);
+  /// ```
   void deleteAll({bool force = false}) {
     final keys = _singl.keys.toList();
     for (final key in keys) {
@@ -424,6 +447,18 @@ extension Inst on GetInterface {
     }
   }
 
+  /// Reloads all registered class instances.
+  ///
+  /// If [force] is set to true, instances marked as `permanent` will also be reloaded.
+  ///
+  /// Example:
+  /// ```dart
+  /// // Reloads all instances.
+  /// Get.reloadAll();
+  ///
+  /// // Reloads all instances, including permanent ones.
+  /// Get.reloadAll(force: true);
+  /// ```
   void reloadAll({bool force = false}) {
     _singl.forEach((key, value) {
       if (value.permanent && !force) {
@@ -436,6 +471,22 @@ extension Inst on GetInterface {
     });
   }
 
+  /// Reloads the instance of type `S`.
+  ///
+  /// If [tag] is provided, the instance associated with that tag is reloaded.
+  /// If [key] is provided, it will be used as the identifier for the instance to reload.
+  /// If [force] is set to true, the instance will be reloaded even if it is marked as permanent.
+  ///
+  /// This method is used to restart an instance, clearing its existing state and recreating it.
+  ///
+  /// Example:
+  /// ```dart
+  /// // Reloads the instance of type `MyController`.
+  /// Get.reload<MyController>();
+  ///
+  /// // Reloads the instance associated with the tag 'myTag'.
+  /// Get.reload<MyService>(tag: 'myTag');
+  /// ```
   void reload<S>({
     String? tag,
     String? key,
@@ -492,43 +543,52 @@ extension Inst on GetInterface {
   }
 }
 
+/// A callback function used to construct instances of type `S`.
+///
+/// The function takes no parameters and returns an instance of type `S`.
 typedef InstanceBuilderCallback<S> = S Function();
 
+/// A callback function used to construct instances of type `S` with access to the current `BuildContext`.
+///
+/// The function takes a `BuildContext` parameter and returns an instance of type `S`.
 typedef InstanceCreateBuilderCallback<S> = S Function(BuildContext _);
 
-// typedef InstanceBuilderCallback<S> = S Function();
-
-// typedef InjectorBuilderCallback<S> = S Function(Inst);
-
+/// A callback function used to asynchronously construct instances of type `S`.
+///
+/// The function takes no parameters and returns a `Future` that resolves to an instance of type `S`.
 typedef AsyncInstanceBuilderCallback<S> = Future<S> Function();
 
-/// Internal class to register instances with `Get.put<S>()`.
+/// Internal class used by GetX to register instances with `Get.put<S>()`.
 class _InstanceBuilderFactory<S> {
   /// Marks the Builder as a single instance.
   /// For reusing [dependency] instead of [builderFunc]
   bool? isSingleton;
 
-  /// When fenix mode is available, when a new instance is need
-  /// Instance manager will recreate a new instance of S
+  /// When fenix mode is available, when a new instance is needed,
+  /// the Instance manager will recreate a new instance of S.
   bool fenix;
 
   /// Stores the actual object instance when [isSingleton]=true.
   S? dependency;
 
   /// Generates (and regenerates) the instance when [isSingleton]=false.
-  /// Usually used by factory methods
+  /// Usually used by factory methods.
   InstanceBuilderCallback<S> builderFunc;
 
   /// Flag to persist the instance in memory,
-  /// without considering `Get.smartManagement`
+  /// without considering `Get.smartManagement`.
   bool permanent = false;
 
+  /// Indicates whether the instance has been initialized.
   bool isInit = false;
 
+  /// Reference to the instance that will be removed late (not immediately).
   _InstanceBuilderFactory<S>? lateRemove;
 
+  /// Flag to indicate whether the instance is dirty and needs to be refreshed.
   bool isDirty = false;
 
+  /// The tag associated with the instance.
   String? tag;
 
   _InstanceBuilderFactory({
@@ -549,7 +609,7 @@ class _InstanceBuilderFactory<S> {
     }
   }
 
-  /// Gets the actual instance by it's [builderFunc] or the persisted instance.
+  /// Gets the actual instance by its [builderFunc] or the persisted instance.
   S getDependency() {
     if (isSingleton!) {
       if (dependency == null) {

@@ -1,3 +1,7 @@
+/// This library provides the core functionality of the GetX state management package.
+/// It exports essential components such as the Flutter engine integration,
+/// interfaces, main functionalities, logging utilities, smart management features,
+/// and various type definitions.
 library get_core;
 
 export 'src/flutter_engine.dart';
