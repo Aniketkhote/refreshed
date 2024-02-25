@@ -276,17 +276,48 @@ class ConfigData {
   }
 }
 
+/// A widget representing the root of a GetX application.
+///
+/// The [GetRoot] widget serves as the root of a GetX application.
+/// It provides configuration data and a child widget to be rendered
+/// within the application.
+///
+/// The [config] parameter is used to provide configuration data
+/// for the application.
+///
+/// The [child] parameter specifies the child widget that will be
+/// rendered within the application.
+///
+/// To access the state of the [GetRoot] widget, you can use the
+/// [of] static method, passing the [BuildContext] of the widget
+/// where you want to access the state.
 class GetRoot extends StatefulWidget {
+  /// Constructs a [GetRoot] widget.
+  ///
+  /// The [config] parameter specifies the configuration data for the application.
+  /// The [child] parameter specifies the child widget to be rendered within the application.
   const GetRoot({
     super.key,
     required this.config,
     required this.child,
   });
+
+  /// Configuration data for the application.
   final ConfigData config;
+
+  /// The child widget to be rendered within the application.
   final Widget child;
+
   @override
   State<GetRoot> createState() => GetRootState();
 
+  /// Retrieves the state of the [GetRoot] widget from the given [BuildContext].
+  ///
+  /// This method is used to access the state of the [GetRoot] widget from any
+  /// descendant widget's [BuildContext].
+  ///
+  /// If the [BuildContext] provided is not associated with a [GetRoot] widget,
+  /// this method will throw a [FlutterError].
   static GetRootState of(BuildContext context) {
     // Handles the case where the input context is a navigator element.
     GetRootState? root;
@@ -308,8 +339,19 @@ class GetRoot extends StatefulWidget {
   }
 }
 
+/// Manages the state and lifecycle of the [GetRoot] widget.
+///
+/// [GetRootState] extends [State] and implements [WidgetsBindingObserver]
+/// to handle the state and lifecycle of the [GetRoot] widget. It initializes
+/// configuration, manages dependencies, and responds to changes in the application's
+/// lifecycle.
 class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   static GetRootState? _controller;
+
+  /// The singleton controller for [GetRootState].
+  ///
+  /// [controller] provides a singleton instance of [GetRootState]
+  /// for accessing its methods and properties.
   static GetRootState get controller {
     if (_controller == null) {
       throw Exception('GetRoot is not part of the three');
@@ -318,6 +360,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     }
   }
 
+  /// Configuration data for the application.
   late ConfigData config;
 
   @override
@@ -329,15 +372,9 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     super.initState();
   }
 
-  // @override
-  // void didUpdateWidget(covariant GetRoot oldWidget) {
-  //   if (oldWidget.config != widget.config) {
-  //     config = widget.config;
-  //   }
-
-  //   super.didUpdateWidget(oldWidget);
-  // }
-
+  /// Handles cleanup and disposal operations.
+  ///
+  /// This method is called when the widget is disposed.
   void onClose() {
     config.onDispose?.call();
     Get.clearTranslations();
@@ -354,6 +391,10 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  /// Initializes the widget.
+  ///
+  /// This method sets up initial configuration, routes, and observers
+  /// for the widget.
   void onInit() {
     if (config.getPages == null && config.home == null) {
       throw 'You need add pages or home';
@@ -416,27 +457,30 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
       config = config.copyWith(defaultTransition: getThemeTransition());
     }
 
-    // defaultOpaqueRoute = config.opaqueRoute ?? true;
-    // defaultPopGesture = config.popGesture ?? GetPlatform.isIOS;
-    // defaultTransitionDuration =
-    //     config.transitionDuration ?? Duration(milliseconds: 300);
-
     Future(() => onReady());
   }
 
+  /// Sets parameters for the application.
   set parameters(Map<String, String?> newParameters) {
     // rootController.parameters = newParameters;
     config = config.copyWith(parameters: newParameters);
   }
 
+  /// Sets test mode for the application.
   set testMode(bool isTest) {
     config = config.copyWith(testMode: isTest);
     // _getxController.testMode = isTest;
   }
 
+  /// Performs actions when the widget is ready.
+  ///
+  /// This method is called when the widget is fully initialized and ready
+  /// to be used.
   void onReady() {
     config.onReady?.call();
   }
+
+  /// Retrieves the theme transition based on the platform.
 
   Transition? getThemeTransition() {
     final platform = context.theme.platform;
@@ -466,6 +510,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     });
   }
 
+  /// Sets the theme for the application.
   void setTheme(ThemeData value) {
     if (config.darkTheme == null) {
       config = config.copyWith(theme: value);
@@ -479,16 +524,19 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     update();
   }
 
+  /// Sets the theme mode for the application.
   void setThemeMode(ThemeMode value) {
     config = config.copyWith(themeMode: value);
     update();
   }
 
+  /// Restarts the application.
   void restartApp() {
     config = config.copyWith(unikey: UniqueKey());
     update();
   }
 
+  /// Updates the widget state.
   void update() {
     context.visitAncestorElements((element) {
       element.markNeedsBuild();
@@ -496,13 +544,19 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     });
   }
 
+  /// Retrieves the key of the root navigator.
   GlobalKey<NavigatorState> get key => rootDelegate.navigatorKey;
 
+  /// Retrieves the root delegate.
   GetDelegate get rootDelegate => config.routerDelegate as GetDelegate;
 
+  /// Retrieves the route information parser.
   RouteInformationParser<Object> get informationParser =>
       config.routeInformationParser!;
 
+  /// Adds a new key to the navigator.
+  ///
+  /// Returns the updated navigator key.
   GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
     rootDelegate.navigatorKey = newKey;
     return key;
@@ -510,6 +564,9 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
 
   Map<String, GetDelegate> keys = {};
 
+  /// Nested key management for routing.
+  ///
+  /// Returns a delegate associated with the provided key.
   GetDelegate? nestedKey(String? key) {
     if (key == null) {
       return rootDelegate;
@@ -528,16 +585,5 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return widget.child;
-  }
-
-  String cleanRouteName(String name) {
-    name = name.replaceAll('() => ', '');
-
-    /// uncomment for URL styling.
-    // name = name.paramCase!;
-    if (!name.startsWith('/')) {
-      name = '/$name';
-    }
-    return Uri.tryParse(name)?.toString() ?? name;
   }
 }

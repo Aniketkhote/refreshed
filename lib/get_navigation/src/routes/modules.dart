@@ -19,10 +19,12 @@ class Dependencies {
 
   S find<S>({String? tag}) => Get.find<S>(tag: tag);
 
-  S put<S>(S dependency,
-          {String? tag,
-          bool permanent = false,
-          InstanceBuilderCallback<S>? builder}) =>
+  S put<S>(
+    S dependency, {
+    String? tag,
+    bool permanent = false,
+    InstanceBuilderCallback<S>? builder,
+  }) =>
       Get.put<S>(dependency, tag: tag, permanent: permanent);
 
   Future<bool> delete<S>({String? tag, bool force = false}) async =>

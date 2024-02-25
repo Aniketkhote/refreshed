@@ -2,28 +2,36 @@ import 'dart:collection';
 
 import '../../refreshed.dart';
 
+/// Manages the routing and memory management for instances associated with routes in GetX.
+///
+/// This class handles the tracking and disposal of instances linked to specific routes
+/// in a GetX application. It is particularly useful when managing the lifecycle
+/// of instances created with `Get.create()` and associated with specific routes.
+///
+/// Instances of this class can be accessed via the static [instance] getter.
+/// It provides methods to report route changes, link dependencies to routes,
+/// and dispose of instances when routes are removed from memory.
 class RouterReportManager<T> {
-  /// Holds a reference to `Get.reference` when the Instance was
-  /// created to manage the memory.
+  /// Holds a reference to the routes and their associated dependencies.
   final Map<T?, List<String>> _routesKey = {};
 
-  /// Stores the onClose() references of instances created with `Get.create()`
-  /// using the `Get.reference`.
-  /// Experimental feature to keep the lifecycle and memory management with
-  /// non-singleton instances.
+  /// Stores references to onClose() functions of instances created with `Get.create()`.
   final Map<T?, HashSet<Function>> _routesByCreate = {};
 
   static RouterReportManager? _instance;
 
   RouterReportManager._();
 
+  /// Retrieves the singleton instance of [RouterReportManager].
   static RouterReportManager get instance =>
       _instance ??= RouterReportManager._();
 
+  /// Disposes of the singleton instance of [RouterReportManager].
   static void dispose() {
     _instance = null;
   }
 
+  /// Prints the current instance stack for debugging purposes.
   void printInstanceStack() {
     Get.log(_routesKey.toString());
   }
@@ -35,8 +43,9 @@ class RouterReportManager<T> {
     _current = newRoute;
   }
 
-  /// Links a Class instance [S] (or [tag]) to the current route.
-  /// Requires usage of `GetMaterialApp`.
+  /// Links a dependency to the current route.
+  ///
+  /// Requires the usage of `GetMaterialApp`.
   void reportDependencyLinkedToRoute(String dependencyKey) {
     if (_current == null) return;
     if (_routesKey.containsKey(_current)) {
@@ -46,36 +55,43 @@ class RouterReportManager<T> {
     }
   }
 
+  /// Clears all route keys and dependencies from memory.
   void clearRouteKeys() {
     _routesKey.clear();
     _routesByCreate.clear();
   }
 
+  /// Appends a route by its created instance.
+  ///
+  /// This method is used internally for managing lifecycle of instances
+  /// created with `Get.create()`.
   void appendRouteByCreate(GetLifeCycleMixin i) {
     _routesByCreate[_current] ??= HashSet<Function>();
-    // _routesByCreate[Get.reference]!.add(i.onDelete as Function);
     _routesByCreate[_current]!.add(i.onDelete);
   }
 
+  /// Reports the disposal of a route.
+  ///
+  /// This method is called when a route is disposed, and it cleans up
+  /// associated instances and dependencies.
   void reportRouteDispose(T disposed) {
     if (Get.smartManagement != SmartManagement.onlyBuilder) {
-      // ambiguate(Engine.instance)!.addPostFrameCallback((_) {
-      // Future.microtask(() {
       _removeDependencyByRoute(disposed);
-      // });
     }
   }
 
+  /// Reports the impending disposal of a route.
+  ///
+  /// This method is called just before a route is disposed, and it ensures
+  /// that instances and dependencies are properly handled before the route
+  /// is removed from memory.
   void reportRouteWillDispose(T disposed) {
     final keysToRemove = <String>[];
 
     _routesKey[disposed]?.forEach(keysToRemove.add);
 
-    /// Removes `Get.create()` instances registered in `routeName`.
     if (_routesByCreate.containsKey(disposed)) {
       for (final onClose in _routesByCreate[disposed]!) {
-        // assure the [DisposableInterface] instance holding a reference
-        // to onClose() wasn't disposed.
         onClose();
       }
       _routesByCreate[disposed]!.clear();
@@ -84,27 +100,22 @@ class RouterReportManager<T> {
 
     for (final element in keysToRemove) {
       Get.markAsDirty(key: element);
-
-      //_routesKey.remove(element);
     }
 
     keysToRemove.clear();
   }
 
-  /// Clears from memory registered Instances associated with [routeName] when
-  /// using `Get.smartManagement` as [SmartManagement.full] or
-  /// [SmartManagement.keepFactory]
-  /// Meant for internal usage of `GetPageRoute` and `GetDialogRoute`
+  /// Removes dependencies associated with a route.
+  ///
+  /// This method is used internally to clear instances and dependencies
+  /// associated with a route that is being removed from memory.
   void _removeDependencyByRoute(T routeName) {
     final keysToRemove = <String>[];
 
     _routesKey[routeName]?.forEach(keysToRemove.add);
 
-    /// Removes `Get.create()` instances registered in `routeName`.
     if (_routesByCreate.containsKey(routeName)) {
       for (final onClose in _routesByCreate[routeName]!) {
-        // assure the [DisposableInterface] instance holding a reference
-        // to onClose() wasn't disposed.
         onClose();
       }
       _routesByCreate[routeName]!.clear();

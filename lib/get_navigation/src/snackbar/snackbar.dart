@@ -172,6 +172,7 @@ class GetSnackBar extends StatefulWidget {
   /// Every other widget is ignored if this is not null.
   final Form? userInputForm;
 
+  /// Constructs a new instance of [GetSnackBar].
   const GetSnackBar({
     super.key,
     this.title,
@@ -222,44 +223,68 @@ class GetSnackBar extends StatefulWidget {
   }
 }
 
+/// The state for the [GetSnackBar] widget.
+///
+/// This state class manages the state of the [GetSnackBar] widget,
+/// including animations, layout calculations, and focus management.
+/// It extends [State] and mixes in [TickerProviderStateMixin] to handle animations.
 class GetSnackBarState extends State<GetSnackBar>
     with TickerProviderStateMixin {
+  // State variables and initialization code here
+
+  /// Animation controller for the fading animation of the snack bar.
   AnimationController? _fadeController;
+
+  /// Animation for the fading animation of the snack bar.
   late Animation<double> _fadeAnimation;
 
-  final Widget _emptyWidget = const SizedBox(width: 0.0, height: 0.0);
+  /// Widget used to represent an empty space.
+  final Widget _emptyWidget = const SizedBox.shrink();
+
+  /// Initial opacity value for the snack bar.
   final double _initialOpacity = 1.0;
+
+  /// Final opacity value for the snack bar when it's being dismissed.
   final double _finalOpacity = 0.4;
 
+  /// Duration for the pulse animation of the snack bar.
   final Duration _pulseAnimationDuration = const Duration(seconds: 1);
 
+  /// Flag indicating whether the title is present in the snack bar.
   late bool _isTitlePresent;
+
+  /// Top margin for the message within the snack bar.
   late double _messageTopMargin;
 
+  /// Focus scope node for managing focus within the snack bar.
   FocusScopeNode? _focusNode;
+
+  /// Attachment for managing focus within the snack bar.
   late FocusAttachment _focusAttachment;
 
+  /// Completer used to get the height of the snack bar.
   final Completer<Size> _boxHeightCompleter = Completer<Size>();
 
+  /// Animation for the progress indicator.
   late CurvedAnimation _progressAnimation;
 
+  /// GlobalKey used to access the background box widget.
   final _backgroundBoxKey = GlobalKey();
 
+  /// Calculates the padding for the action button within the snack bar.
   double get buttonPadding {
-    if (widget.padding.right - 12 < 0) {
-      return 4;
-    } else {
-      return widget.padding.right - 12;
-    }
+    double result = widget.padding.right - 12;
+    return result < 0 ? 4 : result;
   }
 
+  /// Determines the style of the row based on the presence of main button and icon.
   RowStyle get _rowStyle {
-    if (widget.mainButton != null && widget.icon == null) {
-      return RowStyle.action;
-    } else if (widget.mainButton == null && widget.icon != null) {
-      return RowStyle.icon;
-    } else if (widget.mainButton != null && widget.icon != null) {
+    if (widget.mainButton != null && widget.icon != null) {
       return RowStyle.all;
+    } else if (widget.mainButton != null) {
+      return RowStyle.action;
+    } else if (widget.icon != null) {
+      return RowStyle.icon;
     } else {
       return RowStyle.none;
     }
@@ -447,7 +472,11 @@ or define a userInputForm[Form] in GetSnackbar''');
       ),
       child: Padding(
         padding: const EdgeInsets.only(
-            left: 8.0, right: 8.0, bottom: 8.0, top: 16.0),
+          left: 8.0,
+          right: 8.0,
+          bottom: 8.0,
+          top: 16.0,
+        ),
         child: FocusScope(
           node: _focusNode,
           autofocus: true,
@@ -537,7 +566,9 @@ or define a userInputForm[Form] in GetSnackbar''');
                           Text(
                             widget.message ?? "",
                             style: const TextStyle(
-                                fontSize: 14.0, color: Colors.white),
+                              fontSize: 14.0,
+                              color: Colors.white,
+                            ),
                           ),
                     ),
                   ],
@@ -556,15 +587,13 @@ or define a userInputForm[Form] in GetSnackbar''');
   }
 
   Widget? _getIcon() {
-    if (widget.icon != null && widget.icon is Icon && widget.shouldIconPulse) {
+    if (widget.icon != null && widget.shouldIconPulse) {
       return FadeTransition(
         opacity: _fadeAnimation,
-        child: widget.icon,
+        child: widget.icon!,
       );
-    } else if (widget.icon != null) {
-      return widget.icon;
     } else {
-      return _emptyWidget;
+      return widget.icon ?? _emptyWidget;
     }
   }
 
