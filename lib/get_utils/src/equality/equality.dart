@@ -64,8 +64,16 @@ abstract class IEquality<E> {
   bool isValidKey(Object? o);
 }
 
+/// A default equality implementation.
+///
+/// This class provides default equality comparison by using the equality operator (`==`)
+/// for comparing objects and the `hashCode` method for hashing.
+///
+/// It is generic over the type of elements being compared.
 class DefaultEquality<E> implements IEquality<E> {
+  /// Creates a [DefaultEquality].
   const DefaultEquality();
+
   @override
   bool equals(Object? e1, Object? e2) => e1 == e2;
   @override
@@ -85,9 +93,18 @@ class IdentityEquality<E> implements IEquality<E> {
   bool isValidKey(Object? o) => true;
 }
 
+/// A deep equality implementation for collections.
+///
+/// This class provides deep equality comparison for collections such as lists,
+/// sets, maps, and iterables. It recursively compares the elements of collections
+/// to determine if they are deeply equal.
 class DeepCollectionEquality implements IEquality {
   final IEquality _base = const DefaultEquality<Never>();
   final bool _unordered = false;
+
+  /// Creates a [DeepCollectionEquality].
+  ///
+  /// By default, this equality does not allow unordered comparisons.
   const DeepCollectionEquality();
 
   @override

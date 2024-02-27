@@ -2,6 +2,7 @@ import 'dart:async';
 
 import '../../../get_core/src/get_interface.dart';
 
+/// Extension providing additional loop event methods for GetInterface.
 extension LoopEventsExt on GetInterface {
   /// Delays the execution of the given computation until the end of the event loop.
   ///

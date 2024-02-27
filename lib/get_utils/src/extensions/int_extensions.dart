@@ -1,3 +1,4 @@
+/// Extension containing duration utility methods for int.
 extension DurationExt on int {
   /// Converts the integer to a [Duration] representing the given number of seconds.
   ///

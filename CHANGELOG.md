@@ -1,3 +1,7 @@
+## 1.5.1
+
+- Fixed pub points
+
 ## 1.5.0
 
 **Major Update**

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+/// Extension providing additional functionality for doubles.
 extension DoubleExt on double {
   /// Returns this double value rounded to the specified number of decimal places.
   ///

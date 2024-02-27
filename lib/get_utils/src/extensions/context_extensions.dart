@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Extension providing additional functionality for BuildContext.
 extension ContextExt on BuildContext {
   /// The same of [MediaQuery.sizeOf(context)]
   Size get mediaQuerySize => MediaQuery.sizeOf(this);

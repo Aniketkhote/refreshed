@@ -1,5 +1,6 @@
 import '../get_utils/get_utils.dart';
 
+/// Extension containing utility methods for strings.
 extension GetStringUtils on String {
   /// Discover if the String is a valid number
   bool get isNum => GetUtils.isNum(this);
