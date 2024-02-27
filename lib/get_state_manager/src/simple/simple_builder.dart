@@ -83,6 +83,9 @@ class ValueBuilderState<T> extends State<ValueBuilder<T>> {
   }
 }
 
+/// A wrapper around a [StatelessElement] that enables observation of changes in the stateless widget's reactive dependencies.
+///
+/// This element extends [StatelessElement] to provide additional functionality for observing changes using GetX's reactive programming capabilities.
 class ObxElement = StatelessElement with StatelessObserverComponent;
 
 /// It's an experimental feature.

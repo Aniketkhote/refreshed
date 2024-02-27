@@ -25,12 +25,6 @@ extension ReadExt on BuildContext {
   }
 }
 
-// extension FilterExt on BuildContext {
-//   T filter<T extends GetxController>(Object Function(T value)? filter) {
-//     return Bind.of(this, filter: filter, rebuild: true);
-//   }
-// }
-
 class GetBuilder<T extends GetxController> extends StatelessWidget {
   final GetControllerBuilder<T> builder;
   final bool global;

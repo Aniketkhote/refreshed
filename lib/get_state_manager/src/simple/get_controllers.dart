@@ -1,17 +1,24 @@
-// ignore: prefer_mixin
 import 'package:flutter/widgets.dart';
 
 import '../../../instance_manager.dart';
 import '../rx_flutter/rx_notifier.dart';
 import 'list_notifier.dart';
 
-// ignore: prefer_mixin
+/// Abstract class representing a GetX controller.
+///
+/// This class provides functionality for managing the state of
+/// a widget or a group of widgets. It extends [ListNotifier] for
+/// list change notification and implements [GetLifeCycleMixin] for
+/// lifecycle management.
 abstract class GetxController extends ListNotifier with GetLifeCycleMixin {
-  /// Rebuilds `GetBuilder` each time you call `update()`;
-  /// Can take a List of [ids], that will only update the matching
-  /// `GetBuilder( id: )`,
-  /// [ids] can be reused among `GetBuilders` like group tags.
-  /// The update will only notify the Widgets, if [condition] is true.
+  /// Rebuilds the associated `GetBuilder` widgets.
+  ///
+  /// Calling `update()` will trigger a rebuild of all associated `GetBuilder`
+  /// widgets unless a list of [ids] is provided, in which case only the `GetBuilder`
+  /// widgets with matching ids will be rebuilt.
+  ///
+  /// The [condition] parameter determines whether the rebuild should occur.
+  /// If [condition] is `false`, no rebuild will be triggered.
   void update([List<Object>? ids, bool condition = true]) {
     if (!condition) {
       return;
@@ -87,11 +94,18 @@ abstract class SuperController<T> extends FullLifeCycleController
 
 /// A controller with super lifecycles (including native lifecycles)
 abstract class FullLifeCycleController extends GetxController
-    with
-        // ignore: prefer_mixin
-        WidgetsBindingObserver {}
+    with WidgetsBindingObserver {}
 
+/// A mixin that provides a full lifecycle implementation for controllers.
+///
+/// This mixin enhances a controller with lifecycle methods such as initialization,
+/// disposal, and handling of app lifecycle states.
 mixin FullLifeCycleMixin on FullLifeCycleController {
+  /// Called when the controller is initialized.
+  ///
+  /// This method should be overridden to perform initialization logic
+  /// specific to the controller. It is invoked after the parent's `onInit`
+  /// method is called.
   @mustCallSuper
   @override
   void onInit() {
@@ -99,6 +113,11 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
     ambiguate(Engine.instance)!.addObserver(this);
   }
 
+  /// Called when the controller is disposed.
+  ///
+  /// This method should be overridden to perform cleanup logic
+  /// specific to the controller. It is invoked before the parent's `onClose`
+  /// method is called.
   @mustCallSuper
   @override
   void onClose() {
@@ -106,6 +125,10 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
     super.onClose();
   }
 
+  /// Called when the app lifecycle state changes.
+  ///
+  /// This method should be overridden to handle app lifecycle state changes.
+  /// The [state] parameter indicates the new app lifecycle state.
   @mustCallSuper
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -128,9 +151,18 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
     }
   }
 
+  /// Called when the app is resumed from a paused state.
   void onResumed() {}
+
+  /// Called when the app is paused.
   void onPaused() {}
+
+  /// Called when the app is in an inactive state.
   void onInactive() {}
+
+  /// Called when the app is detached.
   void onDetached() {}
+
+  /// Called when the app is hidden.
   void onHidden() {}
 }
