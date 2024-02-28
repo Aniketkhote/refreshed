@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../router_report.dart';
 
+/// A custom [PopupRoute] used by Refreshed for displaying modal bottom sheet routes.
+///
+/// This route displays a modal bottom sheet with customizable properties such as
+/// the builder for the content, theme, background color, elevation, shape, animation
+/// duration, and more.
 class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   GetModalBottomSheetRoute({
     this.builder,
@@ -35,7 +40,6 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   final Color? modalBarrierColor;
   final bool isDismissible;
   final bool enableDrag;
-  // final String name;
   final Duration enterBottomSheetDuration;
   final Duration exitBottomSheetDuration;
   final Curve? curve;

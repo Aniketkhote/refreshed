@@ -2,6 +2,11 @@ import 'package:flutter/widgets.dart';
 
 import '../router_report.dart';
 
+/// A custom [PopupRoute] used by Refreshed for displaying dialog routes.
+///
+/// This route provides a customizable dialog transition and allows the
+/// specification of various properties such as barrier color, duration,
+/// and dismissibility.
 class GetDialogRoute<T> extends PopupRoute<T> {
   GetDialogRoute({
     required RoutePageBuilder pageBuilder,
@@ -61,12 +66,13 @@ class GetDialogRoute<T> extends PopupRoute<T> {
       Animation<double> secondaryAnimation, Widget child) {
     if (_transitionBuilder == null) {
       return FadeTransition(
-          opacity: CurvedAnimation(
-            parent: animation,
-            curve: Curves.linear,
-          ),
-          child: child);
-    } // Some default transition
+        opacity: CurvedAnimation(
+          parent: animation,
+          curve: Curves.linear,
+        ),
+        child: child,
+      );
+    }
     return _transitionBuilder(context, animation, secondaryAnimation, child);
   }
 }

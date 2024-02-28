@@ -9,6 +9,11 @@ import '../../../get_utils/get_utils.dart';
 import '../../get_navigation.dart';
 import 'get_root.dart';
 
+/// A CupertinoApp extension that integrates the Refreshed state management library.
+///
+/// This widget is similar to CupertinoApp, but with additional features provided
+/// by Refreshed, such as reactive state management, dependency injection, and
+/// navigation management.
 class GetCupertinoApp extends StatelessWidget {
   final GlobalKey<NavigatorState>? navigatorKey;
   final Widget? home;

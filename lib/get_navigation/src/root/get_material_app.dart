@@ -7,6 +7,11 @@ import '../../../get_utils/get_utils.dart';
 import '../../get_navigation.dart';
 import 'get_root.dart';
 
+/// A MaterialApp extension that integrates the Refreshed state management library.
+///
+/// This widget is similar to MaterialApp, but with additional features provided
+/// by Refreshed, such as reactive state management, dependency injection, and
+/// navigation management.
 class GetMaterialApp extends StatelessWidget {
   final GlobalKey<NavigatorState>? navigatorKey;
   final GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
