@@ -8,18 +8,27 @@ import '../../../instance_manager.dart';
 import '../../get_state_manager.dart';
 import 'list_notifier.dart';
 
+/// Signature for a function that creates an object of type `T`.
 typedef InitBuilder<T> = T Function();
 
+/// Signature for a function that builds a widget with a controller of type `T`.
 typedef GetControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
     T controller);
 
-extension WatchExt on BuildContext {
+/// Extension methods for accessing state in the context of a widget build.
+extension StateAccessExt on BuildContext {
+  /// Listens for state changes of type `T` and rebuilds the widget when it changes.
+  ///
+  /// This method is used to listen for changes to a specific state type `T` and rebuilds
+  /// the widget whenever the state changes.
   T listen<T>() {
     return Bind.of(this, rebuild: true);
   }
-}
 
-extension ReadExt on BuildContext {
+  /// Gets the current value of state of type `T` without rebuilding the widget.
+  ///
+  /// This method is used to get the current value of a specific state type `T` without
+  /// triggering a widget rebuild.
   T get<T>() {
     return Bind.of(this);
   }

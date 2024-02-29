@@ -1,3 +1,8 @@
+## 1.5.3
+
+- Removed redundant code.
+- Added API documentation.
+
 ## 1.5.2
 
 - Fixed an issue with the default dialog where custom widgets were not being overridden properly.
