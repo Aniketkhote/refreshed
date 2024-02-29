@@ -1,5 +1,9 @@
 ## 1.5.1
 
+- Fixed an issue with the default dialog where custom widgets were not being overridden properly.
+
+## 1.5.1
+
 - Fixed pub points
 
 ## 1.5.0

@@ -34,13 +34,10 @@ extension ExtensionBottomSheet on GetInterface {
         .push(GetModalBottomSheetRoute<T>(
       builder: (_) => bottomsheet,
       isPersistent: persistent,
-      // theme: Theme.of(key.currentContext, shadowThemeOnly: true),
       theme: Theme.of(key.currentContext!),
       isScrollControlled: isScrollControlled,
-
       barrierLabel: MaterialLocalizations.of(key.currentContext!)
           .modalBarrierDismissLabel,
-
       backgroundColor: backgroundColor ?? Colors.transparent,
       elevation: elevation,
       shape: shape,
@@ -79,7 +76,6 @@ extension ExtensionDialog on GetInterface {
   }) {
     assert(debugCheckHasMaterialLocalizations(context!));
 
-    //  final theme = Theme.of(context, shadowThemeOnly: true);
     final ThemeData theme = Theme.of(context!);
     return generalDialog<T>(
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
@@ -129,9 +125,10 @@ extension ExtensionDialog on GetInterface {
     final GlobalKey<NavigatorState>? key =
         navigatorKey ?? Get.nestedKey(id)?.navigatorKey;
     final NavigatorState nav = key?.currentState ??
-        Navigator.of(overlayContext!,
-            rootNavigator:
-                true); //overlay context will always return the root navigator
+        Navigator.of(
+          overlayContext!,
+          rootNavigator: true,
+        ); //overlay context will always return the root navigator
     return nav.push<T>(
       GetDialogRoute<T>(
         pageBuilder: pageBuilder,
@@ -192,10 +189,10 @@ extension ExtensionDialog on GetInterface {
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             shape: RoundedRectangleBorder(
-                side: BorderSide(
-                    color: buttonColor ?? theme.colorScheme.secondary,
-                    width: 2),
-                borderRadius: BorderRadius.circular(radius)),
+              side: BorderSide(
+                  color: buttonColor ?? theme.colorScheme.secondary, width: 2),
+              borderRadius: BorderRadius.circular(radius),
+            ),
           ),
           onPressed: () {
             if (onCancel == null) {
@@ -207,7 +204,8 @@ extension ExtensionDialog on GetInterface {
           child: Text(
             textCancel ?? 'Cancel',
             style: TextStyle(
-                color: cancelTextColor ?? theme.colorScheme.secondary),
+              color: cancelTextColor ?? theme.colorScheme.secondary,
+            ),
           ),
         ));
       }
@@ -216,52 +214,62 @@ extension ExtensionDialog on GetInterface {
       actions.add(confirm);
     } else {
       if (leanConfirm) {
-        actions.add(TextButton(
+        actions.add(
+          TextButton(
             style: TextButton.styleFrom(
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               backgroundColor: buttonColor ?? theme.colorScheme.secondary,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(radius)),
+                borderRadius: BorderRadius.circular(radius),
+              ),
             ),
             child: Text(
               textConfirm ?? 'Ok',
               style: TextStyle(
-                  color: confirmTextColor ?? theme.colorScheme.background),
+                color: confirmTextColor ?? theme.colorScheme.background,
+              ),
             ),
             onPressed: () {
               onConfirm?.call();
-            }));
+            },
+          ),
+        );
       }
     }
 
     final Widget baseAlertDialog = AlertDialog(
       titlePadding: titlePadding ?? const EdgeInsets.all(8),
       contentPadding: contentPadding ?? const EdgeInsets.all(8),
-
       backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(radius))),
-      title: Text(title, textAlign: TextAlign.center, style: titleStyle),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          content ??
-              Text(middleText,
-                  textAlign: TextAlign.center, style: middleTextStyle),
-          const SizedBox(height: 16),
-          ButtonTheme(
-            minWidth: 78.0,
-            height: 34.0,
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8,
-              runSpacing: 8,
-              children: actions,
-            ),
-          )
-        ],
+        borderRadius: BorderRadius.all(
+          Radius.circular(radius),
+        ),
       ),
-      // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
+      title: Text(title, textAlign: TextAlign.center, style: titleStyle),
+      content: custom ??
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              content ??
+                  Text(
+                    middleText,
+                    textAlign: TextAlign.center,
+                    style: middleTextStyle,
+                  ),
+              const SizedBox(height: 16),
+              ButtonTheme(
+                minWidth: 78.0,
+                height: 34.0,
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: actions,
+                ),
+              )
+            ],
+          ),
       buttonPadding: EdgeInsets.zero,
     );
 
