@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:refreshed/get_navigation/src/routes/new_path_route.dart';
 import 'package:refreshed/utils.dart';
 
 import '../../../get_instance/src/bindings_interface.dart';

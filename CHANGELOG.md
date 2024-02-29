@@ -1,4 +1,4 @@
-## 1.5.1
+## 1.5.2
 
 - Fixed an issue with the default dialog where custom widgets were not being overridden properly.
 

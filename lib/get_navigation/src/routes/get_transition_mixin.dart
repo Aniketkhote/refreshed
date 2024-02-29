@@ -696,27 +696,6 @@ Cannot read the previousTitle for a route that has not yet been installed''',
                 child: child,
               ));
 
-        case Transition.circularReveal:
-          return CircularRevealTransition().buildTransitions(
-              context,
-              route.curve,
-              route.alignment,
-              animation,
-              secondaryAnimation,
-              GetBackGestureDetector<T>(
-                popGestureEnable: () =>
-                    _isPopGestureEnabled(route, canSwipe(route), context),
-                onStartPopGesture: () {
-                  assert(_isPopGestureEnabled(route, canSwipe(route), context));
-                  return _startPopGesture(route);
-                },
-                limitedSwipe: limitedSwipe,
-                gestureWidth:
-                    route.gestureWidth?.call(context) ?? _kBackGestureWidth,
-                initialOffset: initialOffset,
-                child: child,
-              ));
-
         default:
           final customTransition = GetRoot.of(context).config.customTransition;
 

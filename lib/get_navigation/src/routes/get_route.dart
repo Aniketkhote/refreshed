@@ -31,11 +31,6 @@ class GetPage<T> extends Page<T> {
   final bool fullscreenDialog;
   final bool preventDuplicates;
   final Completer<T?>? completer;
-  // @override
-  // final LocalKey? key;
-
-  // @override
-  // RouteSettings get settings => this;
 
   @override
   final Object? arguments;

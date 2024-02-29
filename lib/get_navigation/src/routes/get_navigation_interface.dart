@@ -24,10 +24,7 @@ import '../routes/transitions_type.dart';
 ///
 /// another pop will change the _activePages stack to:
 /// 1) /home
-enum PopMode {
-  history,
-  page,
-}
+enum PopMode { history, page }
 
 /// Enables the user to customize the behavior when pushing multiple routes that
 /// shouldn't be duplicates

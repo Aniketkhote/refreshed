@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:refreshed/get_navigation/src/routes/new_path_route.dart';
 
 import '../../../refreshed.dart';
 
@@ -281,15 +282,5 @@ class ParseRouteTree {
       params[routePath.keys[i]!] = param;
     }
     return params;
-  }
-}
-
-extension FirstWhereOrNullExt<T> on List<T> {
-  /// The first element satisfying [test], or `null` if there are none.
-  T? firstWhereOrNull(bool Function(T element) test) {
-    for (var element in this) {
-      if (test(element)) return element;
-    }
-    return null;
   }
 }

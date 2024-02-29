@@ -247,7 +247,12 @@ class RouteNode {
       'RouteNode(name: $path, nodeSegments: $nodeSegments, fullPath: $fullPath )';
 }
 
-extension Foo<T> on Iterable<T> {
+/// Extension providing a `firstWhereOrNull` function to find the first element satisfying a condition.
+///
+/// This extension adds a method `firstWhereOrNull` to iterables, allowing you to find the first
+/// element that satisfies the provided condition, or `null` if no such element exists.
+extension FirstWhereOrNullExt<T> on Iterable<T> {
+  /// Finds the first element satisfying the provided condition, or `null` if none is found.
   T? firstWhereOrNull(bool Function(T element) test) {
     for (var element in this) {
       if (test(element)) return element;

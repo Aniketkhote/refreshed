@@ -3,6 +3,18 @@ import 'package:flutter/cupertino.dart';
 import '../../../refreshed.dart';
 import '../router_report.dart';
 
+/// A mixin that provides route lifecycle event reporting to a [RouterReportManager].
+///
+/// This mixin is intended to be used with [State] objects of [StatefulWidget]s
+/// to report the initialization and disposal of routes to a [RouterReportManager].
+///
+/// Example:
+///
+/// ```dart
+/// class MyRouteState extends State<MyRoute> with RouteReportMixin<MyRoute> {
+///   // Implement widget state...
+/// }
+/// ```
 @optionalTypeArgs
 mixin RouteReportMixin<T extends StatefulWidget> on State<T> {
   @override
@@ -18,6 +30,18 @@ mixin RouteReportMixin<T extends StatefulWidget> on State<T> {
   }
 }
 
+/// A mixin that provides page route lifecycle event reporting to a [RouterReportManager].
+///
+/// This mixin is intended to be used with classes that extend [Route] to report
+/// the installation and disposal of page routes to a [RouterReportManager].
+///
+/// Example:
+///
+/// ```dart
+/// class MyPageRoute extends PageRoute<MyPage> with PageRouteReportMixin<MyPage> {
+///   // Implement page route...
+/// }
+/// ```
 mixin PageRouteReportMixin<T> on Route<T> {
   @override
   void install() {
@@ -72,7 +96,6 @@ class GetPageRoute<T> extends PageRoute<T>
 
   final GetPageBuilder? page;
   final String? routeName;
-  //final String reference;
   final CustomTransition? customTransition;
   final List<BindingsInterface> bindings;
   final Map<String, String>? parameter;
