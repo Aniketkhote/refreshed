@@ -1,5 +1,3 @@
-> **Note:** This package is currently undergoing significant improvements and updates. However, we advise against using it in your production projects at this time due to potential compatibility issues and bugs. We are actively working on resolving these issues to provide a more stable experience. Please be aware that the existing package lacks proper documentation, making it challenging to understand the code and resolve issues efficiently. Consequently, it may take some time to address all issues comprehensively. If you possess a strong understanding of Flutter and GetX, we welcome your contributions to help improve this package. Your expertise and collaboration are invaluable in making this package better suited for the community's needs.
-
 # Refreshed GetX
 
 This is a refreshed version of GetX, aimed at enhancing the robustness, reliability, and bug-free experience of using GetX for your Flutter projects. We understand that as a newcomer to Flutter and Dart ecosystem, you're eager to learn and create meaningful applications. This refreshed version of GetX is tailored to support your journey from a novice to a proficient developer.
