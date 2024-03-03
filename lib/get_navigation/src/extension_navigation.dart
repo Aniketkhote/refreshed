@@ -878,15 +878,21 @@ extension GetNavigationExt on GetInterface {
     }
   }
 
-  void closeAllDialogsAndBottomSheets(
-    String? id,
-  ) {
+  /// Closes all open dialogs and bottom sheets.
+  ///
+  /// Parameters:
+  /// - [id]: The key associated with the delegate to use for closing overlays. If null, the root delegate will be used.
+  void closeAllDialogsAndBottomSheets(String? id) {
     // It can not be divided, because dialogs and bottomsheets can not be consecutive
     while (isDialogOpen! && isBottomSheetOpen!) {
       closeOverlay(id: id);
     }
   }
 
+  /// Closes all open dialogs.
+  ///
+  /// Parameters:
+  /// - [id]: The key associated with the delegate to use for closing dialogs. If null, the root delegate will be used.
   void closeAllDialogs({
     String? id,
   }) {
@@ -895,10 +901,18 @@ extension GetNavigationExt on GetInterface {
     }
   }
 
+  /// Closes the topmost overlay (dialog or bottom sheet) using the given delegate key.
+  ///
+  /// Parameters:
+  /// - [id]: The key associated with the delegate to use for closing the overlay. If null, the root delegate will be used.
   void closeOverlay({String? id}) {
     searchDelegate(id).navigatorKey.currentState?.pop();
   }
 
+  /// Closes all open bottom sheets.
+  ///
+  /// Parameters:
+  /// - [id]: The key associated with the delegate to use for closing bottom sheets. If null, the root delegate will be used.
   void closeAllBottomSheets({
     String? id,
   }) {
@@ -907,6 +921,7 @@ extension GetNavigationExt on GetInterface {
     }
   }
 
+  /// Closes all open overlays (dialogs, bottom sheets, and snackbars).
   void closeAllOverlays() {
     closeAllDialogsAndBottomSheets(null);
     closeAllSnackbars();
@@ -1006,12 +1021,18 @@ extension GetNavigationExt on GetInterface {
     );
   }
 
+  /// Navigates off until a page that satisfies the given predicate is found.
+  ///
+  /// This method searches for a page in the navigation stack starting from the current one
+  /// and navigates backward until it finds a page that satisfies the given predicate.
+  /// Once the predicate condition is met, it stops navigation and returns the result.
   Future<T?> offUntil<T>(
     Widget Function() page,
     bool Function(GetPage) predicate, [
     Object? arguments,
     String? id,
   ]) {
+    // Delegate the navigation operation to the appropriate delegate based on the provided ID
     return searchDelegate(id).offUntil(
       page,
       predicate,
@@ -1083,8 +1104,11 @@ extension GetNavigationExt on GetInterface {
     );
   }
 
+  /// Asynchronously updates the application locale and forces an update.
   Future<void> updateLocale(Locale l) async {
+    // Set the new locale for the application
     Get.locale = l;
+    // Force an update to ensure that the locale change takes effect immediately
     await forceAppUpdate();
   }
 
@@ -1105,24 +1129,58 @@ extension GetNavigationExt on GetInterface {
     await engine.performReassemble();
   }
 
+  /// Function to trigger an application update.
   void appUpdate() => rootController.update();
 
+  /// Function to change the theme of the application.
+  ///
+  /// Parameters:
+  /// - [theme]: The new theme to apply.
   void changeTheme(ThemeData theme) {
     rootController.setTheme(theme);
   }
 
+  /// Function to change the theme mode of the application.
+  ///
+  /// Parameters:
+  /// - [themeMode]: The new theme mode to apply.
   void changeThemeMode(ThemeMode themeMode) {
     rootController.setThemeMode(themeMode);
   }
 
+  /// Function to add a new navigator key to the application.
+  ///
+  /// Parameters:
+  /// - [newKey]: The new navigator key to add.
+  ///
+  /// Returns:
+  /// The added navigator key.
   GlobalKey<NavigatorState>? addKey(GlobalKey<NavigatorState> newKey) {
     return rootController.addKey(newKey);
   }
 
+  /// Function to retrieve a nested delegate by its key.
+  ///
+  /// Parameters:
+  /// - [key]: The key of the nested delegate to retrieve.
+  ///
+  /// Returns:
+  /// The nested delegate associated with the given key, if found.
+  /// If no key is provided, returns the root delegate.
   GetDelegate? nestedKey(String? key) {
     return rootController.nestedKey(key);
   }
 
+  /// Function to search for a delegate by its route id.
+  ///
+  /// Parameters:
+  /// - [k]: The route id to search for.
+  ///
+  /// Returns:
+  /// The delegate associated with the given route id.
+  ///
+  /// Throws:
+  /// - If the provided route id is not found in the keys map.
   GetDelegate searchDelegate(String? k) {
     GetDelegate key;
     if (k == null) {
@@ -1144,6 +1202,7 @@ extension GetNavigationExt on GetInterface {
     //   """;
     // }
 
+    // Missing return statement for 'key' here in the original code
     return key;
   }
 
@@ -1161,10 +1220,14 @@ extension GetNavigationExt on GetInterface {
   bool get isSnackbarOpen =>
       SnackbarController.isSnackbarBeingShown; //routing.isSnackbar;
 
+  /// A function to close all active snackbars.
   void closeAllSnackbars() {
     SnackbarController.cancelAllSnackbars();
   }
 
+  /// A function to close the currently displayed snackbar, if any.
+  ///
+  /// Waits for the snackbar to close before returning.
   Future<void> closeCurrentSnackbar() async {
     await SnackbarController.closeCurrentSnackbar();
   }

@@ -5,48 +5,129 @@ import 'package:refreshed/utils.dart';
 import '../../../refreshed.dart' hide ContextExt;
 import '../router_report.dart';
 
+/// A class that holds configuration data for the application.
 class ConfigData {
+  /// Callback for routing changes.
   final ValueChanged<Routing?>? routingCallback;
+
+  /// Default transition animation for route changes.
   final Transition? defaultTransition;
+
+  /// Callback function called when the application initializes.
   final VoidCallback? onInit;
+
+  /// Callback function called when the application is ready.
   final VoidCallback? onReady;
+
+  /// Callback function called when the application is disposed.
   final VoidCallback? onDispose;
+
+  /// Flag to enable or disable logging.
   final bool? enableLog;
+
+  /// Callback function for custom log writing.
   final LogWriterCallback? logWriterCallback;
+
+  /// Smart management strategy for state management.
   final SmartManagement smartManagement;
+
+  /// List of bindings for dependency injection.
   final List<Bind> binds;
+
+  /// Duration for route transition animations.
   final Duration? transitionDuration;
+
+  /// Flag indicating whether to use global state by default.
   final bool? defaultGlobalState;
+
+  /// List of routes/pages in the application.
   final List<GetPage>? getPages;
+
+  /// Route to use when an unknown route is encountered.
   final GetPage? unknownRoute;
+
+  /// Provider for route information.
   final RouteInformationProvider? routeInformationProvider;
+
+  /// Parser for route information.
   final RouteInformationParser<Object>? routeInformationParser;
+
+  /// Delegate for managing routing and navigation.
   final RouterDelegate<Object>? routerDelegate;
+
+  /// Dispatcher for back button events.
   final BackButtonDispatcher? backButtonDispatcher;
+
+  /// List of observers for the navigator.
   final List<NavigatorObserver>? navigatorObservers;
+
+  /// GlobalKey for the navigator.
   final GlobalKey<NavigatorState>? navigatorKey;
+
+  /// GlobalKey for the ScaffoldMessenger.
   final GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
+
+  /// Localization keys for translations.
   final Map<String, Map<String, String>>? translationsKeys;
+
+  /// Translations for localization.
   final Translations? translations;
+
+  /// Locale to use for localization.
   final Locale? locale;
+
+  /// Fallback locale to use when the requested locale is not available.
   final Locale? fallbackLocale;
+
+  /// Initial route of the application.
   final String? initialRoute;
+
+  /// Custom transition animation for route changes.
   final CustomTransition? customTransition;
+
+  /// Widget to use as the home screen.
   final Widget? home;
-  final bool testMode;
-  final Key? unikey;
+
+  /// Theme data for light mode.
   final ThemeData? theme;
+
+  /// Theme data for dark mode.
   final ThemeData? darkTheme;
+
+  /// Mode for applying themes (e.g., light, dark, system).
   final ThemeMode? themeMode;
+
+  /// Flag indicating whether to enable default pop gesture behavior.
   final bool defaultPopGesture;
+
+  /// Flag indicating whether to make routes opaque by default.
   final bool defaultOpaqueRoute;
+
+  /// Duration for default transition animations.
   final Duration defaultTransitionDuration;
+
+  /// Curve for default transition animations.
   final Curve defaultTransitionCurve;
+
+  /// Curve for default dialog transition animations.
   final Curve defaultDialogTransitionCurve;
+
+  /// Duration for default dialog transition animations.
   final Duration defaultDialogTransitionDuration;
+
+  /// Routing configuration.
   final Routing routing;
+
+  /// Additional parameters for configuration.
   final Map<String, String?> parameters;
 
+  /// Key for uniquely identifying the configuration instance.
+  final Key? unikey;
+
+  /// Flag indicating whether the application is in test mode.
+  final bool testMode;
+
+  /// Constructs a new [ConfigData] instance.
   ConfigData({
     required this.routingCallback,
     required this.defaultTransition,
@@ -512,14 +593,10 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
 
   /// Sets the theme for the application.
   void setTheme(ThemeData value) {
-    if (config.darkTheme == null) {
+    if (value.brightness == Brightness.light || config.darkTheme == null) {
       config = config.copyWith(theme: value);
     } else {
-      if (value.brightness == Brightness.light) {
-        config = config.copyWith(theme: value);
-      } else {
-        config = config.copyWith(darkTheme: value);
-      }
+      config = config.copyWith(darkTheme: value);
     }
     update();
   }
