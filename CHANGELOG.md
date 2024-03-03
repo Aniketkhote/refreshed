@@ -1,4 +1,4 @@
-## 1.5.3
+## 1.5.4
 
 - Resolved issue with Snackbar not using full width, causing buttons on that height to be unclickable.
 
