@@ -2,18 +2,26 @@ import 'package:flutter/widgets.dart';
 
 import '../../../refreshed.dart';
 
+/// A custom navigator widget that uses GetX for routing.
 class GetNavigator extends Navigator {
+  /// Constructs a [GetNavigator] using the provided route generation function.
+  ///
+  /// The [onGenerateRoute] callback is used to generate routes for the navigator.
+  /// The [pages] parameter specifies the list of [GetPage] objects to be used for route resolution.
+  ///
+  /// The [key], [onPopPage], [observers], [transitionDelegate], [initialRoute], and [restorationScopeId]
+  /// parameters are passed to the superclass constructor of [Navigator].
   GetNavigator.onGenerateRoute({
-    GlobalKey<NavigatorState>? super.key,
+    GlobalKey<NavigatorState>? key,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required List<GetPage> super.pages,
+    required List<GetPage> pages,
     List<NavigatorObserver>? observers,
     super.reportsRouteUpdateToEngine,
     TransitionDelegate? transitionDelegate,
-    super.initialRoute,
-    super.restorationScopeId,
+    String? initialRoute,
+    String? restorationScopeId,
   }) : super(
-          //keys should be optional
+          key: key,
           onPopPage: onPopPage ??
               (route, result) {
                 final didPop = route.didPop(result);
@@ -42,17 +50,23 @@ class GetNavigator extends Navigator {
               transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
         );
 
+  /// Constructs a [GetNavigator] using the provided parameters.
+  ///
+  /// This constructor directly sets the list of [pages] to be used for route resolution.
+  ///
+  /// The [key], [onPopPage], [observers], [transitionDelegate], [initialRoute], and [restorationScopeId]
+  /// parameters are passed to the superclass constructor of [Navigator].
   GetNavigator({
-    super.key,
+    GlobalKey<NavigatorState>? key,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required List<GetPage> super.pages,
+    required List<GetPage> pages,
     List<NavigatorObserver>? observers,
     super.reportsRouteUpdateToEngine,
     TransitionDelegate? transitionDelegate,
-    super.initialRoute,
-    super.restorationScopeId,
+    String? initialRoute,
+    String? restorationScopeId,
   }) : super(
-          //keys should be optional
+          key: key,
           onPopPage: onPopPage ??
               (route, result) {
                 final didPop = route.didPop(result);

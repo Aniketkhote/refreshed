@@ -29,7 +29,7 @@ class GetSnackBar extends StatefulWidget {
   /// The direction in which the SnackBar can be dismissed.
   ///
   /// Default is [DismissDirection.down] when
-  /// [snackPosition] == [SnackPosition.bttom] and [DismissDirection.up]
+  /// [snackPosition] == [SnackPosition.bottom] and [DismissDirection.up]
   /// when [snackPosition] == [SnackPosition.top]
   final DismissDirection? dismissDirection;
 
@@ -106,6 +106,12 @@ class GetSnackBar extends StatefulWidget {
   /// If the user swipes to dismiss or clicks the overlay, no value
   /// will be returned.
   final bool isDismissible;
+
+  /// Disabling the Alignment widget, this modification ensures that when a snack bar appears,
+  /// it overlays the entire screen according to its height,
+  /// making widgets in that portion inaccessible. Setting disableSelfAlignment to true disables self-alignment,
+  /// allowing access to background widgets while the snack bar is visible.
+  final bool disableSelfAlignment;
 
   /// Used to limit Snack width (usually on large screens)
   final double? maxWidth;
@@ -187,6 +193,7 @@ class GetSnackBar extends StatefulWidget {
     this.borderRadius = 0.0,
     this.borderColor,
     this.borderWidth = 1.0,
+    this.disableSelfAlignment = false,
     this.backgroundColor = const Color(0xFF303030),
     this.leftBarIndicatorColor,
     this.boxShadows,
@@ -194,7 +201,7 @@ class GetSnackBar extends StatefulWidget {
     this.mainButton,
     this.onTap,
     this.onHover,
-    this.duration,
+    this.duration = const Duration(milliseconds: 1500),
     this.isDismissible = true,
     this.dismissDirection,
     this.showProgressIndicator = false,
@@ -223,11 +230,6 @@ class GetSnackBar extends StatefulWidget {
   }
 }
 
-/// The state for the [GetSnackBar] widget.
-///
-/// This state class manages the state of the [GetSnackBar] widget,
-/// including animations, layout calculations, and focus management.
-/// It extends [State] and mixes in [TickerProviderStateMixin] to handle animations.
 class GetSnackBarState extends State<GetSnackBar>
     with TickerProviderStateMixin {
   // State variables and initialization code here
@@ -292,57 +294,64 @@ class GetSnackBarState extends State<GetSnackBar>
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      heightFactor: 1.0,
-      child: Material(
-        color: widget.snackStyle == SnackStyle.floating
-            ? Colors.transparent
-            : widget.backgroundColor,
-        child: SafeArea(
-          minimum: widget.snackPosition == SnackPosition.bottom
-              ? EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom)
-              : EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          bottom: widget.snackPosition == SnackPosition.bottom,
-          top: widget.snackPosition == SnackPosition.top,
-          left: false,
-          right: false,
-          child: Stack(
-            children: [
-              FutureBuilder<Size>(
-                future: _boxHeightCompleter.future,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (widget.barBlur == 0) {
-                      return _emptyWidget;
-                    }
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(widget.borderRadius),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(
-                            sigmaX: widget.barBlur, sigmaY: widget.barBlur),
-                        child: Container(
-                          height: snapshot.data!.height,
-                          width: snapshot.data!.width,
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius:
-                                BorderRadius.circular(widget.borderRadius),
-                          ),
-                        ),
-                      ),
-                    );
-                  } else {
+    if (widget.disableSelfAlignment) {
+      return _snackBar(context);
+    } else {
+      return Align(
+        heightFactor: 1.0,
+        child: _snackBar(context),
+      );
+    }
+  }
+
+  Material _snackBar(BuildContext context) {
+    return Material(
+      color: widget.snackStyle == SnackStyle.floating
+          ? Colors.transparent
+          : widget.backgroundColor,
+      child: SafeArea(
+        minimum: widget.snackPosition == SnackPosition.bottom
+            ? EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom)
+            : EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+        bottom: widget.snackPosition == SnackPosition.bottom,
+        top: widget.snackPosition == SnackPosition.top,
+        left: false,
+        right: false,
+        child: Stack(
+          children: [
+            FutureBuilder<Size>(
+              future: _boxHeightCompleter.future,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (widget.barBlur == 0) {
                     return _emptyWidget;
                   }
-                },
-              ),
-              if (widget.userInputForm != null)
-                _containerWithForm()
-              else
-                _containerWithoutForm()
-            ],
-          ),
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(widget.borderRadius),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(
+                          sigmaX: widget.barBlur, sigmaY: widget.barBlur),
+                      child: Container(
+                        height: snapshot.data!.height,
+                        width: snapshot.data!.width,
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius:
+                              BorderRadius.circular(widget.borderRadius),
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return _emptyWidget;
+                }
+              },
+            ),
+            if (widget.userInputForm != null)
+              _containerWithForm()
+            else
+              _containerWithoutForm()
+          ],
         ),
       ),
     );
@@ -367,10 +376,7 @@ class GetSnackBarState extends State<GetSnackBar>
         widget.userInputForm != null ||
             ((widget.message != null && widget.message!.isNotEmpty) ||
                 widget.messageText != null),
-        '''
-You need to either use message[String],
-or messageText[Widget] 
-or define a userInputForm[Form] in GetSnackbar''');
+        '''You need to either use message[String], or messageText[Widget] or define a userInputForm[Form] in GetSnackbar''');
 
     _isTitlePresent = (widget.title != null || widget.titleText != null);
     _messageTopMargin = _isTitlePresent ? 6.0 : widget.padding.top;

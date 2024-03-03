@@ -1,5 +1,9 @@
 ## 1.5.3
 
+- Resolved issue with Snackbar not using full width, causing buttons on that height to be unclickable.
+
+## 1.5.3
+
 - Removed redundant code.
 - Added API documentation.
 

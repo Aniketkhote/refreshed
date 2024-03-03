@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import '../../../refreshed.dart';
+
 /// Extension providing additional functionality for doubles.
 extension DoubleExt on double {
   /// Returns this double value rounded to the specified number of decimal places.
@@ -29,4 +31,12 @@ extension DoubleExt on double {
 
   /// Returns a [Duration] representing this double value in days.
   Duration get days => Duration(hours: (this * Duration.hoursPerDay).round());
+}
+
+//Converts a double value to a percentage
+extension PercentSized on double {
+  // height: 50.0.hp = 50%
+  double get hp => (Get.height * (this / 100));
+  // width: 30.0.hp = 30%
+  double get wp => (Get.width * (this / 100));
 }
