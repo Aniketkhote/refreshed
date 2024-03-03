@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+/// A class representing a left-to-right fade transition animation.
 class LeftToRightFadeTransition {
+  /// Builds the transition animation.
   Widget buildTransitions(
       BuildContext context,
       Curve? curve,
@@ -27,7 +29,9 @@ class LeftToRightFadeTransition {
   }
 }
 
+/// A class representing a right-to-left fade transition animation.
 class RightToLeftFadeTransition {
+  /// Builds the transition animation.
   Widget buildTransitions(
       BuildContext context,
       Curve? curve,
@@ -53,7 +57,9 @@ class RightToLeftFadeTransition {
   }
 }
 
+/// A class representing a no transition animation.
 class NoTransition {
+  /// Builds the transition animation.
   Widget buildTransitions(
       BuildContext context,
       Curve curve,
@@ -65,7 +71,9 @@ class NoTransition {
   }
 }
 
+/// A class representing a fade-in transition animation.
 class FadeInTransition {
+  /// Builds the transition animation.
   Widget buildTransitions(
       BuildContext context,
       Curve? curve,
@@ -77,7 +85,9 @@ class FadeInTransition {
   }
 }
 
+/// A class representing a slide-down transition animation.
 class SlideDownTransition {
+  /// Builds the transition animation.
   Widget buildTransitions(
       BuildContext context,
       Curve? curve,
@@ -95,7 +105,9 @@ class SlideDownTransition {
   }
 }
 
+/// A class representing a slide-left transition animation.
 class SlideLeftTransition {
+  /// Builds the transition animation.
   Widget buildTransitions(
       BuildContext context,
       Curve? curve,
@@ -113,7 +125,9 @@ class SlideLeftTransition {
   }
 }
 
+/// A class representing a slide-right transition animation.
 class SlideRightTransition {
+  /// Builds the transition animation.
   Widget buildTransitions(
       BuildContext context,
       Curve? curve,
@@ -131,7 +145,9 @@ class SlideRightTransition {
   }
 }
 
+/// A class representing a slide-top transition animation.
 class SlideTopTransition {
+  /// Builds the transition animation.
   Widget buildTransitions(
       BuildContext context,
       Curve? curve,
@@ -149,7 +165,9 @@ class SlideTopTransition {
   }
 }
 
+/// A class representing a zoom-in transition animation.
 class ZoomInTransition {
+  /// Builds the transition animation.
   Widget buildTransitions(
       BuildContext context,
       Curve? curve,
@@ -164,7 +182,9 @@ class ZoomInTransition {
   }
 }
 
+/// A class representing a size transition animation.
 class SizeTransitions {
+  /// Builds the transition animation.
   Widget buildTransitions(
       BuildContext context,
       Curve curve,
