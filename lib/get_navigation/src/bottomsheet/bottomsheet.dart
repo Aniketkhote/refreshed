@@ -8,6 +8,7 @@ import '../router_report.dart';
 /// the builder for the content, theme, background color, elevation, shape, animation
 /// duration, and more.
 class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
+  /// Constructs a [GetModalBottomSheetRoute].
   GetModalBottomSheetRoute({
     this.builder,
     this.theme,
@@ -16,7 +17,6 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.isPersistent,
     this.elevation,
     this.shape,
-    this.removeTop = true,
     this.clipBehavior,
     this.modalBarrierColor,
     this.isDismissible = true,
@@ -26,34 +26,65 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.enterBottomSheetDuration = const Duration(milliseconds: 250),
     this.exitBottomSheetDuration = const Duration(milliseconds: 200),
     this.curve,
+    this.removeTop = true,
   }) {
     RouterReportManager.instance.reportCurrentRoute(this);
   }
-  final bool? isPersistent;
+
+  /// A builder function that returns the widget tree for the modal bottom sheet.
   final WidgetBuilder? builder;
+
+  /// The theme to use for the modal bottom sheet.
   final ThemeData? theme;
-  final bool isScrollControlled;
+
+  /// The color of the background behind the modal bottom sheet.
   final Color? backgroundColor;
+
+  /// Whether this route is persistent (remains in memory after it's been dismissed).
+  final bool? isPersistent;
+
+  /// Whether the modal bottom sheet can scroll to accommodate the keyboard.
+  final bool isScrollControlled;
+
+  /// The z-coordinate at which to place the modal bottom sheet.
   final double? elevation;
+
+  /// The shape of the modal bottom sheet.
   final ShapeBorder? shape;
+
+  /// The clipping behavior of the modal bottom sheet.
   final Clip? clipBehavior;
+
+  /// The color of the modal barrier that's shown behind the modal bottom sheet.
   final Color? modalBarrierColor;
+
+  /// Whether the modal bottom sheet can be dismissed by tapping outside of its contents.
   final bool isDismissible;
+
+  /// Whether the modal bottom sheet can be dragged vertically.
   final bool enableDrag;
+
+  /// The duration for the modal bottom sheet to animate when entering the screen.
   final Duration enterBottomSheetDuration;
+
+  /// The duration for the modal bottom sheet to animate when exiting the screen.
   final Duration exitBottomSheetDuration;
+
+  /// The curve to use for the modal bottom sheet's entrance and exit animations.
   final Curve? curve;
-  // remove safearea from top
+
+  /// Whether to remove the safe area from the top of the modal bottom sheet.
   final bool removeTop;
+
+  /// A label for the modal barrier that's shown behind the modal bottom sheet.
+  @override
+  final String? barrierLabel;
 
   @override
   Duration get transitionDuration => const Duration(milliseconds: 700);
 
   @override
   bool get barrierDismissible => isDismissible;
-
-  @override
-  final String? barrierLabel;
 
   @override
   Color get barrierColor => modalBarrierColor ?? Colors.black54;

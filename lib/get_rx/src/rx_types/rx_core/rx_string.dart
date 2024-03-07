@@ -1,8 +1,14 @@
 part of '../rx_types.dart';
 
+/// Extension methods for [Rx<String>] to provide additional functionality.
 extension RxStringExt on Rx<String> {
+  /// Concatenates the current value of [Rx<String>] with [val].
   String operator +(String val) => value + val;
 
+  /// Compares the current value of [Rx<String>] with [other].
+  ///
+  /// Returns a negative integer if the current value is less than [other],
+  /// zero if they are equal, and a positive integer if the current value is greater than [other].
   int compareTo(String other) {
     return value.compareTo(other);
   }
