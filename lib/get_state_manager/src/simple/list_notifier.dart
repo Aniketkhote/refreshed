@@ -1,8 +1,8 @@
-import 'dart:collection';
+import "dart:collection";
 
-import 'package:flutter/foundation.dart';
+import "package:flutter/foundation.dart";
 
-import '../../../refreshed.dart';
+import 'package:refreshed/refreshed.dart';
 
 // This callback remove the listener on addListener function
 typedef Disposer = void Function();
@@ -81,8 +81,8 @@ mixin ListNotifierSingleMixin on Listenable {
   bool _debugAssertNotDisposed() {
     assert(() {
       if (isDisposed) {
-        throw FlutterError('''A $runtimeType was used after being disposed.\n
-'Once you have called dispose() on a $runtimeType, it can no longer be used.''');
+        throw FlutterError("""A $runtimeType was used after being disposed.\n
+'Once you have called dispose() on a $runtimeType, it can no longer be used.""");
       }
       return true;
     }());
@@ -130,8 +130,8 @@ mixin ListNotifierGroupMixin on Listenable {
   bool _debugAssertNotDisposed() {
     assert(() {
       if (_updatersGroupIds == null) {
-        throw FlutterError('''A $runtimeType was used after being disposed.\n
-'Once you have called dispose() on a $runtimeType, it can no longer be used.''');
+        throw FlutterError("""A $runtimeType was used after being disposed.\n
+'Once you have called dispose() on a $runtimeType, it can no longer be used.""");
       }
       return true;
     }());
@@ -201,7 +201,7 @@ class NotifyData {
   const NotifyData(
       {required this.updater,
       required this.disposers,
-      this.throwException = true});
+      this.throwException = true,});
   final GetStateUpdate updater;
   final List<VoidCallback> disposers;
   final bool throwException;

@@ -3,11 +3,11 @@
 /// This list contains language codes representing languages
 /// that are written and read from right to left.
 const List<String> rtlLanguages = <String>[
-  'ar', // Arabic
-  'fa', // Farsi
-  'he', // Hebrew
-  'ps', // Pashto
-  'ur', // Urdu
+  "ar", // Arabic
+  "fa", // Farsi
+  "he", // Hebrew
+  "ps", // Pashto
+  "ur", // Urdu
 ];
 
 /// Abstract class representing translations for an application.

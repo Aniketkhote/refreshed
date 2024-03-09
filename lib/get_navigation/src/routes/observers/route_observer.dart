@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
 
-import '../../../../get_core/get_core.dart';
-import '../../../../instance_manager.dart';
-import '../../../get_navigation.dart';
-import '../../dialog/dialog_route.dart';
-import '../../router_report.dart';
+import 'package:refreshed/get_core/get_core.dart';
+import 'package:refreshed/instance_manager.dart';
+import 'package:refreshed/get_navigation/get_navigation.dart';
+import 'package:refreshed/get_navigation/src/dialog/dialog_route.dart';
+import 'package:refreshed/get_navigation/src/router_report.dart';
 
 /// Extracts the name of a route based on it's instance type
 /// or null if not possible.
@@ -19,22 +19,22 @@ String? _extractRouteName(Route? route) {
   }
 
   if (route is GetDialogRoute) {
-    return 'DIALOG ${route.hashCode}';
+    return "DIALOG ${route.hashCode}";
   }
 
   if (route is GetModalBottomSheetRoute) {
-    return 'BOTTOMSHEET ${route.hashCode}';
+    return "BOTTOMSHEET ${route.hashCode}";
   }
 
   return null;
 }
 
 class GetObserver extends NavigatorObserver {
+
+  GetObserver([this.routing, this._routeSend]);
   final Function(Routing?)? routing;
 
   final Routing? _routeSend;
-
-  GetObserver([this.routing, this._routeSend]);
 
   @override
   void didPop(Route route, Route? previousRoute) {
@@ -62,8 +62,8 @@ class GetObserver extends NavigatorObserver {
     _routeSend?.update((value) {
       // Only PageRoute is allowed to change current value
       if (previousRoute is PageRoute) {
-        value.current = _extractRouteName(previousRoute) ?? '';
-        value.previous = newRoute.name ?? '';
+        value.current = _extractRouteName(previousRoute) ?? "";
+        value.previous = newRoute.name ?? "";
       } else if (value.previous.isNotEmpty) {
         value.current = value.previous;
       }
@@ -71,7 +71,7 @@ class GetObserver extends NavigatorObserver {
       value.args = previousRoute?.settings.arguments;
       value.route = previousRoute;
       value.isBack = true;
-      value.removed = '';
+      value.removed = "";
       // value.isSnackbar = newRoute.isSnackbar;
       value.isBottomSheet = newRoute.isBottomSheet;
       value.isDialog = newRoute.isDialog;
@@ -102,7 +102,7 @@ class GetObserver extends NavigatorObserver {
     _routeSend!.update((value) {
       // Only PageRoute is allowed to change current value
       if (route is PageRoute) {
-        value.current = newRoute.name ?? '';
+        value.current = newRoute.name ?? "";
       }
       final previousRouteName = _extractRouteName(previousRoute);
       if (previousRouteName != null) {
@@ -112,7 +112,7 @@ class GetObserver extends NavigatorObserver {
       value.args = route.settings.arguments;
       value.route = route;
       value.isBack = false;
-      value.removed = '';
+      value.removed = "";
       value.isBottomSheet =
           newRoute.isBottomSheet ? true : value.isBottomSheet ?? false;
       value.isDialog = newRoute.isDialog ? true : value.isDialog ?? false;
@@ -134,8 +134,8 @@ class GetObserver extends NavigatorObserver {
     _routeSend?.update((value) {
       value.route = previousRoute;
       value.isBack = false;
-      value.removed = routeName ?? '';
-      value.previous = routeName ?? '';
+      value.removed = routeName ?? "";
+      value.previous = routeName ?? "";
       // value.isSnackbar = currentRoute.isSnackbar ? false : value.isSnackbar;
       value.isBottomSheet =
           currentRoute.isBottomSheet ? false : value.isBottomSheet;
@@ -167,14 +167,14 @@ class GetObserver extends NavigatorObserver {
     _routeSend?.update((value) {
       // Only PageRoute is allowed to change current value
       if (newRoute is PageRoute) {
-        value.current = newName ?? '';
+        value.current = newName ?? "";
       }
 
       value.args = newRoute?.settings.arguments;
       value.route = newRoute;
       value.isBack = false;
-      value.removed = '';
-      value.previous = '$oldName';
+      value.removed = "";
+      value.previous = "$oldName";
       // value.isSnackbar = currentRoute.isSnackbar ? false : value.isSnackbar;
       value.isBottomSheet =
           currentRoute.isBottomSheet ? false : value.isBottomSheet;
@@ -190,6 +190,18 @@ class GetObserver extends NavigatorObserver {
 
 //TODO: Use copyWith, and remove mutate variables
 class Routing {
+
+  Routing({
+    this.current = "",
+    this.previous = "",
+    this.args,
+    this.removed = "",
+    this.route,
+    this.isBack,
+    // this.isSnackbar,
+    this.isBottomSheet,
+    this.isDialog,
+  });
   String current;
   String previous;
   dynamic args;
@@ -200,18 +212,6 @@ class Routing {
   bool? isBottomSheet;
   bool? isDialog;
 
-  Routing({
-    this.current = '',
-    this.previous = '',
-    this.args,
-    this.removed = '',
-    this.route,
-    this.isBack,
-    // this.isSnackbar,
-    this.isBottomSheet,
-    this.isDialog,
-  });
-
   void update(void Function(Routing value) fn) {
     fn(this);
   }
@@ -219,10 +219,6 @@ class Routing {
 
 /// This is basically a util for rules about 'what a route is'
 class _RouteData {
-  final bool isGetPageRoute;
-  final bool isBottomSheet;
-  final bool isDialog;
-  final String? name;
 
   _RouteData({
     required this.name,
@@ -239,4 +235,8 @@ class _RouteData {
       isBottomSheet: route is GetModalBottomSheetRoute,
     );
   }
+  final bool isGetPageRoute;
+  final bool isBottomSheet;
+  final bool isDialog;
+  final String? name;
 }

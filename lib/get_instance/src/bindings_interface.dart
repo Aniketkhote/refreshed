@@ -13,7 +13,7 @@ abstract class BindingsInterface<T> {
 /// instance of Bindings to manage the
 /// dependencies() (via Get.put()) for the Route you are opening.
 // ignore: one_member_abstracts
-@Deprecated('Use Binding instead')
+@Deprecated("Use Binding instead")
 abstract class Bindings extends BindingsInterface<void> {
   @override
   void dependencies();

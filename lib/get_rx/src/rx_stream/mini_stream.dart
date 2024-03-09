@@ -1,4 +1,4 @@
-part of 'rx_stream.dart';
+part of "rx_stream.dart";
 
 class Node<T> {
   T? data;
@@ -64,7 +64,7 @@ class MiniStream<T> {
 
   void close() {
     if (_isClosed) {
-      throw 'You can not close a closed Stream';
+      throw "You can not close a closed Stream";
     }
     listenable._notifyDone();
     listenable.clear();
@@ -179,7 +179,7 @@ class FastList<T> {
     Node<MiniSubscription<T>>? previousNode;
 
     if (isEmpty || length < position || position < 0) {
-      throw Exception('Invalid position');
+      throw Exception("Invalid position");
     } else if (position == 0) {
       _head = _head!.next;
     } else {

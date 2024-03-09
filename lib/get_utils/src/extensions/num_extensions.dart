@@ -1,4 +1,4 @@
-import '../../../utils.dart';
+import 'package:refreshed/utils.dart';
 
 /// Extension providing utility functions for numerical values.
 extension GetNumUtils on num {

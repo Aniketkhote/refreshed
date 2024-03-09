@@ -1,4 +1,4 @@
-import '../refreshed.dart';
+import 'package:refreshed/refreshed.dart';
 
 /// Extension method to reset the Get instance.
 extension GetResetExt on GetInterface {

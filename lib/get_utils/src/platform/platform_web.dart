@@ -1,6 +1,6 @@
-import 'package:web/web.dart' as html;
+import "package:web/web.dart" as html;
 
-import '../../get_utils.dart';
+import 'package:refreshed/get_utils/get_utils.dart';
 
 html.Navigator _navigator = html.window.navigator;
 
@@ -15,25 +15,25 @@ class GeneralPlatform {
 
   /// Returns `true` if the current platform is macOS.
   static bool get isMacOS =>
-      _navigator.appVersion.contains('Mac OS') && !GeneralPlatform.isIOS;
+      _navigator.appVersion.contains("Mac OS") && !GeneralPlatform.isIOS;
 
   /// Returns `true` if the current platform is Windows.
-  static bool get isWindows => _navigator.appVersion.contains('Win');
+  static bool get isWindows => _navigator.appVersion.contains("Win");
 
   /// Returns `true` if the current platform is Linux.
   static bool get isLinux =>
-      (_navigator.appVersion.contains('Linux') ||
-          _navigator.appVersion.contains('x11')) &&
+      (_navigator.appVersion.contains("Linux") ||
+          _navigator.appVersion.contains("x11")) &&
       !isAndroid;
 
   /// Returns `true` if the current platform is Android.
-  static bool get isAndroid => _navigator.appVersion.contains('Android ');
+  static bool get isAndroid => _navigator.appVersion.contains("Android ");
 
   /// Returns `true` if the current platform is iOS.
   static bool get isIOS {
     // maxTouchPoints is needed to separate iPad iOS13 vs new MacOS
-    return GetUtils.hasMatch(_navigator.platform, r'/iPad|iPhone|iPod/') ||
-        (_navigator.platform == 'MacIntel' && _navigator.maxTouchPoints > 1);
+    return GetUtils.hasMatch(_navigator.platform, r"/iPad|iPhone|iPod/") ||
+        (_navigator.platform == "MacIntel" && _navigator.maxTouchPoints > 1);
   }
 
   /// Returns `true` if the current platform is Fuchsia.

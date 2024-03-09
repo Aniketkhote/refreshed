@@ -1,8 +1,8 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:refreshed/refreshed.dart';
+import "package:flutter/widgets.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:refreshed/refreshed.dart";
 
-import 'utils/wrapper.dart';
+import "utils/wrapper.dart";
 
 void main() {
   testWidgets("Test dispose dependencies with unnamed routes", (tester) async {

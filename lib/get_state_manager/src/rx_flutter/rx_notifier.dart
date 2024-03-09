@@ -1,13 +1,13 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:refreshed/utils.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:refreshed/utils.dart";
 
-import '../../../get_rx/src/rx_types/rx_types.dart';
-import '../../../instance_manager.dart';
-import '../../get_state_manager.dart';
-import '../simple/list_notifier.dart';
+import 'package:refreshed/get_rx/src/rx_types/rx_types.dart';
+import 'package:refreshed/instance_manager.dart';
+import 'package:refreshed/get_state_manager/get_state_manager.dart';
+import 'package:refreshed/get_state_manager/src/simple/list_notifier.dart';
 
 extension _Empty on Object {
   /// Checks if the object is empty.
@@ -81,7 +81,7 @@ mixin StateMixin<T> on ListNotifier {
   ///
   /// The [body] function should return a `Future` which resolves to the new state.
   void futurize(Future<T> Function() body,
-      {T? initialData, String? errorMessage, bool useEmpty = true}) {
+      {T? initialData, String? errorMessage, bool useEmpty = true,}) {
     final compute = body;
     _value ??= initialData;
     compute().then((newValue) {
@@ -94,15 +94,15 @@ mixin StateMixin<T> on ListNotifier {
     }, onError: (err) {
       status = GetStatus.error(errorMessage ?? err.toString());
       refresh();
-    });
+    },);
   }
 }
 
 /// A class that provides listenable behavior similar to `ValueNotifier`.
 class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
-  T _value;
 
   GetListenable(T val) : _value = val;
+  T _value;
 
   StreamController<T>? _controller;
 
@@ -242,7 +242,7 @@ extension StateExt<T> on StateMixin<T> {
       } else if (status.isError) {
         return onError != null
             ? onError(status.errorMessage)
-            : Center(child: Text('An error occurred: ${status.errorMessage}'));
+            : Center(child: Text("An error occurred: ${status.errorMessage}"));
       } else if (status.isEmpty) {
         return onEmpty ??
             const SizedBox.shrink(); // Also can be widget(null); but is risky
@@ -253,7 +253,7 @@ extension StateExt<T> on StateMixin<T> {
             const SizedBox.shrink(); // Also can be widget(null); but is risky
       }
       return widget(value);
-    });
+    },);
   }
 }
 
@@ -294,9 +294,9 @@ class LoadingStatus<T> extends GetStatus<T> {
 
 /// A status indicating that the state has encountered an error.
 class ErrorStatus<T, S> extends GetStatus<T> {
-  final S? error;
 
   const ErrorStatus([this.error]);
+  final S? error;
 
   @override
   List get props => [error];
@@ -334,7 +334,7 @@ extension StatusDataExt<T> on GetStatus<T> {
         return err.error as String;
       }
     }
-    return '';
+    return "";
   }
 
   /// Gets the data associated with the status if it is a success status.
@@ -349,11 +349,11 @@ extension StatusDataExt<T> on GetStatus<T> {
 
 /// A status indicating that the state has been successfully updated with data of type `T`.
 class SuccessStatus<T> extends GetStatus<T> {
-  /// The data associated with the success status.
-  final T data;
 
   /// Constructs a [SuccessStatus] with the given [data].
   const SuccessStatus(this.data);
+  /// The data associated with the success status.
+  final T data;
 
   @override
   List get props => [data];

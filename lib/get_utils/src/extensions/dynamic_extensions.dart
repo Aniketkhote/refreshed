@@ -1,4 +1,4 @@
-import '../get_utils/get_utils.dart';
+import 'package:refreshed/get_utils/src/get_utils/get_utils.dart';
 
 /// Extension on dynamic to provide utility methods for dynamic objects.
 extension GetDynamicUtils on dynamic {
@@ -9,16 +9,16 @@ extension GetDynamicUtils on dynamic {
   /// Prints an error message with optional additional [info].
   /// Allows specifying a custom [logFunction] to handle the printing.
   void printError({
-    String info = '',
+    String info = "",
     Function logFunction = GetUtils.printFunction,
   }) =>
-      logFunction('Error: $runtimeType', this, info, isError: true);
+      logFunction("Error: $runtimeType", this, info, isError: true);
 
   /// Prints an information message with optional additional [info].
   /// Allows specifying a custom [printFunction] to handle the printing.
   void printInfo({
-    String info = '',
+    String info = "",
     Function printFunction = GetUtils.printFunction,
   }) =>
-      printFunction('Info: $runtimeType', this, info);
+      printFunction("Info: $runtimeType", this, info);
 }

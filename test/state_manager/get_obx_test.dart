@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:refreshed/refreshed.dart';
+import "package:flutter/material.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:refreshed/refreshed.dart";
 
 void main() {
   testWidgets("GetxController smoke test", (tester) async {
@@ -11,18 +11,18 @@ void main() {
           children: [
             Obx(
               () => Column(children: [
-                Text('Count: ${controller.counter.value}'),
-                Text('Double: ${controller.doubleNum.value}'),
-                Text('String: ${controller.string.value}'),
-                Text('List: ${controller.list.length}'),
-                Text('Bool: ${controller.boolean.value}'),
-                Text('Map: ${controller.map.length}'),
+                Text("Count: ${controller.counter.value}"),
+                Text("Double: ${controller.doubleNum.value}"),
+                Text("String: ${controller.string.value}"),
+                Text("List: ${controller.list.length}"),
+                Text("Bool: ${controller.boolean.value}"),
+                Text("Map: ${controller.map.length}"),
                 TextButton(
                   onPressed: controller.increment,
                   child: const Text("increment"),
                 ),
-                Obx(() => Text('Obx: ${controller.map.length}'))
-              ]),
+                Obx(() => Text("Obx: ${controller.map.length}")),
+              ],),
             ),
           ],
         ),
@@ -43,7 +43,7 @@ void main() {
 
     expect(find.text("Count: 1"), findsOneWidget);
 
-    await tester.tap(find.text('increment'));
+    await tester.tap(find.text("increment"));
 
     await tester.pump();
 

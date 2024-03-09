@@ -1,10 +1,10 @@
-import 'dart:ui' as ui;
+import "dart:ui" as ui;
 
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import '../../refreshed.dart';
-import 'dialog/dialog_route.dart';
-import 'root/get_root.dart';
+import 'package:refreshed/refreshed.dart';
+import 'package:refreshed/get_navigation/src/dialog/dialog_route.dart';
+import 'package:refreshed/get_navigation/src/root/get_root.dart';
 
 /// It replaces the Flutter Navigator, but needs no context.
 /// You can to use navigator.push(YourRoute()) rather
@@ -82,11 +82,11 @@ extension ExtensionDialog on GetInterface {
     final ThemeData theme = Theme.of(context!);
     return generalDialog<T>(
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
-          Animation<double> secondaryAnimation) {
+          Animation<double> secondaryAnimation,) {
         final Widget pageChild = widget;
         Widget dialog = Builder(builder: (BuildContext context) {
           return Theme(data: theme, child: pageChild);
-        });
+        },);
         if (useSafeArea) {
           dialog = SafeArea(child: dialog);
         }
@@ -97,7 +97,7 @@ extension ExtensionDialog on GetInterface {
       barrierColor: barrierColor ?? Colors.black54,
       transitionDuration: transitionDuration ?? defaultDialogTransitionDuration,
       transitionBuilder: (BuildContext context, Animation<double> animation,
-          Animation<double> secondaryAnimation, Widget child) {
+          Animation<double> secondaryAnimation, Widget child,) {
         return FadeTransition(
           opacity: CurvedAnimation(
             parent: animation,
@@ -123,7 +123,7 @@ extension ExtensionDialog on GetInterface {
       RouteTransitionsBuilder? transitionBuilder,
       GlobalKey<NavigatorState>? navigatorKey,
       RouteSettings? routeSettings,
-      String? id}) {
+      String? id,}) {
     assert(!barrierDismissible || barrierLabel != null);
     final GlobalKey<NavigatorState>? key =
         navigatorKey ?? Get.nestedKey(id)?.navigatorKey;
@@ -147,7 +147,7 @@ extension ExtensionDialog on GetInterface {
 
   /// Custom UI Dialog.
   Future<T?> defaultDialog<T>({
-    String title = 'Alert',
+    String title = "Alert",
     EdgeInsetsGeometry? titlePadding,
     TextStyle? titleStyle,
     Widget? content,
@@ -167,7 +167,7 @@ extension ExtensionDialog on GetInterface {
     Color? backgroundColor,
     bool barrierDismissible = true,
     Color? buttonColor,
-    String middleText = '\n',
+    String middleText = "\n",
     TextStyle? middleTextStyle,
     double radius = 20.0,
     //   ThemeData themeData,
@@ -193,7 +193,7 @@ extension ExtensionDialog on GetInterface {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             shape: RoundedRectangleBorder(
               side: BorderSide(
-                  color: buttonColor ?? theme.colorScheme.secondary, width: 2),
+                  color: buttonColor ?? theme.colorScheme.secondary, width: 2,),
               borderRadius: BorderRadius.circular(radius),
             ),
           ),
@@ -205,12 +205,12 @@ extension ExtensionDialog on GetInterface {
             }
           },
           child: Text(
-            textCancel ?? 'Cancel',
+            textCancel ?? "Cancel",
             style: TextStyle(
               color: cancelTextColor ?? theme.colorScheme.secondary,
             ),
           ),
-        ));
+        ),);
       }
     }
     if (confirm != null) {
@@ -227,7 +227,7 @@ extension ExtensionDialog on GetInterface {
               ),
             ),
             child: Text(
-              textConfirm ?? 'Ok',
+              textConfirm ?? "Ok",
               style: TextStyle(
                 color: confirmTextColor ?? theme.colorScheme.background,
               ),
@@ -270,7 +270,7 @@ extension ExtensionDialog on GetInterface {
                   runSpacing: 8,
                   children: actions,
                 ),
-              )
+              ),
             ],
           ),
       buttonPadding: EdgeInsets.zero,
@@ -477,7 +477,7 @@ extension ExtensionSnackbar on GetInterface {
         animationDuration: animationDuration ?? const Duration(seconds: 1),
         overlayBlur: overlayBlur ?? 0.0,
         overlayColor: overlayColor ?? Colors.transparent,
-        userInputForm: userInputForm);
+        userInputForm: userInputForm,);
 
     final SnackbarController controller = SnackbarController(getSnackBar);
 
@@ -534,7 +534,7 @@ extension GetNavigationExt on GetInterface {
       double Function(BuildContext context)? gestureWidth,
       bool rebuildStack = true,
       PreventDuplicateHandlingMode preventDuplicateHandlingMode =
-          PreventDuplicateHandlingMode.reorderRoutes}) {
+          PreventDuplicateHandlingMode.reorderRoutes,}) {
     return searchDelegate(id).to(
       page,
       opaque: opaque,
@@ -946,7 +946,7 @@ extension GetNavigationExt on GetInterface {
   }) {
     void handleClose(bool closeCondition, Function closeAllFunction,
         Function closeSingleFunction,
-        [bool? isOpenCondition]) {
+        [bool? isOpenCondition,]) {
       if (closeCondition) {
         if (closeAll) {
           closeAllFunction();
@@ -959,7 +959,7 @@ extension GetNavigationExt on GetInterface {
     handleClose(closeSnackbar, closeAllSnackbars, closeCurrentSnackbar);
     handleClose(closeDialog, closeAllDialogs, closeOverlay, isDialogOpen);
     handleClose(closeBottomSheet, closeAllBottomSheets, closeOverlay,
-        isBottomSheetOpen);
+        isBottomSheetOpen,);
   }
 
   /// **Navigation.pushReplacement()** shortcut .<br><br>
@@ -1002,7 +1002,7 @@ extension GetNavigationExt on GetInterface {
     Duration? duration,
     double Function(BuildContext context)? gestureWidth,
   }) {
-    routeName ??= '/${page.runtimeType}';
+    routeName ??= "/${page.runtimeType}";
     routeName = cleanRouteName(routeName);
     if (preventDuplicates && routeName == currentRoute) {
       return null;
@@ -1088,7 +1088,7 @@ extension GetNavigationExt on GetInterface {
     Duration? duration,
     double Function(BuildContext context)? gestureWidth,
   }) {
-    routeName ??= '/${page.runtimeType}';
+    routeName ??= "/${page.runtimeType}";
     routeName = cleanRouteName(routeName);
     return searchDelegate(id).offAll<T>(
       page,
@@ -1190,7 +1190,7 @@ extension GetNavigationExt on GetInterface {
       key = Get.rootController.rootDelegate;
     } else {
       if (!keys.containsKey(k)) {
-        throw 'Route id ($k) not found';
+        throw "Route id ($k) not found";
       }
       key = keys[k]!;
     }
@@ -1387,8 +1387,8 @@ extension OverlayExt on GetInterface {
           opacity: opacity,
           child: Container(
             color: opacityColor,
-          ));
-    });
+          ),);
+    },);
     final OverlayEntry overlayEntryLoader =
         OverlayEntry(builder: (BuildContext context) {
       return loadingWidget ??
@@ -1396,9 +1396,9 @@ extension OverlayExt on GetInterface {
               child: SizedBox(
             height: 90,
             width: 90,
-            child: Text('Loading...'),
-          ));
-    });
+            child: Text("Loading..."),
+          ),);
+    },);
     overlayState.insert(overlayEntryOpacity);
     overlayState.insert(overlayEntryLoader);
 

@@ -1,8 +1,8 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/cupertino.dart';
+import "package:flutter/cupertino.dart";
 
-import '../../../refreshed.dart';
+import 'package:refreshed/refreshed.dart';
 
 abstract class _RouteMiddleware {
   /// The Order of the Middlewares to run.
@@ -97,10 +97,10 @@ abstract class _RouteMiddleware {
 /// (( [redirect] -> [onPageCalled] -> [onBindingsStart] ->
 /// [onPageBuildStart] -> [onPageBuilt] -> [onPageDispose] ))
 class GetMiddleware implements _RouteMiddleware {
-  @override
-  int? priority = 0;
 
   GetMiddleware({this.priority});
+  @override
+  int? priority = 0;
 
   @override
   RouteSettings? redirect(String? route) => null;
@@ -152,7 +152,7 @@ class MiddlewareRunner {
         break;
       }
     }
-    Get.log('Redirect to $to');
+    Get.log("Redirect to $to");
     return to;
   }
 
@@ -183,10 +183,6 @@ class MiddlewareRunner {
 }
 
 class PageRedirect {
-  GetPage? route;
-  GetPage? unknownRoute;
-  RouteSettings? settings;
-  bool isUnknown;
 
   PageRedirect({
     this.route,
@@ -194,10 +190,14 @@ class PageRedirect {
     this.isUnknown = false,
     this.settings,
   });
+  GetPage? route;
+  GetPage? unknownRoute;
+  RouteSettings? settings;
+  bool isUnknown;
 
   // redirect all pages that needes redirecting
   GetPageRoute<T> getPageToRoute<T>(
-      GetPage rou, GetPage? unk, BuildContext context) {
+      GetPage rou, GetPage? unk, BuildContext context,) {
     while (needRecheck(context)) {}
     final r = (isUnknown ? unk : rou)!;
 

@@ -1,8 +1,8 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
-import 'list_notifier.dart';
+import 'package:refreshed/get_state_manager/src/simple/list_notifier.dart';
 
 /// A callback function that is called when the value builder updates its value.
 typedef ValueBuilderUpdateCallback<T> = void Function(T snapshot);
@@ -29,6 +29,14 @@ typedef ValueBuilderBuilder<T> = Widget Function(
 ///  ),
 ///  ```
 class ValueBuilder<T> extends StatefulWidget {
+
+  const ValueBuilder({
+    super.key,
+    required this.initialValue,
+    this.onDispose,
+    this.onUpdate,
+    required this.builder,
+  });
   /// The initial value of the state managed by the ValueBuilder.
   final T initialValue;
 
@@ -40,14 +48,6 @@ class ValueBuilder<T> extends StatefulWidget {
 
   /// A function that is called when the value managed by the ValueBuilder is updated.
   final void Function(T)? onUpdate;
-
-  const ValueBuilder({
-    super.key,
-    required this.initialValue,
-    this.onDispose,
-    this.onUpdate,
-    required this.builder,
-  });
 
   @override
   ValueBuilderState<T> createState() => ValueBuilderState<T>();
@@ -90,9 +90,9 @@ class ObxElement = StatelessElement with StatelessObserverComponent;
 
 /// It's an experimental feature.
 class Observer extends ObxStatelessWidget {
-  final WidgetBuilder builder;
 
   const Observer({super.key, required this.builder});
+  final WidgetBuilder builder;
 
   @override
   Widget build(BuildContext context) => builder(context);

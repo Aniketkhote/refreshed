@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
 /// Abstract class representing a cacheable widget in GetX.
 ///

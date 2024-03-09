@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
 
 /// A class representing a left-to-right fade transition animation.
 class LeftToRightFadeTransition {
@@ -10,7 +10,7 @@ class LeftToRightFadeTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
+      Widget child,) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(-1.0, 0.0),
@@ -23,7 +23,7 @@ class LeftToRightFadeTransition {
               begin: Offset.zero,
               end: const Offset(1.0, 0.0),
             ).animate(secondaryAnimation),
-            child: child),
+            child: child,),
       ),
     );
   }
@@ -38,7 +38,7 @@ class RightToLeftFadeTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
+      Widget child,) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(1.0, 0.0),
@@ -51,7 +51,7 @@ class RightToLeftFadeTransition {
               begin: Offset.zero,
               end: const Offset(-1.0, 0.0),
             ).animate(secondaryAnimation),
-            child: child),
+            child: child,),
       ),
     );
   }
@@ -66,7 +66,7 @@ class NoTransition {
       Alignment alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
+      Widget child,) {
     return child;
   }
 }
@@ -80,7 +80,7 @@ class FadeInTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
+      Widget child,) {
     return FadeTransition(opacity: animation, child: child);
   }
 }
@@ -94,7 +94,7 @@ class SlideDownTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
+      Widget child,) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(0.0, 1.0),
@@ -114,7 +114,7 @@ class SlideLeftTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
+      Widget child,) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(-1.0, 0.0),
@@ -134,7 +134,7 @@ class SlideRightTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
+      Widget child,) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(1.0, 0.0),
@@ -154,7 +154,7 @@ class SlideTopTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
+      Widget child,) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(0.0, -1.0),
@@ -174,7 +174,7 @@ class ZoomInTransition {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
+      Widget child,) {
     return ScaleTransition(
       scale: animation,
       child: child,
@@ -191,7 +191,7 @@ class SizeTransitions {
       Alignment? alignment,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      Widget child) {
+      Widget child,) {
     return Align(
       alignment: Alignment.center,
       child: SizeTransition(

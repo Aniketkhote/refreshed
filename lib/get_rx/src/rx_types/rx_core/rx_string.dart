@@ -1,4 +1,4 @@
-part of '../rx_types.dart';
+part of "../rx_types.dart";
 
 /// Extension methods for [Rx<String>] to provide additional functionality.
 extension RxStringExt on Rx<String> {
@@ -71,7 +71,7 @@ extension RxStringExt on Rx<String> {
   ///
   /// Return a new string that prepends [padding] onto this string
   /// one time for each position the length is less than [width].
-  String padLeft(int width, [String padding = ' ']) {
+  String padLeft(int width, [String padding = " "]) {
     return value.padLeft(width, padding);
   }
 
@@ -79,7 +79,7 @@ extension RxStringExt on Rx<String> {
 
   /// Return a new string that appends [padding] after this string
   /// one time for each position the length is less than [width].
-  String padRight(int width, [String padding = ' ']) {
+  String padRight(int width, [String padding = " "]) {
     return value.padRight(width, padding);
   }
 
@@ -131,7 +131,7 @@ extension RxStringExt on Rx<String> {
 }
 
 extension RxnStringExt on Rx<String?> {
-  String operator +(String val) => (value ?? '') + val;
+  String operator +(String val) => (value ?? "") + val;
 
   int? compareTo(String other) {
     return value?.compareTo(other);
@@ -195,7 +195,7 @@ extension RxnStringExt on Rx<String?> {
   ///
   /// Return a new string that prepends [padding] onto this string
   /// one time for each position the length is less than [width].
-  String? padLeft(int width, [String padding = ' ']) {
+  String? padLeft(int width, [String padding = " "]) {
     return value?.padLeft(width, padding);
   }
 
@@ -203,7 +203,7 @@ extension RxnStringExt on Rx<String?> {
 
   /// Return a new string that appends [padding] after this string
   /// one time for each position the length is less than [width].
-  String? padRight(int width, [String padding = ' ']) {
+  String? padRight(int width, [String padding = " "]) {
     return value?.padRight(width, padding);
   }
 

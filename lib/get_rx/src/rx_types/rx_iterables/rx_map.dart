@@ -1,4 +1,4 @@
-part of '../rx_types.dart';
+part of "../rx_types.dart";
 
 class RxMap<K, V> extends GetListenable<Map<K, V>>
     with MapMixin<K, V>, RxObjectMixin<Map<K, V>> {

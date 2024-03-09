@@ -1,13 +1,13 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
 
-import '../../../get_core/get_core.dart';
-import '../../../get_instance/get_instance.dart';
-import '../../../get_state_manager/get_state_manager.dart';
-import '../../../get_utils/get_utils.dart';
-import '../../get_navigation.dart';
-import 'get_root.dart';
+import 'package:refreshed/get_core/get_core.dart';
+import 'package:refreshed/get_instance/get_instance.dart';
+import 'package:refreshed/get_state_manager/get_state_manager.dart';
+import 'package:refreshed/get_utils/get_utils.dart';
+import 'package:refreshed/get_navigation/get_navigation.dart';
+import 'package:refreshed/get_navigation/src/root/get_root.dart';
 
 /// A CupertinoApp extension that integrates the Refreshed state management library.
 ///
@@ -15,6 +15,124 @@ import 'get_root.dart';
 /// by Refreshed, such as reactive state management, dependency injection, and
 /// navigation management.
 class GetCupertinoApp extends StatelessWidget {
+
+  const GetCupertinoApp({
+    super.key,
+    this.theme,
+    this.navigatorKey,
+    this.home,
+    Map<String, Widget Function(BuildContext)> this.routes =
+        const <String, WidgetBuilder>{},
+    this.initialRoute,
+    this.onGenerateRoute,
+    this.onGenerateInitialRoutes,
+    this.onUnknownRoute,
+    List<NavigatorObserver> this.navigatorObservers =
+        const <NavigatorObserver>[],
+    this.builder,
+    this.translationsKeys,
+    this.translations,
+    this.textDirection,
+    this.title = "",
+    this.onGenerateTitle,
+    this.color,
+    this.customTransition,
+    this.onInit,
+    this.onDispose,
+    this.locale,
+    this.binds = const [],
+    this.scrollBehavior,
+    this.fallbackLocale,
+    this.localizationsDelegates,
+    this.localeListResolutionCallback,
+    this.localeResolutionCallback,
+    this.supportedLocales = const <Locale>[Locale("en", "US")],
+    this.showPerformanceOverlay = false,
+    this.checkerboardRasterCacheImages = false,
+    this.checkerboardOffscreenLayers = false,
+    this.showSemanticsDebugger = false,
+    this.debugShowCheckedModeBanner = true,
+    this.shortcuts,
+    this.smartManagement = SmartManagement.full,
+    this.initialBinding,
+    this.useInheritedMediaQuery = false,
+    this.unknownRoute,
+    this.routingCallback,
+    this.defaultTransition,
+    this.onReady,
+    this.getPages,
+    this.opaqueRoute,
+    this.enableLog = kDebugMode,
+    this.logWriterCallback,
+    this.popGesture,
+    this.transitionDuration,
+    this.defaultGlobalState,
+    this.highContrastTheme,
+    this.highContrastDarkTheme,
+    this.actions,
+  })  : routeInformationProvider = null,
+        backButtonDispatcher = null,
+        routeInformationParser = null,
+        routerDelegate = null,
+        routerConfig = null;
+
+  const GetCupertinoApp.router({
+    super.key,
+    this.theme,
+    this.routeInformationProvider,
+    this.routeInformationParser,
+    this.routerDelegate,
+    this.routerConfig,
+    this.backButtonDispatcher,
+    this.builder,
+    this.title = "",
+    this.onGenerateTitle,
+    this.useInheritedMediaQuery = false,
+    this.color,
+    this.highContrastTheme,
+    this.highContrastDarkTheme,
+    this.locale,
+    this.localizationsDelegates,
+    this.localeListResolutionCallback,
+    this.localeResolutionCallback,
+    this.supportedLocales = const <Locale>[Locale("en", "US")],
+    this.showPerformanceOverlay = false,
+    this.checkerboardRasterCacheImages = false,
+    this.checkerboardOffscreenLayers = false,
+    this.showSemanticsDebugger = false,
+    this.debugShowCheckedModeBanner = true,
+    this.shortcuts,
+    this.binds = const [],
+    this.scrollBehavior,
+    this.actions,
+    this.customTransition,
+    this.translationsKeys,
+    this.translations,
+    this.textDirection,
+    this.fallbackLocale,
+    this.routingCallback,
+    this.defaultTransition,
+    this.opaqueRoute,
+    this.onInit,
+    this.onReady,
+    this.onDispose,
+    this.enableLog = kDebugMode,
+    this.logWriterCallback,
+    this.popGesture,
+    this.smartManagement = SmartManagement.full,
+    this.initialBinding,
+    this.transitionDuration,
+    this.defaultGlobalState,
+    this.getPages,
+    this.navigatorObservers,
+    this.unknownRoute,
+  })  : navigatorKey = null,
+        onGenerateRoute = null,
+        home = null,
+        onGenerateInitialRoutes = null,
+        onUnknownRoute = null,
+        routes = null,
+        initialRoute = null;
   final GlobalKey<NavigatorState>? navigatorKey;
   final Widget? home;
   final Map<String, WidgetBuilder>? routes;
@@ -70,124 +188,6 @@ class GetCupertinoApp extends StatelessWidget {
   final bool useInheritedMediaQuery;
   final List<Bind> binds;
   final ScrollBehavior? scrollBehavior;
-
-  const GetCupertinoApp({
-    super.key,
-    this.theme,
-    this.navigatorKey,
-    this.home,
-    Map<String, Widget Function(BuildContext)> this.routes =
-        const <String, WidgetBuilder>{},
-    this.initialRoute,
-    this.onGenerateRoute,
-    this.onGenerateInitialRoutes,
-    this.onUnknownRoute,
-    List<NavigatorObserver> this.navigatorObservers =
-        const <NavigatorObserver>[],
-    this.builder,
-    this.translationsKeys,
-    this.translations,
-    this.textDirection,
-    this.title = '',
-    this.onGenerateTitle,
-    this.color,
-    this.customTransition,
-    this.onInit,
-    this.onDispose,
-    this.locale,
-    this.binds = const [],
-    this.scrollBehavior,
-    this.fallbackLocale,
-    this.localizationsDelegates,
-    this.localeListResolutionCallback,
-    this.localeResolutionCallback,
-    this.supportedLocales = const <Locale>[Locale('en', 'US')],
-    this.showPerformanceOverlay = false,
-    this.checkerboardRasterCacheImages = false,
-    this.checkerboardOffscreenLayers = false,
-    this.showSemanticsDebugger = false,
-    this.debugShowCheckedModeBanner = true,
-    this.shortcuts,
-    this.smartManagement = SmartManagement.full,
-    this.initialBinding,
-    this.useInheritedMediaQuery = false,
-    this.unknownRoute,
-    this.routingCallback,
-    this.defaultTransition,
-    this.onReady,
-    this.getPages,
-    this.opaqueRoute,
-    this.enableLog = kDebugMode,
-    this.logWriterCallback,
-    this.popGesture,
-    this.transitionDuration,
-    this.defaultGlobalState,
-    this.highContrastTheme,
-    this.highContrastDarkTheme,
-    this.actions,
-  })  : routeInformationProvider = null,
-        backButtonDispatcher = null,
-        routeInformationParser = null,
-        routerDelegate = null,
-        routerConfig = null;
-
-  const GetCupertinoApp.router({
-    super.key,
-    this.theme,
-    this.routeInformationProvider,
-    this.routeInformationParser,
-    this.routerDelegate,
-    this.routerConfig,
-    this.backButtonDispatcher,
-    this.builder,
-    this.title = '',
-    this.onGenerateTitle,
-    this.useInheritedMediaQuery = false,
-    this.color,
-    this.highContrastTheme,
-    this.highContrastDarkTheme,
-    this.locale,
-    this.localizationsDelegates,
-    this.localeListResolutionCallback,
-    this.localeResolutionCallback,
-    this.supportedLocales = const <Locale>[Locale('en', 'US')],
-    this.showPerformanceOverlay = false,
-    this.checkerboardRasterCacheImages = false,
-    this.checkerboardOffscreenLayers = false,
-    this.showSemanticsDebugger = false,
-    this.debugShowCheckedModeBanner = true,
-    this.shortcuts,
-    this.binds = const [],
-    this.scrollBehavior,
-    this.actions,
-    this.customTransition,
-    this.translationsKeys,
-    this.translations,
-    this.textDirection,
-    this.fallbackLocale,
-    this.routingCallback,
-    this.defaultTransition,
-    this.opaqueRoute,
-    this.onInit,
-    this.onReady,
-    this.onDispose,
-    this.enableLog = kDebugMode,
-    this.logWriterCallback,
-    this.popGesture,
-    this.smartManagement = SmartManagement.full,
-    this.initialBinding,
-    this.transitionDuration,
-    this.defaultGlobalState,
-    this.getPages,
-    this.navigatorObservers,
-    this.unknownRoute,
-  })  : navigatorKey = null,
-        onGenerateRoute = null,
-        home = null,
-        onGenerateInitialRoutes = null,
-        onUnknownRoute = null,
-        routes = null,
-        initialRoute = null;
 
   @override
   Widget build(BuildContext context) {
@@ -256,7 +256,7 @@ class GetCupertinoApp extends StatelessWidget {
           shortcuts: shortcuts,
           scrollBehavior: scrollBehavior,
         );
-      }),
+      },),
     );
   }
 }

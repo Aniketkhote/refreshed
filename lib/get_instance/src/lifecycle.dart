@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
+import "package:flutter/foundation.dart";
 
-import '../../refreshed.dart';
+import 'package:refreshed/refreshed.dart';
 
 /// The [GetLifeCycle]
 ///

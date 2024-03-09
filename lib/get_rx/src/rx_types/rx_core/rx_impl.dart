@@ -1,4 +1,4 @@
-part of '../rx_types.dart';
+part of "../rx_types.dart";
 
 /// global object that registers against `GetX` and `Obx`, and allows the
 /// reactivity
@@ -303,7 +303,7 @@ class Rx<T> extends _RxImpl<T> {
     try {
       return (value as dynamic)?.toJson();
     } on Exception catch (_) {
-      throw '$T has not method [toJson]';
+      throw "$T has not method [toJson]";
     }
   }
 }

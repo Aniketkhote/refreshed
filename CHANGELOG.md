@@ -4,6 +4,7 @@
 - Resolved the memory leak issue associated with the snackbar component.
 - Addressed and fixed the failing tests related to the snackbar component.
 - Added `BoxConstraints` to the `Get.bottomSheet` method to ensure more precise control and layout constraints.
+- Enhance Dart code to align with linting conventions.
 
 ## 1.5.4
 

@@ -1,9 +1,9 @@
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
-import '../../../instance_manager.dart';
-import '../../../utils.dart';
-import 'get_state.dart';
-import 'get_widget_cache.dart';
+import 'package:refreshed/instance_manager.dart';
+import 'package:refreshed/utils.dart';
+import 'package:refreshed/get_state_manager/src/simple/get_state.dart';
+import 'package:refreshed/get_state_manager/src/simple/get_widget_cache.dart';
 
 /// GetView is a great way of quickly access your Controller
 /// without having to call Get.find<AwesomeController>() yourself.

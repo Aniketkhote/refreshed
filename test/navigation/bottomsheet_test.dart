@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:refreshed/refreshed.dart';
+import "package:flutter/material.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:refreshed/refreshed.dart";
 
-import 'utils/wrapper.dart';
+import "utils/wrapper.dart";
 
 void main() {
   testWidgets("Get.bottomSheet smoke test", (tester) async {
@@ -16,11 +16,11 @@ void main() {
       children: <Widget>[
         ListTile(
           leading: const Icon(Icons.music_note),
-          title: const Text('Music'),
+          title: const Text("Music"),
           onTap: () {},
         ),
       ],
-    ));
+    ),);
 
     await tester.pumpAndSettle();
 
@@ -38,11 +38,11 @@ void main() {
       children: <Widget>[
         ListTile(
           leading: const Icon(Icons.music_note),
-          title: const Text('Music'),
+          title: const Text("Music"),
           onTap: () {},
         ),
       ],
-    ));
+    ),);
 
     await tester.pumpAndSettle();
 

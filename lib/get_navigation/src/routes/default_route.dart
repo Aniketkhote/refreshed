@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import "package:flutter/cupertino.dart";
 
-import '../../../refreshed.dart';
-import '../router_report.dart';
+import 'package:refreshed/refreshed.dart';
+import 'package:refreshed/get_navigation/src/router_report.dart';
 
 /// A mixin that provides route lifecycle event reporting to a [RouterReportManager].
 ///
@@ -176,7 +176,7 @@ class GetPageRoute<T> extends PageRoute<T>
   final String? title;
 
   @override
-  String get debugLabel => '${super.debugLabel}(${settings.name})';
+  String get debugLabel => "${super.debugLabel}(${settings.name})";
 
   @override
   final double Function(BuildContext context)? gestureWidth;

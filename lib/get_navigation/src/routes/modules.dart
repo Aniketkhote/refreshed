@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import '../../../instance_manager.dart';
-import '../router_report.dart';
+import 'package:refreshed/instance_manager.dart';
+import 'package:refreshed/get_navigation/src/router_report.dart';
 
 class Dependencies {
   void lazyPut<S>(InstanceBuilderCallback<S> builder,
-      {String? tag, bool fenix = false}) {
+      {String? tag, bool fenix = false,}) {
     Get.lazyPut<S>(builder, tag: tag, fenix: fenix);
   }
 
@@ -14,7 +14,7 @@ class Dependencies {
   }
 
   void spawn<S>(InstanceBuilderCallback<S> builder,
-          {String? tag, bool permanent = true}) =>
+          {String? tag, bool permanent = true,}) =>
       Get.spawn<S>(builder, tag: tag, permanent: permanent);
 
   S find<S>({String? tag}) => Get.find<S>(tag: tag);
@@ -50,7 +50,7 @@ class Dependencies {
   }
 
   void lazyReplace<P>(InstanceBuilderCallback<P> builder,
-      {String? tag, bool? fenix}) {
+      {String? tag, bool? fenix,}) {
     final info = Get.getInstanceInfo<P>(tag: tag);
     final permanent = (info.isPermanent ?? false);
     delete<P>(tag: tag, force: permanent);

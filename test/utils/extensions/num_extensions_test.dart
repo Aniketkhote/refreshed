@@ -1,18 +1,18 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:refreshed/utils.dart';
+import "package:flutter_test/flutter_test.dart";
+import "package:refreshed/utils.dart";
 
 void main() {
-  num x = 5;
-  num y = 7;
-  num z = 5;
+  final num x = 5;
+  final num y = 7;
+  final num z = 5;
 
-  var doubleX = 2.1;
-  var doubleY = 3.1;
-  var doubleZ = 5.0;
-  var pi = 3.14159265359;
+  final doubleX = 2.1;
+  final doubleY = 3.1;
+  final doubleZ = 5.0;
+  final pi = 3.14159265359;
 
-  group('num extensions text', () {
-    test('var.isLowerThan(value)', () {
+  group("num extensions text", () {
+    test("var.isLowerThan(value)", () {
       expect(x.isLowerThan(y), true);
       expect(y.isLowerThan(x), false);
       expect(x.isLowerThan(z), false);
@@ -21,7 +21,7 @@ void main() {
       expect(x.isLowerThan(doubleX), false);
       expect(z.isLowerThan(doubleZ), false);
     });
-    test('var.isGreaterThan(value)', () {
+    test("var.isGreaterThan(value)", () {
       expect(x.isGreaterThan(y), false);
       expect(y.isGreaterThan(x), true);
       expect(x.isGreaterThan(z), false);
@@ -31,7 +31,7 @@ void main() {
       expect(y.isGreaterThan(doubleY), true);
       expect(z.isGreaterThan(doubleZ), false);
     });
-    test('var.isEqual(value)', () {
+    test("var.isEqual(value)", () {
       expect(x.isEqual(y), false);
       expect(y.isEqual(x), false);
       expect(x.isEqual(5), true);

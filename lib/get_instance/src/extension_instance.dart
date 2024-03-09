@@ -1,13 +1,22 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import '../../get_core/get_core.dart';
-import '../../get_navigation/src/router_report.dart';
-import 'lifecycle.dart';
+import 'package:refreshed/get_core/get_core.dart';
+import 'package:refreshed/get_navigation/src/router_report.dart';
+import 'package:refreshed/get_instance/src/lifecycle.dart';
 
 /// A class that holds information about an instance.
 class InstanceInfo {
+
+  /// Creates an InstanceInfo object with the given parameters.
+  const InstanceInfo({
+    required this.isPermanent,
+    required this.isSingleton,
+    required this.isRegistered,
+    required this.isPrepared,
+    required this.isInit,
+  });
   /// Indicates whether the instance is permanent.
   final bool? isPermanent;
 
@@ -26,18 +35,9 @@ class InstanceInfo {
   /// Indicates whether the instance is initialized.
   final bool? isInit;
 
-  /// Creates an InstanceInfo object with the given parameters.
-  const InstanceInfo({
-    required this.isPermanent,
-    required this.isSingleton,
-    required this.isRegistered,
-    required this.isPrepared,
-    required this.isInit,
-  });
-
   @override
   String toString() {
-    return 'InstanceInfo(isPermanent: $isPermanent, isSingleton: $isSingleton, isRegistered: $isRegistered, isPrepared: $isPrepared, isInit: $isInit)';
+    return "InstanceInfo(isPermanent: $isPermanent, isSingleton: $isSingleton, isRegistered: $isRegistered, isPrepared: $isPrepared, isInit: $isInit)";
   }
 }
 
@@ -93,7 +93,7 @@ extension Inst on GetInterface {
         isSingleton: true,
         name: tag,
         permanent: permanent,
-        builder: (() => dependency));
+        builder: (() => dependency),);
     return find<S>(tag: tag);
   }
 
@@ -339,7 +339,7 @@ extension Inst on GetInterface {
   ///  Note: if fenix is not provided it will be set to true if
   /// the parent instance was permanent
   void lazyReplace<P>(InstanceBuilderCallback<P> builder,
-      {String? tag, bool? fenix}) {
+      {String? tag, bool? fenix,}) {
     final info = getInstanceInfo<P>(tag: tag);
     final permanent = (info.isPermanent ?? false);
     delete<P>(tag: tag, force: permanent);
@@ -560,6 +560,16 @@ typedef AsyncInstanceBuilderCallback<S> = Future<S> Function();
 
 /// Internal class used by GetX to register instances with `Get.put<S>()`.
 class _InstanceBuilderFactory<S> {
+
+  _InstanceBuilderFactory({
+    required this.isSingleton,
+    required this.builderFunc,
+    required this.permanent,
+    required this.isInit,
+    required this.fenix,
+    required this.tag,
+    required this.lateRemove,
+  });
   /// Marks the Builder as a single instance.
   /// For reusing [dependency] instead of [builderFunc]
   bool? isSingleton;
@@ -590,16 +600,6 @@ class _InstanceBuilderFactory<S> {
 
   /// The tag associated with the instance.
   String? tag;
-
-  _InstanceBuilderFactory({
-    required this.isSingleton,
-    required this.builderFunc,
-    required this.permanent,
-    required this.isInit,
-    required this.fenix,
-    required this.tag,
-    required this.lateRemove,
-  });
 
   void _showInitLog() {
     if (tag == null) {

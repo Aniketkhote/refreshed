@@ -1,7 +1,7 @@
-import 'package:flutter/foundation.dart';
-import 'package:refreshed/get_navigation/src/routes/new_path_route.dart';
+import "package:flutter/foundation.dart";
+import "package:refreshed/get_navigation/src/routes/new_path_route.dart";
 
-import '../../../refreshed.dart';
+import 'package:refreshed/refreshed.dart';
 
 @immutable
 class RouteDecoder {
@@ -9,11 +9,9 @@ class RouteDecoder {
     this.currentTreeBranch,
     this.pageSettings,
   );
-  final List<GetPage> currentTreeBranch;
-  final PageSettings? pageSettings;
 
   factory RouteDecoder.fromRoute(String location) {
-    var uri = Uri.parse(location);
+    final uri = Uri.parse(location);
     final args = PageSettings(uri);
     final decoder =
         (Get.rootController.rootDelegate).matchRoute(location, arguments: args);
@@ -24,6 +22,8 @@ class RouteDecoder {
     );
     return decoder;
   }
+  final List<GetPage> currentTreeBranch;
+  final PageSettings? pageSettings;
 
   GetPage? get route =>
       currentTreeBranch.isEmpty ? null : currentTreeBranch.last;
@@ -79,7 +79,7 @@ class RouteDecoder {
 
   @override
   String toString() =>
-      'RouteDecoder(currentTreeBranch: $currentTreeBranch, pageSettings: $pageSettings)';
+      "RouteDecoder(currentTreeBranch: $currentTreeBranch, pageSettings: $pageSettings)";
 }
 
 class ParseRouteTree {
@@ -91,16 +91,16 @@ class ParseRouteTree {
 
   RouteDecoder matchRoute(String name, {PageSettings? arguments}) {
     final uri = Uri.parse(name);
-    final split = uri.path.split('/').where((element) => element.isNotEmpty);
-    var curPath = '/';
+    final split = uri.path.split("/").where((element) => element.isNotEmpty);
+    var curPath = "/";
     final cumulativePaths = <String>[
-      '/',
+      "/",
     ];
     for (var item in split) {
-      if (curPath.endsWith('/')) {
+      if (curPath.endsWith("/")) {
         curPath += item;
       } else {
-        curPath += '/$item';
+        curPath += "/$item";
       }
       cumulativePaths.add(curPath);
     }
@@ -190,18 +190,18 @@ class ParseRouteTree {
       // Add Parent middlewares to children
       final parentMiddlewares = [
         if (page.middlewares.isNotEmpty) ...page.middlewares,
-        if (route.middlewares.isNotEmpty) ...route.middlewares
+        if (route.middlewares.isNotEmpty) ...route.middlewares,
       ];
 
       final parentBindings = [
         if (page.binding != null) page.binding!,
         if (page.bindings.isNotEmpty) ...page.bindings,
-        if (route.bindings.isNotEmpty) ...route.bindings
+        if (route.bindings.isNotEmpty) ...route.bindings,
       ];
 
       final parentBinds = [
         if (page.binds.isNotEmpty) ...page.binds,
-        if (route.binds.isNotEmpty) ...route.binds
+        if (route.binds.isNotEmpty) ...route.binds,
       ];
 
       result.add(
@@ -232,7 +232,7 @@ class ParseRouteTree {
             ...parentBinds,
             if (child.binds.isNotEmpty) ...child.binds,
           ],
-        ));
+        ),);
       }
     }
     return result;
@@ -249,7 +249,7 @@ class ParseRouteTree {
     return origin.copyWith(
       middlewares: middlewares,
       name: origin.inheritParentPath
-          ? (parentPath + origin.name).replaceAll(r'//', '/')
+          ? (parentPath + origin.name).replaceAll(r"//", "/")
           : origin.name,
       bindings: bindings,
       binds: binds,
@@ -267,7 +267,7 @@ class ParseRouteTree {
 
   Map<String, String> _parseParams(String path, PathDecoded routePath) {
     final params = <String, String>{};
-    var idx = path.indexOf('?');
+    final idx = path.indexOf("?");
     if (idx > -1) {
       path = path.substring(0, idx);
       final uri = Uri.tryParse(path);
@@ -275,10 +275,10 @@ class ParseRouteTree {
         params.addAll(uri.queryParameters);
       }
     }
-    var paramsMatch = routePath.regex.firstMatch(path);
+    final paramsMatch = routePath.regex.firstMatch(path);
 
     for (var i = 0; i < routePath.keys.length; i++) {
-      var param = Uri.decodeQueryComponent(paramsMatch![i + 1]!);
+      final param = Uri.decodeQueryComponent(paramsMatch![i + 1]!);
       params[routePath.keys[i]!] = param;
     }
     return params;

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:refreshed/refreshed.dart';
+import "package:flutter/material.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:refreshed/refreshed.dart";
 
 void main() {
   testWidgets("test if Get.isSnackbarOpen works with Get.snackbar",
@@ -9,14 +9,14 @@ void main() {
       GetMaterialApp(
         popGesture: true,
         home: ElevatedButton(
-          child: const Text('Open Snackbar'),
+          child: const Text("Open Snackbar"),
           onPressed: () {
             Get.snackbar(
-              'title',
+              "title",
               "message",
               duration: const Duration(seconds: 1),
               mainButton:
-                  TextButton(onPressed: () {}, child: const Text('button')),
+                  TextButton(onPressed: () {}, child: const Text("button")),
               isDismissible: false,
             );
           },
@@ -27,7 +27,7 @@ void main() {
     await tester.pump();
 
     expect(Get.isSnackbarOpen, false);
-    await tester.tap(find.text('Open Snackbar'));
+    await tester.tap(find.text("Open Snackbar"));
 
     expect(Get.isSnackbarOpen, true);
     await tester.pump(const Duration(seconds: 1));
@@ -39,10 +39,10 @@ void main() {
       GetMaterialApp(
         popGesture: true,
         home: ElevatedButton(
-          child: const Text('Open Snackbar'),
+          child: const Text("Open Snackbar"),
           onPressed: () {
             Get.rawSnackbar(
-              title: 'title',
+              title: "title",
               message: "message",
               onTap: (_) {},
               shouldIconPulse: true,
@@ -62,7 +62,7 @@ void main() {
 
     expect(Get.isSnackbarOpen, false);
     await tester.tap(
-      find.text('Open Snackbar'),
+      find.text("Open Snackbar"),
     );
 
     expect(Get.isSnackbarOpen, true);
@@ -71,20 +71,20 @@ void main() {
   });
 
   testWidgets("test snackbar queue", (tester) async {
-    const messageOne = Text('title');
+    const messageOne = Text("title");
 
-    const messageTwo = Text('titleTwo');
+    const messageTwo = Text("titleTwo");
 
     await tester.pumpWidget(
       GetMaterialApp(
         popGesture: true,
         home: ElevatedButton(
-          child: const Text('Open Snackbar'),
+          child: const Text("Open Snackbar"),
           onPressed: () {
             Get.rawSnackbar(
-                messageText: messageOne, duration: const Duration(seconds: 1));
+                messageText: messageOne, duration: const Duration(seconds: 1),);
             Get.rawSnackbar(
-                messageText: messageTwo, duration: const Duration(seconds: 1));
+                messageText: messageTwo, duration: const Duration(seconds: 1),);
           },
         ),
       ),
@@ -93,26 +93,26 @@ void main() {
     await tester.pump();
 
     expect(Get.isSnackbarOpen, false);
-    await tester.tap(find.text('Open Snackbar'));
+    await tester.tap(find.text("Open Snackbar"));
     expect(Get.isSnackbarOpen, true);
 
     await tester.pump(const Duration(milliseconds: 500));
-    expect(find.text('title'), findsOneWidget);
-    expect(find.text('titleTwo'), findsNothing);
+    expect(find.text("title"), findsOneWidget);
+    expect(find.text("titleTwo"), findsNothing);
     await tester.pump(const Duration(milliseconds: 500));
-    expect(find.text('title'), findsNothing);
-    expect(find.text('titleTwo'), findsOneWidget);
+    expect(find.text("title"), findsNothing);
+    expect(find.text("titleTwo"), findsOneWidget);
     Get.closeAllSnackbars();
     await tester.pumpAndSettle();
   });
 
   testWidgets("test snackbar dismissible", (tester) async {
     const dismissDirection = DismissDirection.down;
-    const snackBarTapTarget = Key('snackbar-tap-target');
+    const snackBarTapTarget = Key("snackbar-tap-target");
 
     const GetSnackBar getBar = GetSnackBar(
-      key: ValueKey('dismissible'),
-      message: 'bar1',
+      key: ValueKey("dismissible"),
+      message: "bar1",
       duration: Duration(seconds: 2),
       isDismissible: true,
       snackPosition: SnackPosition.bottom,
@@ -141,12 +141,12 @@ void main() {
           },
         ),
       ),
-    ));
+    ),);
 
     await tester.pump();
 
     expect(Get.isSnackbarOpen, false);
-    expect(find.text('bar1'), findsNothing);
+    expect(find.text("bar1"), findsNothing);
 
     await tester.tap(find.byKey(snackBarTapTarget));
     await tester.pumpAndSettle();
@@ -163,7 +163,7 @@ void main() {
 
   testWidgets("test snackbar onTap", (tester) async {
     const dismissDirection = DismissDirection.vertical;
-    const snackBarTapTarget = Key('snackbar-tap-target');
+    const snackBarTapTarget = Key("snackbar-tap-target");
     var counter = 0;
 
     late final GetSnackBar getBar;
@@ -180,7 +180,7 @@ void main() {
                   key: snackBarTapTarget,
                   onTap: () {
                     getBar = GetSnackBar(
-                      message: 'bar1',
+                      message: "bar1",
                       onTap: (_) {
                         counter++;
                       },
@@ -201,12 +201,12 @@ void main() {
           },
         ),
       ),
-    ));
+    ),);
 
     await tester.pumpAndSettle();
 
     expect(Get.isSnackbarOpen, false);
-    expect(find.text('bar1'), findsNothing);
+    expect(find.text("bar1"), findsNothing);
 
     await tester.tap(find.byKey(snackBarTapTarget));
     await tester.pumpAndSettle();
@@ -223,7 +223,7 @@ void main() {
 
   testWidgets("Get test actions and icon", (tester) async {
     const icon = Icon(Icons.alarm);
-    final action = TextButton(onPressed: () {}, child: const Text('button'));
+    final action = TextButton(onPressed: () {}, child: const Text("button"));
 
     late final GetSnackBar getBar;
 
@@ -232,10 +232,10 @@ void main() {
     await tester.pump();
 
     expect(Get.isSnackbarOpen, false);
-    expect(find.text('bar1'), findsNothing);
+    expect(find.text("bar1"), findsNothing);
 
     getBar = GetSnackBar(
-      message: 'bar1',
+      message: "bar1",
       icon: icon,
       mainButton: action,
       leftBarIndicatorColor: Colors.yellow,

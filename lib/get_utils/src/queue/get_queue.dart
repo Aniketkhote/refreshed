@@ -1,4 +1,4 @@
-import 'dart:async';
+import "dart:async";
 
 /// A utility class for executing microtasks sequentially.
 ///
@@ -47,7 +47,7 @@ class GetQueue {
   /// The provided [job] function is added to the queue of jobs to be executed.
   /// A [Completer] is used to obtain the result of the job as a future.
   Future<T> add<T>(Function job) {
-    var completer = Completer<T>();
+    final completer = Completer<T>();
     _queue.add(_Item(completer, job));
     _check();
     return completer.future;
@@ -66,7 +66,7 @@ class GetQueue {
   void _check() async {
     if (!_active && _queue.isNotEmpty) {
       _active = true;
-      var item = _queue.removeAt(0);
+      final item = _queue.removeAt(0);
       try {
         item.completer.complete(await item.job());
       } on Exception catch (e) {
@@ -80,9 +80,9 @@ class GetQueue {
 
 /// Represents an item in the job queue with its associated completer and job function.
 class _Item {
-  final dynamic completer;
-  final dynamic job;
 
   /// Constructs an item with the given completer and job.
   _Item(this.completer, this.job);
+  final dynamic completer;
+  final dynamic job;
 }

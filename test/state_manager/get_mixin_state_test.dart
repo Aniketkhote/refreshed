@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:refreshed/get_state_manager/src/simple/mixin_builder.dart';
-import 'package:refreshed/refreshed.dart';
+import "package:flutter/material.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:refreshed/get_state_manager/src/simple/mixin_builder.dart";
+import "package:refreshed/refreshed.dart";
 
 void main() {
   testWidgets("MixinBuilder with reactive and not reactive", (tester) async {
@@ -13,25 +13,25 @@ void main() {
             return Column(
               children: [
                 Text(
-                  'Count: ${controller.counter.value}',
+                  "Count: ${controller.counter.value}",
                 ),
                 Text(
-                  'Count2: ${controller.count}',
+                  "Count2: ${controller.count}",
                 ),
                 Text(
-                  'Double: ${controller.doubleNum.value}',
+                  "Double: ${controller.doubleNum.value}",
                 ),
                 Text(
-                  'String: ${controller.string.value}',
+                  "String: ${controller.string.value}",
                 ),
                 Text(
-                  'List: ${controller.list.length}',
+                  "List: ${controller.list.length}",
                 ),
                 Text(
-                  'Bool: ${controller.boolean.value}',
+                  "Bool: ${controller.boolean.value}",
                 ),
                 Text(
-                  'Map: ${controller.map.length}',
+                  "Map: ${controller.map.length}",
                 ),
                 TextButton(
                   child: const Text("increment"),
@@ -40,7 +40,7 @@ void main() {
                 TextButton(
                   child: const Text("increment2"),
                   onPressed: () => controller.increment2(),
-                )
+                ),
               ],
             );
           },
@@ -62,13 +62,13 @@ void main() {
 
     expect(find.text("Count: 1"), findsOneWidget);
 
-    await tester.tap(find.text('increment'));
+    await tester.tap(find.text("increment"));
 
     await tester.pump();
 
     expect(find.text("Count: 2"), findsOneWidget);
 
-    await tester.tap(find.text('increment2'));
+    await tester.tap(find.text("increment2"));
 
     await tester.pump();
 

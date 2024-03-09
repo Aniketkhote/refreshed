@@ -1,17 +1,17 @@
-import 'dart:async';
-import 'dart:ui';
+import "dart:async";
+import "dart:ui";
 
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import '../../../get_core/get_core.dart';
-import '../../get_navigation.dart';
+import 'package:refreshed/get_core/get_core.dart';
+import 'package:refreshed/get_navigation/get_navigation.dart';
 
 /// Callback signature for tap events on a `GetSnackBar`.
 typedef OnTap = void Function(GetSnackBar snack);
 
 /// Callback signature for hover events on a `GetSnackBar`.
 typedef OnHover = void Function(
-    GetSnackBar snack, SnackHoverState snackHoverState);
+    GetSnackBar snack, SnackHoverState snackHoverState,);
 
 /// Callback signature for status changes on a `GetSnackBar`.
 typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
@@ -20,6 +20,49 @@ typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
 ///
 /// This widget provides functionality for displaying snack bars with customizable behavior and appearance.
 class GetSnackBar extends StatefulWidget {
+
+  /// Constructs a new instance of [GetSnackBar].
+  const GetSnackBar({
+    super.key,
+    this.title,
+    this.message,
+    this.titleText,
+    this.messageText,
+    this.icon,
+    this.shouldIconPulse = true,
+    this.maxWidth,
+    this.margin = const EdgeInsets.all(0.0),
+    this.padding = const EdgeInsets.all(16),
+    this.borderRadius = 0.0,
+    this.borderColor,
+    this.borderWidth = 1.0,
+    this.disableSelfAlignment = false,
+    this.backgroundColor = const Color(0xFF303030),
+    this.leftBarIndicatorColor,
+    this.boxShadows,
+    this.backgroundGradient,
+    this.mainButton,
+    this.onTap,
+    this.onHover,
+    this.duration = const Duration(milliseconds: 1500),
+    this.isDismissible = true,
+    this.dismissDirection,
+    this.showProgressIndicator = false,
+    this.progressIndicatorController,
+    this.progressIndicatorBackgroundColor,
+    this.progressIndicatorValueColor,
+    this.snackPosition = SnackPosition.bottom,
+    this.snackStyle = SnackStyle.floating,
+    this.forwardAnimationCurve = Curves.easeOutCirc,
+    this.reverseAnimationCurve = Curves.easeOutCirc,
+    this.animationDuration = const Duration(seconds: 1),
+    this.barBlur = 0.0,
+    this.overlayBlur = 0.0,
+    this.overlayColor = Colors.transparent,
+    this.userInputForm,
+    this.snackbarStatus,
+    this.hitTestBehavior,
+  });
   /// A callback for you to listen to the different Snack status
   final SnackbarStatusCallback? snackbarStatus;
 
@@ -185,49 +228,6 @@ class GetSnackBar extends StatefulWidget {
   /// Every other widget is ignored if this is not null.
   final Form? userInputForm;
 
-  /// Constructs a new instance of [GetSnackBar].
-  const GetSnackBar({
-    super.key,
-    this.title,
-    this.message,
-    this.titleText,
-    this.messageText,
-    this.icon,
-    this.shouldIconPulse = true,
-    this.maxWidth,
-    this.margin = const EdgeInsets.all(0.0),
-    this.padding = const EdgeInsets.all(16),
-    this.borderRadius = 0.0,
-    this.borderColor,
-    this.borderWidth = 1.0,
-    this.disableSelfAlignment = false,
-    this.backgroundColor = const Color(0xFF303030),
-    this.leftBarIndicatorColor,
-    this.boxShadows,
-    this.backgroundGradient,
-    this.mainButton,
-    this.onTap,
-    this.onHover,
-    this.duration = const Duration(milliseconds: 1500),
-    this.isDismissible = true,
-    this.dismissDirection,
-    this.showProgressIndicator = false,
-    this.progressIndicatorController,
-    this.progressIndicatorBackgroundColor,
-    this.progressIndicatorValueColor,
-    this.snackPosition = SnackPosition.bottom,
-    this.snackStyle = SnackStyle.floating,
-    this.forwardAnimationCurve = Curves.easeOutCirc,
-    this.reverseAnimationCurve = Curves.easeOutCirc,
-    this.animationDuration = const Duration(seconds: 1),
-    this.barBlur = 0.0,
-    this.overlayBlur = 0.0,
-    this.overlayColor = Colors.transparent,
-    this.userInputForm,
-    this.snackbarStatus,
-    this.hitTestBehavior,
-  });
-
   @override
   State createState() => GetSnackBarState();
 
@@ -283,7 +283,7 @@ class GetSnackBarState extends State<GetSnackBar>
 
   /// Calculates the padding for the action button within the snack bar.
   double get buttonPadding {
-    double result = widget.padding.right - 12;
+    final double result = widget.padding.right - 12;
     return result < 0 ? 4 : result;
   }
 
@@ -338,7 +338,7 @@ class GetSnackBarState extends State<GetSnackBar>
                     borderRadius: BorderRadius.circular(widget.borderRadius),
                     child: BackdropFilter(
                       filter: ImageFilter.blur(
-                          sigmaX: widget.barBlur, sigmaY: widget.barBlur),
+                          sigmaX: widget.barBlur, sigmaY: widget.barBlur,),
                       child: Container(
                         height: snapshot.data!.height,
                         width: snapshot.data!.width,
@@ -358,7 +358,7 @@ class GetSnackBarState extends State<GetSnackBar>
             if (widget.userInputForm != null)
               _containerWithForm()
             else
-              _containerWithoutForm()
+              _containerWithoutForm(),
           ],
         ),
       ),
@@ -384,7 +384,7 @@ class GetSnackBarState extends State<GetSnackBar>
         widget.userInputForm != null ||
             ((widget.message != null && widget.message!.isNotEmpty) ||
                 widget.messageText != null),
-        '''You need to either use message[String], or messageText[Widget] or define a userInputForm[Form] in GetSnackbar''');
+        """You need to either use message[String], or messageText[Widget] or define a userInputForm[Form] in GetSnackbar""",);
 
     _isTitlePresent = (widget.title != null || widget.titleText != null);
     _messageTopMargin = _isTitlePresent ? 6.0 : widget.padding.top;
@@ -440,7 +440,7 @@ class GetSnackBarState extends State<GetSnackBar>
       widget.progressIndicatorController!.addListener(_updateProgress);
 
       _progressAnimation = CurvedAnimation(
-          curve: Curves.linear, parent: widget.progressIndicatorController!);
+          curve: Curves.linear, parent: widget.progressIndicatorController!,);
     }
   }
 

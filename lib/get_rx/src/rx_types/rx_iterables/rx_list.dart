@@ -1,4 +1,4 @@
-part of '../rx_types.dart';
+part of "../rx_types.dart";
 
 /// A reactive list that extends functionality similar to `List<T>` and provides automatic notifications on changes.
 class RxList<E> extends GetListenable<List<E>>

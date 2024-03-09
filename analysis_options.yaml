@@ -40,7 +40,6 @@ linter:
     - avoid_slow_async_io
     - avoid_type_to_string
     - avoid_types_as_parameter_names
-    - avoid_types_on_closure_parameters
     - avoid_unnecessary_containers
     - avoid_unused_constructor_parameters
     - avoid_void_async
@@ -103,7 +102,6 @@ linter:
     - noop_primitive_operations
     - null_check_on_nullable_type_parameter
     - null_closures
-    - omit_local_variable_types
     - one_member_abstracts
     - only_throw_errors
     - overridden_fields
@@ -127,7 +125,6 @@ linter:
     - prefer_final_fields
     - prefer_final_in_for_each
     - prefer_final_locals
-    - prefer_final_parameters
     - prefer_for_elements_to_map_fromIterable
     - prefer_foreach
     - prefer_function_declarations_over_variables
@@ -145,8 +142,6 @@ linter:
     - prefer_mixin
     - prefer_null_aware_method_calls
     - prefer_null_aware_operators
-    - prefer_relative_imports
-    - prefer_single_quotes
     - prefer_spread_collections
     - prefer_typing_uninitialized_variables
     - prefer_void_to_null
@@ -174,7 +169,6 @@ linter:
     - unnecessary_breaks
     - unnecessary_const
     - unnecessary_constructor_name
-    - unnecessary_final
     - unnecessary_getters_setters
     - unnecessary_lambdas
     - unnecessary_late
@@ -189,7 +183,7 @@ linter:
     - unnecessary_parenthesis
     - unnecessary_raw_strings
     - unnecessary_statements
-    - unnecessary_string_escapes
+    # - unnecessary_string_escapes
     - unnecessary_string_interpolations
     - unnecessary_this
     - unnecessary_to_list_in_spreads

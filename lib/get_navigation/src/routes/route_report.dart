@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import '../router_report.dart';
-import 'default_route.dart';
+import 'package:refreshed/get_navigation/src/router_report.dart';
+import 'package:refreshed/get_navigation/src/routes/default_route.dart';
 
 /// A StatefulWidget that reports its route lifecycle events to a [RouterReportManager].
 ///

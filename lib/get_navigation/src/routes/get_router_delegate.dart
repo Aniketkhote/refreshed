@@ -1,18 +1,43 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:refreshed/get_navigation/src/routes/new_path_route.dart';
-import 'package:refreshed/utils.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:refreshed/get_navigation/src/routes/new_path_route.dart";
+import "package:refreshed/utils.dart";
 
-import '../../../get_instance/src/bindings_interface.dart';
-import '../../../route_manager.dart';
+import 'package:refreshed/get_instance/src/bindings_interface.dart';
+import 'package:refreshed/route_manager.dart';
 
 class GetDelegate extends RouterDelegate<RouteDecoder>
     with
         ChangeNotifier,
         PopNavigatorRouterDelegateMixin<RouteDecoder>,
         IGetNavigation {
+
+  GetDelegate({
+    GetPage? notFoundRoute,
+    this.navigatorObservers,
+    this.transitionDelegate,
+    this.backButtonPopMode = PopMode.history,
+    this.preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.reorderRoutes,
+    this.pickPagesForRootNavigator,
+    this.restorationScopeId,
+    bool showHashOnUrl = false,
+    GlobalKey<NavigatorState>? navigatorKey,
+    required List<GetPage> pages,
+  })  : navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>(),
+        notFoundRoute = notFoundRoute ??= GetPage(
+          name: "/404",
+          page: () => const Scaffold(
+            body: Center(child: Text("Route not found")),
+          ),
+        ) {
+    if (!showHashOnUrl && GetPlatform.isWeb) setUrlStrategy();
+    addPages(pages);
+    addPage(notFoundRoute);
+    Get.log("GetDelegate is created !");
+  }
   factory GetDelegate.createDelegate({
     GetPage<dynamic>? notFoundRoute,
     List<GetPage> pages = const [],
@@ -79,31 +104,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   final String? restorationScopeId;
 
-  GetDelegate({
-    GetPage? notFoundRoute,
-    this.navigatorObservers,
-    this.transitionDelegate,
-    this.backButtonPopMode = PopMode.history,
-    this.preventDuplicateHandlingMode =
-        PreventDuplicateHandlingMode.reorderRoutes,
-    this.pickPagesForRootNavigator,
-    this.restorationScopeId,
-    bool showHashOnUrl = false,
-    GlobalKey<NavigatorState>? navigatorKey,
-    required List<GetPage> pages,
-  })  : navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>(),
-        notFoundRoute = notFoundRoute ??= GetPage(
-          name: '/404',
-          page: () => const Scaffold(
-            body: Center(child: Text('Route not found')),
-          ),
-        ) {
-    if (!showHashOnUrl && GetPlatform.isWeb) setUrlStrategy();
-    addPages(pages);
-    addPage(notFoundRoute);
-    Get.log('GetDelegate is created !');
-  }
-
   Future<RouteDecoder?> runMiddleware(RouteDecoder config) async {
     final middlewares = config.currentTreeBranch.last.middlewares;
     if (middlewares.isEmpty) {
@@ -111,7 +111,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     }
     var iterator = config;
     for (var item in middlewares) {
-      var redirectRes = await item.redirectDelegate(iterator);
+      final redirectRes = await item.redirectDelegate(iterator);
       if (redirectRes == null) return null;
       iterator = redirectRes;
       // Stop the iteration over the middleware if we changed page
@@ -170,7 +170,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   Future<void> _pushHistory(RouteDecoder config) async {
     if (config.route!.preventDuplicates) {
       final originalEntryIndex = _activePages.indexWhere(
-          (element) => element.pageSettings?.name == config.pageSettings?.name);
+          (element) => element.pageSettings?.name == config.pageSettings?.name,);
       if (originalEntryIndex >= 0) {
         switch (preventDuplicateHandlingMode) {
           case PreventDuplicateHandlingMode.popUntilOriginalRoute:
@@ -587,7 +587,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       if (!canBack) {
         final last = _activePages.last;
         final name = last.route?.name;
-        throw 'The page $name cannot be popped';
+        throw "The page $name cannot be popped";
       }
       return true;
     }());
@@ -595,7 +595,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @override
   Future<R?> backAndtoNamed<T, R>(String page,
-      {T? result, Object? arguments}) async {
+      {T? result, Object? arguments,}) async {
     final args = _buildPageSettings(page, arguments);
     final route = _getRouteDecoder<R>(args);
     if (route == null) return null;
@@ -663,7 +663,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   PageSettings _buildPageSettings(String page, [Object? data]) {
-    var uri = Uri.parse(page);
+    final uri = Uri.parse(page);
     return PageSettings(uri, data);
   }
 
@@ -685,7 +685,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @protected
   RouteDecoder _configureRouterDecoder<T>(
-      RouteDecoder decoder, PageSettings arguments) {
+      RouteDecoder decoder, PageSettings arguments,) {
     final parameters =
         arguments.params.isEmpty ? arguments.query : arguments.params;
     arguments.params.addAll(arguments.query);
@@ -704,7 +704,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   Future<T?> _push<T>(RouteDecoder decoder, {bool rebuildStack = true}) async {
-    var mid = await runMiddleware(decoder);
+    final mid = await runMiddleware(decoder);
     final res = mid ?? decoder;
     // if (res == null) res = decoder;
 
@@ -846,13 +846,13 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 /// converts it to kebab case, and prepends a forward slash if necessary.
 /// The cleaned route name is then returned.
 String cleanRouteName(String name) {
-  name = name.replaceAll('() => ', '');
+  name = name.replaceAll("() => ", "");
 
   // Convert the route name to kebab case
   // name = name.paramCase!;
 
-  if (!name.startsWith('/')) {
-    name = '/$name';
+  if (!name.startsWith("/")) {
+    name = "/$name";
   }
 
   // Optionally, parse the route name as a URI and convert it to a string

@@ -1,12 +1,57 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:refreshed/utils.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:refreshed/utils.dart";
 
-import '../../../refreshed.dart' hide ContextExt;
-import '../router_report.dart';
+import 'package:refreshed/refreshed.dart' hide ContextExt;
+import 'package:refreshed/get_navigation/src/router_report.dart';
 
 /// A class that holds configuration data for the application.
 class ConfigData {
+
+  /// Constructs a new [ConfigData] instance.
+  ConfigData({
+    required this.routingCallback,
+    required this.defaultTransition,
+    required this.onInit,
+    required this.onReady,
+    required this.onDispose,
+    required this.enableLog,
+    required this.logWriterCallback,
+    required this.smartManagement,
+    required this.binds,
+    required this.transitionDuration,
+    required this.defaultGlobalState,
+    required this.getPages,
+    required this.unknownRoute,
+    required this.routeInformationProvider,
+    required this.routeInformationParser,
+    required this.routerDelegate,
+    required this.backButtonDispatcher,
+    required this.navigatorObservers,
+    required this.navigatorKey,
+    required this.scaffoldMessengerKey,
+    required this.translationsKeys,
+    required this.translations,
+    required this.locale,
+    required this.fallbackLocale,
+    required this.initialRoute,
+    required this.customTransition,
+    required this.home,
+    this.theme,
+    this.darkTheme,
+    this.themeMode,
+    this.unikey,
+    this.testMode = false,
+    this.defaultOpaqueRoute = true,
+    this.defaultTransitionDuration = const Duration(milliseconds: 300),
+    this.defaultTransitionCurve = Curves.easeOutQuad,
+    this.defaultDialogTransitionCurve = Curves.easeOutQuad,
+    this.defaultDialogTransitionDuration = const Duration(milliseconds: 300),
+    this.parameters = const {},
+    Routing? routing,
+    bool? defaultPopGesture,
+  })  : defaultPopGesture = defaultPopGesture ?? GetPlatform.isIOS,
+        routing = routing ?? Routing();
   /// Callback for routing changes.
   final ValueChanged<Routing?>? routingCallback;
 
@@ -128,51 +173,6 @@ class ConfigData {
   final bool testMode;
 
   final SnackBarQueue snackBarQueue = SnackBarQueue();
-
-  /// Constructs a new [ConfigData] instance.
-  ConfigData({
-    required this.routingCallback,
-    required this.defaultTransition,
-    required this.onInit,
-    required this.onReady,
-    required this.onDispose,
-    required this.enableLog,
-    required this.logWriterCallback,
-    required this.smartManagement,
-    required this.binds,
-    required this.transitionDuration,
-    required this.defaultGlobalState,
-    required this.getPages,
-    required this.unknownRoute,
-    required this.routeInformationProvider,
-    required this.routeInformationParser,
-    required this.routerDelegate,
-    required this.backButtonDispatcher,
-    required this.navigatorObservers,
-    required this.navigatorKey,
-    required this.scaffoldMessengerKey,
-    required this.translationsKeys,
-    required this.translations,
-    required this.locale,
-    required this.fallbackLocale,
-    required this.initialRoute,
-    required this.customTransition,
-    required this.home,
-    this.theme,
-    this.darkTheme,
-    this.themeMode,
-    this.unikey,
-    this.testMode = false,
-    this.defaultOpaqueRoute = true,
-    this.defaultTransitionDuration = const Duration(milliseconds: 300),
-    this.defaultTransitionCurve = Curves.easeOutQuad,
-    this.defaultDialogTransitionCurve = Curves.easeOutQuad,
-    this.defaultDialogTransitionDuration = const Duration(milliseconds: 300),
-    this.parameters = const {},
-    Routing? routing,
-    bool? defaultPopGesture,
-  })  : defaultPopGesture = defaultPopGesture ?? GetPlatform.isIOS,
-        routing = routing ?? Routing();
 
   ConfigData copyWith({
     ValueChanged<Routing?>? routingCallback,
@@ -411,9 +411,9 @@ class GetRoot extends StatefulWidget {
     assert(() {
       if (root == null) {
         throw FlutterError(
-          'GetRoot operation requested with a context that does not include a GetRoot.\n'
-          'The context used must be that of a '
-          'widget that is a descendant of a GetRoot widget.',
+          "GetRoot operation requested with a context that does not include a GetRoot.\n"
+          "The context used must be that of a "
+          "widget that is a descendant of a GetRoot widget.",
         );
       }
       return true;
@@ -437,7 +437,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   /// for accessing its methods and properties.
   static GetRootState get controller {
     if (_controller == null) {
-      throw Exception('GetRoot is not part of the three');
+      throw Exception("GetRoot is not part of the three");
     } else {
       return _controller!;
     }
@@ -481,7 +481,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   /// for the widget.
   void onInit() {
     if (config.getPages == null && config.home == null) {
-      throw 'You need add pages or home';
+      throw "You need add pages or home";
     }
 
     if (config.routerDelegate == null) {
@@ -497,11 +497,11 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
         navigatorKey: config.navigatorKey,
         navigatorObservers: (config.navigatorObservers == null
             ? <NavigatorObserver>[
-                GetObserver(config.routingCallback, Get.routing)
+                GetObserver(config.routingCallback, Get.routing),
               ]
             : <NavigatorObserver>[
                 GetObserver(config.routingCallback, config.routing),
-                ...config.navigatorObservers!
+                ...config.navigatorObservers!,
               ]),
       );
       config = config.copyWith(routerDelegate: newDelegate);

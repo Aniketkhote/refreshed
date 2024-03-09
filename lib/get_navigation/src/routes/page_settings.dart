@@ -1,6 +1,6 @@
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
-import '../../../route_manager.dart';
+import 'package:refreshed/route_manager.dart';
 
 /// Extension methods for [BuildContext] to provide convenient access to page-related information.
 ///
@@ -62,7 +62,7 @@ extension PageArgExt on BuildContext {
   String get location {
     final parser = router.routeInformationParser;
     final config = delegate.currentConfiguration;
-    return parser?.restoreRouteInformation(config)?.uri.path ?? '/';
+    return parser?.restoreRouteInformation(config)?.uri.path ?? "/";
   }
 
   /// Retrieves the delegate associated with the current router.
@@ -94,7 +94,7 @@ class PageSettings extends RouteSettings {
   ]) : super(arguments: arguments);
 
   @override
-  String get name => '$uri';
+  String get name => "$uri";
 
   /// The URI associated with the page settings.
   final Uri uri;

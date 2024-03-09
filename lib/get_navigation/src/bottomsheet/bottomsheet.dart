@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import '../router_report.dart';
+import 'package:refreshed/get_navigation/src/router_report.dart';
 
 /// A custom [PopupRoute] used by Refreshed for displaying modal bottom sheet routes.
 ///
@@ -120,7 +120,7 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+      Animation<double> secondaryAnimation,) {
     final sheetTheme =
         theme?.bottomSheetTheme ?? Theme.of(context).bottomSheetTheme;
     // By definition, the bottom sheet is aligned to the bottom of the page
@@ -184,7 +184,7 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
         (Theme.of(context).platform == TargetPlatform.fuchsia)) {
       return localizations.dialogLabel;
     } else {
-      return '';
+      return "";
     }
   }
 
@@ -212,7 +212,7 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
           child: ClipRect(
             child: CustomSingleChildLayout(
               delegate: _GetModalBottomSheetLayout(
-                  animationValue, widget.isScrollControlled),
+                  animationValue, widget.isScrollControlled,),
               child: widget.isPersistent == false
                   ? BottomSheet(
                       animationController: widget.route!._animationController,
@@ -289,7 +289,7 @@ class _GetPerModalBottomSheetState<T>
         (Theme.of(context).platform == TargetPlatform.fuchsia)) {
       return localizations.dialogLabel;
     } else {
-      return '';
+      return "";
     }
   }
 
@@ -317,7 +317,7 @@ class _GetPerModalBottomSheetState<T>
           child: ClipRect(
             child: CustomSingleChildLayout(
               delegate: _GetModalBottomSheetLayout(
-                  animationValue, widget.isScrollControlled),
+                  animationValue, widget.isScrollControlled,),
               child: widget.isPersistent == false
                   ? BottomSheet(
                       animationController: widget.route!._animationController,

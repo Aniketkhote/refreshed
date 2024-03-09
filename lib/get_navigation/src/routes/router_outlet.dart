@@ -1,17 +1,9 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import '../../../refreshed.dart';
+import 'package:refreshed/refreshed.dart';
 
 class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
     extends StatefulWidget {
-  final TDelegate routerDelegate;
-  final Widget Function(BuildContext context) builder;
-
-  RouterOutlet.builder({
-    super.key,
-    TDelegate? delegate,
-    required this.builder,
-  }) : routerDelegate = delegate ?? Get.delegate<TDelegate, T>()!;
 
   RouterOutlet({
     Key? key,
@@ -34,7 +26,15 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
               return pageBuilder(context, rDelegate, picked);
             },
             delegate: delegate,
-            key: key);
+            key: key,);
+
+  RouterOutlet.builder({
+    super.key,
+    TDelegate? delegate,
+    required this.builder,
+  }) : routerDelegate = delegate ?? Get.delegate<TDelegate, T>()!;
+  final TDelegate routerDelegate;
+  final Widget Function(BuildContext context) builder;
   @override
   RouterOutletState<TDelegate, T> createState() =>
       RouterOutletState<TDelegate, T>();
@@ -196,7 +196,7 @@ extension PagesListExt on List<GetPage> {
   /// Returns the routes after the given route.
   Iterable<GetPage> pickAfterRoute(String route) {
     // If the provided route is root, we take the first route after root.
-    if (route == '/') {
+    if (route == "/") {
       return pickFromRoute(route).skip(1).take(1);
     }
     // Otherwise, we skip the route and take all routes after it.
@@ -205,7 +205,7 @@ extension PagesListExt on List<GetPage> {
 }
 
 typedef NavigatorItemBuilderBuilder = Widget Function(
-    BuildContext context, List<String> routes, int index);
+    BuildContext context, List<String> routes, int index,);
 
 class IndexedRouteBuilder<T> extends StatelessWidget {
   const IndexedRouteBuilder({

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:refreshed/refreshed.dart';
+import "package:flutter/material.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:refreshed/refreshed.dart";
 
 void main() {
   Get.lazyPut<Controller2>(() => Controller2());
@@ -13,36 +13,36 @@ void main() {
             return Column(
               children: [
                 Text(
-                  'Count: ${controller.counter.value}',
+                  "Count: ${controller.counter.value}",
                 ),
                 Text(
-                  'Double: ${controller.doubleNum.value}',
+                  "Double: ${controller.doubleNum.value}",
                 ),
                 Text(
-                  'String: ${controller.string.value}',
+                  "String: ${controller.string.value}",
                 ),
                 Text(
-                  'List: ${controller.list.length}',
+                  "List: ${controller.list.length}",
                 ),
                 Text(
-                  'Bool: ${controller.boolean.value}',
+                  "Bool: ${controller.boolean.value}",
                 ),
                 Text(
-                  'Map: ${controller.map.length}',
+                  "Map: ${controller.map.length}",
                 ),
                 TextButton(
                   child: const Text("increment"),
                   onPressed: () => controller.increment(),
                 ),
                 GetX<Controller2>(builder: (controller) {
-                  return Text('lazy ${controller.lazy.value}');
-                }),
+                  return Text("lazy ${controller.lazy.value}");
+                },),
                 GetX<ControllerNonGlobal>(
                     init: ControllerNonGlobal(),
                     global: false,
                     builder: (controller) {
-                      return Text('single ${controller.nonGlobal.value}');
-                    })
+                      return Text("single ${controller.nonGlobal.value}");
+                    },),
               ],
             );
           },
@@ -63,7 +63,7 @@ void main() {
 
     expect(find.text("Count: 1"), findsOneWidget);
 
-    await tester.tap(find.text('increment'));
+    await tester.tap(find.text("increment"));
 
     await tester.pump();
 

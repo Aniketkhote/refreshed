@@ -1,4 +1,4 @@
-import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
+import 'package:refreshed/get_utils/src/platform/platform_web.dart' if (dart.library.io) "platform_io.dart";
 
 /// Provides platform-specific information and utilities.
 ///

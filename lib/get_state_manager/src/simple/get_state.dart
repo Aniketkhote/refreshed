@@ -1,19 +1,19 @@
 // ignore_for_file: overridden_fields
 
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import '../../../instance_manager.dart';
-import '../../get_state_manager.dart';
-import 'list_notifier.dart';
+import 'package:refreshed/instance_manager.dart';
+import 'package:refreshed/get_state_manager/get_state_manager.dart';
+import 'package:refreshed/get_state_manager/src/simple/list_notifier.dart';
 
 /// Signature for a function that creates an object of type `T`.
 typedef InitBuilder<T> = T Function();
 
 /// Signature for a function that builds a widget with a controller of type `T`.
 typedef GetControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
-    T controller);
+    T controller,);
 
 /// Extension methods for accessing state in the context of a widget build.
 extension StateAccessExt on BuildContext {
@@ -35,19 +35,6 @@ extension StateAccessExt on BuildContext {
 }
 
 class GetBuilder<T extends GetxController> extends StatelessWidget {
-  final GetControllerBuilder<T> builder;
-  final bool global;
-  final Object? id;
-  final String? tag;
-  final bool autoRemove;
-  final bool assignId;
-  final Object Function(T value)? filter;
-  final void Function(BindElement<T> state)? initState,
-      dispose,
-      didChangeDependencies;
-  final void Function(Binder<T> oldWidget, BindElement<T> state)?
-      didUpdateWidget;
-  final T? init;
 
   const GetBuilder({
     super.key,
@@ -64,6 +51,19 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
     this.didChangeDependencies,
     this.didUpdateWidget,
   });
+  final GetControllerBuilder<T> builder;
+  final bool global;
+  final Object? id;
+  final String? tag;
+  final bool autoRemove;
+  final bool assignId;
+  final Object Function(T value)? filter;
+  final void Function(BindElement<T> state)? initState,
+      dispose,
+      didChangeDependencies;
+  final void Function(Binder<T> oldWidget, BindElement<T> state)?
+      didUpdateWidget;
+  final T? init;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +83,7 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
       child: Builder(builder: (BuildContext context) {
         final controller = Bind.of<T>(context, rebuild: true);
         return builder(controller);
-      }),
+      },),
     );
     // return widget.builder(controller!);
   }
@@ -105,6 +105,38 @@ abstract class Bind<T> extends StatelessWidget {
     this.didChangeDependencies,
     this.didUpdateWidget,
   });
+
+  factory Bind.builder({
+    Widget? child,
+    InitBuilder<T>? init,
+    InstanceCreateBuilderCallback<T>? create,
+    bool global = true,
+    bool autoRemove = true,
+    bool assignId = false,
+    Object Function(T value)? filter,
+    String? tag,
+    Object? id,
+    void Function(BindElement<T> state)? initState,
+    void Function(BindElement<T> state)? dispose,
+    void Function(BindElement<T> state)? didChangeDependencies,
+    void Function(Binder<T> oldWidget, BindElement<T> state)? didUpdateWidget,
+  }) =>
+      _FactoryBind<T>(
+        // key: key,
+        init: init,
+        create: create,
+        global: global,
+        autoRemove: autoRemove,
+        assignId: assignId,
+        initState: initState,
+        filter: filter,
+        tag: tag,
+        dispose: dispose,
+        id: id,
+        didChangeDependencies: didChangeDependencies,
+        didUpdateWidget: didUpdateWidget,
+        child: child,
+      );
 
   final InitBuilder<T>? init;
 
@@ -155,7 +187,7 @@ abstract class Bind<T> extends StatelessWidget {
   }
 
   static Bind create<S>(InstanceCreateBuilderCallback<S> builder,
-      {String? tag, bool permanent = true}) {
+      {String? tag, bool permanent = true,}) {
     return _FactoryBind<S>(
       create: builder,
       tag: tag,
@@ -164,7 +196,7 @@ abstract class Bind<T> extends StatelessWidget {
   }
 
   static Bind spawn<S>(InstanceBuilderCallback<S> builder,
-      {String? tag, bool permanent = true}) {
+      {String? tag, bool permanent = true,}) {
     Get.spawn<S>(builder, tag: tag, permanent: permanent);
     return _FactoryBind<S>(
       tag: tag,
@@ -198,44 +230,12 @@ abstract class Bind<T> extends StatelessWidget {
   }
 
   static void lazyReplace<P>(InstanceBuilderCallback<P> builder,
-      {String? tag, bool? fenix}) {
+      {String? tag, bool? fenix,}) {
     final InstanceInfo info = Get.getInstanceInfo<P>(tag: tag);
     final bool permanent = info.isPermanent ?? false;
     delete<P>(tag: tag, force: permanent);
     Get.lazyPut(builder, tag: tag, fenix: fenix ?? permanent);
   }
-
-  factory Bind.builder({
-    Widget? child,
-    InitBuilder<T>? init,
-    InstanceCreateBuilderCallback<T>? create,
-    bool global = true,
-    bool autoRemove = true,
-    bool assignId = false,
-    Object Function(T value)? filter,
-    String? tag,
-    Object? id,
-    void Function(BindElement<T> state)? initState,
-    void Function(BindElement<T> state)? dispose,
-    void Function(BindElement<T> state)? didChangeDependencies,
-    void Function(Binder<T> oldWidget, BindElement<T> state)? didUpdateWidget,
-  }) =>
-      _FactoryBind<T>(
-        // key: key,
-        init: init,
-        create: create,
-        global: global,
-        autoRemove: autoRemove,
-        assignId: assignId,
-        initState: initState,
-        filter: filter,
-        tag: tag,
-        dispose: dispose,
-        id: id,
-        didChangeDependencies: didChangeDependencies,
-        didUpdateWidget: didUpdateWidget,
-        child: child,
-      );
 
   static T of<T>(
     BuildContext context, {
@@ -247,7 +247,7 @@ abstract class Bind<T> extends StatelessWidget {
             as BindElement<T>?;
 
     if (inheritedElement == null) {
-      throw BindError(controller: '$T', tag: null);
+      throw BindError(controller: "$T", tag: null);
     }
 
     if (rebuild) {
@@ -269,6 +269,23 @@ abstract class Bind<T> extends StatelessWidget {
 }
 
 class _FactoryBind<T> extends Bind<T> {
+
+  const _FactoryBind({
+    super.key,
+    this.child,
+    this.init,
+    this.create,
+    this.global = true,
+    this.autoRemove = true,
+    this.assignId = false,
+    this.initState,
+    this.filter,
+    this.tag,
+    this.dispose,
+    this.id,
+    this.didChangeDependencies,
+    this.didUpdateWidget,
+  }) : super(child: child);
   @override
   final InitBuilder<T>? init;
 
@@ -297,23 +314,6 @@ class _FactoryBind<T> extends Bind<T> {
 
   @override
   final Widget? child;
-
-  const _FactoryBind({
-    super.key,
-    this.child,
-    this.init,
-    this.create,
-    this.global = true,
-    this.autoRemove = true,
-    this.assignId = false,
-    this.initState,
-    this.filter,
-    this.tag,
-    this.dispose,
-    this.id,
-    this.didChangeDependencies,
-    this.didUpdateWidget,
-  }) : super(child: child);
 
   @override
   Bind<T> _copyWithChild(Widget child) {
@@ -354,14 +354,14 @@ class _FactoryBind<T> extends Bind<T> {
 }
 
 class Binds extends StatelessWidget {
-  final List<Bind<dynamic>> binds;
-  final Widget child;
 
   Binds({
     super.key,
     required this.binds,
     required this.child,
   }) : assert(binds.isNotEmpty);
+  final List<Bind<dynamic>> binds;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) => binds.reversed
@@ -608,21 +608,21 @@ class BindElement<T> extends InheritedElement {
 }
 
 class BindError<T> extends Error {
+
+  /// Creates a [BindError]
+  BindError({required this.controller, required this.tag});
   /// The type of the class the user tried to retrieve
   final T controller;
   final String? tag;
 
-  /// Creates a [BindError]
-  BindError({required this.controller, required this.tag});
-
   @override
   String toString() {
-    if (controller == 'dynamic') {
-      return '''Error: please specify type [<T>] when calling context.listen<T>() or context.find<T>() method.''';
+    if (controller == "dynamic") {
+      return """Error: please specify type [<T>] when calling context.listen<T>() or context.find<T>() method.""";
     }
 
-    return '''Error: No Bind<$controller>  ancestor found. To fix this, please add a Bind<$controller> widget ancestor to the current context.
-      ''';
+    return """Error: No Bind<$controller>  ancestor found. To fix this, please add a Bind<$controller> widget ancestor to the current context.
+      """;
   }
 }
 

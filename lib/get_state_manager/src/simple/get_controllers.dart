@@ -1,8 +1,8 @@
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
-import '../../../instance_manager.dart';
-import '../rx_flutter/rx_notifier.dart';
-import 'list_notifier.dart';
+import 'package:refreshed/instance_manager.dart';
+import 'package:refreshed/get_state_manager/src/rx_flutter/rx_notifier.dart';
+import 'package:refreshed/get_state_manager/src/simple/list_notifier.dart';
 
 /// Abstract class representing a GetX controller.
 ///

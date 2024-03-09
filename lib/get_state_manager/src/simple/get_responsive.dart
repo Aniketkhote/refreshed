@@ -1,6 +1,6 @@
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
-import '../../../refreshed.dart';
+import 'package:refreshed/refreshed.dart';
 
 /// A mixin that facilitates building responsive widgets by providing methods
 /// to conditionally choose which widget to build based on the screen type.
@@ -91,30 +91,23 @@ mixin GetResponsiveMixin on Widget {
 /// property `alwaysUseBuilder` to false
 /// With `settings` property you can set the width limit for the screen types.
 class GetResponsiveView<T> extends GetView<T> with GetResponsiveMixin {
-  @override
-  final bool alwaysUseBuilder;
-
-  @override
-  final ResponsiveScreen screen;
 
   GetResponsiveView({
     this.alwaysUseBuilder = false,
     ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
     super.key,
   }) : screen = ResponsiveScreen(settings);
+  @override
+  final bool alwaysUseBuilder;
+
+  @override
+  final ResponsiveScreen screen;
 }
 
 /// A widget that provides responsiveness functionality by dynamically choosing
 /// which widget to build based on the screen type.
 class GetResponsiveWidget<T extends GetLifeCycleMixin> extends GetWidget<T>
     with GetResponsiveMixin {
-  /// Determines whether to always use the `builder` method for building widgets.
-  @override
-  final bool alwaysUseBuilder;
-
-  /// The screen information used for determining the screen type.
-  @override
-  final ResponsiveScreen screen;
 
   /// Constructs a [GetResponsiveWidget] with the given parameters.
   GetResponsiveWidget({
@@ -122,10 +115,24 @@ class GetResponsiveWidget<T extends GetLifeCycleMixin> extends GetWidget<T>
     ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
     super.key,
   }) : screen = ResponsiveScreen(settings);
+  /// Determines whether to always use the `builder` method for building widgets.
+  @override
+  final bool alwaysUseBuilder;
+
+  /// The screen information used for determining the screen type.
+  @override
+  final ResponsiveScreen screen;
 }
 
 /// A class containing settings for responsive screen behavior.
 class ResponsiveScreenSettings {
+
+  /// Constructs a [ResponsiveScreenSettings] with the specified thresholds.
+  const ResponsiveScreenSettings({
+    this.desktopChangePoint = 1200,
+    this.tabletChangePoint = 600,
+    this.watchChangePoint = 300,
+  });
   /// The width threshold for switching to desktop mode.
   final double desktopChangePoint;
 
@@ -134,17 +141,15 @@ class ResponsiveScreenSettings {
 
   /// The width threshold for switching to watch mode.
   final double watchChangePoint;
-
-  /// Constructs a [ResponsiveScreenSettings] with the specified thresholds.
-  const ResponsiveScreenSettings({
-    this.desktopChangePoint = 1200,
-    this.tabletChangePoint = 600,
-    this.watchChangePoint = 300,
-  });
 }
 
 /// A class that provides information about the current screen size and type.
 class ResponsiveScreen {
+
+  /// Constructs a [ResponsiveScreen] with the given settings.
+  ResponsiveScreen(this.settings) {
+    _isPlatformDesktop = GetPlatform.isDesktop;
+  }
   /// The context used for obtaining screen dimensions.
   late BuildContext context;
 
@@ -153,11 +158,6 @@ class ResponsiveScreen {
 
   /// Indicates whether the platform is a desktop.
   late bool _isPlatformDesktop;
-
-  /// Constructs a [ResponsiveScreen] with the given settings.
-  ResponsiveScreen(this.settings) {
-    _isPlatformDesktop = GetPlatform.isDesktop;
-  }
 
   /// Returns the height of the screen.
   double get height => context.height;

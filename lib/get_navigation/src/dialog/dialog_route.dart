@@ -1,6 +1,6 @@
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
-import '../router_report.dart';
+import 'package:refreshed/get_navigation/src/router_report.dart';
 
 /// A custom [PopupRoute] used by Refreshed for displaying dialog routes.
 ///
@@ -53,7 +53,7 @@ class GetDialogRoute<T> extends PopupRoute<T> {
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+      Animation<double> secondaryAnimation,) {
     return Semantics(
       scopesRoute: true,
       explicitChildNodes: true,
@@ -63,7 +63,7 @@ class GetDialogRoute<T> extends PopupRoute<T> {
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
+      Animation<double> secondaryAnimation, Widget child,) {
     if (_transitionBuilder == null) {
       return FadeTransition(
         opacity: CurvedAnimation(

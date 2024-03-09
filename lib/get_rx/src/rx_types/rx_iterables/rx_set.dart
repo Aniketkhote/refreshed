@@ -1,4 +1,4 @@
-part of '../rx_types.dart';
+part of "../rx_types.dart";
 
 class RxSet<E> extends GetListenable<Set<E>>
     with SetMixin<E>, RxObjectMixin<Set<E>> {

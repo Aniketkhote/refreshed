@@ -10,9 +10,9 @@
 ///
 library;
 
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
-import 'default_route.dart';
+import 'package:refreshed/get_navigation/src/routes/default_route.dart';
 
 /// Enum defining various types of transitions that can be applied when
 /// navigating between routes.

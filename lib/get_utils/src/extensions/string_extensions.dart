@@ -1,4 +1,4 @@
-import '../get_utils/get_utils.dart';
+import 'package:refreshed/get_utils/src/get_utils/get_utils.dart';
 
 /// Extension containing utility methods for strings.
 extension GetStringUtils on String {
@@ -122,7 +122,7 @@ extension GetStringUtils on String {
 
   /// add segments to the String
   String createPath([Iterable? segments]) {
-    final path = startsWith('/') ? this : '/$this';
+    final path = startsWith("/") ? this : "/$this";
     return GetUtils.createPath(path, segments);
   }
 

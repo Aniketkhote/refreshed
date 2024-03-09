@@ -1,9 +1,9 @@
-import 'dart:async';
+import "dart:async";
 
-import '../../../get_core/get_core.dart';
-import '../../../get_state_manager/src/rx_flutter/rx_notifier.dart';
-import '../rx_types/rx_types.dart';
-import 'utils/debouncer.dart';
+import 'package:refreshed/get_core/get_core.dart';
+import 'package:refreshed/get_state_manager/src/rx_flutter/rx_notifier.dart';
+import 'package:refreshed/get_rx/src/rx_types/rx_types.dart';
+import 'package:refreshed/get_rx/src/rx_workers/utils/debouncer.dart';
 
 /// A utility function to evaluate a condition and return a boolean value.
 ///
@@ -25,11 +25,11 @@ typedef WorkerCallback<T> = Function(T callback);
 
 /// A class for managing a collection of workers and disposing them when necessary.
 class Workers {
-  /// The list of workers to manage.
-  final List<Worker> workers;
 
   /// Constructs a new [Workers] instance with the provided [workers].
   Workers(this.workers);
+  /// The list of workers to manage.
+  final List<Worker> workers;
 
   /// Disposes all workers in the collection that have not already been disposed.
   void dispose() {
@@ -79,7 +79,7 @@ Worker ever<T>(
   void Function()? onDone,
   bool? cancelOnError,
 }) {
-  StreamSubscription sub = listener.listen(
+  final StreamSubscription sub = listener.listen(
     (event) {
       if (_conditional(condition)) callback(event);
     },
@@ -87,7 +87,7 @@ Worker ever<T>(
     onDone: onDone,
     cancelOnError: cancelOnError,
   );
-  return Worker(sub.cancel, '[ever]');
+  return Worker(sub.cancel, "[ever]");
 }
 
 /// Similar to [ever], but takes a list of [listeners], the condition
@@ -121,7 +121,7 @@ Worker everAll(
     }
   }
 
-  return Worker(cancel, '[everAll]');
+  return Worker(cancel, "[everAll]");
 }
 
 /// `once()` will execute only 1 time when [condition] is met and cancel
@@ -159,7 +159,7 @@ Worker once<T>(
     (event) {
       if (!_conditional(condition)) return;
       ref._disposed = true;
-      ref._log('called');
+      ref._log("called");
       sub?.cancel();
       callback(event);
     },
@@ -167,7 +167,7 @@ Worker once<T>(
     onDone: onDone,
     cancelOnError: cancelOnError,
   );
-  ref = Worker(sub.cancel, '[once]');
+  ref = Worker(sub.cancel, "[once]");
   return ref;
 }
 
@@ -198,7 +198,7 @@ Worker interval<T>(
   bool? cancelOnError,
 }) {
   var debounceActive = false;
-  StreamSubscription sub = listener.listen(
+  final StreamSubscription sub = listener.listen(
     (event) async {
       if (debounceActive || !_conditional(condition)) return;
       debounceActive = true;
@@ -210,7 +210,7 @@ Worker interval<T>(
     onDone: onDone,
     cancelOnError: cancelOnError,
   );
-  return Worker(sub.cancel, '[interval]');
+  return Worker(sub.cancel, "[interval]");
 }
 
 /// [debounce] is similar to [interval], but sends the last value.
@@ -242,7 +242,7 @@ Worker debounce<T>(
 }) {
   final newDebouncer =
       Debouncer(delay: time ?? const Duration(milliseconds: 800));
-  StreamSubscription sub = listener.listen(
+  final StreamSubscription sub = listener.listen(
     (event) {
       newDebouncer(() {
         callback(event);
@@ -252,11 +252,14 @@ Worker debounce<T>(
     onDone: onDone,
     cancelOnError: cancelOnError,
   );
-  return Worker(sub.cancel, '[debounce]');
+  return Worker(sub.cancel, "[debounce]");
 }
 
 /// A class representing a worker for executing asynchronous tasks with disposal functionality.
 class Worker {
+
+  /// Constructs a new [Worker] with the provided [worker] callback and [type].
+  Worker(this.worker, this.type);
   /// Callback function representing the asynchronous task to be executed.
   final Future<void> Function() worker;
 
@@ -265,16 +268,13 @@ class Worker {
 
   bool _disposed = false;
 
-  /// Constructs a new [Worker] with the provided [worker] callback and [type].
-  Worker(this.worker, this.type);
-
   /// Indicates whether the worker has been disposed.
   bool get disposed => _disposed;
 
   /// Internal logging method for debugging purposes.
   void _log(String msg) {
     //  if (!_verbose) return;
-    Get.log('$runtimeType $type $msg');
+    Get.log("$runtimeType $type $msg");
   }
 
   /// Disposes of the worker, cancelling its associated asynchronous task.
@@ -282,12 +282,12 @@ class Worker {
   /// If the worker has already been disposed, this method does nothing.
   void dispose() {
     if (_disposed) {
-      _log('already disposed');
+      _log("already disposed");
       return;
     }
     _disposed = true;
     worker();
-    _log('disposed');
+    _log("disposed");
   }
 
   /// Alias for the [dispose] method, allowing the [Worker] instance to be called directly for disposal.

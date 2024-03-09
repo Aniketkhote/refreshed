@@ -1,16 +1,57 @@
 // ignore_for_file: overridden_fields
 
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import "package:flutter/cupertino.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
 
-import '../../../get_instance/src/bindings_interface.dart';
-import '../../../get_state_manager/src/simple/get_state.dart';
-import '../../get_navigation.dart';
+import 'package:refreshed/get_instance/src/bindings_interface.dart';
+import 'package:refreshed/get_state_manager/src/simple/get_state.dart';
+import 'package:refreshed/get_navigation/get_navigation.dart';
 
 class GetPage<T> extends Page<T> {
+
+  GetPage({
+    required this.name,
+    required this.page,
+    this.title,
+    this.participatesInRootNavigator,
+    this.gestureWidth,
+    // RouteSettings settings,
+    this.maintainState = true,
+    this.curve = Curves.linear,
+    this.alignment,
+    this.parameters,
+    this.opaque = true,
+    this.transitionDuration,
+    this.reverseTransitionDuration,
+    this.popGesture,
+    this.binding,
+    this.bindings = const [],
+    this.binds = const [],
+    this.transition,
+    this.customTransition,
+    this.fullscreenDialog = false,
+    this.children = const <GetPage>[],
+    this.middlewares = const [],
+    this.unknownRoute,
+    this.arguments,
+    this.showCupertinoParallax = true,
+    this.preventDuplicates = true,
+    this.preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.reorderRoutes,
+    this.completer,
+    this.inheritParentPath = true,
+    LocalKey? key,
+  })  : path = _nameToRegex(name),
+        assert(name.startsWith("/"),
+            "It is necessary to start route name [$name] with a slash: /$name",),
+        super(
+          key: key ?? ValueKey(name),
+          name: name,
+          // arguments: Get.arguments,
+        );
   final GetPageBuilder page;
   final bool? popGesture;
   final Map<String, String>? parameters;
@@ -47,47 +88,6 @@ class GetPage<T> extends Page<T> {
   final bool showCupertinoParallax;
 
   final PreventDuplicateHandlingMode preventDuplicateHandlingMode;
-
-  GetPage({
-    required this.name,
-    required this.page,
-    this.title,
-    this.participatesInRootNavigator,
-    this.gestureWidth,
-    // RouteSettings settings,
-    this.maintainState = true,
-    this.curve = Curves.linear,
-    this.alignment,
-    this.parameters,
-    this.opaque = true,
-    this.transitionDuration,
-    this.reverseTransitionDuration,
-    this.popGesture,
-    this.binding,
-    this.bindings = const [],
-    this.binds = const [],
-    this.transition,
-    this.customTransition,
-    this.fullscreenDialog = false,
-    this.children = const <GetPage>[],
-    this.middlewares = const [],
-    this.unknownRoute,
-    this.arguments,
-    this.showCupertinoParallax = true,
-    this.preventDuplicates = true,
-    this.preventDuplicateHandlingMode =
-        PreventDuplicateHandlingMode.reorderRoutes,
-    this.completer,
-    this.inheritParentPath = true,
-    LocalKey? key,
-  })  : path = _nameToRegex(name),
-        assert(name.startsWith('/'),
-            'It is necessary to start route name [$name] with a slash: /$name'),
-        super(
-          key: key ?? ValueKey(name),
-          name: name,
-          // arguments: Get.arguments,
-        );
   // settings = RouteSettings(name: name, arguments: Get.arguments);
 
   GetPage<T> copyWith({
@@ -169,24 +169,24 @@ class GetPage<T> extends Page<T> {
   }
 
   static PathDecoded _nameToRegex(String path) {
-    var keys = <String?>[];
+    final keys = <String?>[];
 
     String recursiveReplace(Match pattern) {
-      var buffer = StringBuffer('(?:');
+      final buffer = StringBuffer("(?:");
 
-      if (pattern[1] != null) buffer.write('.');
-      buffer.write('([\\w%+-._~!\$&\'()*,;=:@]+))');
-      if (pattern[3] != null) buffer.write('?');
+      if (pattern[1] != null) buffer.write(".");
+      buffer.write("([\\w%+-._~!\$&\'()*,;=:@]+))");
+      if (pattern[3] != null) buffer.write("?");
 
       keys.add(pattern[2]);
       return "$buffer";
     }
 
-    var stringPath = '$path/?'
-        .replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), recursiveReplace)
-        .replaceAll('//', '/');
+    final stringPath = "$path/?"
+        .replaceAllMapped(RegExp(r"(\.)?:(\w+)(\?)?"), recursiveReplace)
+        .replaceAll("//", "/");
 
-    return PathDecoded(RegExp('^$stringPath\$'), keys);
+    return PathDecoded(RegExp("^$stringPath\$"), keys);
   }
 
   @override
@@ -207,9 +207,9 @@ class GetPage<T> extends Page<T> {
 
 @immutable
 class PathDecoded {
+  const PathDecoded(this.regex, this.keys);
   final RegExp regex;
   final List<String?> keys;
-  const PathDecoded(this.regex, this.keys);
 
   @override
   int get hashCode => regex.hashCode;

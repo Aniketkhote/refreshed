@@ -1,14 +1,28 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import '../rx_flutter/rx_obx_widget.dart';
-import 'get_controllers.dart';
-import 'get_state.dart';
+import 'package:refreshed/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:refreshed/get_state_manager/src/simple/get_controllers.dart';
+import 'package:refreshed/get_state_manager/src/simple/get_state.dart';
 
 /// A widget that facilitates building UI components with GetX controllers and mixins.
 ///
 /// This widget is a convenience wrapper around GetBuilder and Obx widgets from the Get package,
 /// providing an easy way to integrate GetX controllers with mixin functionality into the widget tree.
 class MixinBuilder<T extends GetxController> extends StatelessWidget {
+
+  /// Creates a MixinBuilder widget.
+  const MixinBuilder({
+    super.key,
+    this.init,
+    this.global = true,
+    required this.builder,
+    this.autoRemove = true,
+    this.initState,
+    this.dispose,
+    this.id,
+    this.didChangeDependencies,
+    this.didUpdateWidget,
+  });
   /// The function that builds the UI component using the provided controller.
   @required
   final Widget Function(T) builder;
@@ -37,20 +51,6 @@ class MixinBuilder<T extends GetxController> extends StatelessWidget {
 
   /// The initial controller instance to use.
   final T? init;
-
-  /// Creates a MixinBuilder widget.
-  const MixinBuilder({
-    super.key,
-    this.init,
-    this.global = true,
-    required this.builder,
-    this.autoRemove = true,
-    this.initState,
-    this.dispose,
-    this.id,
-    this.didChangeDependencies,
-    this.didUpdateWidget,
-  });
 
   @override
   Widget build(BuildContext context) {

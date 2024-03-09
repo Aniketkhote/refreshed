@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 /// Extension providing additional functionality for BuildContext.
 extension ContextExt on BuildContext {
@@ -151,9 +151,9 @@ extension ContextExt on BuildContext {
     T? desktop,
   }) {
     assert(
-        watch != null || mobile != null || tablet != null || desktop != null);
+        watch != null || mobile != null || tablet != null || desktop != null,);
 
-    var deviceWidth = mediaQuerySize.width;
+    final deviceWidth = mediaQuerySize.width;
     //big screen width can display smaller sizes
     final strictValues = [
       if (deviceWidth >= 1200) desktop, //desktop is allowed

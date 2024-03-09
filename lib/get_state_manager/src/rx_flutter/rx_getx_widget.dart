@@ -1,10 +1,10 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/widgets.dart";
 
-import '../../../get_core/get_core.dart';
-import '../../../get_instance/src/extension_instance.dart';
-import '../../../get_instance/src/lifecycle.dart';
-import '../simple/list_notifier.dart';
+import 'package:refreshed/get_core/get_core.dart';
+import 'package:refreshed/get_instance/src/extension_instance.dart';
+import 'package:refreshed/get_instance/src/lifecycle.dart';
+import 'package:refreshed/get_state_manager/src/simple/list_notifier.dart';
 
 /// A typedef representing a builder function for GetX controllers.
 ///
@@ -12,13 +12,30 @@ import '../simple/list_notifier.dart';
 /// It takes a single parameter of type [T], which is expected to be a subclass of [GetLifeCycleMixin],
 /// and returns a [Widget].
 typedef GetXControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
-    T controller);
+    T controller,);
 
 /// A widget that manages the lifecycle of a controller and rebuilds its child widget whenever the controller changes.
 ///
 /// The [GetX] widget is designed to work with controllers that extend [GetLifeCycleMixin].
 /// It can be used to manage the lifecycle of a controller and rebuild its child widget whenever the controller changes.
 class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
+
+  /// Constructs a [GetX] widget.
+  ///
+  /// The [builder] argument is required and must not be null.
+  const GetX({
+    super.key,
+    this.tag,
+    required this.builder,
+    this.global = true,
+    this.autoRemove = true,
+    this.initState,
+    this.assignId = false,
+    this.dispose,
+    this.didChangeDependencies,
+    this.didUpdateWidget,
+    this.init,
+  });
   /// The builder function that creates the child widget based on the controller.
   final GetXControllerBuilder<T> builder;
 
@@ -58,23 +75,6 @@ class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
   /// An optional tag to identify the controller when registered globally.
   final String? tag;
 
-  /// Constructs a [GetX] widget.
-  ///
-  /// The [builder] argument is required and must not be null.
-  const GetX({
-    super.key,
-    this.tag,
-    required this.builder,
-    this.global = true,
-    this.autoRemove = true,
-    this.initState,
-    this.assignId = false,
-    this.dispose,
-    this.didChangeDependencies,
-    this.didUpdateWidget,
-    this.init,
-  });
-
   @override
   StatefulElement createElement() => StatefulElement(this);
 
@@ -83,11 +83,11 @@ class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
     super.debugFillProperties(properties);
     properties
       ..add(
-        DiagnosticsProperty<T>('controller', init),
+        DiagnosticsProperty<T>("controller", init),
       )
-      ..add(DiagnosticsProperty<String>('tag', tag))
+      ..add(DiagnosticsProperty<String>("tag", tag))
       ..add(
-          ObjectFlagProperty<GetXControllerBuilder<T>>.has('builder', builder));
+          ObjectFlagProperty<GetXControllerBuilder<T>>.has("builder", builder),);
   }
 
   @override
@@ -173,11 +173,11 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   @override
   Widget build(BuildContext context) => Notifier.instance.append(
       NotifyData(disposers: disposers, updater: _update),
-      () => widget.builder(controller!));
+      () => widget.builder(controller!),);
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<T>('controller', controller));
+    properties.add(DiagnosticsProperty<T>("controller", controller));
   }
 }

@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:refreshed/refreshed.dart';
+import "package:flutter/material.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:refreshed/refreshed.dart";
 
-import 'utils/wrapper.dart';
+import "utils/wrapper.dart";
 
 void main() {
   testWidgets("Get.defaultDialog smoke test", (tester) async {
@@ -13,7 +13,7 @@ void main() {
     await tester.pump();
 
     Get.defaultDialog(
-        onConfirm: () {}, middleText: "Dialog made in 3 lines of code");
+        onConfirm: () {}, middleText: "Dialog made in 3 lines of code",);
 
     await tester.pumpAndSettle();
 

@@ -1,6 +1,6 @@
-import 'dart:async';
+import "dart:async";
 
-import '../../../get_core/src/get_interface.dart';
+import 'package:refreshed/get_core/src/get_interface.dart';
 
 /// Extension providing additional loop event methods for GetInterface.
 extension LoopEventsExt on GetInterface {
@@ -41,7 +41,7 @@ extension LoopEventsExt on GetInterface {
   /// });
   /// ```
   FutureOr<T> asap<T>(T Function() computation,
-      {bool Function()? condition}) async {
+      {bool Function()? condition,}) async {
     T val;
     if (condition == null || !condition()) {
       await Future.delayed(Duration.zero);

@@ -1,6 +1,6 @@
-import 'dart:collection';
+import "dart:collection";
 
-import '../../refreshed.dart';
+import 'package:refreshed/refreshed.dart';
 
 /// Manages the routing and memory management for instances associated with routes in GetX.
 ///
@@ -12,6 +12,8 @@ import '../../refreshed.dart';
 /// It provides methods to report route changes, link dependencies to routes,
 /// and dispose of instances when routes are removed from memory.
 class RouterReportManager<T> {
+
+  RouterReportManager._();
   /// Holds a reference to the routes and their associated dependencies.
   final Map<T?, List<String>> _routesKey = {};
 
@@ -19,8 +21,6 @@ class RouterReportManager<T> {
   final Map<T?, HashSet<Function>> _routesByCreate = {};
 
   static RouterReportManager? _instance;
-
-  RouterReportManager._();
 
   /// Retrieves the singleton instance of [RouterReportManager].
   static RouterReportManager get instance =>

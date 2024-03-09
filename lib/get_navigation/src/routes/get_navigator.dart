@@ -1,8 +1,36 @@
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
-import '../../../refreshed.dart';
+import 'package:refreshed/refreshed.dart';
 
 class GetNavigator extends Navigator {
+
+  GetNavigator({
+    super.key,
+    bool Function(Route<dynamic>, dynamic)? onPopPage,
+    required List<GetPage> super.pages,
+    List<NavigatorObserver>? observers,
+    super.reportsRouteUpdateToEngine,
+    TransitionDelegate? transitionDelegate,
+    super.initialRoute,
+    super.restorationScopeId,
+  }) : super(
+          //keys should be optional
+          onPopPage: onPopPage ??
+              (route, result) {
+                final didPop = route.didPop(result);
+                if (!didPop) {
+                  return false;
+                }
+                return true;
+              },
+          observers: [
+            // GetObserver(null, Get.routing),
+            HeroController(),
+            ...?observers,
+          ],
+          transitionDelegate:
+              transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
+        );
   GetNavigator.onGenerateRoute({
     GlobalKey<NavigatorState>? super.key,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
@@ -36,34 +64,6 @@ class GetNavigator extends Navigator {
           },
           observers: [
             // GetObserver(),
-            ...?observers,
-          ],
-          transitionDelegate:
-              transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
-        );
-
-  GetNavigator({
-    super.key,
-    bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required List<GetPage> super.pages,
-    List<NavigatorObserver>? observers,
-    super.reportsRouteUpdateToEngine,
-    TransitionDelegate? transitionDelegate,
-    super.initialRoute,
-    super.restorationScopeId,
-  }) : super(
-          //keys should be optional
-          onPopPage: onPopPage ??
-              (route, result) {
-                final didPop = route.didPop(result);
-                if (!didPop) {
-                  return false;
-                }
-                return true;
-              },
-          observers: [
-            // GetObserver(null, Get.routing),
-            HeroController(),
             ...?observers,
           ],
           transitionDelegate:

@@ -1,10 +1,10 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter_test/flutter_test.dart';
-import 'package:refreshed/refreshed.dart';
+import "package:flutter_test/flutter_test.dart";
+import "package:refreshed/refreshed.dart";
 
 void main() {
-  test('once', () async {
+  test("once", () async {
     final count = 0.obs;
     var result = -1;
     once(count, (dynamic _) {
@@ -21,7 +21,7 @@ void main() {
     expect(1, result);
   });
 
-  test('ever', () async {
+  test("ever", () async {
     final count = 0.obs;
     var result = -1;
     ever<int>(count, (value) {
@@ -38,13 +38,13 @@ void main() {
     expect(3, result);
   });
 
-  test('debounce', () async {
+  test("debounce", () async {
     final count = 0.obs;
     int? result = -1;
     debounce(count, (dynamic _) {
       // print(_);
       result = _ as int?;
-    }, time: const Duration(milliseconds: 100));
+    }, time: const Duration(milliseconds: 100),);
 
     count.value++;
     count.value++;
@@ -56,12 +56,12 @@ void main() {
     expect(4, result);
   });
 
-  test('interval', () async {
+  test("interval", () async {
     final count = 0.obs;
     int? result = -1;
     interval<int>(count, (v) {
       result = v;
-    }, time: const Duration(milliseconds: 100));
+    }, time: const Duration(milliseconds: 100),);
 
     count.value++;
     await Future.delayed(Duration.zero);
@@ -79,7 +79,7 @@ void main() {
     expect(result, 5);
   });
 
-  test('bindStream test', () async {
+  test("bindStream test", () async {
     int? count = 0;
     final controller = StreamController<int>();
     final rx = 0.obs;
@@ -96,8 +96,8 @@ void main() {
     controller.close();
   });
 
-  test('Rx same value will not call the same listener when call', () async {
-    var reactiveInteger = RxInt(2);
+  test("Rx same value will not call the same listener when call", () async {
+    final reactiveInteger = RxInt(2);
     var timesCalled = 0;
     reactiveInteger.listen((newInt) {
       timesCalled++;
@@ -113,8 +113,8 @@ void main() {
     expect(1, timesCalled);
   });
 
-  test('Rx different value will call the listener when trigger', () async {
-    var reactiveInteger = RxInt(0);
+  test("Rx different value will call the listener when trigger", () async {
+    final reactiveInteger = RxInt(0);
     var timesCalled = 0;
     reactiveInteger.listen((newInt) {
       timesCalled++;
@@ -131,8 +131,8 @@ void main() {
     expect(3, timesCalled);
   });
 
-  test('Rx same value will call the listener when trigger', () async {
-    var reactiveInteger = RxInt(2);
+  test("Rx same value will call the listener when trigger", () async {
+    final reactiveInteger = RxInt(2);
     var timesCalled = 0;
     reactiveInteger.listen((newInt) {
       timesCalled++;
@@ -149,7 +149,7 @@ void main() {
     expect(4, timesCalled);
   });
 
-  test('Rx String with non null values', () async {
+  test("Rx String with non null values", () async {
     final reactiveString = Rx<String>("abc");
     String? currentString;
     reactiveString.listen((newString) {
@@ -165,8 +165,8 @@ void main() {
     expect(currentString, "b");
   });
 
-  test('Rx String with null values', () async {
-    var reactiveString = Rx<String?>(null);
+  test("Rx String with null values", () async {
+    final reactiveString = Rx<String?>(null);
     String? currentString;
 
     reactiveString.listen((newString) {

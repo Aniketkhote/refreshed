@@ -1,4 +1,4 @@
-import '../../../utils.dart';
+import 'package:refreshed/utils.dart';
 
 /// Returns whether a dynamic value PROBABLY
 /// has the isEmpty getter/method by checking
@@ -49,7 +49,7 @@ int? _obtainDynamicLength(dynamic value) {
   }
 
   if (value is double) {
-    return value.toString().replaceAll('.', '').length;
+    return value.toString().replaceAll(".", "").length;
   }
 
   // ignore: avoid_returning_null
@@ -97,13 +97,13 @@ class GetUtils {
 
   /// Checks if string consist only numeric.
   /// Numeric only doesn't accepting "." which double data type have
-  static bool isNumericOnly(String s) => hasMatch(s, r'^\d+$');
+  static bool isNumericOnly(String s) => hasMatch(s, r"^\d+$");
 
   /// Checks if string consist only Alphabet. (No Whitespace)
-  static bool isAlphabetOnly(String s) => hasMatch(s, r'^[a-zA-Z]+$');
+  static bool isAlphabetOnly(String s) => hasMatch(s, r"^[a-zA-Z]+$");
 
   /// Checks if string contains at least one Capital Letter
-  static bool hasCapitalLetter(String s) => hasMatch(s, r'[A-Z]');
+  static bool hasCapitalLetter(String s) => hasMatch(s, r"[A-Z]");
 
   /// Checks if string is boolean.
   static bool isBool(String value) {
@@ -111,12 +111,12 @@ class GetUtils {
       return false;
     }
 
-    return (value == 'true' || value == 'false');
+    return (value == "true" || value == "false");
   }
 
   /// Checks if string is an video file.
   static bool isVideo(String filePath) {
-    var ext = filePath.toLowerCase();
+    final ext = filePath.toLowerCase();
 
     return ext.endsWith(".mp4") ||
         ext.endsWith(".avi") ||
@@ -197,62 +197,62 @@ class GetUtils {
 
   /// Checks if string is a valid username.
   static bool isUsername(String s) =>
-      hasMatch(s, r'^[a-zA-Z0-9][a-zA-Z0-9_.]+[a-zA-Z0-9]$');
+      hasMatch(s, r"^[a-zA-Z0-9][a-zA-Z0-9_.]+[a-zA-Z0-9]$");
 
   /// Checks if string is URL.
   static bool isURL(String s) => hasMatch(s,
-      r"^((((H|h)(T|t)|(F|f))(T|t)(P|p)((S|s)?))\://)?(www.|[a-zA-Z0-9].)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,7}(\:[0-9]{1,5})*(/($|[a-zA-Z0-9\.\,\;\?\'\\\+&amp;%\$#\=~_\-]+))*$");
+      r"^((((H|h)(T|t)|(F|f))(T|t)(P|p)((S|s)?))\://)?(www.|[a-zA-Z0-9].)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,7}(\:[0-9]{1,5})*(/($|[a-zA-Z0-9\.\,\;\?\'\\\+&amp;%\$#\=~_\-]+))*$",);
 
   /// Checks if string is email.
   static bool isEmail(String s) => hasMatch(s,
-      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',);
 
   /// Checks if string is phone number.
   static bool isPhoneNumber(String s) {
     if (s.length > 16 || s.length < 9) return false;
-    return hasMatch(s, r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
+    return hasMatch(s, r"^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$");
   }
 
   /// Checks if string is DateTime (UTC or Iso8601).
   static bool isDateTime(String s) =>
-      hasMatch(s, r'^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}.\d{3}Z?$');
+      hasMatch(s, r"^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}.\d{3}Z?$");
 
   /// Checks if string is MD5 hash.
-  static bool isMD5(String s) => hasMatch(s, r'^[a-f0-9]{32}$');
+  static bool isMD5(String s) => hasMatch(s, r"^[a-f0-9]{32}$");
 
   /// Checks if string is SHA1 hash.
   static bool isSHA1(String s) =>
-      hasMatch(s, r'(([A-Fa-f0-9]{2}\:){19}[A-Fa-f0-9]{2}|[A-Fa-f0-9]{40})');
+      hasMatch(s, r"(([A-Fa-f0-9]{2}\:){19}[A-Fa-f0-9]{2}|[A-Fa-f0-9]{40})");
 
   /// Checks if string is SHA256 hash.
   static bool isSHA256(String s) =>
-      hasMatch(s, r'([A-Fa-f0-9]{2}\:){31}[A-Fa-f0-9]{2}|[A-Fa-f0-9]{64}');
+      hasMatch(s, r"([A-Fa-f0-9]{2}\:){31}[A-Fa-f0-9]{2}|[A-Fa-f0-9]{64}");
 
   /// Checks if string is SSN (Social Security Number).
   static bool isSSN(String s) => hasMatch(s,
-      r'^(?!0{3}|6{3}|9[0-9]{2})[0-9]{3}-?(?!0{2})[0-9]{2}-?(?!0{4})[0-9]{4}$');
+      r"^(?!0{3}|6{3}|9[0-9]{2})[0-9]{3}-?(?!0{2})[0-9]{2}-?(?!0{4})[0-9]{4}$",);
 
   /// Checks if string is binary.
-  static bool isBinary(String s) => hasMatch(s, r'^[0-1]+$');
+  static bool isBinary(String s) => hasMatch(s, r"^[0-1]+$");
 
   /// Checks if string is IPv4.
   static bool isIPv4(String s) =>
-      hasMatch(s, r'^(?:(?:^|\.)(?:2(?:5[0-5]|[0-4]\d)|1?\d?\d)){4}$');
+      hasMatch(s, r"^(?:(?:^|\.)(?:2(?:5[0-5]|[0-4]\d)|1?\d?\d)){4}$");
 
   /// Checks if string is IPv6.
   static bool isIPv6(String s) => hasMatch(s,
-      r'^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$');
+      r"^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$",);
 
   /// Checks if string is hexadecimal.
   /// Example: HexColor => #12F
   static bool isHexadecimal(String s) =>
-      hasMatch(s, r'^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$');
+      hasMatch(s, r"^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$");
 
   /// Checks if string is Palindrome.
   static bool isPalindrome(String string) {
     final cleanString = string
         .toLowerCase()
-        .replaceAll(RegExp(r"\s+"), '')
+        .replaceAll(RegExp(r"\s+"), "")
         .replaceAll(RegExp(r"[^0-9a-zA-Z]+"), "");
 
     for (var i = 0; i < cleanString.length; i++) {
@@ -266,11 +266,11 @@ class GetUtils {
 
   /// Checks if string is Passport No.
   static bool isPassport(String s) =>
-      hasMatch(s, r'^(?!^0+$)[a-zA-Z0-9]{6,9}$');
+      hasMatch(s, r"^(?!^0+$)[a-zA-Z0-9]{6,9}$");
 
   /// Checks if string is Currency.
   static bool isCurrency(String s) => hasMatch(s,
-      r'^(S?\$|\₩|Rp|\¥|\€|\₹|\₽|fr|R\$|R)?[ ]?[-]?([0-9]{1,3}[,.]([0-9]{3}[,.])*[0-9]{3}|[0-9]+)([,.][0-9]{1,2})?( ?(USD?|AUD|NZD|CAD|CHF|GBP|CNY|EUR|JPY|IDR|MXN|NOK|KRW|TRY|INR|RUB|BRL|ZAR|SGD|MYR))?$');
+      r"^(S?\$|\₩|Rp|\¥|\€|\₹|\₽|fr|R\$|R)?[ ]?[-]?([0-9]{1,3}[,.]([0-9]{3}[,.])*[0-9]{3}|[0-9]+)([,.][0-9]{1,2})?( ?(USD?|AUD|NZD|CAD|CHF|GBP|CNY|EUR|JPY|IDR|MXN|NOK|KRW|TRY|INR|RUB|BRL|ZAR|SGD|MYR))?$",);
 
   /// Checks if length of data is GREATER than maxLength.
   static bool isLengthGreaterThan(dynamic value, int maxLength) {
@@ -364,7 +364,7 @@ class GetUtils {
   /// Example: your name => Your Name
   static String capitalize(String value) {
     if (isBlank(value)!) return value;
-    return value.split(' ').map(capitalizeFirst).join(' ');
+    return value.split(" ").map(capitalizeFirst).join(" ");
   }
 
   /// Uppercase first letter inside string and let the others lowercase
@@ -377,7 +377,7 @@ class GetUtils {
   /// Remove all whitespace inside string
   /// Example: your name => yourname
   static String removeAllWhitespace(String value) {
-    return value.replaceAll(' ', '');
+    return value.replaceAll(" ", "");
   }
 
   /// camelCase string
@@ -389,7 +389,7 @@ class GetUtils {
 
     final separatedWords =
         value.split(RegExp(r'[!@#<>?":`~;[\]\\|=+)(*&^%-\s_]+'));
-    var newString = '';
+    var newString = "";
 
     for (final word in separatedWords) {
       newString += word[0].toUpperCase() + word.substring(1).toLowerCase();
@@ -399,25 +399,25 @@ class GetUtils {
   }
 
   /// credits to "ReCase" package.
-  static final RegExp _upperAlphaRegex = RegExp(r'[A-Z]');
-  static final _symbolSet = {' ', '.', '/', '_', '\\', '-'};
+  static final RegExp _upperAlphaRegex = RegExp(r"[A-Z]");
+  static final _symbolSet = {" ", ".", "/", "_", "\\", "-"};
   static List<String> _groupIntoWords(String text) {
-    var sb = StringBuffer();
-    var words = <String>[];
-    var isAllCaps = text.toUpperCase() == text;
+    final sb = StringBuffer();
+    final words = <String>[];
+    final isAllCaps = text.toUpperCase() == text;
 
     for (var i = 0; i < text.length; i++) {
-      var char = text[i];
-      var nextChar = i + 1 == text.length ? null : text[i + 1];
+      final char = text[i];
+      final nextChar = i + 1 == text.length ? null : text[i + 1];
       if (_symbolSet.contains(char)) {
         continue;
       }
       sb.write(char);
-      var isEndOfWord = nextChar == null ||
+      final isEndOfWord = nextChar == null ||
           (_upperAlphaRegex.hasMatch(nextChar) && !isAllCaps) ||
           _symbolSet.contains(nextChar);
       if (isEndOfWord) {
-        words.add('$sb');
+        words.add("$sb");
         sb.clear();
       }
     }
@@ -425,7 +425,7 @@ class GetUtils {
   }
 
   /// snake_case
-  static String? snakeCase(String? text, {String separator = '_'}) {
+  static String? snakeCase(String? text, {String separator = "_"}) {
     if (isNullOrBlank(text)!) {
       return null;
     }
@@ -435,14 +435,14 @@ class GetUtils {
   }
 
   /// param-case
-  static String? paramCase(String? text) => snakeCase(text, separator: '-');
+  static String? paramCase(String? text) => snakeCase(text, separator: "-");
 
   /// Extract numeric value of string
   /// Example: OTP 12312 27/04/2020 => 1231227042020ß
   /// If firstWordOnly is true, then the example return is "12312"
   /// (first found numeric word)
   static String numericOnly(String s, {bool firstWordOnly = false}) {
-    var numericOnlyStr = '';
+    var numericOnlyStr = "";
 
     for (var i = 0; i < s.length; i++) {
       if (isNumericOnly(s[i])) {
@@ -460,8 +460,8 @@ class GetUtils {
   /// Example: getx will make it easy  => Getx Will Make It Easy
   /// Example 2 : this is an example text => This Is An Example Text
   static String capitalizeAllWordsFirstLetter(String s) {
-    String lowerCasedString = s.toLowerCase();
-    String stringWithoutExtraSpaces = lowerCasedString.trim();
+    final String lowerCasedString = s.toLowerCase();
+    final String stringWithoutExtraSpaces = lowerCasedString.trim();
 
     if (stringWithoutExtraSpaces.isEmpty) {
       return "";
@@ -470,8 +470,8 @@ class GetUtils {
       return stringWithoutExtraSpaces.toUpperCase();
     }
 
-    List<String> stringWordsList = stringWithoutExtraSpaces.split(" ");
-    List<String> capitalizedWordsFirstLetter = stringWordsList
+    final List<String> stringWordsList = stringWithoutExtraSpaces.split(" ");
+    final List<String> capitalizedWordsFirstLetter = stringWordsList
         .map(
           (word) {
             if (word.trim().isEmpty) return "";
@@ -483,14 +483,14 @@ class GetUtils {
         )
         .map(
           (word) {
-            if (word.startsWith(RegExp(r'[\n\t\r]'))) {
+            if (word.startsWith(RegExp(r"[\n\t\r]"))) {
               return word;
             }
             return word[0].toUpperCase() + word.substring(1).toLowerCase();
           },
         )
         .toList();
-    String finalResult = capitalizedWordsFirstLetter.join(" ");
+    final String finalResult = capitalizedWordsFirstLetter.join(" ");
     return finalResult;
   }
 
@@ -510,7 +510,7 @@ class GetUtils {
     if (segments == null || segments.isEmpty) {
       return path;
     }
-    final list = segments.map((e) => '/$e');
+    final list = segments.map((e) => "/$e");
     return path + list.join();
   }
 
@@ -535,7 +535,7 @@ class GetUtils {
     String info, {
     bool isError = false,
   }) {
-    Get.log('$prefix $value $info'.trim(), isError: isError);
+    Get.log("$prefix $value $info".trim(), isError: isError);
   }
 }
 

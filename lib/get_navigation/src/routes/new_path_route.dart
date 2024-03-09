@@ -1,11 +1,11 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
-import 'get_route.dart';
+import 'package:refreshed/get_navigation/src/routes/get_route.dart';
 
 class RouteMatcher {
-  final RouteNode _root = RouteNode('/', '/');
+  final RouteNode _root = RouteNode("/", "/");
 
   RouteNode addRoute(String path) {
     final segments = _parsePath(path);
@@ -68,7 +68,7 @@ class RouteMatcher {
       if (child == null) {
         return null;
       } else {
-        if (child.path.startsWith(':')) {
+        if (child.path.startsWith(":")) {
           parameters[child.path.substring(1)] = segment;
         }
 
@@ -89,22 +89,22 @@ class RouteMatcher {
   }
 
   List<String> _parsePath(String path) {
-    return path.split('/').where((segment) => segment.isNotEmpty).toList();
+    return path.split("/").where((segment) => segment.isNotEmpty).toList();
   }
 }
 
 class RouteTreeResult {
-  final GetPage? route;
-  final MatchResult matchResult;
 
   RouteTreeResult({
     required this.route,
     required this.matchResult,
   });
+  final GetPage? route;
+  final MatchResult matchResult;
 
   @override
   String toString() {
-    return 'RouteTreeResult(route: $route, matchResult: $matchResult)';
+    return "RouteTreeResult(route: $route, matchResult: $matchResult)";
   }
 
   RouteTreeResult configure(String page, Object? arguments) {
@@ -114,7 +114,7 @@ class RouteTreeResult {
       settings: RouteSettings(name: page, arguments: arguments),
       completer: Completer(),
       arguments: arguments,
-    ));
+    ),);
   }
 
   RouteTreeResult copyWith({
@@ -155,7 +155,7 @@ class RouteTree {
       child = child.copyWith(middlewares: middlewares, bindings: bindings);
       if (child.inheritParentPath) {
         child = child.copyWith(
-            name: ('${route.path}/${child.path}').replaceAll(r'//', '/'));
+            name: ("${route.path}/${child.path}").replaceAll(r"//", "/"),);
       }
       addRoute(child);
     }
@@ -187,6 +187,9 @@ class RouteTree {
 
 /// A class representing the result of a route matching operation.
 class MatchResult {
+
+  MatchResult(this.node, this.parameters, this.currentPath,
+      {this.urlParameters = const {},});
   /// The route found that matches the result
   final RouteNode node;
 
@@ -199,31 +202,28 @@ class MatchResult {
   /// Route url parameters eg: adding 'user' the match result for 'user?foo=bar' will be: {foo: bar}
   final Map<String, String> urlParameters;
 
-  MatchResult(this.node, this.parameters, this.currentPath,
-      {this.urlParameters = const {}});
-
   @override
   String toString() =>
-      'MatchResult(node: $node, currentPath: $currentPath, parameters: $parameters, urlParameters: $urlParameters)';
+      "MatchResult(node: $node, currentPath: $currentPath, parameters: $parameters, urlParameters: $urlParameters)";
 }
 
 // A class representing a node in a routing tree.
 class RouteNode {
+
+  RouteNode(this.path, this.originalPath, {this.parent});
   String path;
   String originalPath;
   RouteNode? parent;
   List<RouteNode> nodeSegments = [];
 
-  RouteNode(this.path, this.originalPath, {this.parent});
-
   bool get isRoot => parent == null;
 
   String get fullPath {
     if (isRoot) {
-      return '/';
+      return "/";
     } else {
-      final parentPath = parent?.fullPath == '/' ? '' : parent?.fullPath;
-      return '$parentPath/$path';
+      final parentPath = parent?.fullPath == "/" ? "" : parent?.fullPath;
+      return "$parentPath/$path";
     }
   }
 
@@ -239,12 +239,12 @@ class RouteNode {
   }
 
   bool matches(String name) {
-    return name == path || path == '*' || path.startsWith(':');
+    return name == path || path == "*" || path.startsWith(":");
   }
 
   @override
   String toString() =>
-      'RouteNode(name: $path, nodeSegments: $nodeSegments, fullPath: $fullPath )';
+      "RouteNode(name: $path, nodeSegments: $nodeSegments, fullPath: $fullPath )";
 }
 
 /// Extension providing a `firstWhereOrNull` function to find the first element satisfying a condition.

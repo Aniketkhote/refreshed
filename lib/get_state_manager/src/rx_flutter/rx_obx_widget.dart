@@ -1,7 +1,7 @@
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
-import '../../../get_rx/src/rx_types/rx_types.dart';
-import '../simple/simple_builder.dart';
+import 'package:refreshed/get_rx/src/rx_types/rx_types.dart';
+import 'package:refreshed/get_state_manager/src/simple/simple_builder.dart';
 
 /// Callback signature for a widget builder function.
 typedef WidgetCallback = Widget Function();
@@ -26,10 +26,10 @@ abstract class ObxWidget extends ObxStatelessWidget {
 /// Obx(() => Text(_name.value)),
 /// ```
 class Obx extends ObxWidget {
-  final WidgetCallback builder;
 
   /// Constructs an [Obx] widget with the given [builder].
   const Obx(this.builder, {super.key});
+  final WidgetCallback builder;
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +52,11 @@ class Obx extends ObxWidget {
 /// ),
 /// ```
 class ObxValue<T extends RxInterface> extends ObxWidget {
-  final Widget Function(T) builder;
-  final T data;
 
   /// Constructs an [ObxValue] widget with the given [builder] and [data].
   const ObxValue(this.builder, this.data, {super.key});
+  final Widget Function(T) builder;
+  final T data;
 
   @override
   Widget build(BuildContext context) => builder(data);

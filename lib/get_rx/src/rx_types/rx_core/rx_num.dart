@@ -1,4 +1,4 @@
-part of '../rx_types.dart';
+part of "../rx_types.dart";
 
 extension RxNumExt<T extends num> on Rx<T> {
   /// Multiplication operator.

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:refreshed/refreshed.dart';
+import "package:flutter/material.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:refreshed/refreshed.dart";
 
 void main() {
   Get.lazyPut<Controller2>(() => Controller2());
@@ -12,7 +12,7 @@ void main() {
           builder: (controller) => Column(
             children: [
               Text(
-                '${controller.counter}',
+                "${controller.counter}",
               ),
               TextButton(
                 child: const Text("increment"),
@@ -23,22 +23,22 @@ void main() {
                 onPressed: () => controller.incrementWithId(),
               ),
               GetBuilder<Controller>(
-                  id: '1',
+                  id: "1",
                   didChangeDependencies: (_) {
                     // print("didChangeDependencies called");
                   },
                   builder: (controller) {
-                    return Text('id ${controller.counter}');
-                  }),
+                    return Text("id ${controller.counter}");
+                  },),
               GetBuilder<Controller2>(builder: (controller) {
-                return Text('lazy ${controller.test}');
-              }),
+                return Text("lazy ${controller.test}");
+              },),
               GetBuilder<ControllerNonGlobal>(
                   init: ControllerNonGlobal(),
                   global: false,
                   builder: (controller) {
-                    return Text('single ${controller.nonGlobal}');
-                  })
+                    return Text("single ${controller.nonGlobal}");
+                  },),
             ],
           ),
         ),
@@ -53,13 +53,13 @@ void main() {
 
     expect(find.text("1"), findsOneWidget);
 
-    await test.tap(find.text('increment'));
+    await test.tap(find.text("increment"));
 
     await test.pump();
 
     expect(find.text("2"), findsOneWidget);
 
-    await test.tap(find.text('incrementWithId'));
+    await test.tap(find.text("incrementWithId"));
 
     await test.pump();
 
@@ -94,7 +94,7 @@ class Controller extends GetxController {
 
   void incrementWithId() {
     counter++;
-    update(['1']);
+    update(["1"]);
   }
 }
 
