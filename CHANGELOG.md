@@ -1,3 +1,10 @@
+## 2.0.0
+
+- Removed the `int`, `double`, and `duration` extensions, as they are no longer necessary. Instead, users can utilize the `Quickly` package for similar functionalities.
+- Resolved the memory leak issue associated with the snackbar component.
+- Addressed and fixed the failing tests related to the snackbar component.
+- Added `BoxConstraints` to the `Get.bottomSheet` method to ensure more precise control and layout constraints.
+
 ## 1.5.4
 
 - Resolved issue with Snackbar not using full width, causing buttons on that height to be unclickable.

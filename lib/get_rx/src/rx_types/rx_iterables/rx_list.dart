@@ -143,7 +143,7 @@ extension ListExtension<E> on List<E> {
   /// Add [item] to [List<E>] only if [item] is not null.
   ///
   /// If [item] is not null, it is added to the list.
-  void addNonNull(E item) {
+  void addNonNull(E? item) {
     if (item != null) add(item);
   }
 

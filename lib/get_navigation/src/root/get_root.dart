@@ -127,6 +127,8 @@ class ConfigData {
   /// Flag indicating whether the application is in test mode.
   final bool testMode;
 
+  final SnackBarQueue snackBarQueue = SnackBarQueue();
+
   /// Constructs a new [ConfigData] instance.
   ConfigData({
     required this.routingCallback,
@@ -459,6 +461,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   void onClose() {
     config.onDispose?.call();
     Get.clearTranslations();
+    config.snackBarQueue.disposeControllers();
     RouterReportManager.instance.clearRouteKeys();
     RouterReportManager.dispose();
     Get.resetInstance(clearRouteBindings: true);

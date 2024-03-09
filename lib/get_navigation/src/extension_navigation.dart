@@ -29,30 +29,33 @@ extension ExtensionBottomSheet on GetInterface {
     Duration? enterBottomSheetDuration,
     Duration? exitBottomSheetDuration,
     Curve? curve,
+    BoxConstraints? contraints,
   }) {
-    return Navigator.of(overlayContext!, rootNavigator: useRootNavigator)
-        .push(GetModalBottomSheetRoute<T>(
-      builder: (_) => bottomsheet,
-      isPersistent: persistent,
-      theme: Theme.of(key.currentContext!),
-      isScrollControlled: isScrollControlled,
-      barrierLabel: MaterialLocalizations.of(key.currentContext!)
-          .modalBarrierDismissLabel,
-      backgroundColor: backgroundColor ?? Colors.transparent,
-      elevation: elevation,
-      shape: shape,
-      removeTop: ignoreSafeArea ?? true,
-      clipBehavior: clipBehavior,
-      isDismissible: isDismissible,
-      modalBarrierColor: barrierColor,
-      settings: settings,
-      enableDrag: enableDrag,
-      enterBottomSheetDuration:
-          enterBottomSheetDuration ?? const Duration(milliseconds: 250),
-      exitBottomSheetDuration:
-          exitBottomSheetDuration ?? const Duration(milliseconds: 200),
-      curve: curve,
-    ));
+    return Navigator.of(overlayContext!, rootNavigator: useRootNavigator).push(
+      GetModalBottomSheetRoute<T>(
+        builder: (_) => bottomsheet,
+        isPersistent: persistent,
+        theme: Theme.of(key.currentContext!),
+        isScrollControlled: isScrollControlled,
+        barrierLabel: MaterialLocalizations.of(key.currentContext!)
+            .modalBarrierDismissLabel,
+        backgroundColor: backgroundColor ?? Colors.transparent,
+        elevation: elevation,
+        shape: shape,
+        removeTop: ignoreSafeArea ?? true,
+        clipBehavior: clipBehavior,
+        isDismissible: isDismissible,
+        modalBarrierColor: barrierColor,
+        settings: settings,
+        enableDrag: enableDrag,
+        enterBottomSheetDuration:
+            enterBottomSheetDuration ?? const Duration(milliseconds: 250),
+        exitBottomSheetDuration:
+            exitBottomSheetDuration ?? const Duration(milliseconds: 200),
+        curve: curve,
+        constraints: contraints,
+      ),
+    );
   }
 }
 
