@@ -1,8 +1,7 @@
 import "package:flutter/widgets.dart";
-
-import 'package:refreshed/instance_manager.dart';
-import 'package:refreshed/get_state_manager/src/rx_flutter/rx_notifier.dart';
-import 'package:refreshed/get_state_manager/src/simple/list_notifier.dart';
+import "package:refreshed/get_state_manager/src/rx_flutter/rx_notifier.dart";
+import "package:refreshed/get_state_manager/src/simple/list_notifier.dart";
+import "package:refreshed/instance_manager.dart";
 
 /// Abstract class representing a GetX controller.
 ///
@@ -26,8 +25,8 @@ abstract class GetxController extends ListNotifier with GetLifeCycleMixin {
     if (ids == null) {
       refresh();
     } else {
-      for (final id in ids) {
-        refreshGroup(id);
+      for (int i = 0; i < ids.length; i++) {
+        refreshGroup(ids[i]);
       }
     }
   }
@@ -48,20 +47,24 @@ mixin ScrollMixin on GetLifeCycleMixin {
 
   bool _canFetchTop = true;
 
-  void _listener() {
+  Future<void> _listener() async {
     if (scroll.position.atEdge) {
-      _checkIfCanLoadMore();
+      await _checkIfCanLoadMore();
     }
   }
 
   Future<void> _checkIfCanLoadMore() async {
     if (scroll.position.pixels == 0) {
-      if (!_canFetchTop) return;
+      if (!_canFetchTop) {
+        return;
+      }
       _canFetchTop = false;
       await onTopScroll();
       _canFetchTop = true;
     } else {
-      if (!_canFetchBottom) return;
+      if (!_canFetchBottom) {
+        return;
+      }
       _canFetchBottom = false;
       await onEndScroll();
       _canFetchBottom = true;
@@ -135,19 +138,14 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
     switch (state) {
       case AppLifecycleState.resumed:
         onResumed();
-        break;
       case AppLifecycleState.inactive:
         onInactive();
-        break;
       case AppLifecycleState.paused:
         onPaused();
-        break;
       case AppLifecycleState.detached:
         onDetached();
-        break;
       case AppLifecycleState.hidden:
         onHidden();
-        break;
     }
   }
 

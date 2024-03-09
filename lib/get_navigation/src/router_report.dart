@@ -1,6 +1,6 @@
 import "dart:collection";
 
-import 'package:refreshed/refreshed.dart';
+import "package:refreshed/refreshed.dart";
 
 /// Manages the routing and memory management for instances associated with routes in GetX.
 ///

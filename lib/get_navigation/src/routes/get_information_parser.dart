@@ -1,7 +1,7 @@
 import "package:flutter/foundation.dart";
 import "package:flutter/widgets.dart";
 
-import 'package:refreshed/refreshed.dart';
+import "package:refreshed/refreshed.dart";
 
 class GetInformationParser extends RouteInformationParser<RouteDecoder> {
 

@@ -29,24 +29,27 @@ mixin GetSingleTickerProviderStateMixin on GetxController
 
   @override
   Ticker createTicker(TickerCallback onTick) {
-    assert(() {
-      if (_ticker == null) {
-        return true;
-      }
-      throw FlutterError.fromParts(<DiagnosticsNode>[
-        ErrorSummary(
-          "$runtimeType is a GetSingleTickerProviderStateMixin but multiple tickers were created.",
-        ),
-        ErrorDescription(
-          "A GetSingleTickerProviderStateMixin can only be used as a TickerProvider once.",
-        ),
-        ErrorHint(
-          "If a State is used for multiple AnimationController objects, or if it is passed to other "
-          "objects and those objects might use it more than one time in total, then instead of "
-          "mixing in a GetSingleTickerProviderStateMixin, use a regular GetTickerProviderStateMixin.",
-        ),
-      ]);
-    }());
+    assert(
+      () {
+        if (_ticker == null) {
+          return true;
+        }
+        throw FlutterError.fromParts(<DiagnosticsNode>[
+          ErrorSummary(
+            "$runtimeType is a GetSingleTickerProviderStateMixin but multiple tickers were created.",
+          ),
+          ErrorDescription(
+            "A GetSingleTickerProviderStateMixin can only be used as a TickerProvider once.",
+          ),
+          ErrorHint(
+            "If a State is used for multiple AnimationController objects, or if it is passed to other "
+            "objects and those objects might use it more than one time in total, then instead of "
+            "mixing in a GetSingleTickerProviderStateMixin, use a regular GetTickerProviderStateMixin.",
+          ),
+        ]);
+      }(),
+      "",
+    );
     _ticker =
         Ticker(onTick, debugLabel: kDebugMode ? "created by $this" : null);
     // We assume that this is called from initState, build, or some sort of
@@ -56,6 +59,7 @@ mixin GetSingleTickerProviderStateMixin on GetxController
     return _ticker!;
   }
 
+  /// Callback invoked when the dependencies of this widget change.
   void didChangeDependencies(BuildContext context) {
     if (_ticker != null) {
       _ticker!.muted = !TickerMode.of(context);
@@ -64,25 +68,28 @@ mixin GetSingleTickerProviderStateMixin on GetxController
 
   @override
   void onClose() {
-    assert(() {
-      if (_ticker == null || !_ticker!.isActive) {
-        return true;
-      }
-      throw FlutterError.fromParts(<DiagnosticsNode>[
-        ErrorSummary("$this was disposed with an active Ticker."),
-        ErrorDescription(
-          "$runtimeType created a Ticker via its GetSingleTickerProviderStateMixin, but at the time "
-          "dispose() was called on the mixin, that Ticker was still active. The Ticker must "
-          "be disposed before calling super.dispose().",
-        ),
-        ErrorHint(
-          "Tickers used by AnimationControllers "
-          "should be disposed by calling dispose() on the AnimationController itself. "
-          "Otherwise, the ticker will leak.",
-        ),
-        _ticker!.describeForError("The offending ticker was"),
-      ]);
-    }());
+    assert(
+      () {
+        if (_ticker == null || !_ticker!.isActive) {
+          return true;
+        }
+        throw FlutterError.fromParts(<DiagnosticsNode>[
+          ErrorSummary("$this was disposed with an active Ticker."),
+          ErrorDescription(
+            "$runtimeType created a Ticker via its GetSingleTickerProviderStateMixin, but at the time "
+            "dispose() was called on the mixin, that Ticker was still active. The Ticker must "
+            "be disposed before calling super.dispose().",
+          ),
+          ErrorHint(
+            "Tickers used by AnimationControllers "
+            "should be disposed by calling dispose() on the AnimationController itself. "
+            "Otherwise, the ticker will leak.",
+          ),
+          _ticker!.describeForError("The offending ticker was"),
+        ]);
+      }(),
+      "",
+    );
     super.onClose();
   }
 }
@@ -128,11 +135,15 @@ mixin GetTickerProviderStateMixin on GetxController implements TickerProvider {
   }
 
   void _removeTicker(_WidgetTicker ticker) {
-    assert(_tickers != null);
-    assert(_tickers!.contains(ticker));
+    assert(_tickers != null, "You must add a ticker before removing it.");
+    assert(
+      _tickers!.contains(ticker),
+      "You must add a ticker before removing it.",
+    );
     _tickers!.remove(ticker);
   }
 
+  /// Callback invoked when the dependencies of this widget change.
   void didChangeDependencies(BuildContext context) {
     final bool muted = !TickerMode.of(context);
     if (_tickers != null) {
@@ -144,35 +155,38 @@ mixin GetTickerProviderStateMixin on GetxController implements TickerProvider {
 
   @override
   void onClose() {
-    assert(() {
-      if (_tickers != null) {
-        for (final Ticker ticker in _tickers!) {
-          if (ticker.isActive) {
-            throw FlutterError.fromParts(<DiagnosticsNode>[
-              ErrorSummary("$this was disposed with an active Ticker."),
-              ErrorDescription(
-                "$runtimeType created a Ticker via its GetTickerProviderStateMixin, but at the time "
-                "dispose() was called on the mixin, that Ticker was still active. All Tickers must "
-                "be disposed before calling super.dispose().",
-              ),
-              ErrorHint(
-                "Tickers used by AnimationControllers "
-                "should be disposed by calling dispose() on the AnimationController itself. "
-                "Otherwise, the ticker will leak.",
-              ),
-              ticker.describeForError("The offending ticker was"),
-            ]);
+    assert(
+      () {
+        if (_tickers != null) {
+          for (final Ticker ticker in _tickers!) {
+            if (ticker.isActive) {
+              throw FlutterError.fromParts(<DiagnosticsNode>[
+                ErrorSummary("$this was disposed with an active Ticker."),
+                ErrorDescription(
+                  "$runtimeType created a Ticker via its GetTickerProviderStateMixin, but at the time "
+                  "dispose() was called on the mixin, that Ticker was still active. All Tickers must "
+                  "be disposed before calling super.dispose().",
+                ),
+                ErrorHint(
+                  "Tickers used by AnimationControllers "
+                  "should be disposed by calling dispose() on the AnimationController itself. "
+                  "Otherwise, the ticker will leak.",
+                ),
+                ticker.describeForError("The offending ticker was"),
+              ]);
+            }
           }
         }
-      }
-      return true;
-    }());
+        return true;
+      }(),
+      "",
+    );
     super.onClose();
   }
 }
 
 class _WidgetTicker extends Ticker {
-  _WidgetTicker(super.onTick, this._creator, {super.debugLabel});
+  _WidgetTicker(super._onTick, this._creator, {super.debugLabel});
 
   final GetTickerProviderStateMixin _creator;
 

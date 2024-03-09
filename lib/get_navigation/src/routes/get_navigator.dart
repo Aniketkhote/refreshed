@@ -1,6 +1,6 @@
 import "package:flutter/widgets.dart";
 
-import 'package:refreshed/refreshed.dart';
+import "package:refreshed/refreshed.dart";
 
 class GetNavigator extends Navigator {
 

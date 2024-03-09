@@ -5,8 +5,8 @@ import "package:flutter/material.dart";
 import "package:refreshed/get_navigation/src/routes/new_path_route.dart";
 import "package:refreshed/utils.dart";
 
-import 'package:refreshed/get_instance/src/bindings_interface.dart';
-import 'package:refreshed/route_manager.dart';
+import "package:refreshed/get_instance/src/bindings_interface.dart";
+import "package:refreshed/route_manager.dart";
 
 class GetDelegate extends RouterDelegate<RouteDecoder>
     with

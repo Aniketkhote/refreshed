@@ -1,9 +1,9 @@
 import "dart:async";
 
-import 'package:refreshed/get_core/get_core.dart';
-import 'package:refreshed/get_state_manager/src/rx_flutter/rx_notifier.dart';
-import 'package:refreshed/get_rx/src/rx_types/rx_types.dart';
-import 'package:refreshed/get_rx/src/rx_workers/utils/debouncer.dart';
+import "package:refreshed/get_core/get_core.dart";
+import "package:refreshed/get_state_manager/src/rx_flutter/rx_notifier.dart";
+import "package:refreshed/get_rx/src/rx_types/rx_types.dart";
+import "package:refreshed/get_rx/src/rx_workers/utils/debouncer.dart";
 
 /// A utility function to evaluate a condition and return a boolean value.
 ///

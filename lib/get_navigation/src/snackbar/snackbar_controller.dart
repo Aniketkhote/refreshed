@@ -4,8 +4,8 @@ import "dart:ui";
 
 import "package:flutter/material.dart";
 
-import 'package:refreshed/refreshed.dart';
-import 'package:refreshed/get_navigation/src/root/get_root.dart';
+import "package:refreshed/refreshed.dart";
+import "package:refreshed/get_navigation/src/root/get_root.dart";
 
 class SnackbarController {
 

@@ -1,22 +1,7 @@
-// ignore: one_member_abstracts
-
-// ignore: one_member_abstracts
 /// Defines a contract for classes that provide dependencies for a specific type `T`.
 abstract class BindingsInterface<T> {
   /// Returns an instance of type `T` containing the required dependencies.
   T dependencies();
-}
-
-/// [Bindings] should be extended or implemented.
-/// When using `GetMaterialApp`, all `GetPage`s and navigation
-/// methods (like Get.to()) have a `binding` property that takes an
-/// instance of Bindings to manage the
-/// dependencies() (via Get.put()) for the Route you are opening.
-// ignore: one_member_abstracts
-@Deprecated("Use Binding instead")
-abstract class Bindings extends BindingsInterface<void> {
-  @override
-  void dependencies();
 }
 
 // /// Simplifies Bindings generation from a single callback.

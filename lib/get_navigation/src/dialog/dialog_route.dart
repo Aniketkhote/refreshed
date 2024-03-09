@@ -1,6 +1,6 @@
 import "package:flutter/widgets.dart";
 
-import 'package:refreshed/get_navigation/src/router_report.dart';
+import "package:refreshed/get_navigation/src/router_report.dart";
 
 /// A custom [PopupRoute] used by Refreshed for displaying dialog routes.
 ///

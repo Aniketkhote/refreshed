@@ -1,4 +1,4 @@
-import 'package:refreshed/get_core/src/get_interface.dart';
+import "package:refreshed/get_core/src/get_interface.dart";
 
 ///Use to instead of Navigator.push, off instead of Navigator.pushReplacement,
 ///offAll instead of Navigator.pushAndRemoveUntil. For named routes just

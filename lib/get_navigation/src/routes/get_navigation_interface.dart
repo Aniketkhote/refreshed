@@ -1,8 +1,8 @@
 import "package:flutter/widgets.dart";
 
-import 'package:refreshed/get_instance/src/bindings_interface.dart';
-import 'package:refreshed/get_navigation/src/routes/get_route.dart';
-import 'package:refreshed/get_navigation/src/routes/transitions_type.dart';
+import "package:refreshed/get_instance/src/bindings_interface.dart";
+import "package:refreshed/get_navigation/src/routes/get_route.dart";
+import "package:refreshed/get_navigation/src/routes/transitions_type.dart";
 
 /// Enables the user to customize the intended pop behavior
 ///

@@ -1,7 +1,6 @@
 import "package:flutter/widgets.dart";
-
-import 'package:refreshed/get_rx/src/rx_types/rx_types.dart';
-import 'package:refreshed/get_state_manager/src/simple/simple_builder.dart';
+import "package:refreshed/get_rx/src/rx_types/rx_types.dart";
+import "package:refreshed/get_state_manager/src/simple/simple_builder.dart";
 
 /// Callback signature for a widget builder function.
 typedef WidgetCallback = Widget Function();
@@ -26,15 +25,16 @@ abstract class ObxWidget extends ObxStatelessWidget {
 /// Obx(() => Text(_name.value)),
 /// ```
 class Obx extends ObxWidget {
-
   /// Constructs an [Obx] widget with the given [builder].
+  ///
+  /// The [builder] parameter is a callback function that returns the widget to be built.
   const Obx(this.builder, {super.key});
+
+  /// A callback function that returns the widget to be built based on the observed state.
   final WidgetCallback builder;
 
   @override
-  Widget build(BuildContext context) {
-    return builder();
-  }
+  Widget build(BuildContext context) => builder();
 }
 
 /// Similar to [Obx], but manages a local state.
@@ -51,11 +51,14 @@ class Obx extends ObxWidget {
 /// false.obs,
 /// ),
 /// ```
-class ObxValue<T extends RxInterface> extends ObxWidget {
-
+class ObxValue<T extends RxInterface<T>> extends ObxWidget {
   /// Constructs an [ObxValue] widget with the given [builder] and [data].
   const ObxValue(this.builder, this.data, {super.key});
+
+  /// A callback function that takes the observed data and returns the widget to be built.
   final Widget Function(T) builder;
+
+  /// The observed data.
   final T data;
 
   @override

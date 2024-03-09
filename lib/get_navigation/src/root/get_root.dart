@@ -2,8 +2,8 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:refreshed/utils.dart";
 
-import 'package:refreshed/refreshed.dart' hide ContextExt;
-import 'package:refreshed/get_navigation/src/router_report.dart';
+import "package:refreshed/refreshed.dart" hide ContextExt;
+import "package:refreshed/get_navigation/src/router_report.dart";
 
 /// A class that holds configuration data for the application.
 class ConfigData {

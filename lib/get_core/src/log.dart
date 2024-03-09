@@ -1,6 +1,6 @@
 import "dart:developer" as developer;
 
-import 'package:refreshed/get_core/src/get_main.dart';
+import "package:refreshed/get_core/src/get_main.dart";
 
 /// A typedef representing a callback function for writing logs, typically used in the context of GetX.
 typedef LogWriterCallback = void Function(String text, {bool isError});

@@ -1,7 +1,7 @@
 import "package:flutter/foundation.dart";
 
-import 'package:refreshed/get_core/src/log.dart';
-import 'package:refreshed/get_core/src/smart_management.dart';
+import "package:refreshed/get_core/src/log.dart";
+import "package:refreshed/get_core/src/smart_management.dart";
 
 /// A contract defining the interface for interacting with the "Get" class,
 /// enabling auxiliary packages to extend its functionality through extensions.

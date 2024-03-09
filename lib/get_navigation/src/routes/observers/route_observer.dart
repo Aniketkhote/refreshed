@@ -1,11 +1,11 @@
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 
-import 'package:refreshed/get_core/get_core.dart';
-import 'package:refreshed/instance_manager.dart';
-import 'package:refreshed/get_navigation/get_navigation.dart';
-import 'package:refreshed/get_navigation/src/dialog/dialog_route.dart';
-import 'package:refreshed/get_navigation/src/router_report.dart';
+import "package:refreshed/get_core/get_core.dart";
+import "package:refreshed/instance_manager.dart";
+import "package:refreshed/get_navigation/get_navigation.dart";
+import "package:refreshed/get_navigation/src/dialog/dialog_route.dart";
+import "package:refreshed/get_navigation/src/router_report.dart";
 
 /// Extracts the name of a route based on it's instance type
 /// or null if not possible.

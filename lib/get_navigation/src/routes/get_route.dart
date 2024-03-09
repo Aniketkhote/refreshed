@@ -6,9 +6,9 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 
-import 'package:refreshed/get_instance/src/bindings_interface.dart';
-import 'package:refreshed/get_state_manager/src/simple/get_state.dart';
-import 'package:refreshed/get_navigation/get_navigation.dart';
+import "package:refreshed/get_instance/src/bindings_interface.dart";
+import "package:refreshed/get_state_manager/src/simple/get_state.dart";
+import "package:refreshed/get_navigation/get_navigation.dart";
 
 class GetPage<T> extends Page<T> {
 

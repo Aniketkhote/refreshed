@@ -1,7 +1,7 @@
 import "package:flutter/cupertino.dart";
 
-import 'package:refreshed/refreshed.dart';
-import 'package:refreshed/get_navigation/src/router_report.dart';
+import "package:refreshed/refreshed.dart";
+import "package:refreshed/get_navigation/src/router_report.dart";
 
 /// A mixin that provides route lifecycle event reporting to a [RouterReportManager].
 ///

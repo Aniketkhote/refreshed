@@ -1,6 +1,6 @@
 import "package:web/web.dart" as html;
 
-import 'package:refreshed/get_utils/get_utils.dart';
+import "package:refreshed/get_utils/get_utils.dart";
 
 html.Navigator _navigator = html.window.navigator;
 

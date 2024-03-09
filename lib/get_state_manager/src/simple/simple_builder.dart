@@ -2,7 +2,7 @@ import "dart:async";
 
 import "package:flutter/widgets.dart";
 
-import 'package:refreshed/get_state_manager/src/simple/list_notifier.dart';
+import "package:refreshed/get_state_manager/src/simple/list_notifier.dart";
 
 /// A callback function that is called when the value builder updates its value.
 typedef ValueBuilderUpdateCallback<T> = void Function(T snapshot);

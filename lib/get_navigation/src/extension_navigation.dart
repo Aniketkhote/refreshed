@@ -2,9 +2,9 @@ import "dart:ui" as ui;
 
 import "package:flutter/material.dart";
 
-import 'package:refreshed/refreshed.dart';
-import 'package:refreshed/get_navigation/src/dialog/dialog_route.dart';
-import 'package:refreshed/get_navigation/src/root/get_root.dart';
+import "package:refreshed/refreshed.dart";
+import "package:refreshed/get_navigation/src/dialog/dialog_route.dart";
+import "package:refreshed/get_navigation/src/root/get_root.dart";
 
 /// It replaces the Flutter Navigator, but needs no context.
 /// You can to use navigator.push(YourRoute()) rather

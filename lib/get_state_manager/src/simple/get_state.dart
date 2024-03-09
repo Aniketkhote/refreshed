@@ -4,9 +4,9 @@ import "dart:async";
 
 import "package:flutter/material.dart";
 
-import 'package:refreshed/instance_manager.dart';
-import 'package:refreshed/get_state_manager/get_state_manager.dart';
-import 'package:refreshed/get_state_manager/src/simple/list_notifier.dart';
+import "package:refreshed/instance_manager.dart";
+import "package:refreshed/get_state_manager/get_state_manager.dart";
+import "package:refreshed/get_state_manager/src/simple/list_notifier.dart";
 
 /// Signature for a function that creates an object of type `T`.
 typedef InitBuilder<T> = T Function();

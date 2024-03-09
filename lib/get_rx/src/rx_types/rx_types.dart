@@ -26,8 +26,8 @@ import "dart:collection";
 
 import "package:flutter/foundation.dart";
 
-import 'package:refreshed/get_state_manager/src/rx_flutter/rx_notifier.dart';
-import 'package:refreshed/get_rx/src/rx_typedefs/rx_typedefs.dart';
+import "package:refreshed/get_state_manager/src/rx_flutter/rx_notifier.dart";
+import "package:refreshed/get_rx/src/rx_typedefs/rx_typedefs.dart";
 
 part "rx_core/rx_impl.dart";
 part "rx_core/rx_interface.dart";

@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 
-import 'package:refreshed/refreshed.dart';
+import "package:refreshed/refreshed.dart";
 
 class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
     extends StatefulWidget {

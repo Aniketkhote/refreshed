@@ -3,8 +3,8 @@ import "dart:ui";
 
 import "package:flutter/material.dart";
 
-import 'package:refreshed/get_core/get_core.dart';
-import 'package:refreshed/get_navigation/get_navigation.dart';
+import "package:refreshed/get_core/get_core.dart";
+import "package:refreshed/get_navigation/get_navigation.dart";
 
 /// Callback signature for tap events on a `GetSnackBar`.
 typedef OnTap = void Function(GetSnackBar snack);

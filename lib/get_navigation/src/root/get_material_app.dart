@@ -1,11 +1,10 @@
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "package:refreshed/get_navigation/get_navigation.dart";
+import "package:refreshed/get_navigation/src/root/get_root.dart";
+import "package:refreshed/get_state_manager/get_state_manager.dart";
+import "package:refreshed/get_utils/get_utils.dart";
 import "package:refreshed/instance_manager.dart";
-
-import 'package:refreshed/get_state_manager/get_state_manager.dart';
-import 'package:refreshed/get_utils/get_utils.dart';
-import 'package:refreshed/get_navigation/get_navigation.dart';
-import 'package:refreshed/get_navigation/src/root/get_root.dart';
 
 /// A MaterialApp extension that integrates the Refreshed state management library.
 ///
@@ -13,7 +12,6 @@ import 'package:refreshed/get_navigation/src/root/get_root.dart';
 /// by Refreshed, such as reactive state management, dependency injection, and
 /// navigation management.
 class GetMaterialApp extends StatelessWidget {
-
   const GetMaterialApp({
     super.key,
     this.navigatorKey,
@@ -66,7 +64,7 @@ class GetMaterialApp extends StatelessWidget {
     this.transitionDuration,
     this.defaultGlobalState,
     this.smartManagement = SmartManagement.full,
-    this.binds = const [],
+    this.binds = const <Bind>[],
     this.unknownRoute,
     this.highContrastTheme,
     this.highContrastDarkTheme,
@@ -124,7 +122,7 @@ class GetMaterialApp extends StatelessWidget {
     this.logWriterCallback,
     this.popGesture,
     this.smartManagement = SmartManagement.full,
-    this.binds = const [],
+    this.binds = const <Bind>[],
     this.transitionDuration,
     this.defaultGlobalState,
     this.getPages,
@@ -197,95 +195,95 @@ class GetMaterialApp extends StatelessWidget {
   final bool useInheritedMediaQuery;
 
   @override
-  Widget build(BuildContext context) {
-    return GetRoot(
-      config: ConfigData(
-        backButtonDispatcher: backButtonDispatcher,
-        binds: binds,
-        customTransition: customTransition,
-        defaultGlobalState: defaultGlobalState,
-        defaultTransition: defaultTransition,
-        enableLog: enableLog,
-        fallbackLocale: fallbackLocale,
-        getPages: getPages,
-        home: home,
-        initialRoute: initialRoute,
-        locale: locale,
-        logWriterCallback: logWriterCallback,
-        navigatorKey: navigatorKey,
-        navigatorObservers: navigatorObservers,
-        onDispose: onDispose,
-        onInit: onInit,
-        onReady: onReady,
-        routeInformationParser: routeInformationParser,
-        routeInformationProvider: routeInformationProvider,
-        routerDelegate: routerDelegate,
-        routingCallback: routingCallback,
-        scaffoldMessengerKey: scaffoldMessengerKey,
-        smartManagement: smartManagement,
-        transitionDuration: transitionDuration,
-        translations: translations,
-        translationsKeys: translationsKeys,
-        unknownRoute: unknownRoute,
-        theme: theme,
-        darkTheme: darkTheme,
-        themeMode: themeMode,
-      ),
-      // binds: [
-      //   Bind.lazyPut<GetMaterialController>(
-      //     () => GetMaterialController(
-
-      //     ),
-      //     onClose: () {
-      //       Get.clearTranslations();
-      //       RouterReportManager.dispose();
-      //       Get.resetInstance(clearRouteBindings: true);
-      //     },
-      //   ),
-      //   ...binds,
-      // ],
-      child: Builder(builder: (context) {
-        final controller = GetRoot.of(context);
-        return MaterialApp.router(
-          routerDelegate: controller.config.routerDelegate,
-          routeInformationParser: controller.config.routeInformationParser,
+  Widget build(BuildContext context) => GetRoot(
+        config: ConfigData(
           backButtonDispatcher: backButtonDispatcher,
+          binds: binds,
+          customTransition: customTransition,
+          defaultGlobalState: defaultGlobalState,
+          defaultTransition: defaultTransition,
+          enableLog: enableLog,
+          fallbackLocale: fallbackLocale,
+          getPages: getPages,
+          home: home,
+          initialRoute: initialRoute,
+          locale: locale,
+          logWriterCallback: logWriterCallback,
+          navigatorKey: navigatorKey,
+          navigatorObservers: navigatorObservers,
+          onDispose: onDispose,
+          onInit: onInit,
+          onReady: onReady,
+          routeInformationParser: routeInformationParser,
           routeInformationProvider: routeInformationProvider,
-          routerConfig: routerConfig,
-          key: controller.config.unikey,
-          builder: (context, child) => Directionality(
-            textDirection: textDirection ??
-                (rtlLanguages.contains(Get.locale?.languageCode)
-                    ? TextDirection.rtl
-                    : TextDirection.ltr),
-            child: builder == null
-                ? (child ?? const Material())
-                : builder!(context, child ?? const Material()),
-          ),
-          title: title,
-          onGenerateTitle: onGenerateTitle,
-          color: color,
-          theme: controller.config.theme ?? ThemeData.fallback(),
-          darkTheme: controller.config.darkTheme ??
-              controller.config.theme ??
-              ThemeData.fallback(),
-          themeMode: controller.config.themeMode,
-          locale: Get.locale ?? locale,
-          scaffoldMessengerKey: controller.config.scaffoldMessengerKey,
-          localizationsDelegates: localizationsDelegates,
-          localeListResolutionCallback: localeListResolutionCallback,
-          localeResolutionCallback: localeResolutionCallback,
-          supportedLocales: supportedLocales,
-          debugShowMaterialGrid: debugShowMaterialGrid,
-          showPerformanceOverlay: showPerformanceOverlay,
-          checkerboardRasterCacheImages: checkerboardRasterCacheImages,
-          checkerboardOffscreenLayers: checkerboardOffscreenLayers,
-          showSemanticsDebugger: showSemanticsDebugger,
-          debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-          shortcuts: shortcuts,
-          scrollBehavior: scrollBehavior,
-        );
-      },),
-    );
-  }
+          routerDelegate: routerDelegate,
+          routingCallback: routingCallback,
+          scaffoldMessengerKey: scaffoldMessengerKey,
+          smartManagement: smartManagement,
+          transitionDuration: transitionDuration,
+          translations: translations,
+          translationsKeys: translationsKeys,
+          unknownRoute: unknownRoute,
+          theme: theme,
+          darkTheme: darkTheme,
+          themeMode: themeMode,
+        ),
+        // binds: [
+        //   Bind.lazyPut<GetMaterialController>(
+        //     () => GetMaterialController(
+
+        //     ),
+        //     onClose: () {
+        //       Get.clearTranslations();
+        //       RouterReportManager.dispose();
+        //       Get.resetInstance(clearRouteBindings: true);
+        //     },
+        //   ),
+        //   ...binds,
+        // ],
+        child: Builder(
+          builder: (BuildContext context) {
+            final GetRootState controller = GetRoot.of(context);
+            return MaterialApp.router(
+              routerDelegate: controller.config.routerDelegate,
+              routeInformationParser: controller.config.routeInformationParser,
+              backButtonDispatcher: backButtonDispatcher,
+              routeInformationProvider: routeInformationProvider,
+              routerConfig: routerConfig,
+              key: controller.config.unikey,
+              builder: (BuildContext context, Widget? child) => Directionality(
+                textDirection: textDirection ??
+                    (rtlLanguages.contains(Get.locale?.languageCode)
+                        ? TextDirection.rtl
+                        : TextDirection.ltr),
+                child: builder == null
+                    ? (child ?? const Material())
+                    : builder!(context, child ?? const Material()),
+              ),
+              title: title,
+              onGenerateTitle: onGenerateTitle,
+              color: color,
+              theme: controller.config.theme ?? ThemeData.fallback(),
+              darkTheme: controller.config.darkTheme ??
+                  controller.config.theme ??
+                  ThemeData.fallback(),
+              themeMode: controller.config.themeMode,
+              locale: Get.locale ?? locale,
+              scaffoldMessengerKey: controller.config.scaffoldMessengerKey,
+              localizationsDelegates: localizationsDelegates,
+              localeListResolutionCallback: localeListResolutionCallback,
+              localeResolutionCallback: localeResolutionCallback,
+              supportedLocales: supportedLocales,
+              debugShowMaterialGrid: debugShowMaterialGrid,
+              showPerformanceOverlay: showPerformanceOverlay,
+              checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+              checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+              showSemanticsDebugger: showSemanticsDebugger,
+              debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+              shortcuts: shortcuts,
+              scrollBehavior: scrollBehavior,
+            );
+          },
+        ),
+      );
 }

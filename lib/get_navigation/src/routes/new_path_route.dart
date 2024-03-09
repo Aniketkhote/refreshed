@@ -2,7 +2,7 @@ import "dart:async";
 
 import "package:flutter/widgets.dart";
 
-import 'package:refreshed/get_navigation/src/routes/get_route.dart';
+import "package:refreshed/get_navigation/src/routes/get_route.dart";
 
 class RouteMatcher {
   final RouteNode _root = RouteNode("/", "/");

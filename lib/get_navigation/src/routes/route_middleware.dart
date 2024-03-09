@@ -2,7 +2,7 @@ import "dart:async";
 
 import "package:flutter/cupertino.dart";
 
-import 'package:refreshed/refreshed.dart';
+import "package:refreshed/refreshed.dart";
 
 abstract class _RouteMiddleware {
   /// The Order of the Middlewares to run.

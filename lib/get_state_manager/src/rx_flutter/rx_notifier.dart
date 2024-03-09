@@ -40,7 +40,7 @@ mixin StateMixin<T> on ListNotifier {
   /// Gets the current status of the state.
   GetStatus<T> get status {
     reportRead();
-    return _status ??= _status = GetStatus.loading();
+    return _status ??= _status = GetStatus<T>.loading();
   }
 
   /// Gets the current state.

@@ -1,6 +1,6 @@
 import "package:flutter/widgets.dart";
 
-import 'package:refreshed/refreshed.dart';
+import "package:refreshed/refreshed.dart";
 
 /// A mixin that facilitates building responsive widgets by providing methods
 /// to conditionally choose which widget to build based on the screen type.

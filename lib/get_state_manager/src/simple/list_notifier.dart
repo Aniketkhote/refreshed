@@ -2,7 +2,7 @@ import "dart:collection";
 
 import "package:flutter/foundation.dart";
 
-import 'package:refreshed/refreshed.dart';
+import "package:refreshed/refreshed.dart";
 
 // This callback remove the listener on addListener function
 typedef Disposer = void Function();
