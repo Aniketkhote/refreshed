@@ -91,7 +91,6 @@ mixin GetResponsiveMixin on Widget {
 /// property `alwaysUseBuilder` to false
 /// With `settings` property you can set the width limit for the screen types.
 class GetResponsiveView<T> extends GetView<T> with GetResponsiveMixin {
-
   GetResponsiveView({
     this.alwaysUseBuilder = false,
     ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
@@ -108,13 +107,13 @@ class GetResponsiveView<T> extends GetView<T> with GetResponsiveMixin {
 /// which widget to build based on the screen type.
 class GetResponsiveWidget<T extends GetLifeCycleMixin> extends GetWidget<T>
     with GetResponsiveMixin {
-
   /// Constructs a [GetResponsiveWidget] with the given parameters.
   GetResponsiveWidget({
     this.alwaysUseBuilder = false,
     ResponsiveScreenSettings settings = const ResponsiveScreenSettings(),
     super.key,
   }) : screen = ResponsiveScreen(settings);
+
   /// Determines whether to always use the `builder` method for building widgets.
   @override
   final bool alwaysUseBuilder;
@@ -126,13 +125,13 @@ class GetResponsiveWidget<T extends GetLifeCycleMixin> extends GetWidget<T>
 
 /// A class containing settings for responsive screen behavior.
 class ResponsiveScreenSettings {
-
   /// Constructs a [ResponsiveScreenSettings] with the specified thresholds.
   const ResponsiveScreenSettings({
     this.desktopChangePoint = 1200,
     this.tabletChangePoint = 600,
     this.watchChangePoint = 300,
   });
+
   /// The width threshold for switching to desktop mode.
   final double desktopChangePoint;
 
@@ -145,11 +144,11 @@ class ResponsiveScreenSettings {
 
 /// A class that provides information about the current screen size and type.
 class ResponsiveScreen {
-
   /// Constructs a [ResponsiveScreen] with the given settings.
   ResponsiveScreen(this.settings) {
     _isPlatformDesktop = GetPlatform.isDesktop;
   }
+
   /// The context used for obtaining screen dimensions.
   late BuildContext context;
 

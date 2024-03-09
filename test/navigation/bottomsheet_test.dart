@@ -12,15 +12,17 @@ void main() {
 
     await tester.pump();
 
-    Get.bottomSheet(Wrap(
-      children: <Widget>[
-        ListTile(
-          leading: const Icon(Icons.music_note),
-          title: const Text("Music"),
-          onTap: () {},
-        ),
-      ],
-    ),);
+    Get.bottomSheet(
+      Wrap(
+        children: <Widget>[
+          ListTile(
+            leading: const Icon(Icons.music_note),
+            title: const Text("Music"),
+            onTap: () {},
+          ),
+        ],
+      ),
+    );
 
     await tester.pumpAndSettle();
 
@@ -34,15 +36,17 @@ void main() {
 
     await tester.pump();
 
-    Get.bottomSheet(Wrap(
-      children: <Widget>[
-        ListTile(
-          leading: const Icon(Icons.music_note),
-          title: const Text("Music"),
-          onTap: () {},
-        ),
-      ],
-    ),);
+    Get.bottomSheet(
+      Wrap(
+        children: <Widget>[
+          ListTile(
+            leading: const Icon(Icons.music_note),
+            title: const Text("Music"),
+            onTap: () {},
+          ),
+        ],
+      ),
+    );
 
     await tester.pumpAndSettle();
 

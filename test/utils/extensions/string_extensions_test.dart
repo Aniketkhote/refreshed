@@ -35,20 +35,34 @@ void main() {
       expect(numbers.capitalizeAllWordsFirstLetter(), "123");
       expect(letters.capitalizeAllWordsFirstLetter(), "Foo");
       expect(sentences[0].capitalizeAllWordsFirstLetter(), "Getx");
-      expect(sentences[1].capitalizeAllWordsFirstLetter(),
-          "This Is An Example Sentence",);
-      expect(sentences[2].capitalizeAllWordsFirstLetter(),
-          "This Is An Example Sentence With A Number 5",);
-      expect(sentences[3].capitalizeAllWordsFirstLetter(),
-          "This Is An Example Sentence With A Number 5 And A Special Character #",);
-      expect(sentences[4].capitalizeAllWordsFirstLetter(),
-          "This Is An Example Sentence With A Number 5 And A Special Character # And B Letter C",);
       expect(
-          sentences[5].capitalizeAllWordsFirstLetter(), "Emm, Lemme Think !",);
-      expect(sentences[6].capitalizeAllWordsFirstLetter(),
-          "Bro, Foo Is A Good Word",);
-      expect(sentences[7].capitalizeAllWordsFirstLetter(),
-          "This Is A Sentence With All Capital Letters",);
+        sentences[1].capitalizeAllWordsFirstLetter(),
+        "This Is An Example Sentence",
+      );
+      expect(
+        sentences[2].capitalizeAllWordsFirstLetter(),
+        "This Is An Example Sentence With A Number 5",
+      );
+      expect(
+        sentences[3].capitalizeAllWordsFirstLetter(),
+        "This Is An Example Sentence With A Number 5 And A Special Character #",
+      );
+      expect(
+        sentences[4].capitalizeAllWordsFirstLetter(),
+        "This Is An Example Sentence With A Number 5 And A Special Character # And B Letter C",
+      );
+      expect(
+        sentences[5].capitalizeAllWordsFirstLetter(),
+        "Emm, Lemme Think !",
+      );
+      expect(
+        sentences[6].capitalizeAllWordsFirstLetter(),
+        "Bro, Foo Is A Good Word",
+      );
+      expect(
+        sentences[7].capitalizeAllWordsFirstLetter(),
+        "This Is A Sentence With All Capital Letters",
+      );
       expect(sentences[8].capitalizeAllWordsFirstLetter(), "");
     });
 

@@ -25,9 +25,9 @@ typedef WorkerCallback<T> = Function(T callback);
 
 /// A class for managing a collection of workers and disposing them when necessary.
 class Workers {
-
   /// Constructs a new [Workers] instance with the provided [workers].
   Workers(this.workers);
+
   /// The list of workers to manage.
   final List<Worker> workers;
 
@@ -257,9 +257,9 @@ Worker debounce<T>(
 
 /// A class representing a worker for executing asynchronous tasks with disposal functionality.
 class Worker {
-
   /// Constructs a new [Worker] with the provided [worker] callback and [type].
   Worker(this.worker, this.type);
+
   /// Callback function representing the asynchronous task to be executed.
   final Future<void> Function() worker;
 

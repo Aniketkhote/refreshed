@@ -11,7 +11,9 @@ typedef OnTap = void Function(GetSnackBar snack);
 
 /// Callback signature for hover events on a `GetSnackBar`.
 typedef OnHover = void Function(
-    GetSnackBar snack, SnackHoverState snackHoverState,);
+  GetSnackBar snack,
+  SnackHoverState snackHoverState,
+);
 
 /// Callback signature for status changes on a `GetSnackBar`.
 typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
@@ -20,7 +22,6 @@ typedef SnackbarStatusCallback = void Function(SnackbarStatus? status);
 ///
 /// This widget provides functionality for displaying snack bars with customizable behavior and appearance.
 class GetSnackBar extends StatefulWidget {
-
   /// Constructs a new instance of [GetSnackBar].
   const GetSnackBar({
     super.key,
@@ -63,6 +64,7 @@ class GetSnackBar extends StatefulWidget {
     this.snackbarStatus,
     this.hitTestBehavior,
   });
+
   /// A callback for you to listen to the different Snack status
   final SnackbarStatusCallback? snackbarStatus;
 
@@ -338,7 +340,9 @@ class GetSnackBarState extends State<GetSnackBar>
                     borderRadius: BorderRadius.circular(widget.borderRadius),
                     child: BackdropFilter(
                       filter: ImageFilter.blur(
-                          sigmaX: widget.barBlur, sigmaY: widget.barBlur,),
+                        sigmaX: widget.barBlur,
+                        sigmaY: widget.barBlur,
+                      ),
                       child: Container(
                         height: snapshot.data!.height,
                         width: snapshot.data!.width,
@@ -381,10 +385,11 @@ class GetSnackBarState extends State<GetSnackBar>
     super.initState();
 
     assert(
-        widget.userInputForm != null ||
-            ((widget.message != null && widget.message!.isNotEmpty) ||
-                widget.messageText != null),
-        """You need to either use message[String], or messageText[Widget] or define a userInputForm[Form] in GetSnackbar""",);
+      widget.userInputForm != null ||
+          ((widget.message != null && widget.message!.isNotEmpty) ||
+              widget.messageText != null),
+      """You need to either use message[String], or messageText[Widget] or define a userInputForm[Form] in GetSnackbar""",
+    );
 
     _isTitlePresent = (widget.title != null || widget.titleText != null);
     _messageTopMargin = _isTitlePresent ? 6.0 : widget.padding.top;
@@ -440,7 +445,9 @@ class GetSnackBarState extends State<GetSnackBar>
       widget.progressIndicatorController!.addListener(_updateProgress);
 
       _progressAnimation = CurvedAnimation(
-          curve: Curves.linear, parent: widget.progressIndicatorController!,);
+        curve: Curves.linear,
+        parent: widget.progressIndicatorController!,
+      );
     }
   }
 

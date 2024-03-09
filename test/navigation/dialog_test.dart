@@ -13,7 +13,9 @@ void main() {
     await tester.pump();
 
     Get.defaultDialog(
-        onConfirm: () {}, middleText: "Dialog made in 3 lines of code",);
+      onConfirm: () {},
+      middleText: "Dialog made in 3 lines of code",
+    );
 
     await tester.pumpAndSettle();
 

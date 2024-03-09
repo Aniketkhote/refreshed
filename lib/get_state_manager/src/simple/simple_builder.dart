@@ -29,7 +29,6 @@ typedef ValueBuilderBuilder<T> = Widget Function(
 ///  ),
 ///  ```
 class ValueBuilder<T> extends StatefulWidget {
-
   const ValueBuilder({
     super.key,
     required this.initialValue,
@@ -37,6 +36,7 @@ class ValueBuilder<T> extends StatefulWidget {
     this.onUpdate,
     required this.builder,
   });
+
   /// The initial value of the state managed by the ValueBuilder.
   final T initialValue;
 
@@ -90,7 +90,6 @@ class ObxElement = StatelessElement with StatelessObserverComponent;
 
 /// It's an experimental feature.
 class Observer extends ObxStatelessWidget {
-
   const Observer({super.key, required this.builder});
   final WidgetBuilder builder;
 

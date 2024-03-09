@@ -216,23 +216,25 @@ class ParseRouteTree {
 
       final children = _flattenPage(page);
       for (var child in children) {
-        result.add(_addChild(
-          child,
-          parentPath,
-          [
-            ...parentMiddlewares,
-            if (child.middlewares.isNotEmpty) ...child.middlewares,
-          ],
-          [
-            ...parentBindings,
-            if (child.binding != null) child.binding!,
-            if (child.bindings.isNotEmpty) ...child.bindings,
-          ],
-          [
-            ...parentBinds,
-            if (child.binds.isNotEmpty) ...child.binds,
-          ],
-        ),);
+        result.add(
+          _addChild(
+            child,
+            parentPath,
+            [
+              ...parentMiddlewares,
+              if (child.middlewares.isNotEmpty) ...child.middlewares,
+            ],
+            [
+              ...parentBindings,
+              if (child.binding != null) child.binding!,
+              if (child.bindings.isNotEmpty) ...child.bindings,
+            ],
+            [
+              ...parentBinds,
+              if (child.binds.isNotEmpty) ...child.binds,
+            ],
+          ),
+        );
       }
     }
     return result;

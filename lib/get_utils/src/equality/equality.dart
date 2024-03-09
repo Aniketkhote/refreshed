@@ -99,7 +99,6 @@ class IdentityEquality<E> implements IEquality<E> {
 /// sets, maps, and iterables. It recursively compares the elements of collections
 /// to determine if they are deeply equal.
 class DeepCollectionEquality implements IEquality {
-
   /// Creates a [DeepCollectionEquality].
   ///
   /// By default, this equality does not allow unordered comparisons.
@@ -149,9 +148,9 @@ class DeepCollectionEquality implements IEquality {
 /// Two lists are equal if they have the same length and their elements
 /// at each index are equal.
 class ListEquality<E> implements IEquality<List<E>> {
-  const ListEquality(
-      [IEquality<E> elementEquality = const DefaultEquality<Never>(),])
-      : _elementEquality = elementEquality;
+  const ListEquality([
+    IEquality<E> elementEquality = const DefaultEquality<Never>(),
+  ]) : _elementEquality = elementEquality;
   final IEquality<E> _elementEquality;
 
   @override
@@ -194,10 +193,10 @@ class ListEquality<E> implements IEquality<List<E>> {
 /// Two maps are equal if they have the same number of entries, and if the
 /// entries of the two maps are pairwise equal on both key and value.
 class MapEquality<K, V> implements IEquality<Map<K, V>> {
-  const MapEquality(
-      {IEquality<K> keys = const DefaultEquality<Never>(),
-      IEquality<V> values = const DefaultEquality<Never>(),})
-      : _keyEquality = keys,
+  const MapEquality({
+    IEquality<K> keys = const DefaultEquality<Never>(),
+    IEquality<V> values = const DefaultEquality<Never>(),
+  })  : _keyEquality = keys,
         _valueEquality = values;
   final IEquality<K> _keyEquality;
   final IEquality<V> _valueEquality;
@@ -265,9 +264,9 @@ class _MapEntry {
 ///
 /// Two iterables are equal if they have the same elements in the same order.
 class IterableEquality<E> implements IEquality<Iterable<E>> {
-  const IterableEquality(
-      [IEquality<E> elementEquality = const DefaultEquality<Never>(),])
-      : _elementEquality = elementEquality;
+  const IterableEquality([
+    IEquality<E> elementEquality = const DefaultEquality<Never>(),
+  ]) : _elementEquality = elementEquality;
   final IEquality<E?> _elementEquality;
 
   @override
@@ -319,7 +318,6 @@ class SetEquality<E> extends _UnorderedEquality<E, Set<E>> {
 
 abstract class _UnorderedEquality<E, T extends Iterable<E>>
     implements IEquality<T> {
-
   const _UnorderedEquality(this._elementEquality);
   final IEquality<E> _elementEquality;
 
@@ -328,9 +326,10 @@ abstract class _UnorderedEquality<E, T extends Iterable<E>>
     if (identical(elements1, elements2)) return true;
     if (elements1 == null || elements2 == null) return false;
     final counts = HashMap<E, int>(
-        equals: _elementEquality.equals,
-        hashCode: _elementEquality.hash,
-        isValidKey: _elementEquality.isValidKey,);
+      equals: _elementEquality.equals,
+      hashCode: _elementEquality.hash,
+      isValidKey: _elementEquality.isValidKey,
+    );
     var length = 0;
     for (var e in elements1) {
       final count = counts[e] ?? 0;
@@ -367,8 +366,9 @@ abstract class _UnorderedEquality<E, T extends Iterable<E>>
 /// and the elements of one set can be paired with the elements
 /// of the other iterable, so that each pair are equal.
 class UnorderedIterableEquality<E> extends _UnorderedEquality<E, Iterable<E>> {
-  const UnorderedIterableEquality(
-      [super.elementEquality = const DefaultEquality<Never>(),]);
+  const UnorderedIterableEquality([
+    super.elementEquality = const DefaultEquality<Never>(),
+  ]);
 
   @override
   bool isValidKey(Object? o) => o is Iterable<E>;

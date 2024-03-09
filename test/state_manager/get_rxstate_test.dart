@@ -34,15 +34,18 @@ void main() {
                   child: const Text("increment"),
                   onPressed: () => controller.increment(),
                 ),
-                GetX<Controller2>(builder: (controller) {
-                  return Text("lazy ${controller.lazy.value}");
-                },),
+                GetX<Controller2>(
+                  builder: (controller) {
+                    return Text("lazy ${controller.lazy.value}");
+                  },
+                ),
                 GetX<ControllerNonGlobal>(
-                    init: ControllerNonGlobal(),
-                    global: false,
-                    builder: (controller) {
-                      return Text("single ${controller.nonGlobal.value}");
-                    },),
+                  init: ControllerNonGlobal(),
+                  global: false,
+                  builder: (controller) {
+                    return Text("single ${controller.nonGlobal.value}");
+                  },
+                ),
               ],
             );
           },

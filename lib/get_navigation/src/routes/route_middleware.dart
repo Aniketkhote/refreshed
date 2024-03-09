@@ -97,7 +97,6 @@ abstract class _RouteMiddleware {
 /// (( [redirect] -> [onPageCalled] -> [onBindingsStart] ->
 /// [onPageBuildStart] -> [onPageBuilt] -> [onPageDispose] ))
 class GetMiddleware implements _RouteMiddleware {
-
   GetMiddleware({this.priority});
   @override
   int? priority = 0;
@@ -183,7 +182,6 @@ class MiddlewareRunner {
 }
 
 class PageRedirect {
-
   PageRedirect({
     this.route,
     this.unknownRoute,
@@ -197,7 +195,10 @@ class PageRedirect {
 
   // redirect all pages that needes redirecting
   GetPageRoute<T> getPageToRoute<T>(
-      GetPage rou, GetPage? unk, BuildContext context,) {
+    GetPage rou,
+    GetPage? unk,
+    BuildContext context,
+  ) {
     while (needRecheck(context)) {}
     final r = (isUnknown ? unk : rou)!;
 

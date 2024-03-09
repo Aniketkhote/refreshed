@@ -28,7 +28,6 @@
 import "package:flutter_test/flutter_test.dart";
 
 class FunctionMatcher<T> extends CustomMatcher {
-
   FunctionMatcher(String name, this._feature, matcher)
       : super("`$name`:", "`$name`", matcher);
   final Object Function(T value) _feature;
@@ -38,11 +37,13 @@ class FunctionMatcher<T> extends CustomMatcher {
 }
 
 class HavingMatcher<T> implements TypeMatcher<T> {
-
-  HavingMatcher(TypeMatcher<T> parent, String description,
-      Object Function(T) feature, dynamic matcher,
-      [Iterable<FunctionMatcher<T>>? existing,])
-      : _parent = parent,
+  HavingMatcher(
+    TypeMatcher<T> parent,
+    String description,
+    Object Function(T) feature,
+    dynamic matcher, [
+    Iterable<FunctionMatcher<T>>? existing,
+  ])  : _parent = parent,
         _functionMatchers = [
           ...?existing,
           FunctionMatcher<T>(description, feature, matcher),
@@ -52,7 +53,10 @@ class HavingMatcher<T> implements TypeMatcher<T> {
 
   @override
   TypeMatcher<T> having(
-          Object Function(T) feature, String description, dynamic matcher,) =>
+    Object Function(T) feature,
+    String description,
+    dynamic matcher,
+  ) =>
       HavingMatcher(_parent, description, feature, matcher, _functionMatchers);
 
   @override
@@ -75,7 +79,11 @@ class HavingMatcher<T> implements TypeMatcher<T> {
   ) {
     final matcher = matchState["matcher"] as Matcher;
     matcher.describeMismatch(
-        item, mismatchDescription, matchState["state"] as Map, verbose,);
+      item,
+      mismatchDescription,
+      matchState["state"] as Map,
+      verbose,
+    );
     return mismatchDescription;
   }
 
@@ -91,7 +99,10 @@ class TypeMatcher<T> extends Matcher {
   const TypeMatcher();
 
   TypeMatcher<T> having(
-          Object Function(T) feature, String description, dynamic matcher,) =>
+    Object Function(T) feature,
+    String description,
+    dynamic matcher,
+  ) =>
       HavingMatcher(this, description, feature, matcher);
 
   @override

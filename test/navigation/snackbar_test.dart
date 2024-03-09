@@ -82,9 +82,13 @@ void main() {
           child: const Text("Open Snackbar"),
           onPressed: () {
             Get.rawSnackbar(
-                messageText: messageOne, duration: const Duration(seconds: 1),);
+              messageText: messageOne,
+              duration: const Duration(seconds: 1),
+            );
             Get.rawSnackbar(
-                messageText: messageTwo, duration: const Duration(seconds: 1),);
+              messageText: messageTwo,
+              duration: const Duration(seconds: 1),
+            );
           },
         ),
       ),
@@ -119,29 +123,31 @@ void main() {
       dismissDirection: dismissDirection,
     );
 
-    await tester.pumpWidget(GetMaterialApp(
-      home: Scaffold(
-        body: Builder(
-          builder: (context) {
-            return Column(
-              children: <Widget>[
-                GestureDetector(
-                  key: snackBarTapTarget,
-                  onTap: () {
-                    Get.showSnackbar(getBar);
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: const SizedBox(
-                    height: 100.0,
-                    width: 100.0,
+    await tester.pumpWidget(
+      GetMaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (context) {
+              return Column(
+                children: <Widget>[
+                  GestureDetector(
+                    key: snackBarTapTarget,
+                    onTap: () {
+                      Get.showSnackbar(getBar);
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: const SizedBox(
+                      height: 100.0,
+                      width: 100.0,
+                    ),
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ),
-    ),);
+    );
 
     await tester.pump();
 
@@ -170,38 +176,40 @@ void main() {
 
     late final SnackbarController getBarController;
 
-    await tester.pumpWidget(GetMaterialApp(
-      home: Scaffold(
-        body: Builder(
-          builder: (context) {
-            return Column(
-              children: <Widget>[
-                GestureDetector(
-                  key: snackBarTapTarget,
-                  onTap: () {
-                    getBar = GetSnackBar(
-                      message: "bar1",
-                      onTap: (_) {
-                        counter++;
-                      },
-                      duration: const Duration(seconds: 2),
-                      isDismissible: true,
-                      dismissDirection: dismissDirection,
-                    );
-                    getBarController = Get.showSnackbar(getBar);
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: const SizedBox(
-                    height: 100.0,
-                    width: 100.0,
+    await tester.pumpWidget(
+      GetMaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (context) {
+              return Column(
+                children: <Widget>[
+                  GestureDetector(
+                    key: snackBarTapTarget,
+                    onTap: () {
+                      getBar = GetSnackBar(
+                        message: "bar1",
+                        onTap: (_) {
+                          counter++;
+                        },
+                        duration: const Duration(seconds: 2),
+                        isDismissible: true,
+                        dismissDirection: dismissDirection,
+                      );
+                      getBarController = Get.showSnackbar(getBar);
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: const SizedBox(
+                      height: 100.0,
+                      width: 100.0,
+                    ),
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ),
-    ),);
+    );
 
     await tester.pumpAndSettle();
 

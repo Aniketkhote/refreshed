@@ -11,7 +11,6 @@ import "package:refreshed/get_state_manager/src/simple/get_state.dart";
 import "package:refreshed/get_navigation/get_navigation.dart";
 
 class GetPage<T> extends Page<T> {
-
   GetPage({
     required this.name,
     required this.page,
@@ -45,8 +44,10 @@ class GetPage<T> extends Page<T> {
     this.inheritParentPath = true,
     LocalKey? key,
   })  : path = _nameToRegex(name),
-        assert(name.startsWith("/"),
-            "It is necessary to start route name [$name] with a slash: /$name",),
+        assert(
+          name.startsWith("/"),
+          "It is necessary to start route name [$name] with a slash: /$name",
+        ),
         super(
           key: key ?? ValueKey(name),
           name: name,

@@ -198,10 +198,11 @@ class Notifier {
 }
 
 class NotifyData {
-  const NotifyData(
-      {required this.updater,
-      required this.disposers,
-      this.throwException = true,});
+  const NotifyData({
+    required this.updater,
+    required this.disposers,
+    this.throwException = true,
+  });
   final GetStateUpdate updater;
   final List<VoidCallback> disposers;
   final bool throwException;

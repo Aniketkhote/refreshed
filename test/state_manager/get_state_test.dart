@@ -23,22 +23,26 @@ void main() {
                 onPressed: () => controller.incrementWithId(),
               ),
               GetBuilder<Controller>(
-                  id: "1",
-                  didChangeDependencies: (_) {
-                    // print("didChangeDependencies called");
-                  },
-                  builder: (controller) {
-                    return Text("id ${controller.counter}");
-                  },),
-              GetBuilder<Controller2>(builder: (controller) {
-                return Text("lazy ${controller.test}");
-              },),
+                id: "1",
+                didChangeDependencies: (_) {
+                  // print("didChangeDependencies called");
+                },
+                builder: (controller) {
+                  return Text("id ${controller.counter}");
+                },
+              ),
+              GetBuilder<Controller2>(
+                builder: (controller) {
+                  return Text("lazy ${controller.test}");
+                },
+              ),
               GetBuilder<ControllerNonGlobal>(
-                  init: ControllerNonGlobal(),
-                  global: false,
-                  builder: (controller) {
-                    return Text("single ${controller.nonGlobal}");
-                  },),
+                init: ControllerNonGlobal(),
+                global: false,
+                builder: (controller) {
+                  return Text("single ${controller.nonGlobal}");
+                },
+              ),
             ],
           ),
         ),

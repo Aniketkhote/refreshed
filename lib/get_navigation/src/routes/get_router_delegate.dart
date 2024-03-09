@@ -13,7 +13,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
         ChangeNotifier,
         PopNavigatorRouterDelegateMixin<RouteDecoder>,
         IGetNavigation {
-
   GetDelegate({
     GetPage? notFoundRoute,
     this.navigatorObservers,
@@ -170,7 +169,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   Future<void> _pushHistory(RouteDecoder config) async {
     if (config.route!.preventDuplicates) {
       final originalEntryIndex = _activePages.indexWhere(
-          (element) => element.pageSettings?.name == config.pageSettings?.name,);
+        (element) => element.pageSettings?.name == config.pageSettings?.name,
+      );
       if (originalEntryIndex >= 0) {
         switch (preventDuplicateHandlingMode) {
           case PreventDuplicateHandlingMode.popUntilOriginalRoute:
@@ -594,8 +594,11 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<R?> backAndtoNamed<T, R>(String page,
-      {T? result, Object? arguments,}) async {
+  Future<R?> backAndtoNamed<T, R>(
+    String page, {
+    T? result,
+    Object? arguments,
+  }) async {
     final args = _buildPageSettings(page, arguments);
     final route = _getRouteDecoder<R>(args);
     if (route == null) return null;
@@ -685,7 +688,9 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
   @protected
   RouteDecoder _configureRouterDecoder<T>(
-      RouteDecoder decoder, PageSettings arguments,) {
+    RouteDecoder decoder,
+    PageSettings arguments,
+  ) {
     final parameters =
         arguments.params.isEmpty ? arguments.query : arguments.params;
     arguments.params.addAll(arguments.query);

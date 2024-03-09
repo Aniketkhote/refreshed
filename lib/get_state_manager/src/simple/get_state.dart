@@ -13,7 +13,8 @@ typedef InitBuilder<T> = T Function();
 
 /// Signature for a function that builds a widget with a controller of type `T`.
 typedef GetControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
-    T controller,);
+  T controller,
+);
 
 /// Extension methods for accessing state in the context of a widget build.
 extension StateAccessExt on BuildContext {
@@ -35,7 +36,6 @@ extension StateAccessExt on BuildContext {
 }
 
 class GetBuilder<T extends GetxController> extends StatelessWidget {
-
   const GetBuilder({
     super.key,
     this.init,
@@ -80,10 +80,12 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
       lazy: false,
       didChangeDependencies: didChangeDependencies,
       didUpdateWidget: didUpdateWidget,
-      child: Builder(builder: (BuildContext context) {
-        final controller = Bind.of<T>(context, rebuild: true);
-        return builder(controller);
-      },),
+      child: Builder(
+        builder: (BuildContext context) {
+          final controller = Bind.of<T>(context, rebuild: true);
+          return builder(controller);
+        },
+      ),
     );
     // return widget.builder(controller!);
   }
@@ -186,8 +188,11 @@ abstract class Bind<T> extends StatelessWidget {
     );
   }
 
-  static Bind create<S>(InstanceCreateBuilderCallback<S> builder,
-      {String? tag, bool permanent = true,}) {
+  static Bind create<S>(
+    InstanceCreateBuilderCallback<S> builder, {
+    String? tag,
+    bool permanent = true,
+  }) {
     return _FactoryBind<S>(
       create: builder,
       tag: tag,
@@ -195,8 +200,11 @@ abstract class Bind<T> extends StatelessWidget {
     );
   }
 
-  static Bind spawn<S>(InstanceBuilderCallback<S> builder,
-      {String? tag, bool permanent = true,}) {
+  static Bind spawn<S>(
+    InstanceBuilderCallback<S> builder, {
+    String? tag,
+    bool permanent = true,
+  }) {
     Get.spawn<S>(builder, tag: tag, permanent: permanent);
     return _FactoryBind<S>(
       tag: tag,
@@ -229,8 +237,11 @@ abstract class Bind<T> extends StatelessWidget {
     Get.put(child, tag: tag, permanent: permanent);
   }
 
-  static void lazyReplace<P>(InstanceBuilderCallback<P> builder,
-      {String? tag, bool? fenix,}) {
+  static void lazyReplace<P>(
+    InstanceBuilderCallback<P> builder, {
+    String? tag,
+    bool? fenix,
+  }) {
     final InstanceInfo info = Get.getInstanceInfo<P>(tag: tag);
     final bool permanent = info.isPermanent ?? false;
     delete<P>(tag: tag, force: permanent);
@@ -269,7 +280,6 @@ abstract class Bind<T> extends StatelessWidget {
 }
 
 class _FactoryBind<T> extends Bind<T> {
-
   const _FactoryBind({
     super.key,
     this.child,
@@ -354,7 +364,6 @@ class _FactoryBind<T> extends Bind<T> {
 }
 
 class Binds extends StatelessWidget {
-
   Binds({
     super.key,
     required this.binds,
@@ -608,9 +617,9 @@ class BindElement<T> extends InheritedElement {
 }
 
 class BindError<T> extends Error {
-
   /// Creates a [BindError]
   BindError({required this.controller, required this.tag});
+
   /// The type of the class the user tried to retrieve
   final T controller;
   final String? tag;

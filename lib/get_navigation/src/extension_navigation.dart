@@ -81,12 +81,17 @@ extension ExtensionDialog on GetInterface {
 
     final ThemeData theme = Theme.of(context!);
     return generalDialog<T>(
-      pageBuilder: (BuildContext buildContext, Animation<double> animation,
-          Animation<double> secondaryAnimation,) {
+      pageBuilder: (
+        BuildContext buildContext,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+      ) {
         final Widget pageChild = widget;
-        Widget dialog = Builder(builder: (BuildContext context) {
-          return Theme(data: theme, child: pageChild);
-        },);
+        Widget dialog = Builder(
+          builder: (BuildContext context) {
+            return Theme(data: theme, child: pageChild);
+          },
+        );
         if (useSafeArea) {
           dialog = SafeArea(child: dialog);
         }
@@ -96,8 +101,12 @@ extension ExtensionDialog on GetInterface {
       barrierLabel: MaterialLocalizations.of(context!).modalBarrierDismissLabel,
       barrierColor: barrierColor ?? Colors.black54,
       transitionDuration: transitionDuration ?? defaultDialogTransitionDuration,
-      transitionBuilder: (BuildContext context, Animation<double> animation,
-          Animation<double> secondaryAnimation, Widget child,) {
+      transitionBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+        Widget child,
+      ) {
         return FadeTransition(
           opacity: CurvedAnimation(
             parent: animation,
@@ -114,16 +123,17 @@ extension ExtensionDialog on GetInterface {
   }
 
   /// Api from showGeneralDialog with no context
-  Future<T?> generalDialog<T>(
-      {required RoutePageBuilder pageBuilder,
-      bool barrierDismissible = false,
-      String? barrierLabel,
-      Color barrierColor = const Color(0x80000000),
-      Duration transitionDuration = const Duration(milliseconds: 200),
-      RouteTransitionsBuilder? transitionBuilder,
-      GlobalKey<NavigatorState>? navigatorKey,
-      RouteSettings? routeSettings,
-      String? id,}) {
+  Future<T?> generalDialog<T>({
+    required RoutePageBuilder pageBuilder,
+    bool barrierDismissible = false,
+    String? barrierLabel,
+    Color barrierColor = const Color(0x80000000),
+    Duration transitionDuration = const Duration(milliseconds: 200),
+    RouteTransitionsBuilder? transitionBuilder,
+    GlobalKey<NavigatorState>? navigatorKey,
+    RouteSettings? routeSettings,
+    String? id,
+  }) {
     assert(!barrierDismissible || barrierLabel != null);
     final GlobalKey<NavigatorState>? key =
         navigatorKey ?? Get.nestedKey(id)?.navigatorKey;
@@ -187,30 +197,34 @@ extension ExtensionDialog on GetInterface {
       actions.add(cancel);
     } else {
       if (leanCancel) {
-        actions.add(TextButton(
-          style: TextButton.styleFrom(
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            shape: RoundedRectangleBorder(
-              side: BorderSide(
-                  color: buttonColor ?? theme.colorScheme.secondary, width: 2,),
-              borderRadius: BorderRadius.circular(radius),
+        actions.add(
+          TextButton(
+            style: TextButton.styleFrom(
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: buttonColor ?? theme.colorScheme.secondary,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(radius),
+              ),
+            ),
+            onPressed: () {
+              if (onCancel == null) {
+                closeAllDialogs();
+              } else {
+                onCancel.call();
+              }
+            },
+            child: Text(
+              textCancel ?? "Cancel",
+              style: TextStyle(
+                color: cancelTextColor ?? theme.colorScheme.secondary,
+              ),
             ),
           ),
-          onPressed: () {
-            if (onCancel == null) {
-              closeAllDialogs();
-            } else {
-              onCancel.call();
-            }
-          },
-          child: Text(
-            textCancel ?? "Cancel",
-            style: TextStyle(
-              color: cancelTextColor ?? theme.colorScheme.secondary,
-            ),
-          ),
-        ),);
+        );
       }
     }
     if (confirm != null) {
@@ -428,56 +442,57 @@ extension ExtensionSnackbar on GetInterface {
     Form? userInputForm,
   }) {
     final GetSnackBar getSnackBar = GetSnackBar(
-        snackbarStatus: snackbarStatus,
-        titleText: titleText ??
-            Text(
-              title,
-              style: TextStyle(
-                color: colorText ?? iconColor ?? Colors.black,
-                fontWeight: FontWeight.w800,
-                fontSize: 16,
-              ),
+      snackbarStatus: snackbarStatus,
+      titleText: titleText ??
+          Text(
+            title,
+            style: TextStyle(
+              color: colorText ?? iconColor ?? Colors.black,
+              fontWeight: FontWeight.w800,
+              fontSize: 16,
             ),
-        messageText: messageText ??
-            Text(
-              message,
-              style: TextStyle(
-                color: colorText ?? iconColor ?? Colors.black,
-                fontWeight: FontWeight.w300,
-                fontSize: 14,
-              ),
+          ),
+      messageText: messageText ??
+          Text(
+            message,
+            style: TextStyle(
+              color: colorText ?? iconColor ?? Colors.black,
+              fontWeight: FontWeight.w300,
+              fontSize: 14,
             ),
-        snackPosition: snackPosition ?? SnackPosition.top,
-        borderRadius: borderRadius ?? 15,
-        margin: margin ?? const EdgeInsets.symmetric(horizontal: 10),
-        duration: duration,
-        barBlur: barBlur ?? 7.0,
-        backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
-        icon: icon,
-        shouldIconPulse: shouldIconPulse ?? true,
-        maxWidth: maxWidth,
-        padding: padding ?? const EdgeInsets.all(16),
-        borderColor: borderColor,
-        borderWidth: borderWidth,
-        leftBarIndicatorColor: leftBarIndicatorColor,
-        boxShadows: boxShadows,
-        backgroundGradient: backgroundGradient,
-        mainButton: mainButton,
-        onTap: onTap,
-        onHover: onHover,
-        isDismissible: isDismissible ?? true,
-        dismissDirection: dismissDirection,
-        showProgressIndicator: showProgressIndicator ?? false,
-        progressIndicatorController: progressIndicatorController,
-        progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
-        progressIndicatorValueColor: progressIndicatorValueColor,
-        snackStyle: snackStyle ?? SnackStyle.floating,
-        forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
-        reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
-        animationDuration: animationDuration ?? const Duration(seconds: 1),
-        overlayBlur: overlayBlur ?? 0.0,
-        overlayColor: overlayColor ?? Colors.transparent,
-        userInputForm: userInputForm,);
+          ),
+      snackPosition: snackPosition ?? SnackPosition.top,
+      borderRadius: borderRadius ?? 15,
+      margin: margin ?? const EdgeInsets.symmetric(horizontal: 10),
+      duration: duration,
+      barBlur: barBlur ?? 7.0,
+      backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
+      icon: icon,
+      shouldIconPulse: shouldIconPulse ?? true,
+      maxWidth: maxWidth,
+      padding: padding ?? const EdgeInsets.all(16),
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      leftBarIndicatorColor: leftBarIndicatorColor,
+      boxShadows: boxShadows,
+      backgroundGradient: backgroundGradient,
+      mainButton: mainButton,
+      onTap: onTap,
+      onHover: onHover,
+      isDismissible: isDismissible ?? true,
+      dismissDirection: dismissDirection,
+      showProgressIndicator: showProgressIndicator ?? false,
+      progressIndicatorController: progressIndicatorController,
+      progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
+      progressIndicatorValueColor: progressIndicatorValueColor,
+      snackStyle: snackStyle ?? SnackStyle.floating,
+      forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
+      reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
+      animationDuration: animationDuration ?? const Duration(seconds: 1),
+      overlayBlur: overlayBlur ?? 0.0,
+      overlayColor: overlayColor ?? Colors.transparent,
+      userInputForm: userInputForm,
+    );
 
     final SnackbarController controller = SnackbarController(getSnackBar);
 
@@ -518,23 +533,25 @@ extension GetNavigationExt on GetInterface {
   ///
   /// By default, GetX will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
-  Future<T?>? to<T extends Object?>(Widget Function() page,
-      {bool? opaque,
-      Transition? transition,
-      Curve? curve,
-      Duration? duration,
-      String? id,
-      String? routeName,
-      bool fullscreenDialog = false,
-      dynamic arguments,
-      List<BindingsInterface> bindings = const <BindingsInterface>[],
-      bool preventDuplicates = true,
-      bool? popGesture,
-      bool showCupertinoParallax = true,
-      double Function(BuildContext context)? gestureWidth,
-      bool rebuildStack = true,
-      PreventDuplicateHandlingMode preventDuplicateHandlingMode =
-          PreventDuplicateHandlingMode.reorderRoutes,}) {
+  Future<T?>? to<T extends Object?>(
+    Widget Function() page, {
+    bool? opaque,
+    Transition? transition,
+    Curve? curve,
+    Duration? duration,
+    String? id,
+    String? routeName,
+    bool fullscreenDialog = false,
+    dynamic arguments,
+    List<BindingsInterface> bindings = const <BindingsInterface>[],
+    bool preventDuplicates = true,
+    bool? popGesture,
+    bool showCupertinoParallax = true,
+    double Function(BuildContext context)? gestureWidth,
+    bool rebuildStack = true,
+    PreventDuplicateHandlingMode preventDuplicateHandlingMode =
+        PreventDuplicateHandlingMode.reorderRoutes,
+  }) {
     return searchDelegate(id).to(
       page,
       opaque: opaque,
@@ -944,9 +961,12 @@ extension GetNavigationExt on GetInterface {
     String? id,
     T? result,
   }) {
-    void handleClose(bool closeCondition, Function closeAllFunction,
-        Function closeSingleFunction,
-        [bool? isOpenCondition,]) {
+    void handleClose(
+      bool closeCondition,
+      Function closeAllFunction,
+      Function closeSingleFunction, [
+      bool? isOpenCondition,
+    ]) {
       if (closeCondition) {
         if (closeAll) {
           closeAllFunction();
@@ -958,8 +978,12 @@ extension GetNavigationExt on GetInterface {
 
     handleClose(closeSnackbar, closeAllSnackbars, closeCurrentSnackbar);
     handleClose(closeDialog, closeAllDialogs, closeOverlay, isDialogOpen);
-    handleClose(closeBottomSheet, closeAllBottomSheets, closeOverlay,
-        isBottomSheetOpen,);
+    handleClose(
+      closeBottomSheet,
+      closeAllBottomSheets,
+      closeOverlay,
+      isBottomSheetOpen,
+    );
   }
 
   /// **Navigation.pushReplacement()** shortcut .<br><br>
@@ -1381,24 +1405,28 @@ extension OverlayExt on GetInterface {
     final NavigatorState navigatorState = Navigator.of(Get.overlayContext!);
     final OverlayState overlayState = navigatorState.overlay!;
 
-    final OverlayEntry overlayEntryOpacity =
-        OverlayEntry(builder: (BuildContext context) {
-      return Opacity(
+    final OverlayEntry overlayEntryOpacity = OverlayEntry(
+      builder: (BuildContext context) {
+        return Opacity(
           opacity: opacity,
           child: Container(
             color: opacityColor,
-          ),);
-    },);
-    final OverlayEntry overlayEntryLoader =
-        OverlayEntry(builder: (BuildContext context) {
-      return loadingWidget ??
-          const Center(
+          ),
+        );
+      },
+    );
+    final OverlayEntry overlayEntryLoader = OverlayEntry(
+      builder: (BuildContext context) {
+        return loadingWidget ??
+            const Center(
               child: SizedBox(
-            height: 90,
-            width: 90,
-            child: Text("Loading..."),
-          ),);
-    },);
+                height: 90,
+                width: 90,
+                child: Text("Loading..."),
+              ),
+            );
+      },
+    );
     overlayState.insert(overlayEntryOpacity);
     overlayState.insert(overlayEntryLoader);
 

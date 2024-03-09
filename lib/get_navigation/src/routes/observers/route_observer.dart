@@ -30,7 +30,6 @@ String? _extractRouteName(Route? route) {
 }
 
 class GetObserver extends NavigatorObserver {
-
   GetObserver([this.routing, this._routeSend]);
   final Function(Routing?)? routing;
 
@@ -190,7 +189,6 @@ class GetObserver extends NavigatorObserver {
 
 //TODO: Use copyWith, and remove mutate variables
 class Routing {
-
   Routing({
     this.current = "",
     this.previous = "",
@@ -219,7 +217,6 @@ class Routing {
 
 /// This is basically a util for rules about 'what a route is'
 class _RouteData {
-
   _RouteData({
     required this.name,
     required this.isGetPageRoute,

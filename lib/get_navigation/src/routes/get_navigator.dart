@@ -3,7 +3,6 @@ import "package:flutter/widgets.dart";
 import "package:refreshed/refreshed.dart";
 
 class GetNavigator extends Navigator {
-
   GetNavigator({
     super.key,
     bool Function(Route<dynamic>, dynamic)? onPopPage,

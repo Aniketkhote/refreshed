@@ -1,3 +1,7 @@
+## 2.0.1
+
+- Fixed dart formatting issues.
+
 ## 2.0.0
 
 - Removed the `int`, `double`, `num` and `duration` extensions, as they are no longer necessary. Instead, users can utilize the `Quickly` package for similar functionalities.

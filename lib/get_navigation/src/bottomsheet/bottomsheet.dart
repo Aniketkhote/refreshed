@@ -119,8 +119,11 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   }
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation,) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     final sheetTheme =
         theme?.bottomSheetTheme ?? Theme.of(context).bottomSheetTheme;
     // By definition, the bottom sheet is aligned to the bottom of the page
@@ -212,7 +215,9 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
           child: ClipRect(
             child: CustomSingleChildLayout(
               delegate: _GetModalBottomSheetLayout(
-                  animationValue, widget.isScrollControlled,),
+                animationValue,
+                widget.isScrollControlled,
+              ),
               child: widget.isPersistent == false
                   ? BottomSheet(
                       animationController: widget.route!._animationController,
@@ -317,7 +322,9 @@ class _GetPerModalBottomSheetState<T>
           child: ClipRect(
             child: CustomSingleChildLayout(
               delegate: _GetModalBottomSheetLayout(
-                  animationValue, widget.isScrollControlled,),
+                animationValue,
+                widget.isScrollControlled,
+              ),
               child: widget.isPersistent == false
                   ? BottomSheet(
                       animationController: widget.route!._animationController,

@@ -102,7 +102,6 @@ void main() {
 }
 
 class Todo {
-
   Todo({
     required this.id,
     required this.title,

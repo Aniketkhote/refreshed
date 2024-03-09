@@ -12,8 +12,8 @@ import "package:refreshed/refreshed.dart";
 /// It provides methods to report route changes, link dependencies to routes,
 /// and dispose of instances when routes are removed from memory.
 class RouterReportManager<T> {
-
   RouterReportManager._();
+
   /// Holds a reference to the routes and their associated dependencies.
   final Map<T?, List<String>> _routesKey = {};
 

@@ -5,12 +5,13 @@ import "package:flutter/material.dart";
 class LeftToRightFadeTransition {
   /// Builds the transition animation.
   Widget buildTransitions(
-      BuildContext context,
-      Curve? curve,
-      Alignment? alignment,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,) {
+    BuildContext context,
+    Curve? curve,
+    Alignment? alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(-1.0, 0.0),
@@ -19,11 +20,12 @@ class LeftToRightFadeTransition {
       child: FadeTransition(
         opacity: animation,
         child: SlideTransition(
-            position: Tween<Offset>(
-              begin: Offset.zero,
-              end: const Offset(1.0, 0.0),
-            ).animate(secondaryAnimation),
-            child: child,),
+          position: Tween<Offset>(
+            begin: Offset.zero,
+            end: const Offset(1.0, 0.0),
+          ).animate(secondaryAnimation),
+          child: child,
+        ),
       ),
     );
   }
@@ -33,12 +35,13 @@ class LeftToRightFadeTransition {
 class RightToLeftFadeTransition {
   /// Builds the transition animation.
   Widget buildTransitions(
-      BuildContext context,
-      Curve? curve,
-      Alignment? alignment,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,) {
+    BuildContext context,
+    Curve? curve,
+    Alignment? alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(1.0, 0.0),
@@ -47,11 +50,12 @@ class RightToLeftFadeTransition {
       child: FadeTransition(
         opacity: animation,
         child: SlideTransition(
-            position: Tween<Offset>(
-              begin: Offset.zero,
-              end: const Offset(-1.0, 0.0),
-            ).animate(secondaryAnimation),
-            child: child,),
+          position: Tween<Offset>(
+            begin: Offset.zero,
+            end: const Offset(-1.0, 0.0),
+          ).animate(secondaryAnimation),
+          child: child,
+        ),
       ),
     );
   }
@@ -61,12 +65,13 @@ class RightToLeftFadeTransition {
 class NoTransition {
   /// Builds the transition animation.
   Widget buildTransitions(
-      BuildContext context,
-      Curve curve,
-      Alignment alignment,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,) {
+    BuildContext context,
+    Curve curve,
+    Alignment alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return child;
   }
 }
@@ -75,12 +80,13 @@ class NoTransition {
 class FadeInTransition {
   /// Builds the transition animation.
   Widget buildTransitions(
-      BuildContext context,
-      Curve? curve,
-      Alignment? alignment,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,) {
+    BuildContext context,
+    Curve? curve,
+    Alignment? alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return FadeTransition(opacity: animation, child: child);
   }
 }
@@ -89,12 +95,13 @@ class FadeInTransition {
 class SlideDownTransition {
   /// Builds the transition animation.
   Widget buildTransitions(
-      BuildContext context,
-      Curve? curve,
-      Alignment? alignment,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,) {
+    BuildContext context,
+    Curve? curve,
+    Alignment? alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(0.0, 1.0),
@@ -109,12 +116,13 @@ class SlideDownTransition {
 class SlideLeftTransition {
   /// Builds the transition animation.
   Widget buildTransitions(
-      BuildContext context,
-      Curve? curve,
-      Alignment? alignment,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,) {
+    BuildContext context,
+    Curve? curve,
+    Alignment? alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(-1.0, 0.0),
@@ -129,12 +137,13 @@ class SlideLeftTransition {
 class SlideRightTransition {
   /// Builds the transition animation.
   Widget buildTransitions(
-      BuildContext context,
-      Curve? curve,
-      Alignment? alignment,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,) {
+    BuildContext context,
+    Curve? curve,
+    Alignment? alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(1.0, 0.0),
@@ -149,12 +158,13 @@ class SlideRightTransition {
 class SlideTopTransition {
   /// Builds the transition animation.
   Widget buildTransitions(
-      BuildContext context,
-      Curve? curve,
-      Alignment? alignment,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,) {
+    BuildContext context,
+    Curve? curve,
+    Alignment? alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return SlideTransition(
       position: Tween<Offset>(
         begin: const Offset(0.0, -1.0),
@@ -169,12 +179,13 @@ class SlideTopTransition {
 class ZoomInTransition {
   /// Builds the transition animation.
   Widget buildTransitions(
-      BuildContext context,
-      Curve? curve,
-      Alignment? alignment,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,) {
+    BuildContext context,
+    Curve? curve,
+    Alignment? alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return ScaleTransition(
       scale: animation,
       child: child,
@@ -186,12 +197,13 @@ class ZoomInTransition {
 class SizeTransitions {
   /// Builds the transition animation.
   Widget buildTransitions(
-      BuildContext context,
-      Curve curve,
-      Alignment? alignment,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,) {
+    BuildContext context,
+    Curve curve,
+    Alignment? alignment,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return Align(
       alignment: Alignment.center,
       child: SizeTransition(

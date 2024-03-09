@@ -4,14 +4,14 @@ import "package:flutter/widgets.dart";
 import "package:refreshed/refreshed.dart";
 
 class GetInformationParser extends RouteInformationParser<RouteDecoder> {
-
   GetInformationParser({
     required this.initialRoute,
   }) {
     Get.log("GetInformationParser is created !");
   }
-  factory GetInformationParser.createInformationParser(
-      {String initialRoute = "/",}) {
+  factory GetInformationParser.createInformationParser({
+    String initialRoute = "/",
+  }) {
     return GetInformationParser(initialRoute: initialRoute);
   }
 

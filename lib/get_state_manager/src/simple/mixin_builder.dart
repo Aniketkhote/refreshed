@@ -9,7 +9,6 @@ import "package:refreshed/get_state_manager/src/simple/get_state.dart";
 /// This widget is a convenience wrapper around GetBuilder and Obx widgets from the Get package,
 /// providing an easy way to integrate GetX controllers with mixin functionality into the widget tree.
 class MixinBuilder<T extends GetxController> extends StatelessWidget {
-
   /// Creates a MixinBuilder widget.
   const MixinBuilder({
     super.key,
@@ -23,6 +22,7 @@ class MixinBuilder<T extends GetxController> extends StatelessWidget {
     this.didChangeDependencies,
     this.didUpdateWidget,
   });
+
   /// The function that builds the UI component using the provided controller.
   @required
   final Widget Function(T) builder;

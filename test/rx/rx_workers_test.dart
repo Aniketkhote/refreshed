@@ -41,10 +41,14 @@ void main() {
   test("debounce", () async {
     final count = 0.obs;
     int? result = -1;
-    debounce(count, (dynamic _) {
-      // print(_);
-      result = _ as int?;
-    }, time: const Duration(milliseconds: 100),);
+    debounce(
+      count,
+      (dynamic _) {
+        // print(_);
+        result = _ as int?;
+      },
+      time: const Duration(milliseconds: 100),
+    );
 
     count.value++;
     count.value++;
@@ -59,9 +63,13 @@ void main() {
   test("interval", () async {
     final count = 0.obs;
     int? result = -1;
-    interval<int>(count, (v) {
-      result = v;
-    }, time: const Duration(milliseconds: 100),);
+    interval<int>(
+      count,
+      (v) {
+        result = v;
+      },
+      time: const Duration(milliseconds: 100),
+    );
 
     count.value++;
     await Future.delayed(Duration.zero);

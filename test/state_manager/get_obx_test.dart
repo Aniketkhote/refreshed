@@ -10,19 +10,21 @@ void main() {
         home: Column(
           children: [
             Obx(
-              () => Column(children: [
-                Text("Count: ${controller.counter.value}"),
-                Text("Double: ${controller.doubleNum.value}"),
-                Text("String: ${controller.string.value}"),
-                Text("List: ${controller.list.length}"),
-                Text("Bool: ${controller.boolean.value}"),
-                Text("Map: ${controller.map.length}"),
-                TextButton(
-                  onPressed: controller.increment,
-                  child: const Text("increment"),
-                ),
-                Obx(() => Text("Obx: ${controller.map.length}")),
-              ],),
+              () => Column(
+                children: [
+                  Text("Count: ${controller.counter.value}"),
+                  Text("Double: ${controller.doubleNum.value}"),
+                  Text("String: ${controller.string.value}"),
+                  Text("List: ${controller.list.length}"),
+                  Text("Bool: ${controller.boolean.value}"),
+                  Text("Map: ${controller.map.length}"),
+                  TextButton(
+                    onPressed: controller.increment,
+                    child: const Text("increment"),
+                  ),
+                  Obx(() => Text("Obx: ${controller.map.length}")),
+                ],
+              ),
             ),
           ],
         ),

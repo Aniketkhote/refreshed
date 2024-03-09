@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:refreshed/refreshed.dart";
 
 class Wrapper extends StatelessWidget {
-
   const Wrapper({
     super.key,
     this.child,
@@ -33,7 +32,6 @@ class Wrapper extends StatelessWidget {
 }
 
 class WrapperNamed extends StatelessWidget {
-
   const WrapperNamed({
     super.key,
     this.child,

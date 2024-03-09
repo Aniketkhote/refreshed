@@ -94,7 +94,6 @@ class RouteMatcher {
 }
 
 class RouteTreeResult {
-
   RouteTreeResult({
     required this.route,
     required this.matchResult,
@@ -109,12 +108,13 @@ class RouteTreeResult {
 
   RouteTreeResult configure(String page, Object? arguments) {
     return copyWith(
-        route: route?.copyWith(
-      key: ValueKey(page),
-      settings: RouteSettings(name: page, arguments: arguments),
-      completer: Completer(),
-      arguments: arguments,
-    ),);
+      route: route?.copyWith(
+        key: ValueKey(page),
+        settings: RouteSettings(name: page, arguments: arguments),
+        completer: Completer(),
+        arguments: arguments,
+      ),
+    );
   }
 
   RouteTreeResult copyWith({
@@ -155,7 +155,8 @@ class RouteTree {
       child = child.copyWith(middlewares: middlewares, bindings: bindings);
       if (child.inheritParentPath) {
         child = child.copyWith(
-            name: ("${route.path}/${child.path}").replaceAll(r"//", "/"),);
+          name: ("${route.path}/${child.path}").replaceAll(r"//", "/"),
+        );
       }
       addRoute(child);
     }
@@ -187,9 +188,13 @@ class RouteTree {
 
 /// A class representing the result of a route matching operation.
 class MatchResult {
+  MatchResult(
+    this.node,
+    this.parameters,
+    this.currentPath, {
+    this.urlParameters = const {},
+  });
 
-  MatchResult(this.node, this.parameters, this.currentPath,
-      {this.urlParameters = const {},});
   /// The route found that matches the result
   final RouteNode node;
 
@@ -209,7 +214,6 @@ class MatchResult {
 
 // A class representing a node in a routing tree.
 class RouteNode {
-
   RouteNode(this.path, this.originalPath, {this.parent});
   String path;
   String originalPath;

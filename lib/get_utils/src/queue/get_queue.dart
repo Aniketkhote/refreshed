@@ -80,7 +80,6 @@ class GetQueue {
 
 /// Represents an item in the job queue with its associated completer and job function.
 class _Item {
-
   /// Constructs an item with the given completer and job.
   _Item(this.completer, this.job);
   final dynamic completer;

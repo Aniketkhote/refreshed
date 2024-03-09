@@ -4,7 +4,6 @@ import "package:refreshed/refreshed.dart";
 
 class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
     extends StatefulWidget {
-
   RouterOutlet({
     Key? key,
     TDelegate? delegate,
@@ -15,18 +14,19 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
       Iterable<GetPage>? page,
     ) pageBuilder,
   }) : this.builder(
-            builder: (context) {
-              final currentConfig = context.delegate.currentConfiguration as T?;
-              final rDelegate = context.delegate as TDelegate;
-              var picked =
-                  currentConfig == null ? null : pickPages(currentConfig);
-              if (picked?.isEmpty ?? true) {
-                picked = null;
-              }
-              return pageBuilder(context, rDelegate, picked);
-            },
-            delegate: delegate,
-            key: key,);
+          builder: (context) {
+            final currentConfig = context.delegate.currentConfiguration as T?;
+            final rDelegate = context.delegate as TDelegate;
+            var picked =
+                currentConfig == null ? null : pickPages(currentConfig);
+            if (picked?.isEmpty ?? true) {
+              picked = null;
+            }
+            return pageBuilder(context, rDelegate, picked);
+          },
+          delegate: delegate,
+          key: key,
+        );
 
   RouterOutlet.builder({
     super.key,
@@ -205,7 +205,10 @@ extension PagesListExt on List<GetPage> {
 }
 
 typedef NavigatorItemBuilderBuilder = Widget Function(
-    BuildContext context, List<String> routes, int index,);
+  BuildContext context,
+  List<String> routes,
+  int index,
+);
 
 class IndexedRouteBuilder<T> extends StatelessWidget {
   const IndexedRouteBuilder({

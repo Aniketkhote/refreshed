@@ -52,8 +52,11 @@ class GetDialogRoute<T> extends PopupRoute<T> {
   final RouteTransitionsBuilder? _transitionBuilder;
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation,) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     return Semantics(
       scopesRoute: true,
       explicitChildNodes: true,
@@ -62,8 +65,12 @@ class GetDialogRoute<T> extends PopupRoute<T> {
   }
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child,) {
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     if (_transitionBuilder == null) {
       return FadeTransition(
         opacity: CurvedAnimation(
