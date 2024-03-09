@@ -1,9 +1,9 @@
 import "dart:async";
 
-import 'package:refreshed/get_core/src/get_interface.dart';
+import "package:refreshed/get_core/src/get_interface.dart";
 
 /// Extension providing additional loop event methods for GetInterface.
-extension LoopEventsExt on GetInterface {
+extension LoopEventsExtension on GetInterface {
   /// Delays the execution of the given computation until the end of the event loop.
   ///
   /// Useful for ensuring that certain computations are executed after the current event loop has completed.
@@ -15,8 +15,8 @@ extension LoopEventsExt on GetInterface {
   /// });
   /// ```
   Future<T> toEnd<T>(FutureOr<T> Function() computation) async {
-    await Future.delayed(Duration.zero);
-    final val = computation();
+    await Future<T>.delayed(Duration.zero);
+    final FutureOr<T> val = computation();
     return val;
   }
 
@@ -40,11 +40,13 @@ extension LoopEventsExt on GetInterface {
   ///   return true; // Execute the computation immediately
   /// });
   /// ```
-  FutureOr<T> asap<T>(T Function() computation,
-      {bool Function()? condition,}) async {
+  FutureOr<T> asap<T>(
+    T Function() computation, {
+    bool Function()? condition,
+  }) async {
     T val;
     if (condition == null || !condition()) {
-      await Future.delayed(Duration.zero);
+      await Future<T>.delayed(Duration.zero);
       val = computation();
     } else {
       val = computation();

@@ -1,7 +1,7 @@
-import 'package:refreshed/get_utils/src/get_utils/get_utils.dart';
+import "package:refreshed/get_utils/src/get_utils/get_utils.dart";
 
 /// Extension on dynamic to provide utility methods for dynamic objects.
-extension GetDynamicUtils on dynamic {
+extension DynamicExtension on dynamic {
   /// Checks if the dynamic object is null, empty, or consists only of whitespace.
   /// Returns `true` if the object is blank; otherwise, returns `false`.
   bool? get isBlank => GetUtils.isBlank(this);
