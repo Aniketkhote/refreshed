@@ -6,6 +6,7 @@
 - Added `BoxConstraints` to the `Get.bottomSheet` method to ensure more precise control and layout constraints.
 - Enhance Dart code to align with linting conventions.
 - Implemented data types to enhance code safety.
+- Added API documentation.
 
 ## 1.5.4
 

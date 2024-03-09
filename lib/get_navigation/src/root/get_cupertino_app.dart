@@ -14,6 +14,7 @@ import "package:refreshed/get_utils/get_utils.dart";
 /// by Refreshed, such as reactive state management, dependency injection, and
 /// navigation management.
 class GetCupertinoApp extends StatelessWidget {
+  /// Constructs a [GetCupertinoApp] widget.
   const GetCupertinoApp({
     super.key,
     this.theme,
@@ -74,6 +75,7 @@ class GetCupertinoApp extends StatelessWidget {
         routerDelegate = null,
         routerConfig = null;
 
+  /// Constructs a [GetCupertinoApp] widget with router configuration.
   const GetCupertinoApp.router({
     super.key,
     this.theme,
@@ -131,60 +133,170 @@ class GetCupertinoApp extends StatelessWidget {
         onUnknownRoute = null,
         routes = null,
         initialRoute = null;
+
+  /// A key to identify the navigator state.
   final GlobalKey<NavigatorState>? navigatorKey;
+
+  /// The default widget to show when the app is first run.
   final Widget? home;
+
+  /// A map of named routes and their corresponding builder functions.
   final Map<String, WidgetBuilder>? routes;
+
+  /// The name of the initial route the app should navigate to.
   final String? initialRoute;
+
+  /// A function that generates routes for navigation.
   final RouteFactory? onGenerateRoute;
+
+  /// A function that generates a list of initial routes for navigation.
   final InitialRouteListFactory? onGenerateInitialRoutes;
+
+  /// A function that generates a route when no other route matches.
   final RouteFactory? onUnknownRoute;
+
+  /// A list of observers for navigation events.
   final List<NavigatorObserver>? navigatorObservers;
+
+  /// A builder function to customize transitions between routes.
   final TransitionBuilder? builder;
+
+  /// The title of the app, displayed in the device's title bar.
   final String title;
+
+  /// A function to generate the app's title dynamically.
   final GenerateAppTitle? onGenerateTitle;
+
+  /// A custom transition configuration for route transitions.
   final CustomTransition? customTransition;
+
+  /// The primary color of the app.
   final Color? color;
+
+  /// A map of translation keys for internationalization.
   final Map<String, Map<String, String>>? translationsKeys;
+
+  /// The translations for internationalization.
   final Translations? translations;
+
+  /// The text direction of the app.
   final TextDirection? textDirection;
+
+  /// The locale to use for localization.
   final Locale? locale;
+
+  /// The fallback locale to use if the specified locale is not available.
   final Locale? fallbackLocale;
+
+  /// The localizations delegates for internationalization.
   final Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates;
+
+  /// The locale list resolution callback for internationalization.
   final LocaleListResolutionCallback? localeListResolutionCallback;
+
+  /// The locale resolution callback for internationalization.
   final LocaleResolutionCallback? localeResolutionCallback;
+
+  /// The supported locales for internationalization.
   final Iterable<Locale> supportedLocales;
+
+  /// Whether to show performance overlay for debugging.
   final bool showPerformanceOverlay;
+
+  /// Whether to show raster cache images checkerboard for debugging.
   final bool checkerboardRasterCacheImages;
+
+  /// Whether to show offscreen layers checkerboard for debugging.
   final bool checkerboardOffscreenLayers;
+
+  /// Whether to show semantics debugger for debugging.
   final bool showSemanticsDebugger;
+
+  /// Whether to show checked mode banner in debug mode.
   final bool debugShowCheckedModeBanner;
+
+  /// The shortcuts for keyboard shortcuts.
   final Map<LogicalKeySet, Intent>? shortcuts;
+
+  /// The high contrast theme for accessibility.
   final ThemeData? highContrastTheme;
+
+  /// The high contrast dark theme for accessibility.
   final ThemeData? highContrastDarkTheme;
+
+  /// The actions for shortcuts.
   final Map<Type, Action<Intent>>? actions;
+
+  /// The callback for routing events.
   final Function(Routing?)? routingCallback;
+
+  /// The default transition animation type.
   final Transition? defaultTransition;
+
+  /// Whether routes should be opaque.
   final bool? opaqueRoute;
+
+  /// The callback for initializing the app.
   final VoidCallback? onInit;
+
+  /// The callback for when the app is ready.
   final VoidCallback? onReady;
+
+  /// The callback for when the app is disposed.
   final VoidCallback? onDispose;
+
+  /// Whether logging is enabled.
   final bool? enableLog;
+
+  /// The callback for writing logs.
   final LogWriterCallback? logWriterCallback;
+
+  /// Whether pop gesture is enabled.
   final bool? popGesture;
+
+  /// The smart management strategy for state management.
   final SmartManagement smartManagement;
+
+  /// The initial bindings for dependency injection.
   final BindingsInterface? initialBinding;
+
+  /// The duration for transition animations.
   final Duration? transitionDuration;
+
+  /// Whether the default global state is enabled.
   final bool? defaultGlobalState;
+
+  /// The pages for navigation.
   final List<GetPage>? getPages;
+
+  /// The unknown route page for navigation.
   final GetPage? unknownRoute;
+
+  /// The route information provider for routing.
   final RouteInformationProvider? routeInformationProvider;
+
+  /// The route information parser for routing.
   final RouteInformationParser<Object>? routeInformationParser;
+
+  /// The router delegate for routing.
   final RouterDelegate<Object>? routerDelegate;
+
+  /// The router configuration for routing.
   final RouterConfig<Object>? routerConfig;
+
+  /// The back button dispatcher for routing.
   final BackButtonDispatcher? backButtonDispatcher;
+
+  /// The Cupertino theme data for styling.
   final CupertinoThemeData? theme;
+
+  /// Whether to use inherited media query.
   final bool useInheritedMediaQuery;
+
+  /// The list of bindings for dependency injection.
   final List<Bind> binds;
+
+  /// The scroll behavior for scrolling.
   final ScrollBehavior? scrollBehavior;
 
   @override
