@@ -1,13 +1,10 @@
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:refreshed/utils.dart";
-
-import "package:refreshed/refreshed.dart" hide ContextExt;
 import "package:refreshed/get_navigation/src/router_report.dart";
+import "package:refreshed/refreshed.dart";
 
 /// A class that holds configuration data for the application.
 class ConfigData {
-
   /// Constructs a new [ConfigData] instance.
   ConfigData({
     required this.routingCallback,
@@ -47,11 +44,12 @@ class ConfigData {
     this.defaultTransitionCurve = Curves.easeOutQuad,
     this.defaultDialogTransitionCurve = Curves.easeOutQuad,
     this.defaultDialogTransitionDuration = const Duration(milliseconds: 300),
-    this.parameters = const {},
+    this.parameters = const <String, String?>{},
     Routing? routing,
     bool? defaultPopGesture,
   })  : defaultPopGesture = defaultPopGesture ?? GetPlatform.isIOS,
         routing = routing ?? Routing();
+
   /// Callback for routing changes.
   final ValueChanged<Routing?>? routingCallback;
 
@@ -215,56 +213,55 @@ class ConfigData {
     Duration? defaultDialogTransitionDuration,
     Routing? routing,
     Map<String, String?>? parameters,
-  }) {
-    return ConfigData(
-      routingCallback: routingCallback ?? this.routingCallback,
-      defaultTransition: defaultTransition ?? this.defaultTransition,
-      onInit: onInit ?? this.onInit,
-      onReady: onReady ?? this.onReady,
-      onDispose: onDispose ?? this.onDispose,
-      enableLog: enableLog ?? this.enableLog,
-      logWriterCallback: logWriterCallback ?? this.logWriterCallback,
-      smartManagement: smartManagement ?? this.smartManagement,
-      binds: binds ?? this.binds,
-      transitionDuration: transitionDuration ?? this.transitionDuration,
-      defaultGlobalState: defaultGlobalState ?? this.defaultGlobalState,
-      getPages: getPages ?? this.getPages,
-      unknownRoute: unknownRoute ?? this.unknownRoute,
-      routeInformationProvider:
-          routeInformationProvider ?? this.routeInformationProvider,
-      routeInformationParser:
-          routeInformationParser ?? this.routeInformationParser,
-      routerDelegate: routerDelegate ?? this.routerDelegate,
-      backButtonDispatcher: backButtonDispatcher ?? this.backButtonDispatcher,
-      navigatorObservers: navigatorObservers ?? this.navigatorObservers,
-      navigatorKey: navigatorKey ?? this.navigatorKey,
-      scaffoldMessengerKey: scaffoldMessengerKey ?? this.scaffoldMessengerKey,
-      translationsKeys: translationsKeys ?? this.translationsKeys,
-      translations: translations ?? this.translations,
-      locale: locale ?? this.locale,
-      fallbackLocale: fallbackLocale ?? this.fallbackLocale,
-      initialRoute: initialRoute ?? this.initialRoute,
-      customTransition: customTransition ?? this.customTransition,
-      home: home ?? this.home,
-      testMode: testMode ?? this.testMode,
-      unikey: unikey ?? this.unikey,
-      theme: theme ?? this.theme,
-      darkTheme: darkTheme ?? this.darkTheme,
-      themeMode: themeMode ?? this.themeMode,
-      defaultPopGesture: defaultPopGesture ?? this.defaultPopGesture,
-      defaultOpaqueRoute: defaultOpaqueRoute ?? this.defaultOpaqueRoute,
-      defaultTransitionDuration:
-          defaultTransitionDuration ?? this.defaultTransitionDuration,
-      defaultTransitionCurve:
-          defaultTransitionCurve ?? this.defaultTransitionCurve,
-      defaultDialogTransitionCurve:
-          defaultDialogTransitionCurve ?? this.defaultDialogTransitionCurve,
-      defaultDialogTransitionDuration: defaultDialogTransitionDuration ??
-          this.defaultDialogTransitionDuration,
-      routing: routing ?? this.routing,
-      parameters: parameters ?? this.parameters,
-    );
-  }
+  }) =>
+      ConfigData(
+        routingCallback: routingCallback ?? this.routingCallback,
+        defaultTransition: defaultTransition ?? this.defaultTransition,
+        onInit: onInit ?? this.onInit,
+        onReady: onReady ?? this.onReady,
+        onDispose: onDispose ?? this.onDispose,
+        enableLog: enableLog ?? this.enableLog,
+        logWriterCallback: logWriterCallback ?? this.logWriterCallback,
+        smartManagement: smartManagement ?? this.smartManagement,
+        binds: binds ?? this.binds,
+        transitionDuration: transitionDuration ?? this.transitionDuration,
+        defaultGlobalState: defaultGlobalState ?? this.defaultGlobalState,
+        getPages: getPages ?? this.getPages,
+        unknownRoute: unknownRoute ?? this.unknownRoute,
+        routeInformationProvider:
+            routeInformationProvider ?? this.routeInformationProvider,
+        routeInformationParser:
+            routeInformationParser ?? this.routeInformationParser,
+        routerDelegate: routerDelegate ?? this.routerDelegate,
+        backButtonDispatcher: backButtonDispatcher ?? this.backButtonDispatcher,
+        navigatorObservers: navigatorObservers ?? this.navigatorObservers,
+        navigatorKey: navigatorKey ?? this.navigatorKey,
+        scaffoldMessengerKey: scaffoldMessengerKey ?? this.scaffoldMessengerKey,
+        translationsKeys: translationsKeys ?? this.translationsKeys,
+        translations: translations ?? this.translations,
+        locale: locale ?? this.locale,
+        fallbackLocale: fallbackLocale ?? this.fallbackLocale,
+        initialRoute: initialRoute ?? this.initialRoute,
+        customTransition: customTransition ?? this.customTransition,
+        home: home ?? this.home,
+        testMode: testMode ?? this.testMode,
+        unikey: unikey ?? this.unikey,
+        theme: theme ?? this.theme,
+        darkTheme: darkTheme ?? this.darkTheme,
+        themeMode: themeMode ?? this.themeMode,
+        defaultPopGesture: defaultPopGesture ?? this.defaultPopGesture,
+        defaultOpaqueRoute: defaultOpaqueRoute ?? this.defaultOpaqueRoute,
+        defaultTransitionDuration:
+            defaultTransitionDuration ?? this.defaultTransitionDuration,
+        defaultTransitionCurve:
+            defaultTransitionCurve ?? this.defaultTransitionCurve,
+        defaultDialogTransitionCurve:
+            defaultDialogTransitionCurve ?? this.defaultDialogTransitionCurve,
+        defaultDialogTransitionDuration: defaultDialogTransitionDuration ??
+            this.defaultDialogTransitionDuration,
+        routing: routing ?? this.routing,
+        parameters: parameters ?? this.parameters,
+      );
 
   @override
   bool operator ==(Object other) {
@@ -315,48 +312,47 @@ class ConfigData {
   }
 
   @override
-  int get hashCode {
-    return routingCallback.hashCode ^
-        defaultTransition.hashCode ^
-        onInit.hashCode ^
-        onReady.hashCode ^
-        onDispose.hashCode ^
-        enableLog.hashCode ^
-        logWriterCallback.hashCode ^
-        smartManagement.hashCode ^
-        binds.hashCode ^
-        transitionDuration.hashCode ^
-        defaultGlobalState.hashCode ^
-        getPages.hashCode ^
-        unknownRoute.hashCode ^
-        routeInformationProvider.hashCode ^
-        routeInformationParser.hashCode ^
-        routerDelegate.hashCode ^
-        backButtonDispatcher.hashCode ^
-        navigatorObservers.hashCode ^
-        navigatorKey.hashCode ^
-        scaffoldMessengerKey.hashCode ^
-        translationsKeys.hashCode ^
-        translations.hashCode ^
-        locale.hashCode ^
-        fallbackLocale.hashCode ^
-        initialRoute.hashCode ^
-        customTransition.hashCode ^
-        home.hashCode ^
-        testMode.hashCode ^
-        unikey.hashCode ^
-        theme.hashCode ^
-        darkTheme.hashCode ^
-        themeMode.hashCode ^
-        defaultPopGesture.hashCode ^
-        defaultOpaqueRoute.hashCode ^
-        defaultTransitionDuration.hashCode ^
-        defaultTransitionCurve.hashCode ^
-        defaultDialogTransitionCurve.hashCode ^
-        defaultDialogTransitionDuration.hashCode ^
-        routing.hashCode ^
-        parameters.hashCode;
-  }
+  int get hashCode =>
+      routingCallback.hashCode ^
+      defaultTransition.hashCode ^
+      onInit.hashCode ^
+      onReady.hashCode ^
+      onDispose.hashCode ^
+      enableLog.hashCode ^
+      logWriterCallback.hashCode ^
+      smartManagement.hashCode ^
+      binds.hashCode ^
+      transitionDuration.hashCode ^
+      defaultGlobalState.hashCode ^
+      getPages.hashCode ^
+      unknownRoute.hashCode ^
+      routeInformationProvider.hashCode ^
+      routeInformationParser.hashCode ^
+      routerDelegate.hashCode ^
+      backButtonDispatcher.hashCode ^
+      navigatorObservers.hashCode ^
+      navigatorKey.hashCode ^
+      scaffoldMessengerKey.hashCode ^
+      translationsKeys.hashCode ^
+      translations.hashCode ^
+      locale.hashCode ^
+      fallbackLocale.hashCode ^
+      initialRoute.hashCode ^
+      customTransition.hashCode ^
+      home.hashCode ^
+      testMode.hashCode ^
+      unikey.hashCode ^
+      theme.hashCode ^
+      darkTheme.hashCode ^
+      themeMode.hashCode ^
+      defaultPopGesture.hashCode ^
+      defaultOpaqueRoute.hashCode ^
+      defaultTransitionDuration.hashCode ^
+      defaultTransitionCurve.hashCode ^
+      defaultDialogTransitionCurve.hashCode ^
+      defaultDialogTransitionDuration.hashCode ^
+      routing.hashCode ^
+      parameters.hashCode;
 }
 
 /// A widget representing the root of a GetX application.
@@ -380,9 +376,9 @@ class GetRoot extends StatefulWidget {
   /// The [config] parameter specifies the configuration data for the application.
   /// The [child] parameter specifies the child widget to be rendered within the application.
   const GetRoot({
-    super.key,
     required this.config,
     required this.child,
+    super.key,
   });
 
   /// Configuration data for the application.
@@ -464,7 +460,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     config.snackBarQueue.disposeControllers();
     RouterReportManager.instance.clearRouteKeys();
     RouterReportManager.dispose();
-    Get.resetInstance(clearRouteBindings: true);
+    Get.resetInstance();
     _controller = null;
     ambiguate(Engine.instance)!.removeObserver(this);
   }
@@ -485,9 +481,9 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     }
 
     if (config.routerDelegate == null) {
-      final newDelegate = GetDelegate.createDelegate(
+      final GetDelegate newDelegate = GetDelegate.createDelegate(
         pages: config.getPages ??
-            [
+            <GetPage>[
               GetPage(
                 name: cleanRouteName("/${config.home.runtimeType}"),
                 page: () => config.home!,
@@ -508,7 +504,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     }
 
     if (config.routeInformationParser == null) {
-      final newRouteInformationParser =
+      final GetInformationParser newRouteInformationParser =
           GetInformationParser.createInformationParser(
         initialRoute: config.initialRoute ??
             config.getPages?.first.name ??
@@ -541,7 +537,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
       config = config.copyWith(defaultTransition: getThemeTransition());
     }
 
-    Future(() => onReady());
+    Future(onReady);
   }
 
   /// Sets parameters for the application.
@@ -567,8 +563,8 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   /// Retrieves the theme transition based on the platform.
 
   Transition? getThemeTransition() {
-    final platform = context.theme.platform;
-    final matchingTransition =
+    final TargetPlatform platform = context.theme.platform;
+    final PageTransitionsBuilder? matchingTransition =
         Get.theme.pageTransitionsTheme.builders[platform];
     switch (matchingTransition) {
       case CupertinoPageTransitionsBuilder():
@@ -587,7 +583,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   @override
   void didChangeLocales(List<Locale>? locales) {
     Get.asap(() {
-      final locale = Get.deviceLocale;
+      final Locale? locale = Get.deviceLocale;
       if (locale != null) {
         Get.updateLocale(locale);
       }
@@ -618,7 +614,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
 
   /// Updates the widget state.
   void update() {
-    context.visitAncestorElements((element) {
+    context.visitAncestorElements((Element element) {
       element.markNeedsBuild();
       return false;
     });
@@ -628,7 +624,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   GlobalKey<NavigatorState> get key => rootDelegate.navigatorKey;
 
   /// Retrieves the root delegate.
-  GetDelegate get rootDelegate => config.routerDelegate as GetDelegate;
+  GetDelegate get rootDelegate => config.routerDelegate! as GetDelegate;
 
   /// Retrieves the route information parser.
   RouteInformationParser<Object> get informationParser =>
@@ -642,7 +638,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     return key;
   }
 
-  Map<String, GetDelegate> keys = {};
+  Map<String, GetDelegate> keys = <String, GetDelegate>{};
 
   /// Nested key management for routing.
   ///
@@ -656,14 +652,12 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
       () => GetDelegate(
         showHashOnUrl: true,
         //debugLabel: 'Getx nested key: ${key.toString()}',
-        pages: RouteDecoder.fromRoute(key).currentChildren ?? [],
+        pages: RouteDecoder.fromRoute(key).currentChildren ?? <GetPage>[],
       ),
     );
     return keys[key];
   }
 
   @override
-  Widget build(BuildContext context) {
-    return widget.child;
-  }
+  Widget build(BuildContext context) => widget.child;
 }
