@@ -1,14 +1,12 @@
 import "dart:async";
 
 import "package:flutter/material.dart";
-
-import 'package:refreshed/get_core/get_core.dart';
-import 'package:refreshed/get_navigation/src/router_report.dart';
-import 'package:refreshed/get_instance/src/lifecycle.dart';
+import "package:refreshed/get_core/get_core.dart";
+import "package:refreshed/get_instance/src/lifecycle.dart";
+import "package:refreshed/get_navigation/src/router_report.dart";
 
 /// A class that holds information about an instance.
 class InstanceInfo {
-
   /// Creates an InstanceInfo object with the given parameters.
   const InstanceInfo({
     required this.isPermanent,
@@ -17,6 +15,7 @@ class InstanceInfo {
     required this.isPrepared,
     required this.isInit,
   });
+
   /// Indicates whether the instance is permanent.
   final bool? isPermanent;
 
@@ -36,9 +35,8 @@ class InstanceInfo {
   final bool? isInit;
 
   @override
-  String toString() {
-    return "InstanceInfo(isPermanent: $isPermanent, isSingleton: $isSingleton, isRegistered: $isRegistered, isPrepared: $isPrepared, isInit: $isInit)";
-  }
+  String toString() =>
+      "InstanceInfo(isPermanent: $isPermanent, isSingleton: $isSingleton, isRegistered: $isRegistered, isPrepared: $isPrepared, isInit: $isInit)";
 }
 
 /// Extension on GetInterface providing a method to reset all registered instances.
@@ -60,12 +58,15 @@ extension ResetInstance on GetInterface {
   }
 }
 
+/// Extension on `GetInterface` providing a convenient method to find instances of type `T`.
 extension Inst on GetInterface {
+  /// Calls `find<T>()` to retrieve an instance of type `T`.
   T call<T>() => find<T>();
 
   /// Holds references to every registered Instance when using
   /// `Get.put()`
-  static final Map<String, _InstanceBuilderFactory> _singl = {};
+  static final Map<String, _InstanceBuilderFactory> _singl =
+      <String, _InstanceBuilderFactory>{};
 
   /// Holds a reference to every registered callback when using
   /// `Get.lazyPut()`
@@ -90,10 +91,11 @@ extension Inst on GetInterface {
     bool permanent = false,
   }) {
     _insert(
-        isSingleton: true,
-        name: tag,
-        permanent: permanent,
-        builder: (() => dependency),);
+      isSingleton: true,
+      name: tag,
+      permanent: permanent,
+      builder: () => dependency,
+    );
     return find<S>(tag: tag);
   }
 
@@ -165,17 +167,17 @@ extension Inst on GetInterface {
 
   /// Injects the Instance [S] builder into the `_singleton` HashMap.
   void _insert<S>({
+    required InstanceBuilderCallback<S> builder,
     bool? isSingleton,
     String? name,
     bool permanent = false,
-    required InstanceBuilderCallback<S> builder,
     bool fenix = false,
   }) {
-    final key = _getKey(S, name);
+    final String key = _getKey(S, name);
 
     _InstanceBuilderFactory<S>? dep;
     if (_singl.containsKey(key)) {
-      final newDep = _singl[key];
+      final _InstanceBuilderFactory? newDep = _singl[key];
       if (newDep == null || !newDep.isDirty) {
         return;
       } else {
@@ -203,11 +205,11 @@ extension Inst on GetInterface {
   /// Returns the instance if not initialized, required for Get.create() to
   /// work properly.
   S? _initDependencies<S>({String? name}) {
-    final key = _getKey(S, name);
-    final isInit = _singl[key]!.isInit;
+    final String key = _getKey(S, name);
+    final bool isInit = _singl[key]!.isInit;
     S? i;
     if (!isInit) {
-      final isSingleton = _singl[key]?.isSingleton ?? false;
+      final bool isSingleton = _singl[key]?.isSingleton ?? false;
       if (isSingleton) {
         _singl[key]!.isInit = true;
       }
@@ -224,7 +226,7 @@ extension Inst on GetInterface {
   }
 
   InstanceInfo getInstanceInfo<S>({String? tag}) {
-    final build = _getDependency<S>(tag: tag);
+    final _InstanceBuilderFactory? build = _getDependency<S>(tag: tag);
 
     return InstanceInfo(
       isPermanent: build?.permanent,
@@ -236,7 +238,7 @@ extension Inst on GetInterface {
   }
 
   _InstanceBuilderFactory? _getDependency<S>({String? tag, String? key}) {
-    final newKey = key ?? _getKey(S, tag);
+    final String newKey = key ?? _getKey(S, tag);
 
     if (!_singl.containsKey(newKey)) {
       Get.log('Instance "$newKey" is not registered.', isError: true);
@@ -247,9 +249,9 @@ extension Inst on GetInterface {
   }
 
   void markAsDirty<S>({String? tag, String? key}) {
-    final newKey = key ?? _getKey(S, tag);
+    final String newKey = key ?? _getKey(S, tag);
     if (_singl.containsKey(newKey)) {
-      final dep = _singl[newKey];
+      final _InstanceBuilderFactory? dep = _singl[newKey];
       if (dep != null && !dep.permanent) {
         dep.isDirty = true;
       }
@@ -258,7 +260,7 @@ extension Inst on GetInterface {
 
   /// Initializes the controller
   S _startController<S>({String? tag}) {
-    final key = _getKey(S, tag);
+    final String key = _getKey(S, tag);
     final i = _singl[key]!.getDependency() as S;
     if (i is GetLifeCycleMixin) {
       i.onStart();
@@ -275,7 +277,7 @@ extension Inst on GetInterface {
   }
 
   S putOrFind<S>(InstanceBuilderCallback<S> dep, {String? tag}) {
-    final key = _getKey(S, tag);
+    final String key = _getKey(S, tag);
 
     if (_singl.containsKey(key)) {
       return _singl[key]!.getDependency() as S;
@@ -290,9 +292,9 @@ extension Inst on GetInterface {
   /// If the registered type <[S]> (or [tag]) is a Controller,
   /// it will initialize it's lifecycle.
   S find<S>({String? tag}) {
-    final key = _getKey(S, tag);
+    final String key = _getKey(S, tag);
     if (isRegistered<S>(tag: tag)) {
-      final dep = _singl[key];
+      final _InstanceBuilderFactory? dep = _singl[key];
       if (dep == null) {
         if (tag == null) {
           throw 'Class "$S" is not registered';
@@ -325,8 +327,8 @@ extension Inst on GetInterface {
   /// with a [child] instance
   /// - [tag] optional, if you use a [tag] to register the Instance.
   void replace<P>(P child, {String? tag}) {
-    final info = getInstanceInfo<P>(tag: tag);
-    final permanent = (info.isPermanent ?? false);
+    final InstanceInfo info = getInstanceInfo<P>(tag: tag);
+    final bool permanent = info.isPermanent ?? false;
     delete<P>(tag: tag, force: permanent);
     put(child, tag: tag, permanent: permanent);
   }
@@ -338,19 +340,21 @@ extension Inst on GetInterface {
   ///
   ///  Note: if fenix is not provided it will be set to true if
   /// the parent instance was permanent
-  void lazyReplace<P>(InstanceBuilderCallback<P> builder,
-      {String? tag, bool? fenix,}) {
-    final info = getInstanceInfo<P>(tag: tag);
-    final permanent = (info.isPermanent ?? false);
+  void lazyReplace<P>(
+    InstanceBuilderCallback<P> builder, {
+    String? tag,
+    bool? fenix,
+  }) {
+    final InstanceInfo info = getInstanceInfo<P>(tag: tag);
+    final bool permanent = info.isPermanent ?? false;
     delete<P>(tag: tag, force: permanent);
     lazyPut(builder, tag: tag, fenix: fenix ?? permanent);
   }
 
   /// Generates the key based on [type] (and optionally a [name])
   /// to register an Instance Builder in the hashmap.
-  String _getKey(Type type, String? name) {
-    return name == null ? type.toString() : type.toString() + name;
-  }
+  String _getKey(Type type, String? name) =>
+      name == null ? type.toString() : type.toString() + name;
 
   /// Delete registered Class Instance [S] (or [tag]) and, closes any open
   /// controllers `DisposableInterface`, cleans up the memory
@@ -369,14 +373,14 @@ extension Inst on GetInterface {
   ///   the Instance. **don't use** it unless you know what you are doing.
   /// - [force] Will delete an Instance even if marked as `permanent`.
   bool delete<S>({String? tag, String? key, bool force = false}) {
-    final newKey = key ?? _getKey(S, tag);
+    final String newKey = key ?? _getKey(S, tag);
 
     if (!_singl.containsKey(newKey)) {
       Get.log('Instance "$newKey" already removed.', isError: true);
       return false;
     }
 
-    final dep = _singl[newKey];
+    final _InstanceBuilderFactory? dep = _singl[newKey];
 
     if (dep == null) return false;
 
@@ -441,8 +445,8 @@ extension Inst on GetInterface {
   /// Get.deleteAll(force: true);
   /// ```
   void deleteAll({bool force = false}) {
-    final keys = _singl.keys.toList();
-    for (final key in keys) {
+    final List<String> keys = _singl.keys.toList();
+    for (final String key in keys) {
       delete(key: key, force: force);
     }
   }
@@ -460,7 +464,7 @@ extension Inst on GetInterface {
   /// Get.reloadAll(force: true);
   /// ```
   void reloadAll({bool force = false}) {
-    _singl.forEach((key, value) {
+    _singl.forEach((String key, _InstanceBuilderFactory value) {
       if (value.permanent && !force) {
         Get.log('Instance "$key" is permanent. Skipping reload');
       } else {
@@ -492,9 +496,10 @@ extension Inst on GetInterface {
     String? key,
     bool force = false,
   }) {
-    final newKey = key ?? _getKey(S, tag);
+    final String newKey = key ?? _getKey(S, tag);
 
-    final builder = _getDependency<S>(tag: tag, key: newKey);
+    final _InstanceBuilderFactory? builder =
+        _getDependency<S>(tag: tag, key: newKey);
     if (builder == null) return;
 
     if (builder.permanent && !force) {
@@ -529,9 +534,10 @@ extension Inst on GetInterface {
   /// Instance<[S]> is registered in memory.
   /// - [tag] is optional, if you used a [tag] to register the lazy Instance.
   bool isPrepared<S>({String? tag}) {
-    final newKey = _getKey(S, tag);
+    final String newKey = _getKey(S, tag);
 
-    final builder = _getDependency<S>(tag: tag, key: newKey);
+    final _InstanceBuilderFactory? builder =
+        _getDependency<S>(tag: tag, key: newKey);
     if (builder == null) {
       return false;
     }
@@ -560,7 +566,6 @@ typedef AsyncInstanceBuilderCallback<S> = Future<S> Function();
 
 /// Internal class used by GetX to register instances with `Get.put<S>()`.
 class _InstanceBuilderFactory<S> {
-
   _InstanceBuilderFactory({
     required this.isSingleton,
     required this.builderFunc,
@@ -570,6 +575,7 @@ class _InstanceBuilderFactory<S> {
     required this.tag,
     required this.lateRemove,
   });
+
   /// Marks the Builder as a single instance.
   /// For reusing [dependency] instead of [builderFunc]
   bool? isSingleton;
