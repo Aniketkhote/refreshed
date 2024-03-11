@@ -43,7 +43,9 @@
 
 ## 1.4.0
 
-- **Major Update** Extracted the get_connect module from the package and published it as vaultify.
+**Major Update**
+
+- Extracted the get_connect module from the package and published it as vaultify.
 - Removed infrequently used string extension methods
 
 ## 1.3.0
