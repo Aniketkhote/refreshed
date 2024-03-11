@@ -1,13 +1,13 @@
 import "package:flutter/widgets.dart";
-
 import "package:refreshed/get_navigation/src/router_report.dart";
 
-/// A custom [PopupRoute] used by Refreshed for displaying dialog routes.
+/// A custom [PopupRoute] used by GetX for displaying dialog routes.
 ///
 /// This route provides a customizable dialog transition and allows the
 /// specification of various properties such as barrier color, duration,
 /// and dismissibility.
 class GetDialogRoute<T> extends PopupRoute<T> {
+  /// Constructs a [GetDialogRoute].
   GetDialogRoute({
     required RoutePageBuilder pageBuilder,
     bool barrierDismissible = true,
@@ -25,6 +25,7 @@ class GetDialogRoute<T> extends PopupRoute<T> {
     RouterReportManager.instance.reportCurrentRoute(this);
   }
 
+  /// The widget builder for the dialog content.
   final RoutePageBuilder widget;
 
   @override
@@ -49,6 +50,7 @@ class GetDialogRoute<T> extends PopupRoute<T> {
   Duration get transitionDuration => _transitionDuration;
   final Duration _transitionDuration;
 
+  /// The custom transition builder for the dialog.
   final RouteTransitionsBuilder? _transitionBuilder;
 
   @override
@@ -56,13 +58,12 @@ class GetDialogRoute<T> extends PopupRoute<T> {
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
-  ) {
-    return Semantics(
-      scopesRoute: true,
-      explicitChildNodes: true,
-      child: widget(context, animation, secondaryAnimation),
-    );
-  }
+  ) =>
+      Semantics(
+        scopesRoute: true,
+        explicitChildNodes: true,
+        child: widget(context, animation, secondaryAnimation),
+      );
 
   @override
   Widget buildTransitions(

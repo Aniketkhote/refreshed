@@ -15,10 +15,10 @@ class RouterReportManager<T> {
   RouterReportManager._();
 
   /// Holds a reference to the routes and their associated dependencies.
-  final Map<T?, List<String>> _routesKey = {};
+  final Map<T?, List<String>> _routesKey = <T?, List<String>>{};
 
   /// Stores references to onClose() functions of instances created with `Get.create()`.
-  final Map<T?, HashSet<Function>> _routesByCreate = {};
+  final Map<T?, HashSet<Function>> _routesByCreate = <T?, HashSet<Function>>{};
 
   static RouterReportManager? _instance;
 
@@ -38,7 +38,6 @@ class RouterReportManager<T> {
 
   T? _current;
 
-  // ignore: use_setters_to_change_properties
   void reportCurrentRoute(T newRoute) {
     _current = newRoute;
   }
@@ -47,7 +46,9 @@ class RouterReportManager<T> {
   ///
   /// Requires the usage of `GetMaterialApp`.
   void reportDependencyLinkedToRoute(String dependencyKey) {
-    if (_current == null) return;
+    if (_current == null) {
+      return;
+    }
     if (_routesKey.containsKey(_current)) {
       _routesKey[_current!]!.add(dependencyKey);
     } else {
@@ -86,19 +87,19 @@ class RouterReportManager<T> {
   /// that instances and dependencies are properly handled before the route
   /// is removed from memory.
   void reportRouteWillDispose(T disposed) {
-    final keysToRemove = <String>[];
+    final List<String> keysToRemove = <String>[];
 
     _routesKey[disposed]?.forEach(keysToRemove.add);
 
     if (_routesByCreate.containsKey(disposed)) {
-      for (final onClose in _routesByCreate[disposed]!) {
+      for (final Function onClose in _routesByCreate[disposed]!) {
         onClose();
       }
       _routesByCreate[disposed]!.clear();
       _routesByCreate.remove(disposed);
     }
 
-    for (final element in keysToRemove) {
+    for (final String element in keysToRemove) {
       Get.markAsDirty(key: element);
     }
 
@@ -110,20 +111,20 @@ class RouterReportManager<T> {
   /// This method is used internally to clear instances and dependencies
   /// associated with a route that is being removed from memory.
   void _removeDependencyByRoute(T routeName) {
-    final keysToRemove = <String>[];
+    final List<String> keysToRemove = <String>[];
 
     _routesKey[routeName]?.forEach(keysToRemove.add);
 
     if (_routesByCreate.containsKey(routeName)) {
-      for (final onClose in _routesByCreate[routeName]!) {
+      for (final Function onClose in _routesByCreate[routeName]!) {
         onClose();
       }
       _routesByCreate[routeName]!.clear();
       _routesByCreate.remove(routeName);
     }
 
-    for (final element in keysToRemove) {
-      final value = Get.delete(key: element);
+    for (final String element in keysToRemove) {
+      final bool value = Get.delete(key: element);
       if (value) {
         _routesKey[routeName]?.remove(element);
       }

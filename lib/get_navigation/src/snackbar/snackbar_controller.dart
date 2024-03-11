@@ -3,13 +3,12 @@ import "dart:math";
 import "dart:ui";
 
 import "package:flutter/material.dart";
-
-import "package:refreshed/refreshed.dart";
 import "package:refreshed/get_navigation/src/root/get_root.dart";
+import "package:refreshed/refreshed.dart";
 
 class SnackbarController {
   SnackbarController(this.snackbar);
-  final key = GlobalKey<GetSnackBarState>();
+  final GlobalKey<GetSnackBarState> key = GlobalKey<GetSnackBarState>();
 
   static bool get isSnackbarBeingShown =>
       GetRootState.controller.config.snackBarQueue.isJobInProgress;
@@ -18,7 +17,7 @@ class SnackbarController {
   late Animation<Color?> _filterColorAnimation;
 
   final GetSnackBar snackbar;
-  final _transitionCompleter = Completer();
+  final Completer _transitionCompleter = Completer();
 
   late SnackbarStatusCallback? _snackbarStatus;
   late final Alignment? _initialAlignment;
@@ -41,7 +40,7 @@ class SnackbarController {
 
   SnackbarStatus? _currentStatus;
 
-  final _overlayEntries = <OverlayEntry>[];
+  final List<OverlayEntry> _overlayEntries = <OverlayEntry>[];
 
   OverlayState? _overlayState;
 
@@ -60,9 +59,8 @@ class SnackbarController {
   /// Adds GetSnackbar to a view queue.
   /// Only one GetSnackbar will be displayed at a time, and this method returns
   /// a future to when the snackbar disappears.
-  Future<void> show() {
-    return GetRootState.controller.config.snackBarQueue.addJob(this);
-  }
+  Future<void> show() =>
+      GetRootState.controller.config.snackBarQueue.addJob(this);
 
   void _cancelTimer() {
     if (_timer != null && _timer!.isActive) {
@@ -75,14 +73,14 @@ class SnackbarController {
     switch (snackbar.snackPosition) {
       case SnackPosition.top:
         {
-          _initialAlignment = const Alignment(-1.0, -2.0);
-          _endAlignment = const Alignment(-1.0, -1.0);
+          _initialAlignment = const Alignment(-1, -2);
+          _endAlignment = const Alignment(-1, -1);
           break;
         }
       case SnackPosition.bottom:
         {
-          _initialAlignment = const Alignment(-1.0, 2.0);
-          _endAlignment = const Alignment(-1.0, 1.0);
+          _initialAlignment = const Alignment(-1, 2);
+          _endAlignment = const Alignment(-1, 1);
           break;
         }
     }
@@ -91,7 +89,7 @@ class SnackbarController {
   bool _isTesting = false;
 
   void _configureOverlay() {
-    final overlayContext = Get.overlayContext;
+    final BuildContext? overlayContext = Get.overlayContext;
     _isTesting = overlayContext == null;
     _overlayState =
         _isTesting ? OverlayState() : Overlay.of(Get.overlayContext!);
@@ -166,50 +164,46 @@ class SnackbarController {
     );
   }
 
-  Animation<double> _createBlurFilterAnimation() {
-    return Tween(begin: 0.0, end: snackbar.overlayBlur).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(
-          0.0,
-          0.35,
-          curve: Curves.easeInOutCirc,
+  Animation<double> _createBlurFilterAnimation() =>
+      Tween<double>(begin: 0, end: snackbar.overlayBlur).animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: const Interval(
+            0,
+            0.35,
+            curve: Curves.easeInOutCirc,
+          ),
         ),
-      ),
-    );
-  }
+      );
 
-  Animation<Color?> _createColorOverlayColor() {
-    return ColorTween(
-      begin: const Color(0x00000000),
-      end: snackbar.overlayColor,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(
-          0.0,
-          0.35,
-          curve: Curves.easeInOutCirc,
+  Animation<Color?> _createColorOverlayColor() => ColorTween(
+        begin: const Color(0x00000000),
+        end: snackbar.overlayColor,
+      ).animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: const Interval(
+            0,
+            0.35,
+            curve: Curves.easeInOutCirc,
+          ),
         ),
-      ),
-    );
-  }
+      );
 
-  Iterable<OverlayEntry> _createOverlayEntries(Widget child) {
-    return <OverlayEntry>[
-      if (snackbar.overlayBlur > 0.0) ...[
-        OverlayEntry(
-          builder: (context) => GestureDetector(
-            onTap: () {
-              if (snackbar.isDismissible && !_onTappedDismiss) {
-                _onTappedDismiss = true;
-                close();
-              }
-            },
-            child: AnimatedBuilder(
-              animation: _filterBlurAnimation,
-              builder: (context, child) {
-                return BackdropFilter(
+  Iterable<OverlayEntry> _createOverlayEntries(Widget child) => <OverlayEntry>[
+        if (snackbar.overlayBlur > 0.0) ...<OverlayEntry>[
+          OverlayEntry(
+            builder: (BuildContext context) => GestureDetector(
+              onTap: () {
+                if (snackbar.isDismissible && !_onTappedDismiss) {
+                  _onTappedDismiss = true;
+                  close();
+                }
+              },
+              child: AnimatedBuilder(
+                animation: _filterBlurAnimation,
+                builder: (BuildContext context, Widget? child) =>
+                    BackdropFilter(
                   filter: ImageFilter.blur(
                     sigmaX: max(0.001, _filterBlurAnimation.value),
                     sigmaY: max(0.001, _filterBlurAnimation.value),
@@ -218,36 +212,28 @@ class SnackbarController {
                     constraints: const BoxConstraints.expand(),
                     color: _filterColorAnimation.value,
                   ),
-                );
-              },
+                ),
+              ),
             ),
           ),
-          maintainState: false,
-          opaque: false,
-        ),
-      ],
-      OverlayEntry(
-        builder: (context) => Semantics(
-          focused: false,
-          container: true,
-          explicitChildNodes: true,
-          child: AlignTransition(
-            alignment: _animation,
-            child: snackbar.isDismissible
-                ? _getDismissibleSnack(child)
-                : _getSnackbarContainer(child),
+        ],
+        OverlayEntry(
+          builder: (BuildContext context) => Semantics(
+            focused: false,
+            container: true,
+            explicitChildNodes: true,
+            child: AlignTransition(
+              alignment: _animation,
+              child: snackbar.isDismissible
+                  ? _getDismissibleSnack(child)
+                  : _getSnackbarContainer(child),
+            ),
           ),
         ),
-        maintainState: false,
-        opaque: false,
-      ),
-    ];
-  }
+      ];
 
-  Widget _getBodyWidget() {
-    return Builder(
-      builder: (_) {
-        return MouseRegion(
+  Widget _getBodyWidget() => Builder(
+        builder: (_) => MouseRegion(
           onEnter: (_) =>
               snackbar.onHover?.call(snackbar, SnackHoverState.entered),
           onExit: (_) =>
@@ -259,10 +245,8 @@ class SnackbarController {
                 : null,
             child: snackbar,
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
 
   DismissDirection _getDefaultDismissDirection() {
     if (snackbar.snackPosition == SnackPosition.top) {
@@ -271,57 +255,53 @@ class SnackbarController {
     return DismissDirection.down;
   }
 
-  Widget _getDismissibleSnack(Widget child) {
-    return Dismissible(
-      behavior: snackbar.hitTestBehavior ?? HitTestBehavior.opaque,
-      direction: snackbar.dismissDirection ?? _getDefaultDismissDirection(),
-      resizeDuration: null,
-      confirmDismiss: (_) {
-        if (_currentStatus == SnackbarStatus.opening ||
-            _currentStatus == SnackbarStatus.closing) {
-          return Future.value(false);
-        }
-        return Future.value(true);
-      },
-      key: const Key("dismissible"),
-      onDismissed: (_) {
-        _wasDismissedBySwipe = true;
-        _removeEntry();
-      },
-      child: _getSnackbarContainer(child),
-    );
-  }
+  Widget _getDismissibleSnack(Widget child) => Dismissible(
+        behavior: snackbar.hitTestBehavior ?? HitTestBehavior.opaque,
+        direction: snackbar.dismissDirection ?? _getDefaultDismissDirection(),
+        resizeDuration: null,
+        confirmDismiss: (_) {
+          if (_currentStatus == SnackbarStatus.opening ||
+              _currentStatus == SnackbarStatus.closing) {
+            return Future<bool?>.value(false);
+          }
+          return Future<bool?>.value(true);
+        },
+        key: const Key("dismissible"),
+        onDismissed: (_) {
+          _wasDismissedBySwipe = true;
+          _removeEntry();
+        },
+        child: _getSnackbarContainer(child),
+      );
 
-  Widget _getSnackbarContainer(Widget child) {
-    return Container(
-      margin: snackbar.margin,
-      child: child,
-    );
-  }
+  Widget _getSnackbarContainer(Widget child) => Container(
+        margin: snackbar.margin,
+        child: child,
+      );
 
   void _handleStatusChanged(AnimationStatus status) {
     switch (status) {
       case AnimationStatus.completed:
         _currentStatus = SnackbarStatus.open;
         _snackbarStatus?.call(_currentStatus);
-        if (_overlayEntries.isNotEmpty) _overlayEntries.first.opaque = false;
+        if (_overlayEntries.isNotEmpty) {
+          _overlayEntries.first.opaque = false;
+        }
 
-        break;
       case AnimationStatus.forward:
         _currentStatus = SnackbarStatus.opening;
         _snackbarStatus?.call(_currentStatus);
-        break;
       case AnimationStatus.reverse:
         _currentStatus = SnackbarStatus.closing;
         _snackbarStatus?.call(_currentStatus);
-        if (_overlayEntries.isNotEmpty) _overlayEntries.first.opaque = false;
-        break;
+        if (_overlayEntries.isNotEmpty) {
+          _overlayEntries.first.opaque = false;
+        }
       case AnimationStatus.dismissed:
         assert(!_overlayEntries.first.opaque);
         _currentStatus = SnackbarStatus.closed;
         _snackbarStatus?.call(_currentStatus);
         _removeOverlay();
-        break;
     }
   }
 
@@ -343,7 +323,7 @@ class SnackbarController {
 
   void _removeOverlay() {
     if (!_isTesting) {
-      for (var element in _overlayEntries) {
+      for (final OverlayEntry element in _overlayEntries) {
         element.remove();
       }
     }
@@ -372,11 +352,13 @@ class SnackbarController {
 }
 
 class SnackBarQueue {
-  final _queue = GetQueue();
-  final _snackbarList = <SnackbarController>[];
+  final GetQueue _queue = GetQueue();
+  final List<SnackbarController> _snackbarList = <SnackbarController>[];
 
   SnackbarController? get _currentSnackbar {
-    if (_snackbarList.isEmpty) return null;
+    if (_snackbarList.isEmpty) {
+      return null;
+    }
     return _snackbarList.first;
   }
 
@@ -404,14 +386,16 @@ class SnackBarQueue {
 
     _queue.cancelAllJobs();
 
-    for (var element in _snackbarList) {
+    for (final SnackbarController element in _snackbarList) {
       element._controller.dispose();
     }
     _snackbarList.clear();
   }
 
   Future<void> closeCurrentJob() async {
-    if (_currentSnackbar == null) return;
+    if (_currentSnackbar == null) {
+      return;
+    }
     await _currentSnackbar!.close();
   }
 }
