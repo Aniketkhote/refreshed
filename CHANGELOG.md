@@ -1,3 +1,7 @@
+## 2.0.2
+
+- Resolved await issue in the closeAllSnackbars and closeAllOverlays methods.
+
 ## 2.0.1
 
 - Fixed dart formatting issues.

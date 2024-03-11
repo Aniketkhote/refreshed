@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:refreshed/refreshed.dart";
 
-class Wrapper extends StatelessWidget {
+class Wrapper<T> extends StatelessWidget {
   const Wrapper({
     super.key,
     this.child,
@@ -10,28 +10,26 @@ class Wrapper extends StatelessWidget {
     this.defaultTransition,
   });
   final Widget? child;
-  final List<GetPage>? namedRoutes;
+  final List<GetPage<T>>? namedRoutes;
   final String? initialRoute;
   final Transition? defaultTransition;
 
   @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      defaultTransition: defaultTransition,
-      initialRoute: initialRoute,
-      translations: WrapperTranslations(),
-      locale: WrapperTranslations.locale,
-      getPages: namedRoutes,
-      home: namedRoutes == null
-          ? Scaffold(
-              body: child,
-            )
-          : null,
-    );
-  }
+  Widget build(BuildContext context) => GetMaterialApp(
+        defaultTransition: defaultTransition,
+        initialRoute: initialRoute,
+        translations: WrapperTranslations(),
+        locale: WrapperTranslations.locale,
+        getPages: namedRoutes,
+        home: namedRoutes == null
+            ? Scaffold(
+                body: child,
+              )
+            : null,
+      );
 }
 
-class WrapperNamed extends StatelessWidget {
+class WrapperNamed<T> extends StatelessWidget {
   const WrapperNamed({
     super.key,
     this.child,
@@ -40,31 +38,29 @@ class WrapperNamed extends StatelessWidget {
     this.defaultTransition,
   });
   final Widget? child;
-  final List<GetPage>? namedRoutes;
+  final List<GetPage<T>>? namedRoutes;
   final String? initialRoute;
   final Transition? defaultTransition;
 
   @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      defaultTransition: defaultTransition,
-      initialRoute: initialRoute,
-      getPages: namedRoutes,
-    );
-  }
+  Widget build(BuildContext context) => GetMaterialApp(
+        defaultTransition: defaultTransition,
+        initialRoute: initialRoute,
+        getPages: namedRoutes,
+      );
 }
 
 class WrapperTranslations extends Translations {
-  static const fallbackLocale = Locale("en", "US");
+  static const Locale fallbackLocale = Locale("en", "US");
   static Locale? get locale => const Locale("en", "US");
   @override
-  Map<String, Map<String, String>> get keys => {
-        "en_US": {
+  Map<String, Map<String, String>> get keys => <String, Map<String, String>>{
+        "en_US": <String, String>{
           "covid": "Corona Virus",
           "total_confirmed": "Total Confirmed",
           "total_deaths": "Total Deaths",
         },
-        "pt_BR": {
+        "pt_BR": <String, String>{
           "covid": "Corona Vírus",
           "total_confirmed": "Total confirmado",
           "total_deaths": "Total de mortes",

@@ -2,9 +2,8 @@ import "dart:async";
 import "dart:ui";
 
 import "package:flutter/material.dart";
-
-import "package:refreshed/get_core/get_core.dart";
 import "package:refreshed/get_navigation/get_navigation.dart";
+import "package:refreshed/utils.dart";
 
 /// Callback signature for tap events on a `GetSnackBar`.
 typedef OnTap = void Function(GetSnackBar snack);
@@ -32,7 +31,7 @@ class GetSnackBar extends StatefulWidget {
     this.icon,
     this.shouldIconPulse = true,
     this.maxWidth,
-    this.margin = const EdgeInsets.all(0.0),
+    this.margin = EdgeInsets.zero,
     this.padding = const EdgeInsets.all(16),
     this.borderRadius = 0.0,
     this.borderColor,
@@ -188,14 +187,14 @@ class GetSnackBar extends StatefulWidget {
   /// Changes the width of the border if [borderColor] is specified
   final double? borderWidth;
 
-  /// Snack can be based on [SnackPosition.TOP] or on [SnackPosition.BOTTOM]
+  /// Snack can be based on [SnackPosition.top] or on [SnackPosition.bottom]
   /// of your screen.
-  /// [SnackPosition.BOTTOM] is the default.
+  /// [SnackPosition.bottom] is the default.
   final SnackPosition snackPosition;
 
   /// Snack can be floating or be grounded to the edge of the screen.
   /// If grounded, I do not recommend using [margin] or [borderRadius].
-  /// [SnackStyle.FLOATING] is the default
+  /// [SnackStyle.floating] is the default
   /// If grounded, I do not recommend using a [backgroundColor] with
   /// transparency or [barBlur]
   final SnackStyle snackStyle;
@@ -233,13 +232,12 @@ class GetSnackBar extends StatefulWidget {
   @override
   State createState() => GetSnackBarState();
 
-  /// Show the snack. It's call [SnackbarStatus.OPENING] state
-  /// followed by [SnackbarStatus.OPEN]
-  SnackbarController show() {
-    return Get.showSnackbar(this);
-  }
+  /// Show the snack. It's call [SnackbarStatus.opening] state
+  /// followed by [SnackbarStatus.open]
+  SnackbarController show() => Get.showSnackbar(this);
 }
 
+/// The state for managing a GetSnackBar widget.
 class GetSnackBarState extends State<GetSnackBar>
     with TickerProviderStateMixin {
   // State variables and initialization code here
@@ -254,7 +252,7 @@ class GetSnackBarState extends State<GetSnackBar>
   final Widget _emptyWidget = const SizedBox.shrink();
 
   /// Initial opacity value for the snack bar.
-  final double _initialOpacity = 1.0;
+  final double _initialOpacity = 1;
 
   /// Final opacity value for the snack bar when it's being dismissed.
   final double _finalOpacity = 0.4;
@@ -281,7 +279,7 @@ class GetSnackBarState extends State<GetSnackBar>
   late CurvedAnimation _progressAnimation;
 
   /// GlobalKey used to access the background box widget.
-  final _backgroundBoxKey = GlobalKey();
+  final GlobalKey<State<StatefulWidget>> _backgroundBoxKey = GlobalKey();
 
   /// Calculates the padding for the action button within the snack bar.
   double get buttonPadding {
@@ -308,66 +306,66 @@ class GetSnackBarState extends State<GetSnackBar>
       return _snackBar(context);
     } else {
       return Align(
-        heightFactor: 1.0,
+        heightFactor: 1,
         child: _snackBar(context),
       );
     }
   }
 
-  Material _snackBar(BuildContext context) {
-    return Material(
-      color: widget.snackStyle == SnackStyle.floating
-          ? Colors.transparent
-          : widget.backgroundColor,
-      child: SafeArea(
-        minimum: widget.snackPosition == SnackPosition.bottom
-            ? EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom)
-            : EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-        bottom: widget.snackPosition == SnackPosition.bottom,
-        top: widget.snackPosition == SnackPosition.top,
-        left: false,
-        right: false,
-        child: Stack(
-          children: [
-            FutureBuilder<Size>(
-              future: _boxHeightCompleter.future,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (widget.barBlur == 0) {
-                    return _emptyWidget;
-                  }
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(widget.borderRadius),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(
-                        sigmaX: widget.barBlur,
-                        sigmaY: widget.barBlur,
-                      ),
-                      child: Container(
-                        height: snapshot.data!.height,
-                        width: snapshot.data!.width,
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius:
-                              BorderRadius.circular(widget.borderRadius),
+  Material _snackBar(BuildContext context) => Material(
+        color: widget.snackStyle == SnackStyle.floating
+            ? Colors.transparent
+            : widget.backgroundColor,
+        child: SafeArea(
+          minimum: widget.snackPosition == SnackPosition.bottom
+              ? EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                )
+              : EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          bottom: widget.snackPosition == SnackPosition.bottom,
+          top: widget.snackPosition == SnackPosition.top,
+          left: false,
+          right: false,
+          child: Stack(
+            children: <Widget>[
+              FutureBuilder<Size>(
+                future: _boxHeightCompleter.future,
+                builder: (BuildContext context, AsyncSnapshot<Size> snapshot) {
+                  if (snapshot.hasData) {
+                    if (widget.barBlur == 0) {
+                      return _emptyWidget;
+                    }
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(widget.borderRadius),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                          sigmaX: widget.barBlur,
+                          sigmaY: widget.barBlur,
+                        ),
+                        child: Container(
+                          height: snapshot.data!.height,
+                          width: snapshot.data!.width,
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius:
+                                BorderRadius.circular(widget.borderRadius),
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                } else {
-                  return _emptyWidget;
-                }
-              },
-            ),
-            if (widget.userInputForm != null)
-              _containerWithForm()
-            else
-              _containerWithoutForm(),
-          ],
+                    );
+                  } else {
+                    return _emptyWidget;
+                  }
+                },
+              ),
+              if (widget.userInputForm != null)
+                _containerWithForm()
+              else
+                _containerWithoutForm(),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   @override
   void dispose() {
@@ -391,7 +389,7 @@ class GetSnackBarState extends State<GetSnackBar>
       """You need to either use message[String], or messageText[Widget] or define a userInputForm[Form] in GetSnackbar""",
     );
 
-    _isTitlePresent = (widget.title != null || widget.titleText != null);
+    _isTitlePresent = widget.title != null || widget.titleText != null;
     _messageTopMargin = _isTitlePresent ? 6.0 : widget.padding.top;
 
     _configureLeftBarFuture();
@@ -410,11 +408,11 @@ class GetSnackBarState extends State<GetSnackBar>
     if (widget.leftBarIndicatorColor != null) {
       return FutureBuilder<Size>(
         future: _boxHeightCompleter.future,
-        builder: (buildContext, snapshot) {
+        builder: (BuildContext buildContext, AsyncSnapshot<Size> snapshot) {
           if (snapshot.hasData) {
             return Container(
               color: widget.leftBarIndicatorColor,
-              width: 5.0,
+              width: 5,
               height: snapshot.data!.height,
             );
           } else {
@@ -430,9 +428,9 @@ class GetSnackBarState extends State<GetSnackBar>
   void _configureLeftBarFuture() {
     ambiguate(Engine.instance)!.addPostFrameCallback(
       (_) {
-        final keyContext = _backgroundBoxKey.currentContext;
+        final BuildContext? keyContext = _backgroundBoxKey.currentContext;
         if (keyContext != null) {
-          final box = keyContext.findRenderObject() as RenderBox;
+          final RenderBox box = keyContext.findRenderObject()! as RenderBox;
           _boxHeightCompleter.complete(box.size);
         }
       },
@@ -454,14 +452,15 @@ class GetSnackBarState extends State<GetSnackBar>
   void _configurePulseAnimation() {
     _fadeController =
         AnimationController(vsync: this, duration: _pulseAnimationDuration);
-    _fadeAnimation = Tween(begin: _initialOpacity, end: _finalOpacity).animate(
+    _fadeAnimation =
+        Tween<double>(begin: _initialOpacity, end: _finalOpacity).animate(
       CurvedAnimation(
         parent: _fadeController!,
         curve: Curves.linear,
       ),
     );
 
-    _fadeController!.addStatusListener((status) {
+    _fadeController!.addStatusListener((AnimationStatus status) {
       if (status == AnimationStatus.completed) {
         _fadeController!.reverse();
       }
@@ -473,48 +472,48 @@ class GetSnackBarState extends State<GetSnackBar>
     _fadeController!.forward();
   }
 
-  Widget _containerWithForm() {
-    return Container(
-      key: _backgroundBoxKey,
-      constraints: widget.maxWidth != null
-          ? BoxConstraints(maxWidth: widget.maxWidth!)
-          : null,
-      decoration: BoxDecoration(
-        color: widget.backgroundColor,
-        gradient: widget.backgroundGradient,
-        boxShadow: widget.boxShadows,
-        borderRadius: BorderRadius.circular(widget.borderRadius),
-        border: widget.borderColor != null
-            ? Border.all(
-                color: widget.borderColor!,
-                width: widget.borderWidth!,
-              )
+  Widget _containerWithForm() => Container(
+        key: _backgroundBoxKey,
+        constraints: widget.maxWidth != null
+            ? BoxConstraints(maxWidth: widget.maxWidth!)
             : null,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(
-          left: 8.0,
-          right: 8.0,
-          bottom: 8.0,
-          top: 16.0,
+        decoration: BoxDecoration(
+          color: widget.backgroundColor,
+          gradient: widget.backgroundGradient,
+          boxShadow: widget.boxShadows,
+          borderRadius: BorderRadius.circular(widget.borderRadius),
+          border: widget.borderColor != null
+              ? Border.all(
+                  color: widget.borderColor!,
+                  width: widget.borderWidth!,
+                )
+              : null,
         ),
-        child: FocusScope(
-          node: _focusNode,
-          autofocus: true,
-          child: widget.userInputForm!,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 8,
+            right: 8,
+            bottom: 8,
+            top: 16,
+          ),
+          child: FocusScope(
+            node: _focusNode,
+            autofocus: true,
+            child: widget.userInputForm!,
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   Widget _containerWithoutForm() {
-    final iconPadding = widget.padding.left > 16.0 ? widget.padding.left : 0.0;
-    final left = _rowStyle == RowStyle.icon || _rowStyle == RowStyle.all
+    final double iconPadding =
+        widget.padding.left > 16.0 ? widget.padding.left : 0.0;
+    final double left = _rowStyle == RowStyle.icon || _rowStyle == RowStyle.all
         ? 4.0
         : widget.padding.left;
-    final right = _rowStyle == RowStyle.action || _rowStyle == RowStyle.all
-        ? 8.0
-        : widget.padding.right;
+    final double right =
+        _rowStyle == RowStyle.action || _rowStyle == RowStyle.all
+            ? 8.0
+            : widget.padding.right;
     return Container(
       key: _backgroundBoxKey,
       constraints: widget.maxWidth != null
@@ -531,19 +530,19 @@ class GetSnackBarState extends State<GetSnackBar>
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          widget.showProgressIndicator
-              ? LinearProgressIndicator(
-                  value: widget.progressIndicatorController != null
-                      ? _progressAnimation.value
-                      : null,
-                  backgroundColor: widget.progressIndicatorBackgroundColor,
-                  valueColor: widget.progressIndicatorValueColor,
-                )
-              : _emptyWidget,
+        children: <Widget>[
+          if (widget.showProgressIndicator)
+            LinearProgressIndicator(
+              value: widget.progressIndicatorController != null
+                  ? _progressAnimation.value
+                  : null,
+              backgroundColor: widget.progressIndicatorBackgroundColor,
+              valueColor: widget.progressIndicatorValueColor,
+            )
+          else
+            _emptyWidget,
           Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
+            children: <Widget>[
               _buildLeftBarIndicator(),
               if (_rowStyle == RowStyle.icon || _rowStyle == RowStyle.all)
                 ConstrainedBox(
@@ -552,7 +551,6 @@ class GetSnackBarState extends State<GetSnackBar>
                   child: _getIcon(),
                 ),
               Expanded(
-                flex: 1,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
@@ -568,7 +566,7 @@ class GetSnackBarState extends State<GetSnackBar>
                             Text(
                               widget.title ?? "",
                               style: const TextStyle(
-                                fontSize: 16.0,
+                                fontSize: 16,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -587,7 +585,7 @@ class GetSnackBarState extends State<GetSnackBar>
                           Text(
                             widget.message ?? "",
                             style: const TextStyle(
-                              fontSize: 14.0,
+                              fontSize: 14,
                               color: Colors.white,
                             ),
                           ),
@@ -611,7 +609,7 @@ class GetSnackBarState extends State<GetSnackBar>
     if (widget.icon != null && widget.shouldIconPulse) {
       return FadeTransition(
         opacity: _fadeAnimation,
-        child: widget.icon!,
+        child: widget.icon,
       );
     } else {
       return widget.icon ?? _emptyWidget;
@@ -620,25 +618,3 @@ class GetSnackBarState extends State<GetSnackBar>
 
   void _updateProgress() => setState(() {});
 }
-
-/// An enumeration representing different styles for rows.
-enum RowStyle { icon, action, all, none }
-
-/// Indicates Status of snackbar
-/// [SnackbarStatus.open] Snack is fully open, [SnackbarStatus.closed] Snackbar
-/// has closed,
-/// [SnackbarStatus.opening] Starts with the opening animation and ends
-/// with the full
-/// snackbar display, [SnackbarStatus.closing] Starts with the closing animation
-/// and ends
-/// with the full snackbar dispose
-enum SnackbarStatus { open, closed, opening, closing }
-
-/// Indicates if snack is going to start at the [top] or at the [bottom]
-enum SnackPosition { top, bottom }
-
-/// Indicates if snack will be attached to the edge of the screen or not
-enum SnackStyle { floating, grounded }
-
-/// Indicates if the mouse entered or exited
-enum SnackHoverState { entered, exited }

@@ -32,7 +32,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   refreshed:
     path: ../
-  #get_test: ^3.13.3
 
 dev_dependencies:
   flutter_test:
