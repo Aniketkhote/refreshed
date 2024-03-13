@@ -51,7 +51,9 @@ extension ResetInstance on GetInterface {
   bool resetInstance({bool clearRouteBindings = true}) {
     //  if (clearFactory) _factory.clear();
     // deleteAll(force: true);
-    if (clearRouteBindings) RouterReportManager.instance.clearRouteKeys();
+    if (clearRouteBindings) {
+      RouterReportManager.instance.clearRouteKeys();
+    }
     Inst._singl.clear();
 
     return true;
@@ -261,7 +263,7 @@ extension Inst on GetInterface {
   /// Initializes the controller
   S _startController<S>({String? tag}) {
     final String key = _getKey(S, tag);
-    final i = _singl[key]!.getDependency() as S;
+    final S i = _singl[key]!.getDependency() as S;
     if (i is GetLifeCycleMixin) {
       i.onStart();
       if (tag == null) {
@@ -297,20 +299,22 @@ extension Inst on GetInterface {
       final _InstanceBuilderFactory? dep = _singl[key];
       if (dep == null) {
         if (tag == null) {
-          throw 'Class "$S" is not registered';
+          throw Exception('Class "$S" is not registered');
         } else {
-          throw 'Class "$S" with tag "$tag" is not registered';
+          throw Exception('Class "$S" with tag "$tag" is not registered');
         }
       }
 
       /// although dirty solution, the lifecycle starts inside
       /// `initDependencies`, so we have to return the instance from there
       /// to make it compatible with `Get.create()`.
-      final i = _initDependencies<S>(name: tag);
+      final S? i = _initDependencies<S>(name: tag);
       return i ?? dep.getDependency() as S;
     } else {
       // ignore: lines_longer_than_80_chars
-      throw '"$S" not found. You need to call "Get.put($S())" or "Get.lazyPut(()=>$S())"';
+      throw Exception(
+        '"$S" not found. You need to call "Get.put($S())" or "Get.lazyPut(()=>$S())"',
+      );
     }
   }
 
@@ -382,7 +386,9 @@ extension Inst on GetInterface {
 
     final _InstanceBuilderFactory? dep = _singl[newKey];
 
-    if (dep == null) return false;
+    if (dep == null) {
+      return false;
+    }
 
     final _InstanceBuilderFactory builder;
     if (dep.isDirty) {
@@ -399,7 +405,7 @@ extension Inst on GetInterface {
       );
       return false;
     }
-    final i = builder.dependency;
+    final dynamic i = builder.dependency;
 
     if (i is GetxServiceMixin && !force) {
       return false;
@@ -411,8 +417,9 @@ extension Inst on GetInterface {
     }
 
     if (builder.fenix) {
-      builder.dependency = null;
-      builder.isInit = false;
+      builder
+        ..dependency = null
+        ..isInit = false;
       return true;
     } else {
       if (dep.lateRemove != null) {
@@ -468,8 +475,9 @@ extension Inst on GetInterface {
       if (value.permanent && !force) {
         Get.log('Instance "$key" is permanent. Skipping reload');
       } else {
-        value.dependency = null;
-        value.isInit = false;
+        value
+          ..dependency = null
+          ..isInit = false;
         Get.log('Instance "$key" was reloaded.');
       }
     });
@@ -500,7 +508,9 @@ extension Inst on GetInterface {
 
     final _InstanceBuilderFactory? builder =
         _getDependency<S>(tag: tag, key: newKey);
-    if (builder == null) return;
+    if (builder == null) {
+      return;
+    }
 
     if (builder.permanent && !force) {
       Get.log(
@@ -510,7 +520,7 @@ extension Inst on GetInterface {
       return;
     }
 
-    final i = builder.dependency;
+    final dynamic i = builder.dependency;
 
     if (i is GetxServiceMixin && !force) {
       return;
