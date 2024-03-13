@@ -1,3 +1,9 @@
+## 2.0.3
+
+- Fixed the asynchronous issue in `goToUnknownPage` function within the route, resolving the need for `await`.
+- Removed unnecessary `await` statements in the route delegate for improved efficiency.
+- Enhanced safety in the route delegate by adding required return types.
+
 ## 2.0.2
 
 - Resolved await issue in the closeAllSnackbars and closeAllOverlays methods.

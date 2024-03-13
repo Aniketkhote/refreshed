@@ -11,6 +11,7 @@ typedef WidgetCallback = Widget Function();
 /// - [Obx]
 /// - [ObxValue]
 abstract class ObxWidget extends ObxStatelessWidget {
+  /// Constructs an [ObxWidget].
   const ObxWidget({super.key});
 }
 

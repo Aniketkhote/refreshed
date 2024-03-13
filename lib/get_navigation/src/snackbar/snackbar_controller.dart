@@ -68,7 +68,6 @@ class SnackbarController {
     }
   }
 
-  // ignore: avoid_returning_this
   void _configureAlignment(SnackPosition snackPosition) {
     switch (snackbar.snackPosition) {
       case SnackPosition.top:
@@ -93,8 +92,9 @@ class SnackbarController {
     _isTesting = overlayContext == null;
     _overlayState =
         _isTesting ? OverlayState() : Overlay.of(Get.overlayContext!);
-    _overlayEntries.clear();
-    _overlayEntries.addAll(_createOverlayEntries(_getBodyWidget()));
+    _overlayEntries
+      ..clear()
+      ..addAll(_createOverlayEntries(_getBodyWidget()));
     if (!_isTesting) {
       _overlayState!.insertAll(_overlayEntries);
     }
