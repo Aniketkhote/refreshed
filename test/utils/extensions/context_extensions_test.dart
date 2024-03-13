@@ -5,65 +5,65 @@ import "package:refreshed/refreshed.dart";
 import "../../navigation/utils/wrapper.dart";
 
 void main() {
-  testWidgets("Get.defaultDialog smoke test", (tester) async {
-    await tester.pumpWidget(Wrapper(child: Container()));
+  testWidgets("Get.defaultDialog smoke test", (WidgetTester tester) async {
+    await tester.pumpWidget(Wrapper<dynamic>(child: Container()));
     await tester.pumpAndSettle();
 
     final BuildContext context = tester.element(find.byType(Container));
 
-    final mediaQuery = MediaQuery.of(context);
+    final MediaQueryData mediaQuery = MediaQuery.of(context);
     expect(mediaQuery, context.mediaQuery);
-    final mediaQuerySize = mediaQuery.size;
+    final Size mediaQuerySize = mediaQuery.size;
     expect(mediaQuerySize, context.mediaQuerySize);
-    final theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
     expect(theme, context.theme);
-    final textTheme = theme.textTheme;
+    final TextTheme textTheme = theme.textTheme;
     expect(textTheme, context.textTheme);
-    final devicePixelRatio = mediaQuery.devicePixelRatio;
+    final double devicePixelRatio = mediaQuery.devicePixelRatio;
     expect(devicePixelRatio, context.devicePixelRatio);
-    final height = mediaQuerySize.height;
+    final double height = mediaQuerySize.height;
     expect(height, context.height);
-    final heightTransformer =
+    final double heightTransformer =
         (mediaQuerySize.height - ((mediaQuerySize.height / 100) * 0)) / 1;
     expect(heightTransformer, context.heightTransformer());
-    final iconColor = theme.iconTheme.color;
+    final Color? iconColor = theme.iconTheme.color;
     expect(iconColor, context.iconColor);
-    final isDarkMode = (theme.brightness == Brightness.dark);
+    final bool isDarkMode = (theme.brightness == Brightness.dark);
     expect(isDarkMode, context.isDarkMode);
-    final orientation = mediaQuery.orientation;
+    final Orientation orientation = mediaQuery.orientation;
     expect(orientation, context.orientation);
-    final isLandscape = orientation == Orientation.landscape;
+    final bool isLandscape = orientation == Orientation.landscape;
     expect(isLandscape, context.isLandscape);
-    final mediaQueryShortestSide = mediaQuerySize.shortestSide;
+    final double mediaQueryShortestSide = mediaQuerySize.shortestSide;
     expect(mediaQueryShortestSide, context.mediaQueryShortestSide);
-    final width = mediaQuerySize.width;
+    final double width = mediaQuerySize.width;
     expect(width, context.width);
 
-    final isLargeTabletOrWider = (width >= 720);
+    final bool isLargeTabletOrWider = width >= 720;
     expect(isLargeTabletOrWider, context.isLargeTabletOrWider);
-    final isPhoneOrLess = (width < 600);
+    final bool isPhoneOrLess = width < 600;
     expect(isPhoneOrLess, context.isPhoneOrLess);
-    final isPortrait = orientation == Orientation.portrait;
+    final bool isPortrait = orientation == Orientation.portrait;
     expect(isPortrait, context.isPortrait);
-    final isSmallTabletOrWider = (width >= 600);
+    final bool isSmallTabletOrWider = width >= 600;
     expect(isSmallTabletOrWider, context.isSmallTabletOrWider);
-    final isTablet = isSmallTabletOrWider || isLargeTabletOrWider;
+    final bool isTablet = isSmallTabletOrWider || isLargeTabletOrWider;
     expect(isTablet, context.isSmallTabletOrWider);
-    final mediaQueryPadding = mediaQuery.padding;
+    final EdgeInsets mediaQueryPadding = mediaQuery.padding;
     expect(mediaQueryPadding, context.mediaQueryPadding);
-    final mediaQueryViewInsets = mediaQuery.viewInsets;
+    final EdgeInsets mediaQueryViewInsets = mediaQuery.viewInsets;
     expect(mediaQueryViewInsets, context.mediaQueryViewInsets);
-    final mediaQueryViewPadding = mediaQuery.viewPadding;
+    final EdgeInsets mediaQueryViewPadding = mediaQuery.viewPadding;
     expect(mediaQueryViewPadding, context.mediaQueryViewPadding);
-    final widthTransformer =
+    final double widthTransformer =
         (mediaQuerySize.width - ((mediaQuerySize.width / 100) * 0)) / 1;
     expect(widthTransformer, context.widthTransformer());
-    final ratio = heightTransformer / widthTransformer;
+    final double ratio = heightTransformer / widthTransformer;
     expect(ratio, context.ratio());
 
-    final showNavbar = (width > 800);
+    final bool showNavbar = width > 800;
     expect(showNavbar, context.showNavbar);
-    final textScaleFactor = mediaQuery.textScaler;
+    final TextScaler textScaleFactor = mediaQuery.textScaler;
     expect(textScaleFactor, context.textScaleFactor);
   });
 }

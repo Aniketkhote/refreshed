@@ -5,7 +5,7 @@ import "package:refreshed/refreshed.dart";
 import "utils/wrapper.dart";
 
 void main() {
-  testWidgets("Get.bottomSheet smoke test", (tester) async {
+  testWidgets("Get.bottomSheet smoke test", (WidgetTester tester) async {
     await tester.pumpWidget(
       Wrapper(child: Container()),
     );
@@ -29,7 +29,7 @@ void main() {
     expect(find.byIcon(Icons.music_note), findsOneWidget);
   });
 
-  testWidgets("Get.bottomSheet close test", (tester) async {
+  testWidgets("Get.bottomSheet close test", (WidgetTester tester) async {
     await tester.pumpWidget(
       Wrapper(child: Container()),
     );

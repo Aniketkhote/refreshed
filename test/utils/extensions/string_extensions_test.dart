@@ -3,12 +3,12 @@ import "package:refreshed/utils.dart";
 
 void main() {
   group("String extensions", () {
-    const text = "oi";
-    const digit = "5";
-    const specialCaracters = "#\$!%@";
-    const alphaNumeric = "123asd";
-    const numbers = "123";
-    const letters = "foo";
+    const String text = "oi";
+    const String digit = "5";
+    const String specialCaracters = r"#$!%@";
+    const String alphaNumeric = "123asd";
+    const String numbers = "123";
+    const String letters = "foo";
     // String notInitializedVar;
 
     test("var.isNum", () {
@@ -17,7 +17,7 @@ void main() {
     });
 
     test("var.capitalizeAllWordsFirstLetter()", () {
-      final List<String> sentences = [
+      final List<String> sentences = <String>[
         "getx",
         "this is an example sentence",
         "this is an example sentence with a number 5",
@@ -30,7 +30,7 @@ void main() {
       ];
       expect(text.capitalizeAllWordsFirstLetter(), "Oi");
       expect(digit.capitalizeAllWordsFirstLetter(), "5");
-      expect(specialCaracters.capitalizeAllWordsFirstLetter(), "#\$!%@");
+      expect(specialCaracters.capitalizeAllWordsFirstLetter(), r"#$!%@");
       expect(alphaNumeric.capitalizeAllWordsFirstLetter(), "123asd");
       expect(numbers.capitalizeAllWordsFirstLetter(), "123");
       expect(letters.capitalizeAllWordsFirstLetter(), "Foo");
@@ -80,27 +80,27 @@ void main() {
     });
 
     test("var.isBool", () {
-      const trueString = "true";
+      const String trueString = "true";
       // expect(notInitializedVar.isBool, false);
       expect(letters.isBool, false);
       expect(trueString.isBool, true);
     });
 
     test("var.isVectorFileName", () {
-      const path = "logo.svg";
-      const fullPath = "C:/Users/Getx/Documents/logo.svg";
+      const String path = "logo.svg";
+      const String fullPath = "C:/Users/Getx/Documents/logo.svg";
       expect(path.isVectorFileName, true);
       expect(fullPath.isVectorFileName, true);
       expect(alphaNumeric.isVectorFileName, false);
     });
 
     test("var.isImageFileName", () {
-      const jpgPath = "logo.jpg";
-      const jpegPath = "logo.jpeg";
-      const pngPath = "logo.png";
-      const gifPath = "logo.gif";
-      const bmpPath = "logo.bmp";
-      const svgPath = "logo.svg";
+      const String jpgPath = "logo.jpg";
+      const String jpegPath = "logo.jpeg";
+      const String pngPath = "logo.png";
+      const String gifPath = "logo.gif";
+      const String bmpPath = "logo.bmp";
+      const String svgPath = "logo.svg";
 
       expect(jpgPath.isImageFileName, true);
       expect(jpegPath.isImageFileName, true);
@@ -111,12 +111,12 @@ void main() {
     });
 
     test("var.isAudioFileName", () {
-      const mp3Path = "logo.mp3";
-      const wavPath = "logo.wav";
-      const wmaPath = "logo.wma";
-      const amrPath = "logo.amr";
-      const oggPath = "logo.ogg";
-      const svgPath = "logo.svg";
+      const String mp3Path = "logo.mp3";
+      const String wavPath = "logo.wav";
+      const String wmaPath = "logo.wma";
+      const String amrPath = "logo.amr";
+      const String oggPath = "logo.ogg";
+      const String svgPath = "logo.svg";
 
       expect(mp3Path.isAudioFileName, true);
       expect(wavPath.isAudioFileName, true);
@@ -127,14 +127,14 @@ void main() {
     });
 
     test("var.isVideoFileName", () {
-      const mp4Path = "logo.mp4";
-      const aviPath = "logo.avi";
-      const wmvPath = "logo.wmv";
-      const rmvbPath = "logo.rmvb";
-      const mpgPath = "logo.mpg";
-      const mpegPath = "logo.mpeg";
-      const threegpPath = "logo.3gp";
-      const svgPath = "logo.svg";
+      const String mp4Path = "logo.mp4";
+      const String aviPath = "logo.avi";
+      const String wmvPath = "logo.wmv";
+      const String rmvbPath = "logo.rmvb";
+      const String mpgPath = "logo.mpg";
+      const String mpegPath = "logo.mpeg";
+      const String threegpPath = "logo.3gp";
+      const String svgPath = "logo.svg";
 
       expect(mp4Path.isVideoFileName, true);
       expect(aviPath.isVideoFileName, true);
@@ -147,14 +147,14 @@ void main() {
     });
 
     test("var.isTxtFileName", () {
-      const txtPath = "file.txt";
+      const String txtPath = "file.txt";
       expect(txtPath.isTxtFileName, true);
       expect(alphaNumeric.isTxtFileName, false);
     });
 
     test("var.isDocumentFileName", () {
-      const docPath = "file.doc";
-      const docxPath = "file.docx";
+      const String docPath = "file.doc";
+      const String docxPath = "file.docx";
 
       expect(docPath.isDocumentFileName, true);
       expect(docxPath.isDocumentFileName, true);
@@ -162,8 +162,8 @@ void main() {
     });
 
     test("var.isExcelFileName", () {
-      const xlsPath = "file.xls";
-      const xlsxPath = "file.xlsx";
+      const String xlsPath = "file.xls";
+      const String xlsxPath = "file.xlsx";
 
       expect(xlsPath.isExcelFileName, true);
       expect(xlsxPath.isExcelFileName, true);
@@ -171,8 +171,8 @@ void main() {
     });
 
     test("var.isPPTFileName", () {
-      const pptPath = "file.ppt";
-      const pptxPath = "file.pptx";
+      const String pptPath = "file.ppt";
+      const String pptxPath = "file.pptx";
 
       expect(pptPath.isPPTFileName, true);
       expect(pptxPath.isPPTFileName, true);
@@ -180,27 +180,27 @@ void main() {
     });
 
     test("var.isAPKFileName", () {
-      const apkPath = "file.apk";
+      const String apkPath = "file.apk";
 
       expect(apkPath.isAPKFileName, true);
       expect(alphaNumeric.isAPKFileName, false);
     });
 
     test("var.isPDFFileName", () {
-      const pdfPath = "file.pdf";
+      const String pdfPath = "file.pdf";
 
       expect(pdfPath.isPDFFileName, true);
       expect(alphaNumeric.isPDFFileName, false);
     });
     test("var.isHTMLFileName", () {
-      const htmlPath = "file.html";
+      const String htmlPath = "file.html";
 
       expect(htmlPath.isHTMLFileName, true);
       expect(alphaNumeric.isHTMLFileName, false);
     });
     test("var.isURL", () {
       // Url's generated in https://www.randomlists.com/urls
-      final urls = [
+      final List<String> urls = <String>[
         "http://www.example.com/aunt/babies.aspx#act",
         "http://adjustment.example.com/bedroom/animal.htm",
         "http://blade.example.com/arch/basketball",
@@ -230,13 +230,13 @@ void main() {
         "http://birds.example/",
       ];
 
-      for (final url in urls) {
+      for (final String url in urls) {
         expect(url.isURL, true);
       }
       expect(alphaNumeric.isURL, false);
     });
     test("var.isEmail", () {
-      final emails = [
+      final List<String> emails = <String>[
         "hellfire@comcast.net",
         "hllam@icloud.com",
         "tskirvin@live.com",
@@ -269,13 +269,13 @@ void main() {
         "johnbob@hotmail.com.br",
       ];
 
-      for (final email in emails) {
+      for (final String email in emails) {
         expect(email.isEmail, true);
       }
       expect(alphaNumeric.isEmail, false);
     });
     test("var.isPhoneNumber", () {
-      final phoneNumbers = [
+      final List<String> phoneNumbers = <String>[
         "+1202-555-0145",
         "+1202-555-0139",
         "+1202-555-0101",
@@ -305,18 +305,18 @@ void main() {
         "02131973585858",
       ];
 
-      for (final phone in phoneNumbers) {
+      for (final String phone in phoneNumbers) {
         // print('testing $phone');
         expect(phone.isPhoneNumber, true);
       }
 
-      const bigRandomNumber = "168468468465241327987624987327987";
+      const String bigRandomNumber = "168468468465241327987624987327987";
       expect(bigRandomNumber.isPhoneNumber, false);
 
       expect(alphaNumeric.isPhoneNumber, false);
     });
     test("var.isDateTime", () {
-      final dateTimes = [
+      final List<String> dateTimes = <String>[
         "2003-07-05 05:51:47.000Z",
         "1991-05-11 11:57:30.000Z",
         "2002-01-04 10:00:41.000Z",
@@ -359,14 +359,14 @@ void main() {
         "2016-01-16 22:01:20.000Z",
       ];
 
-      for (final dateTime in dateTimes) {
+      for (final String dateTime in dateTimes) {
         // print('testing $dateTime');
         expect(dateTime.isDateTime, true);
       }
       expect(alphaNumeric.isDateTime, false);
     });
     test("var.isMD5", () {
-      final md5s = [
+      final List<String> md5s = <String>[
         "176cfa006065a2a2bd8d3f1f83531b64",
         "713fca6d088132e863497a79d1bd9572",
         "7decc2fb2aca5cbd8a2cae5de1b50edb",
@@ -390,14 +390,14 @@ void main() {
         "b0d8492572a52d1f2360535612c5dc82",
       ];
 
-      for (final md5 in md5s) {
+      for (final String md5 in md5s) {
         expect(md5.isMD5, true);
       }
 
       expect(alphaNumeric.isMD5, false);
     });
     test("var.isSHA1", () {
-      final sha1s = [
+      final List<String> sha1s = <String>[
         "1A310CF5DC8CE513586F74EE19CE90BD4BCC5AED",
         "B458B077B5075C316CFD03619D627F529A0555BF",
         "902C6A2850B4348BE445D637689CCAE5C5EF3552",
@@ -413,14 +413,14 @@ void main() {
         "2A87522644011223A27FD62C87FA926A1838F271",
       ];
 
-      for (final sha1 in sha1s) {
+      for (final String sha1 in sha1s) {
         expect(sha1.isSHA1, true);
       }
 
       expect(alphaNumeric.isSHA1, false);
     });
     test("var.isSHA256", () {
-      final sha256s = [
+      final List<String> sha256s = <String>[
         "FC694FFE78167EAE21EA4EBF072D8AB6ECF847162D1F65600BF019BA9805DB2D",
         "3B64F1C349B548E72688A8EEFFA2F418A62BA2E22CF5BD954B4B1912C963D7FA",
         "EF69D763148B8A222980BD164943F754937DF12771083889DDB69C18245C2904",
@@ -443,14 +443,14 @@ void main() {
         "AC98F969AA56810BE672C770BE30EF79F7F77AE6EFB2A90D56FA2AD5506D8BD7",
       ];
 
-      for (final sha256 in sha256s) {
+      for (final String sha256 in sha256s) {
         expect(sha256.isSHA256, true);
       }
 
       expect(alphaNumeric.isSHA256, false);
     });
     test("var.isBinary", () {
-      final binaries = [
+      final List<String> binaries = <String>[
         "00111100",
         "00001111",
         "10110110",
@@ -473,14 +473,14 @@ void main() {
         "01000111",
       ];
 
-      for (final binary in binaries) {
+      for (final String binary in binaries) {
         expect(binary.isBinary, true);
       }
 
       expect(alphaNumeric.isBinary, false);
     });
     test("var.isIPv4", () {
-      final ipv4s = [
+      final List<String> ipv4s = <String>[
         "155.162.247.250",
         "121.99.222.180",
         "142.197.183.237",
@@ -503,14 +503,14 @@ void main() {
         "51.73.246.208",
       ];
 
-      for (final ipv4 in ipv4s) {
+      for (final String ipv4 in ipv4s) {
         expect(ipv4.isIPv4, true);
       }
 
       expect(alphaNumeric.isIPv4, false);
     });
     test("var.isIPv6", () {
-      final ipv6s = [
+      final List<String> ipv6s = <String>[
         "f856:62fc:9091:e649:e928:d771:f40c:1439",
         "b8d5:3f85:5ae5:c63a:6b5f:f7e6:ea6b:871d",
         "2f91:979a:90b0:55d1:40b7:3e6f:a210:598e",
@@ -533,14 +533,14 @@ void main() {
         "1083:d492:f42e:2c99:f050:f67f:07c5:23f9",
       ];
 
-      for (final ipv6 in ipv6s) {
+      for (final String ipv6 in ipv6s) {
         expect(ipv6.isIPv6, true);
       }
 
       expect(alphaNumeric.isIPv6, false);
     });
     test("var.isHexadecimal", () {
-      final hexadecimals = [
+      final List<String> hexadecimals = <String>[
         "#56E97B",
         "#597E2A",
         "#F45D5C",
@@ -563,14 +563,14 @@ void main() {
         "#4DFF4E",
       ];
 
-      for (final hexadecimal in hexadecimals) {
+      for (final String hexadecimal in hexadecimals) {
         expect(hexadecimal.isHexadecimal, true);
       }
 
       expect(alphaNumeric.isHexadecimal, false);
     });
     test("var.isPalindrome", () {
-      final palindroms = [
+      final List<String> palindroms = <String>[
         "Anna",
         "Civic",
         "Kayak",
@@ -598,21 +598,21 @@ void main() {
         "A dama admirou o rim da amada.",
         "A Daniela ama a lei? Nada!",
       ];
-      for (final palindrom in palindroms) {
+      for (final String palindrom in palindroms) {
         // print("testing $palindrom");
         expect(palindrom.isPalindrome, true);
       }
       expect(alphaNumeric.isPalindrome, false);
     });
     test("var.isPassport", () {
-      final passports = [
+      final List<String> passports = <String>[
         "12ss46",
         "jdmg5dg",
         "5f7fj5d7",
         "w8a9s6f3z",
       ];
 
-      for (final passport in passports) {
+      for (final String passport in passports) {
         expect(passport.isPassport, true);
       }
 
@@ -620,9 +620,9 @@ void main() {
     });
 
     test("var.isCurrency", () {
-      final currencies = [
-        "R\$50.58",
-        "\$82.48",
+      final List<String> currencies = <String>[
+        r"R$50.58",
+        r"$82.48",
         "₩54.24",
         "¥81.04",
         "€4.06",
@@ -647,7 +647,7 @@ void main() {
         "29.20INR",
       ];
 
-      for (final currency in currencies) {
+      for (final String currency in currencies) {
         // print('currency $currency');
         expect(currency.isCurrency, true);
       }
@@ -656,7 +656,7 @@ void main() {
     });
 
     test("var.isCaseInsensitiveContains(string)", () {
-      const phrase = "Back to Square One";
+      const String phrase = "Back to Square One";
 
       expect(phrase.isCaseInsensitiveContains("to"), true);
       expect(phrase.isCaseInsensitiveContains("square"), true);
@@ -665,7 +665,7 @@ void main() {
     });
 
     test("var.isCaseInsensitiveContainsAny(string)", () {
-      const phrase = "Back to Square One";
+      const String phrase = "Back to Square One";
 
       expect(phrase.isCaseInsensitiveContainsAny("to"), true);
       expect(phrase.isCaseInsensitiveContainsAny("square"), true);

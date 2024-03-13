@@ -5,7 +5,8 @@ import "package:refreshed/refreshed.dart";
 import "utils/wrapper.dart";
 
 void main() {
-  testWidgets("Test dispose dependencies with unnamed routes", (tester) async {
+  testWidgets("Test dispose dependencies with unnamed routes",
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       Wrapper(child: Container()),
     );

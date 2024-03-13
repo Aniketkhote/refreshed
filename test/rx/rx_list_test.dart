@@ -1,43 +1,45 @@
+// ignore_for_file: cascade_invocations, unreachable_from_main
+
 import "package:flutter_test/flutter_test.dart";
 import "package:refreshed/refreshed.dart";
 
 void main() {
   group("RxList Tests", () {
     test("RxList initializes with empty list", () {
-      final rxList = RxList<int>();
+      final RxList<int> rxList = RxList<int>();
       expect(rxList, isEmpty);
     });
 
     test("RxList adds default items", () {
-      final rxList = RxList([1, 2]);
+      final RxList<int> rxList = RxList<int>(<int>[1, 2]);
       rxList.add(3);
-      expect(rxList, [1, 2, 3]);
+      expect(rxList, <int>[1, 2, 3]);
     });
 
     test("RxList adds items", () {
-      final rxList = RxList<int>();
+      final RxList<int> rxList = RxList<int>();
       rxList.add(1);
-      rxList.addAll([2, 3]);
-      expect(rxList, [1, 2, 3]);
+      rxList.addAll(<int>[2, 3]);
+      expect(rxList, <int>[1, 2, 3]);
     });
 
     test("RxList updates items", () {
-      final rxList = RxList<int>();
-      rxList.addAll([1, 2, 3]);
+      final RxList<int> rxList = RxList<int>();
+      rxList.addAll(<int>[1, 2, 3]);
       rxList[0] = 4;
-      expect(rxList, [4, 2, 3]);
+      expect(rxList, <int>[4, 2, 3]);
     });
 
     test("RxList removes items", () {
-      final rxList = RxList<int>();
-      rxList.addAll([1, 2, 3]);
+      final RxList<int> rxList = RxList<int>();
+      rxList.addAll(<int>[1, 2, 3]);
       rxList.removeAt(1);
-      expect(rxList, [1, 3]);
+      expect(rxList, <int>[1, 3]);
     });
 
     test("RxList clears all items", () {
-      final rxList = RxList<int>();
-      rxList.addAll([1, 2, 3]);
+      final RxList<int> rxList = RxList<int>();
+      rxList.addAll(<int>[1, 2, 3]);
       rxList.clear();
       expect(rxList, isEmpty);
     });
@@ -45,17 +47,17 @@ void main() {
 
   group("RxList with model Tests", () {
     test("RxList initializes with empty list", () {
-      final rxList = RxList<Todo>();
+      final RxList<Todo> rxList = RxList<Todo>();
       expect(rxList, isEmpty);
     });
 
     test("RxList adds items", () {
-      final rxList = RxList<Todo>();
-      final todo1 = Todo(id: 1, title: "Task 1", completed: false);
-      final todo2 = Todo(id: 2, title: "Task 2", completed: true);
+      final RxList<Todo> rxList = RxList<Todo>();
+      final Todo todo1 = Todo(id: 1, title: "Task 1", completed: false);
+      final Todo todo2 = Todo(id: 2, title: "Task 2", completed: true);
 
       rxList.add(todo1);
-      rxList.addAll([todo2]);
+      rxList.addAll(<Todo>[todo2]);
 
       expect(rxList.length, 2);
       expect(rxList, contains(todo1));
@@ -63,8 +65,8 @@ void main() {
     });
 
     test("RxList updates items", () {
-      final rxList = RxList<Todo>();
-      final todo = Todo(id: 1, title: "Task 1", completed: false);
+      final RxList<Todo> rxList = RxList<Todo>();
+      final Todo todo = Todo(id: 1, title: "Task 1", completed: false);
 
       rxList.add(todo);
       expect(rxList[0].completed, false);
@@ -74,11 +76,11 @@ void main() {
     });
 
     test("RxList removes items", () {
-      final rxList = RxList<Todo>();
-      final todo1 = Todo(id: 1, title: "Task 1", completed: false);
-      final todo2 = Todo(id: 2, title: "Task 2", completed: true);
+      final RxList<Todo> rxList = RxList<Todo>();
+      final Todo todo1 = Todo(id: 1, title: "Task 1", completed: false);
+      final Todo todo2 = Todo(id: 2, title: "Task 2", completed: true);
 
-      rxList.addAll([todo1, todo2]);
+      rxList.addAll(<Todo>[todo1, todo2]);
       expect(rxList.length, 2);
 
       rxList.removeAt(0);
@@ -88,11 +90,11 @@ void main() {
     });
 
     test("RxList clears all items", () {
-      final rxList = RxList<Todo>();
-      final todo1 = Todo(id: 1, title: "Task 1", completed: false);
-      final todo2 = Todo(id: 2, title: "Task 2", completed: true);
+      final RxList<Todo> rxList = RxList<Todo>();
+      final Todo todo1 = Todo(id: 1, title: "Task 1", completed: false);
+      final Todo todo2 = Todo(id: 2, title: "Task 2", completed: true);
 
-      rxList.addAll([todo1, todo2]);
+      rxList.addAll(<Todo>[todo1, todo2]);
       expect(rxList, isNotEmpty);
 
       rxList.clear();

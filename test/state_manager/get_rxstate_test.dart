@@ -3,52 +3,48 @@ import "package:flutter_test/flutter_test.dart";
 import "package:refreshed/refreshed.dart";
 
 void main() {
-  Get.lazyPut<Controller2>(() => Controller2());
-  testWidgets("GetxController smoke test", (tester) async {
+  Get.lazyPut<Controller2>(Controller2.new);
+  testWidgets("GetxController smoke test", (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: GetX<Controller>(
           init: Controller(),
-          builder: (controller) {
-            return Column(
-              children: [
-                Text(
-                  "Count: ${controller.counter.value}",
-                ),
-                Text(
-                  "Double: ${controller.doubleNum.value}",
-                ),
-                Text(
-                  "String: ${controller.string.value}",
-                ),
-                Text(
-                  "List: ${controller.list.length}",
-                ),
-                Text(
-                  "Bool: ${controller.boolean.value}",
-                ),
-                Text(
-                  "Map: ${controller.map.length}",
-                ),
-                TextButton(
-                  child: const Text("increment"),
-                  onPressed: () => controller.increment(),
-                ),
-                GetX<Controller2>(
-                  builder: (controller) {
-                    return Text("lazy ${controller.lazy.value}");
-                  },
-                ),
-                GetX<ControllerNonGlobal>(
-                  init: ControllerNonGlobal(),
-                  global: false,
-                  builder: (controller) {
-                    return Text("single ${controller.nonGlobal.value}");
-                  },
-                ),
-              ],
-            );
-          },
+          builder: (Controller controller) => Column(
+            children: <Widget>[
+              Text(
+                "Count: ${controller.counter.value}",
+              ),
+              Text(
+                "Double: ${controller.doubleNum.value}",
+              ),
+              Text(
+                "String: ${controller.string.value}",
+              ),
+              Text(
+                "List: ${controller.list.length}",
+              ),
+              Text(
+                "Bool: ${controller.boolean.value}",
+              ),
+              Text(
+                "Map: ${controller.map.length}",
+              ),
+              TextButton(
+                child: const Text("increment"),
+                onPressed: () => controller.increment(),
+              ),
+              GetX<Controller2>(
+                builder: (Controller2 controller) =>
+                    Text("lazy ${controller.lazy.value}"),
+              ),
+              GetX<ControllerNonGlobal>(
+                init: ControllerNonGlobal(),
+                global: false,
+                builder: (ControllerNonGlobal controller) =>
+                    Text("single ${controller.nonGlobal.value}"),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -90,8 +86,8 @@ class Controller extends GetxController {
   RxInt counter = 0.obs;
   RxDouble doubleNum = 0.0.obs;
   RxString string = "string".obs;
-  RxList list = [].obs;
-  RxMap map = {}.obs;
+  RxList<int> list = <int>[].obs;
+  RxMap<int, int> map = <int, int>{}.obs;
   RxBool boolean = true.obs;
 
   void increment() {

@@ -3,14 +3,14 @@ import "package:flutter_test/flutter_test.dart";
 import "package:refreshed/refreshed.dart";
 
 void main() {
-  Get.lazyPut<Controller2>(() => Controller2());
-  testWidgets("GetxController smoke test", (test) async {
+  Get.lazyPut<Controller2>(Controller2.new);
+  testWidgets("GetxController smoke test", (WidgetTester test) async {
     await test.pumpWidget(
       MaterialApp(
         home: GetBuilder<Controller>(
           init: Controller(),
-          builder: (controller) => Column(
-            children: [
+          builder: (Controller controller) => Column(
+            children: <Widget>[
               Text(
                 "${controller.counter}",
               ),
@@ -27,21 +27,18 @@ void main() {
                 didChangeDependencies: (_) {
                   // print("didChangeDependencies called");
                 },
-                builder: (controller) {
-                  return Text("id ${controller.counter}");
-                },
+                builder: (Controller controller) =>
+                    Text("id ${controller.counter}"),
               ),
               GetBuilder<Controller2>(
-                builder: (controller) {
-                  return Text("lazy ${controller.test}");
-                },
+                builder: (Controller2 controller) =>
+                    Text("lazy ${controller.test}"),
               ),
               GetBuilder<ControllerNonGlobal>(
                 init: ControllerNonGlobal(),
                 global: false,
-                builder: (controller) {
-                  return Text("single ${controller.nonGlobal}");
-                },
+                builder: (ControllerNonGlobal controller) =>
+                    Text("single ${controller.nonGlobal}"),
               ),
             ],
           ),
@@ -98,7 +95,7 @@ class Controller extends GetxController {
 
   void incrementWithId() {
     counter++;
-    update(["1"]);
+    update(<Object>["1"]);
   }
 }
 

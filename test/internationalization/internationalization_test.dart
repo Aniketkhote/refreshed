@@ -5,7 +5,7 @@ import "package:refreshed/refreshed.dart";
 import "../navigation/utils/wrapper.dart";
 
 void main() {
-  testWidgets("Get.defaultDialog smoke test", (tester) async {
+  testWidgets("Get.defaultDialog smoke test", (WidgetTester tester) async {
     await tester.pumpWidget(
       Wrapper(child: Container()),
     );

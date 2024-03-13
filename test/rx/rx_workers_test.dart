@@ -1,3 +1,5 @@
+// ignore_for_file: cascade_invocations, always_specify_types
+
 import "dart:async";
 
 import "package:flutter_test/flutter_test.dart";
@@ -5,10 +7,10 @@ import "package:refreshed/refreshed.dart";
 
 void main() {
   test("once", () async {
-    final count = 0.obs;
-    var result = -1;
-    once(count, (dynamic _) {
-      result = _ as int;
+    final RxInt count = 0.obs;
+    int result = -1;
+    once(count, (r) {
+      result = r;
     });
     count.value++;
     await Future.delayed(Duration.zero);
@@ -22,9 +24,9 @@ void main() {
   });
 
   test("ever", () async {
-    final count = 0.obs;
-    var result = -1;
-    ever<int>(count, (value) {
+    final RxInt count = 0.obs;
+    int result = -1;
+    ever<int>(count, (int value) {
       result = value;
     });
     count.value++;
@@ -39,13 +41,12 @@ void main() {
   });
 
   test("debounce", () async {
-    final count = 0.obs;
+    final RxInt count = 0.obs;
     int? result = -1;
     debounce(
       count,
-      (dynamic _) {
-        // print(_);
-        result = _ as int?;
+      (r) {
+        result = r as int?;
       },
       time: const Duration(milliseconds: 100),
     );
@@ -61,11 +62,11 @@ void main() {
   });
 
   test("interval", () async {
-    final count = 0.obs;
+    final RxInt count = 0.obs;
     int? result = -1;
     interval<int>(
       count,
-      (v) {
+      (int v) {
         result = v;
       },
       time: const Duration(milliseconds: 100),
@@ -89,10 +90,10 @@ void main() {
 
   test("bindStream test", () async {
     int? count = 0;
-    final controller = StreamController<int>();
-    final rx = 0.obs;
+    final StreamController<int> controller = StreamController<int>();
+    final RxInt rx = 0.obs;
 
-    rx.listen((value) {
+    rx.listen((int value) {
       count = value;
     });
     rx.bindStream(controller.stream);
@@ -101,13 +102,13 @@ void main() {
 
     await Future.delayed(Duration.zero);
     expect(count, 555);
-    controller.close();
+    await controller.close();
   });
 
   test("Rx same value will not call the same listener when call", () async {
-    final reactiveInteger = RxInt(2);
-    var timesCalled = 0;
-    reactiveInteger.listen((newInt) {
+    final RxInt reactiveInteger = RxInt(2);
+    int timesCalled = 0;
+    reactiveInteger.listen((int newInt) {
       timesCalled++;
     });
 
@@ -122,9 +123,9 @@ void main() {
   });
 
   test("Rx different value will call the listener when trigger", () async {
-    final reactiveInteger = RxInt(0);
-    var timesCalled = 0;
-    reactiveInteger.listen((newInt) {
+    final RxInt reactiveInteger = RxInt(0);
+    int timesCalled = 0;
+    reactiveInteger.listen((int newInt) {
       timesCalled++;
     });
 
@@ -140,9 +141,9 @@ void main() {
   });
 
   test("Rx same value will call the listener when trigger", () async {
-    final reactiveInteger = RxInt(2);
-    var timesCalled = 0;
-    reactiveInteger.listen((newInt) {
+    final RxInt reactiveInteger = RxInt(2);
+    int timesCalled = 0;
+    reactiveInteger.listen((int newInt) {
       timesCalled++;
     });
 
@@ -158,9 +159,9 @@ void main() {
   });
 
   test("Rx String with non null values", () async {
-    final reactiveString = Rx<String>("abc");
+    final Rx<String> reactiveString = Rx<String>("abc");
     String? currentString;
-    reactiveString.listen((newString) {
+    reactiveString.listen((String newString) {
       currentString = newString;
     });
 
@@ -174,10 +175,10 @@ void main() {
   });
 
   test("Rx String with null values", () async {
-    final reactiveString = Rx<String?>(null);
+    final Rx<String?> reactiveString = Rx<String?>(null);
     String? currentString;
 
-    reactiveString.listen((newString) {
+    reactiveString.listen((String? newString) {
       currentString = newString;
     });
 
@@ -190,9 +191,9 @@ void main() {
   });
 
   test('Number of times "ever" is called in RxList', () async {
-    final list = [1, 2, 3].obs;
-    var count = 0;
-    ever<List<int>>(list, (value) {
+    final RxList<int> list = <int>[1, 2, 3].obs;
+    int count = 0;
+    ever<List<int>>(list, (List<int> value) {
       count++;
     });
 
@@ -201,7 +202,7 @@ void main() {
     expect(count, 1);
 
     count = 0;
-    list.addAll([4, 5]);
+    list.addAll(<int>[4, 5]);
     await Future.delayed(Duration.zero);
     expect(count, 1);
 
@@ -211,12 +212,12 @@ void main() {
     expect(count, 1);
 
     count = 0;
-    list.removeWhere((element) => element == 2);
+    list.removeWhere((int element) => element == 2);
     await Future.delayed(Duration.zero);
     expect(count, 1);
 
     count = 0;
-    list.retainWhere((element) => element == 1);
+    list.retainWhere((int element) => element == 1);
     await Future.delayed(Duration.zero);
     expect(count, 1);
   });

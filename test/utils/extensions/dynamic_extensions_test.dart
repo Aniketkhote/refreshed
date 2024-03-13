@@ -1,10 +1,12 @@
+// ignore_for_file: avoid_annotating_with_dynamic
+
 import "package:flutter_test/flutter_test.dart";
 import "package:refreshed/utils.dart";
 
 void main() {
   test("String test", () {
-    final value = "string";
-    var expected = "";
+    const String value = "string";
+    String expected = "";
     void logFunction(
       String prefix,
       dynamic value,
@@ -18,8 +20,8 @@ void main() {
     expect(expected, "Error: String string");
   });
   test("Int test", () {
-    final value = 1;
-    var expected = "";
+    const int value = 1;
+    String expected = "";
     void logFunction(
       String prefix,
       dynamic value,
@@ -33,8 +35,8 @@ void main() {
     expect(expected, "Error: int 1");
   });
   test("Double test", () {
-    final value = 1.0;
-    var expected = "";
+    const double value = 1;
+    String expected = "";
     void logFunction(
       String prefix,
       dynamic value,

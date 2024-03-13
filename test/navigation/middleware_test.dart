@@ -5,40 +5,27 @@ import "package:refreshed/refreshed.dart";
 import "get_main_test.dart";
 
 class RedirectMiddleware extends GetMiddleware {
-  // @override
-  // RouteSettings redirect(String? route) {
-  //   return RouteSettings(name: '/second');
-  // }
-
   @override
-  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
-    return RouteDecoder.fromRoute("/second");
-  }
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async =>
+      RouteDecoder.fromRoute("/second");
 }
 
 class RedirectMiddlewareNull extends GetMiddleware {
-  // @override
-  // RouteSettings redirect(String? route) {
-  //   return RouteSettings(name: '/second');
-  // }
-
   @override
-  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async {
-    return null;
-  }
+  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async => null;
 }
 
 void main() {
-  testWidgets("Middleware redirect smoke test", (tester) async {
+  testWidgets("Middleware redirect smoke test", (WidgetTester tester) async {
     await tester.pumpWidget(
       GetMaterialApp(
         initialRoute: "/",
-        getPages: [
-          GetPage(name: "/", page: () => Container()),
+        getPages: <GetPage>[
+          GetPage(name: "/", page: Container.new),
           GetPage(
             name: "/first",
             page: () => const FirstScreen(),
-            middlewares: [
+            middlewares: <GetMiddleware>[
               RedirectMiddleware(),
             ],
           ),
@@ -54,16 +41,16 @@ void main() {
     expect(find.byType(SecondScreen), findsOneWidget);
   });
 
-  testWidgets("Middleware redirect null test", (tester) async {
+  testWidgets("Middleware redirect null test", (WidgetTester tester) async {
     await tester.pumpWidget(
       GetMaterialApp(
         initialRoute: "/",
-        getPages: [
-          GetPage(name: "/", page: () => Container()),
+        getPages: <GetPage>[
+          GetPage(name: "/", page: Container.new),
           GetPage(
             name: "/first",
             page: () => const FirstScreen(),
-            middlewares: [
+            middlewares: <GetMiddleware>[
               RedirectMiddlewareNull(),
             ],
           ),

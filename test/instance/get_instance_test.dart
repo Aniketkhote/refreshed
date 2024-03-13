@@ -1,37 +1,23 @@
-// ignore_for_file: avoid_classes_with_only_static_members
+// ignore_for_file: avoid_classes_with_only_static_members, cascade_invocations
 
 import "package:flutter_test/flutter_test.dart";
 import "package:refreshed/refreshed.dart";
 
 import "util/matcher.dart" as m;
 
-class Mock {
-  static Future<String> test() async {
-    await Future.delayed(Duration.zero);
-    return "test";
-  }
-}
-
 abstract class MyController with GetLifeCycleMixin {}
 
 class DisposableController extends MyController {}
 
 // ignore: one_member_abstracts
-abstract class Service {
-  String post();
-}
+abstract class Service {}
 
-class Api implements Service {
-  @override
-  String post() {
-    return "test";
-  }
-}
+class Api implements Service {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   test("Get.put test", () async {
-    final instance = Get.put<Controller>(Controller());
+    final Controller instance = Get.put<Controller>(Controller());
     expect(instance, Get.find<Controller>());
     Get.reset();
   });
@@ -41,7 +27,7 @@ void main() {
       ..put(Controller())
       ..put(Controller());
 
-    final controller = Get.find<Controller>();
+    final Controller controller = Get.find<Controller>();
     expect(controller.init, 1);
 
     Get
@@ -52,8 +38,8 @@ void main() {
   });
 
   test("Get.put tag test", () async {
-    final instance = Get.put<Controller>(Controller(), tag: "one");
-    final instance2 = Get.put<Controller>(Controller(), tag: "two");
+    final Controller instance = Get.put<Controller>(Controller(), tag: "one");
+    final Controller instance2 = Get.put<Controller>(Controller(), tag: "two");
     expect(instance == instance2, false);
     expect(
       Get.find<Controller>(tag: "one") == Get.find<Controller>(tag: "two"),
@@ -71,8 +57,8 @@ void main() {
   });
 
   test("Get.lazyPut tag test", () async {
-    Get.lazyPut<Controller>(() => Controller(), tag: "one");
-    Get.lazyPut<Controller>(() => Controller(), tag: "two");
+    Get.lazyPut<Controller>(Controller.new, tag: "one");
+    Get.lazyPut<Controller>(Controller.new, tag: "two");
 
     expect(
       Get.find<Controller>(tag: "one") == Get.find<Controller>(tag: "two"),
@@ -90,15 +76,15 @@ void main() {
   });
 
   test("Get.lazyPut test", () async {
-    final controller = Controller();
+    final Controller controller = Controller();
     Get.lazyPut<Controller>(() => controller);
-    final ct1 = Get.find<Controller>();
+    final Controller ct1 = Get.find<Controller>();
     expect(ct1, controller);
     Get.reset();
   });
 
   test("Get.lazyPut fenix test", () async {
-    Get.lazyPut<Controller>(() => Controller(), fenix: true);
+    Get.lazyPut<Controller>(Controller.new, fenix: true);
     Get.find<Controller>().increment();
 
     expect(Get.find<Controller>().count, 1);
@@ -108,7 +94,7 @@ void main() {
   });
 
   test("Get.lazyPut without fenix", () async {
-    Get.lazyPut<Controller>(() => Controller());
+    Get.lazyPut<Controller>(Controller.new);
     Get.find<Controller>().increment();
 
     expect(Get.find<Controller>().count, 1);
@@ -121,8 +107,8 @@ void main() {
   });
 
   test("Get.reloadInstance test", () async {
-    Get.lazyPut<Controller>(() => Controller());
-    var ct1 = Get.find<Controller>();
+    Get.lazyPut<Controller>(Controller.new);
+    Controller ct1 = Get.find<Controller>();
     ct1.increment();
     expect(ct1.count, 1);
     ct1 = Get.find<Controller>();
@@ -134,9 +120,9 @@ void main() {
   });
 
   test("GetxService test", () async {
-    Get.lazyPut<PermanentService>(() => PermanentService());
-    final sv1 = Get.find<PermanentService>();
-    final sv2 = Get.find<PermanentService>();
+    Get.lazyPut<PermanentService>(PermanentService.new);
+    final PermanentService sv1 = Get.find<PermanentService>();
+    final PermanentService sv2 = Get.find<PermanentService>();
     expect(sv1, sv2);
     expect(Get.isRegistered<PermanentService>(), true);
     Get.delete<PermanentService>();
@@ -147,17 +133,17 @@ void main() {
   });
 
   test("Get.lazyPut with abstract class test", () async {
-    final api = Api();
+    final Api api = Api();
     Get.lazyPut<Service>(() => api);
-    final ct1 = Get.find<Service>();
+    final Service ct1 = Get.find<Service>();
     expect(ct1, api);
     Get.reset();
   });
 
   test("Get.create with abstract class test", () async {
-    Get.spawn<Service>(() => Api());
-    final ct1 = Get.find<Service>();
-    final ct2 = Get.find<Service>();
+    Get.spawn<Service>(Api.new);
+    final Service ct1 = Get.find<Service>();
+    final Service ct2 = Get.find<Service>();
     // expect(ct1 is Service, true);
     // expect(ct2 is Service, true);
     expect(ct1 == ct2, false);
@@ -168,7 +154,7 @@ void main() {
     tearDownAll(Get.reset);
 
     test("Get.put test with init check", () async {
-      final instance = Get.put(DisposableController());
+      final DisposableController instance = Get.put(DisposableController());
       expect(instance, Get.find<DisposableController>());
       expect(instance.initialized, true);
     });
@@ -184,7 +170,8 @@ void main() {
 
     test("Get.put test after delete with disposable controller and init check",
         () async {
-      final instance = Get.put<DisposableController>(DisposableController());
+      final DisposableController instance =
+          Get.put<DisposableController>(DisposableController());
       expect(instance, Get.find<DisposableController>());
       expect(instance.initialized, true);
     });
@@ -195,7 +182,7 @@ void main() {
     test("temporary", () async {
       Get.put(DisposableController());
       Get.replace<DisposableController>(Controller());
-      final instance = Get.find<DisposableController>();
+      final DisposableController instance = Get.find<DisposableController>();
       expect(instance is Controller, isTrue);
       expect((instance as Controller).init, greaterThan(0));
     });
@@ -203,34 +190,36 @@ void main() {
     test("permanent", () async {
       Get.put(DisposableController(), permanent: true);
       Get.replace<DisposableController>(Controller());
-      final instance = Get.find<DisposableController>();
+      final DisposableController instance = Get.find<DisposableController>();
       expect(instance is Controller, isTrue);
       expect((instance as Controller).init, greaterThan(0));
     });
 
     test("tagged temporary", () async {
-      const tag = "tag";
+      const String tag = "tag";
       Get.put(DisposableController(), tag: tag);
       Get.replace<DisposableController>(Controller(), tag: tag);
-      final instance = Get.find<DisposableController>(tag: tag);
+      final DisposableController instance =
+          Get.find<DisposableController>(tag: tag);
       expect(instance is Controller, isTrue);
       expect((instance as Controller).init, greaterThan(0));
     });
 
     test("tagged permanent", () async {
-      const tag = "tag";
+      const String tag = "tag";
       Get.put(DisposableController(), permanent: true, tag: tag);
       Get.replace<DisposableController>(Controller(), tag: tag);
-      final instance = Get.find<DisposableController>(tag: tag);
+      final DisposableController instance =
+          Get.find<DisposableController>(tag: tag);
       expect(instance is Controller, isTrue);
       expect((instance as Controller).init, greaterThan(0));
     });
 
     test("a generic parent type", () async {
-      const tag = "tag";
+      const String tag = "tag";
       Get.put<MyController>(DisposableController(), permanent: true, tag: tag);
       Get.replace<MyController>(Controller(), tag: tag);
-      final instance = Get.find<MyController>(tag: tag);
+      final MyController instance = Get.find<MyController>(tag: tag);
       expect(instance is Controller, isTrue);
       expect((instance as Controller).init, greaterThan(0));
     });
@@ -240,15 +229,15 @@ void main() {
     tearDown(Get.reset);
     test("without fenix", () async {
       Get.put(DisposableController());
-      Get.lazyReplace<DisposableController>(() => Controller());
-      final instance = Get.find<DisposableController>();
+      Get.lazyReplace<DisposableController>(Controller.new);
+      final DisposableController instance = Get.find<DisposableController>();
       expect(instance, isA<Controller>());
       expect((instance as Controller).init, greaterThan(0));
     });
 
     test("with fenix", () async {
       Get.put(DisposableController());
-      Get.lazyReplace<DisposableController>(() => Controller(), fenix: true);
+      Get.lazyReplace<DisposableController>(Controller.new, fenix: true);
       expect(Get.find<DisposableController>(), isA<Controller>());
       (Get.find<DisposableController>() as Controller).increment();
 
@@ -259,8 +248,8 @@ void main() {
 
     test("with fenix when parent is permanent", () async {
       Get.put(DisposableController(), permanent: true);
-      Get.lazyReplace<DisposableController>(() => Controller());
-      final instance = Get.find<DisposableController>();
+      Get.lazyReplace<DisposableController>(Controller.new);
+      final DisposableController instance = Get.find<DisposableController>();
       expect(instance, isA<Controller>());
       (instance as Controller).increment();
 

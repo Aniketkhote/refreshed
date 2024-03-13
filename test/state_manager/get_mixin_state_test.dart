@@ -4,46 +4,45 @@ import "package:refreshed/get_state_manager/src/simple/mixin_builder.dart";
 import "package:refreshed/refreshed.dart";
 
 void main() {
-  testWidgets("MixinBuilder with reactive and not reactive", (tester) async {
+  testWidgets("MixinBuilder with reactive and not reactive",
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: MixinBuilder<Controller>(
           init: Controller(),
-          builder: (controller) {
-            return Column(
-              children: [
-                Text(
-                  "Count: ${controller.counter.value}",
-                ),
-                Text(
-                  "Count2: ${controller.count}",
-                ),
-                Text(
-                  "Double: ${controller.doubleNum.value}",
-                ),
-                Text(
-                  "String: ${controller.string.value}",
-                ),
-                Text(
-                  "List: ${controller.list.length}",
-                ),
-                Text(
-                  "Bool: ${controller.boolean.value}",
-                ),
-                Text(
-                  "Map: ${controller.map.length}",
-                ),
-                TextButton(
-                  child: const Text("increment"),
-                  onPressed: () => controller.increment(),
-                ),
-                TextButton(
-                  child: const Text("increment2"),
-                  onPressed: () => controller.increment2(),
-                ),
-              ],
-            );
-          },
+          builder: (Controller controller) => Column(
+            children: <Widget>[
+              Text(
+                "Count: ${controller.counter.value}",
+              ),
+              Text(
+                "Count2: ${controller.count}",
+              ),
+              Text(
+                "Double: ${controller.doubleNum.value}",
+              ),
+              Text(
+                "String: ${controller.string.value}",
+              ),
+              Text(
+                "List: ${controller.list.length}",
+              ),
+              Text(
+                "Bool: ${controller.boolean.value}",
+              ),
+              Text(
+                "Map: ${controller.map.length}",
+              ),
+              TextButton(
+                child: const Text("increment"),
+                onPressed: () => controller.increment(),
+              ),
+              TextButton(
+                child: const Text("increment2"),
+                onPressed: () => controller.increment2(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -95,8 +94,8 @@ class Controller extends GetxController {
   RxInt counter = 0.obs;
   RxDouble doubleNum = 0.0.obs;
   RxString string = "string".obs;
-  RxList list = [].obs;
-  RxMap map = {}.obs;
+  RxList<int> list = <int>[].obs;
+  RxMap<int, int> map = <int, int>{}.obs;
   RxBool boolean = true.obs;
 
   void increment() {

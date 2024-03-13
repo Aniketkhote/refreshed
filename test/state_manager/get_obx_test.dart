@@ -3,15 +3,15 @@ import "package:flutter_test/flutter_test.dart";
 import "package:refreshed/refreshed.dart";
 
 void main() {
-  testWidgets("GetxController smoke test", (tester) async {
-    final controller = Get.put(Controller());
+  testWidgets("GetxController smoke test", (WidgetTester tester) async {
+    final Controller controller = Get.put(Controller());
     await tester.pumpWidget(
       MaterialApp(
         home: Column(
-          children: [
+          children: <Widget>[
             Obx(
               () => Column(
-                children: [
+                children: <Widget>[
                   Text("Count: ${controller.counter.value}"),
                   Text("Double: ${controller.doubleNum.value}"),
                   Text("String: ${controller.string.value}"),
@@ -59,8 +59,8 @@ class Controller extends GetxController {
   RxInt counter = 0.obs;
   RxDouble doubleNum = 0.0.obs;
   RxString string = "string".obs;
-  RxList list = [].obs;
-  RxMap map = {}.obs;
+  RxList<int> list = <int>[].obs;
+  RxMap<int, int> map = <int, int>{}.obs;
   RxBool boolean = true.obs;
 
   void increment() {
