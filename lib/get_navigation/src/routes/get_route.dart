@@ -5,10 +5,9 @@ import "dart:async";
 import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-
 import "package:refreshed/get_instance/src/bindings_interface.dart";
-import "package:refreshed/get_state_manager/src/simple/get_state.dart";
 import "package:refreshed/get_navigation/get_navigation.dart";
+import "package:refreshed/get_state_manager/src/simple/get_state.dart";
 
 class GetPage<T> extends Page<T> {
   GetPage({
@@ -176,7 +175,7 @@ class GetPage<T> extends Page<T> {
       final buffer = StringBuffer("(?:");
 
       if (pattern[1] != null) buffer.write(".");
-      buffer.write("([\\w%+-._~!\$&\'()*,;=:@]+))");
+      buffer.write("([\\w%+-._~!\$&'()*,;=:@]+))");
       if (pattern[3] != null) buffer.write("?");
 
       keys.add(pattern[2]);
