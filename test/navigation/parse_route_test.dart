@@ -4,148 +4,150 @@ import "package:refreshed/refreshed.dart";
 
 void main() {
   test("Parse Page with children", () {
-    final testParams = {"hi": "value"};
-    final pageTree = GetPage(
+    final Map<String, String> testParams = <String, String>{"hi": "value"};
+    final GetPage<dynamic> pageTree = GetPage<dynamic>(
       name: "/city",
-      page: () => Container(),
-      children: [
-        GetPage(
+      page: Container.new,
+      children: <GetPage<dynamic>>[
+        GetPage<dynamic>(
           name: "/home",
-          page: () => Container(),
+          page: Container.new,
           transition: Transition.rightToLeftWithFade,
-          children: [
-            GetPage(
+          children: <GetPage<dynamic>>[
+            GetPage<dynamic>(
               name: "/bed-room",
               transition: Transition.size,
-              page: () => Container(),
+              page: Container.new,
             ),
-            GetPage(
+            GetPage<dynamic>(
               name: "/living-room",
               transition: Transition.topLevel,
-              page: () => Container(),
+              page: Container.new,
             ),
           ],
         ),
-        GetPage(
+        GetPage<dynamic>(
           name: "/work",
           transition: Transition.upToDown,
-          page: () => Container(),
-          children: [
-            GetPage(
+          page: Container.new,
+          children: <GetPage<dynamic>>[
+            GetPage<dynamic>(
               name: "/office",
               transition: Transition.zoom,
-              page: () => Container(),
-              children: [
-                GetPage(
+              page: Container.new,
+              children: <GetPage<dynamic>>[
+                GetPage<dynamic>(
                   name: "/pen",
                   transition: Transition.cupertino,
-                  page: () => Container(),
+                  page: Container.new,
                   parameters: testParams,
                 ),
-                GetPage(
+                GetPage<dynamic>(
                   name: "/paper",
-                  page: () => Container(),
+                  page: Container.new,
                   transition: Transition.downToUp,
                 ),
               ],
             ),
-            GetPage(
+            GetPage<dynamic>(
               name: "/meeting-room",
               transition: Transition.fade,
-              page: () => Container(),
+              page: Container.new,
             ),
           ],
         ),
       ],
     );
 
-    final tree = ParseRouteTree(routes: <GetPage>[]);
+    final ParseRouteTree tree = ParseRouteTree(routes: <GetPage<dynamic>>[]);
 
     tree.addRoute(pageTree);
 
-    // tree.addRoute(pageTree);
-    const searchRoute = "/city/work/office/pen";
-    final match = tree.matchRoute(searchRoute);
+    const String searchRoute = "/city/work/office/pen";
+    final RouteDecoder match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
     expect(match.route!.name, searchRoute);
-    final testRouteParam = match.route!.parameters!;
-    for (final tParam in testParams.entries) {
+    final Map<String, String> testRouteParam = match.route!.parameters!;
+    for (final MapEntry<String, String> tParam in testParams.entries) {
       expect(testRouteParam[tParam.key], tParam.value);
     }
   });
 
   test("Parse Page without children", () {
-    final pageTree = [
-      GetPage(
+    final List<GetPage<dynamic>> pageTree = <GetPage<dynamic>>[
+      GetPage<dynamic>(
         name: "/city",
-        page: () => Container(),
+        page: Container.new,
         transition: Transition.cupertino,
       ),
-      GetPage(
+      GetPage<dynamic>(
         name: "/city/home",
-        page: () => Container(),
+        page: Container.new,
         transition: Transition.downToUp,
       ),
-      GetPage(
+      GetPage<dynamic>(
         name: "/city/home/bed-room",
-        page: () => Container(),
+        page: Container.new,
         transition: Transition.fade,
       ),
-      GetPage(
+      GetPage<dynamic>(
         name: "/city/home/living-room",
-        page: () => Container(),
+        page: Container.new,
         transition: Transition.fadeIn,
       ),
-      GetPage(
+      GetPage<dynamic>(
         name: "/city/work",
-        page: () => Container(),
+        page: Container.new,
         transition: Transition.leftToRight,
       ),
-      GetPage(
+      GetPage<dynamic>(
         name: "/city/work/office",
-        page: () => Container(),
+        page: Container.new,
         transition: Transition.leftToRightWithFade,
       ),
-      GetPage(
+      GetPage<dynamic>(
         name: "/city/work/office/pen",
-        page: () => Container(),
+        page: Container.new,
         transition: Transition.native,
       ),
-      GetPage(
+      GetPage<dynamic>(
         name: "/city/work/office/paper",
-        page: () => Container(),
+        page: Container.new,
         transition: Transition.noTransition,
       ),
-      GetPage(
+      GetPage<dynamic>(
         name: "/city/work/meeting-room",
-        page: () => Container(),
+        page: Container.new,
         transition: Transition.rightToLeft,
       ),
     ];
 
-    final tree = ParseRouteTree(routes: pageTree);
+    final ParseRouteTree tree = ParseRouteTree(routes: pageTree);
 
     // for (var p in pageTree) {
     //   tree.addRoute(p);
     // }
 
-    const searchRoute = "/city/work/office/pen";
-    final match = tree.matchRoute(searchRoute);
+    const String searchRoute = "/city/work/office/pen";
+    final RouteDecoder match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
     expect(match.route!.name, searchRoute);
   });
 
   testWidgets(
     "test params from dynamic route",
-    (tester) async {
+    (WidgetTester tester) async {
       await tester.pumpWidget(
         GetMaterialApp(
           initialRoute: "/first/juan",
-          getPages: [
-            GetPage(page: () => Container(), name: "/first/:name"),
-            GetPage(page: () => Container(), name: "/second/:id"),
-            GetPage(page: () => Container(), name: "/third"),
-            GetPage(page: () => Container(), name: "/last/:id/:name/profile"),
+          getPages: <GetPage<dynamic>>[
+            GetPage<dynamic>(page: Container.new, name: "/first/:name"),
+            GetPage<dynamic>(page: Container.new, name: "/second/:id"),
+            GetPage<dynamic>(page: Container.new, name: "/third"),
+            GetPage<dynamic>(
+              page: Container.new,
+              name: "/last/:id/:name/profile",
+            ),
           ],
         ),
       );
@@ -184,24 +186,24 @@ void main() {
 
   testWidgets(
     "params in url by parameters",
-    (tester) async {
+    (WidgetTester tester) async {
       await tester.pumpWidget(
         GetMaterialApp(
           initialRoute: "/first/juan",
-          getPages: [
-            GetPage(page: () => Container(), name: "/first/:name"),
-            GetPage(page: () => Container(), name: "/italy"),
+          getPages: <GetPage<dynamic>>[
+            GetPage<dynamic>(page: Container.new, name: "/first/:name"),
+            GetPage<dynamic>(page: Container.new, name: "/italy"),
           ],
         ),
       );
 
       // Get.parameters = ({"varginias": "varginia", "vinis": "viniiss"});
-      final parameters = <String, String>{
+      final Map<String, String> parameters = <String, String>{
         "varginias": "varginia",
         "vinis": "viniiss",
       };
       // print("Get.parameters: ${Get.parameters}");
-      parameters.addAll({"a": "b", "c": "d"});
+      parameters.addAll(<String, String>{"a": "b", "c": "d"});
       Get.toNamed("/italy", parameters: parameters);
 
       await tester.pumpAndSettle();

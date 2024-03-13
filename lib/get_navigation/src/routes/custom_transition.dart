@@ -4,6 +4,7 @@ import "package:flutter/widgets.dart";
 ///
 /// Implementations of this class define how a transition animation should be built
 /// for a specific route transition.
+// ignore: one_member_abstracts
 abstract class CustomTransition {
   /// Builds the transition animation for a route.
   ///

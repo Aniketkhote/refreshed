@@ -11,24 +11,23 @@ class LeftToRightFadeTransition {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
-  ) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(-1.0, 0.0),
-        end: Offset.zero,
-      ).animate(animation),
-      child: FadeTransition(
-        opacity: animation,
-        child: SlideTransition(
-          position: Tween<Offset>(
-            begin: Offset.zero,
-            end: const Offset(1.0, 0.0),
-          ).animate(secondaryAnimation),
-          child: child,
+  ) =>
+      SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(-1, 0),
+          end: Offset.zero,
+        ).animate(animation),
+        child: FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: Offset.zero,
+              end: const Offset(1, 0),
+            ).animate(secondaryAnimation),
+            child: child,
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 /// A class representing a right-to-left fade transition animation.
@@ -41,24 +40,23 @@ class RightToLeftFadeTransition {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
-  ) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(1.0, 0.0),
-        end: Offset.zero,
-      ).animate(animation),
-      child: FadeTransition(
-        opacity: animation,
-        child: SlideTransition(
-          position: Tween<Offset>(
-            begin: Offset.zero,
-            end: const Offset(-1.0, 0.0),
-          ).animate(secondaryAnimation),
-          child: child,
+  ) =>
+      SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(1, 0),
+          end: Offset.zero,
+        ).animate(animation),
+        child: FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: Offset.zero,
+              end: const Offset(-1, 0),
+            ).animate(secondaryAnimation),
+            child: child,
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 /// A class representing a no transition animation.
@@ -71,9 +69,8 @@ class NoTransition {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
-  ) {
-    return child;
-  }
+  ) =>
+      child;
 }
 
 /// A class representing a fade-in transition animation.
@@ -86,9 +83,8 @@ class FadeInTransition {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
-  ) {
-    return FadeTransition(opacity: animation, child: child);
-  }
+  ) =>
+      FadeTransition(opacity: animation, child: child);
 }
 
 /// A class representing a slide-down transition animation.
@@ -101,15 +97,14 @@ class SlideDownTransition {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
-  ) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(0.0, 1.0),
-        end: Offset.zero,
-      ).animate(animation),
-      child: child,
-    );
-  }
+  ) =>
+      SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0, 1),
+          end: Offset.zero,
+        ).animate(animation),
+        child: child,
+      );
 }
 
 /// A class representing a slide-left transition animation.
@@ -122,15 +117,14 @@ class SlideLeftTransition {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
-  ) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(-1.0, 0.0),
-        end: Offset.zero,
-      ).animate(animation),
-      child: child,
-    );
-  }
+  ) =>
+      SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(-1, 0),
+          end: Offset.zero,
+        ).animate(animation),
+        child: child,
+      );
 }
 
 /// A class representing a slide-right transition animation.
@@ -143,15 +137,14 @@ class SlideRightTransition {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
-  ) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(1.0, 0.0),
-        end: Offset.zero,
-      ).animate(animation),
-      child: child,
-    );
-  }
+  ) =>
+      SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(1, 0),
+          end: Offset.zero,
+        ).animate(animation),
+        child: child,
+      );
 }
 
 /// A class representing a slide-top transition animation.
@@ -164,15 +157,14 @@ class SlideTopTransition {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
-  ) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(0.0, -1.0),
-        end: Offset.zero,
-      ).animate(animation),
-      child: child,
-    );
-  }
+  ) =>
+      SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0, -1),
+          end: Offset.zero,
+        ).animate(animation),
+        child: child,
+      );
 }
 
 /// A class representing a zoom-in transition animation.
@@ -185,12 +177,11 @@ class ZoomInTransition {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
-  ) {
-    return ScaleTransition(
-      scale: animation,
-      child: child,
-    );
-  }
+  ) =>
+      ScaleTransition(
+        scale: animation,
+        child: child,
+      );
 }
 
 /// A class representing a size transition animation.
@@ -203,16 +194,14 @@ class SizeTransitions {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
-  ) {
-    return Align(
-      alignment: Alignment.center,
-      child: SizeTransition(
-        sizeFactor: CurvedAnimation(
-          parent: animation,
-          curve: curve,
+  ) =>
+      Align(
+        child: SizeTransition(
+          sizeFactor: CurvedAnimation(
+            parent: animation,
+            curve: curve,
+          ),
+          child: child,
         ),
-        child: child,
-      ),
-    );
-  }
+      );
 }
