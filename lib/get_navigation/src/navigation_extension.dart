@@ -1,3 +1,5 @@
+// ignore_for_file: cascade_invocations
+
 import "dart:ui" as ui;
 
 import "package:flutter/material.dart";

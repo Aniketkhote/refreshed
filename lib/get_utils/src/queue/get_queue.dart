@@ -38,17 +38,17 @@ class GetMicrotask {
 /// Each job is represented by a [Function] that returns a [Future].
 /// The result of each job's future is stored in a [Completer].
 /// Jobs are executed asynchronously using [Future] and [Completer].
-class GetQueue {
-  final List<_Item> _queue = [];
+class GetQueue<T> {
+  final List<_Item<T>> _queue = <_Item<T>>[];
   bool _active = false;
 
   /// Adds a job to the queue and returns its result as a future.
   ///
   /// The provided [job] function is added to the queue of jobs to be executed.
   /// A [Completer] is used to obtain the result of the job as a future.
-  Future<T> add<T>(Function job) {
-    final completer = Completer<T>();
-    _queue.add(_Item(completer, job));
+  Future<T> add(Function job) {
+    final Completer<T> completer = Completer<T>();
+    _queue.add(_Item<T>(completer, job));
     _check();
     return completer.future;
   }
@@ -63,25 +63,25 @@ class GetQueue {
   /// Checks and executes the next job in the queue if the queue is not empty and no other job is currently active.
   ///
   /// This method is called recursively after each job is executed to continue processing the queue.
-  void _check() async {
+  Future<void> _check() async {
     if (!_active && _queue.isNotEmpty) {
       _active = true;
-      final item = _queue.removeAt(0);
+      final _Item<T> item = _queue.removeAt(0);
       try {
         item.completer.complete(await item.job());
       } on Exception catch (e) {
         item.completer.completeError(e);
       }
       _active = false;
-      _check();
+      await _check();
     }
   }
 }
 
 /// Represents an item in the job queue with its associated completer and job function.
-class _Item {
+class _Item<T> {
   /// Constructs an item with the given completer and job.
   _Item(this.completer, this.job);
-  final dynamic completer;
-  final dynamic job;
+  final Completer<T> completer;
+  final Function job;
 }

@@ -7,6 +7,7 @@ import "package:refreshed/get_navigation/src/root/get_root.dart";
 import "package:refreshed/refreshed.dart";
 
 class SnackbarController {
+  /// construct [SnackbarController]
   SnackbarController(this.snackbar);
   final GlobalKey<GetSnackBarState> key = GlobalKey<GetSnackBarState>();
 
@@ -59,7 +60,7 @@ class SnackbarController {
   /// Adds GetSnackbar to a view queue.
   /// Only one GetSnackbar will be displayed at a time, and this method returns
   /// a future to when the snackbar disappears.
-  Future<void> show() =>
+  Future<void> show() async =>
       GetRootState.controller.config.snackBarQueue.addJob(this);
 
   void _cancelTimer() {
@@ -351,8 +352,8 @@ class SnackbarController {
   }
 }
 
-class SnackBarQueue {
-  final GetQueue _queue = GetQueue();
+class SnackBarQueue<T> {
+  final GetQueue<T> _queue = GetQueue<T>();
   final List<SnackbarController> _snackbarList = <SnackbarController>[];
 
   SnackbarController? get _currentSnackbar {
@@ -364,7 +365,7 @@ class SnackBarQueue {
 
   bool get isJobInProgress => _snackbarList.isNotEmpty;
 
-  Future<void> addJob(SnackbarController job) async {
+  Future<T> addJob(SnackbarController job) async {
     _snackbarList.add(job);
     final data = await _queue.add(job._show);
     _snackbarList.remove(job);

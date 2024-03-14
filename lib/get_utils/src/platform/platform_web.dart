@@ -1,6 +1,7 @@
-import "package:web/web.dart" as html;
+// ignore_for_file: avoid_classes_with_only_static_members
 
 import "package:refreshed/get_utils/get_utils.dart";
+import "package:web/web.dart" as html;
 
 html.Navigator _navigator = html.window.navigator;
 
@@ -30,11 +31,10 @@ class GeneralPlatform {
   static bool get isAndroid => _navigator.appVersion.contains("Android ");
 
   /// Returns `true` if the current platform is iOS.
-  static bool get isIOS {
-    // maxTouchPoints is needed to separate iPad iOS13 vs new MacOS
-    return GetUtils.hasMatch(_navigator.platform, r"/iPad|iPhone|iPod/") ||
-        (_navigator.platform == "MacIntel" && _navigator.maxTouchPoints > 1);
-  }
+  static bool get isIOS =>
+      // maxTouchPoints is needed to separate iPad iOS13 vs new MacOS
+      GetUtils.hasMatch(_navigator.platform, "/iPad|iPhone|iPod/") ||
+      (_navigator.platform == "MacIntel" && _navigator.maxTouchPoints > 1);
 
   /// Returns `true` if the current platform is Fuchsia.
   static bool get isFuchsia => false;

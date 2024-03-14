@@ -4,7 +4,7 @@ import "package:refreshed/get_navigation/src/router_report.dart";
 import "package:refreshed/refreshed.dart";
 
 /// A class that holds configuration data for the application.
-class ConfigData {
+class ConfigData<T> {
   /// Constructs a new [ConfigData] instance.
   ConfigData({
     required this.routingCallback,
@@ -75,7 +75,7 @@ class ConfigData {
   final SmartManagement smartManagement;
 
   /// List of bindings for dependency injection.
-  final List<Bind> binds;
+  final List<Bind<T>> binds;
 
   /// Duration for route transition animations.
   final Duration? transitionDuration;
@@ -84,10 +84,10 @@ class ConfigData {
   final bool? defaultGlobalState;
 
   /// List of routes/pages in the application.
-  final List<GetPage>? getPages;
+  final List<GetPage<T>>? getPages;
 
   /// Route to use when an unknown route is encountered.
-  final GetPage? unknownRoute;
+  final GetPage<T>? unknownRoute;
 
   /// Provider for route information.
   final RouteInformationProvider? routeInformationProvider;
@@ -170,9 +170,9 @@ class ConfigData {
   /// Flag indicating whether the application is in test mode.
   final bool testMode;
 
-  final SnackBarQueue snackBarQueue = SnackBarQueue();
+  final SnackBarQueue<T> snackBarQueue = SnackBarQueue<T>();
 
-  ConfigData copyWith({
+  ConfigData<T> copyWith({
     ValueChanged<Routing?>? routingCallback,
     Transition? defaultTransition,
     VoidCallback? onInit,
@@ -181,11 +181,11 @@ class ConfigData {
     bool? enableLog,
     LogWriterCallback? logWriterCallback,
     SmartManagement? smartManagement,
-    List<Bind>? binds,
+    List<Bind<T>>? binds,
     Duration? transitionDuration,
     bool? defaultGlobalState,
-    List<GetPage>? getPages,
-    GetPage? unknownRoute,
+    List<GetPage<T>>? getPages,
+    GetPage<T>? unknownRoute,
     RouteInformationProvider? routeInformationProvider,
     RouteInformationParser<Object>? routeInformationParser,
     RouterDelegate<Object>? routerDelegate,
@@ -214,7 +214,7 @@ class ConfigData {
     Routing? routing,
     Map<String, String?>? parameters,
   }) =>
-      ConfigData(
+      ConfigData<T>(
         routingCallback: routingCallback ?? this.routingCallback,
         defaultTransition: defaultTransition ?? this.defaultTransition,
         onInit: onInit ?? this.onInit,
@@ -265,7 +265,9 @@ class ConfigData {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     return other is ConfigData &&
         other.routingCallback == routingCallback &&
@@ -477,7 +479,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   /// for the widget.
   void onInit() {
     if (config.getPages == null && config.home == null) {
-      throw "You need add pages or home";
+      throw Exception("You need add pages or home");
     }
 
     if (config.routerDelegate == null) {
@@ -515,7 +517,9 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
           config.copyWith(routeInformationParser: newRouteInformationParser);
     }
 
-    if (config.locale != null) Get.locale = config.locale;
+    if (config.locale != null) {
+      Get.locale = config.locale;
+    }
 
     if (config.fallbackLocale != null) {
       Get.fallbackLocale = config.fallbackLocale;
@@ -537,7 +541,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
       config = config.copyWith(defaultTransition: getThemeTransition());
     }
 
-    Future(onReady);
+    Future<void>(onReady);
   }
 
   /// Sets parameters for the application.
@@ -581,7 +585,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeLocales(List<Locale>? locales) {
+  Future<void> didChangeLocales(List<Locale>? locales) async {
     Get.asap(() {
       final Locale? locale = Get.deviceLocale;
       if (locale != null) {

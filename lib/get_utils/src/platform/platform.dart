@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import "package:refreshed/get_utils/src/platform/platform_web.dart"
     if (dart.library.io) "platform_io.dart";
 

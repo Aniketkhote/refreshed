@@ -1,3 +1,8 @@
+## 2.1.0
+
+- Refactored codebase by eliminating String extensions and methods, Instead, use`Quickly` package for similar functionalities.
+- Resolved asynchronous issue in Queue by introducing proper await usage.
+
 ## 2.0.3
 
 - Fixed the asynchronous issue in `goToUnknownPage` function within the route, resolving the need for `await`.
@@ -14,7 +19,7 @@
 
 ## 2.0.0
 
-- Removed the `int`, `double`, `num` and `duration` extensions, as they are no longer necessary. Instead, users can utilize the `Quickly` package for similar functionalities.
+- Removed the `int`, `double`, `num` and `duration` extensions, as they are no longer necessary. Instead, use`Quickly` package for similar functionalities.
 - Resolved the memory leak issue associated with the snackbar component.
 - Addressed and fixed the failing tests related to the snackbar component.
 - Added `BoxConstraints` to the `Get.bottomSheet` method to ensure more precise control and layout constraints.
