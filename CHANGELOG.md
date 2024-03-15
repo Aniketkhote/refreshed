@@ -1,3 +1,7 @@
+## 2.2.0
+
+- Implemented drag handle customization, including visibility, color, and size, along with drag start/end callbacks and shadow color support in the bottom sheet.
+
 ## 2.1.0
 
 - Refactored codebase by eliminating String extensions and methods, Instead, use`Quickly` package for similar functionalities.

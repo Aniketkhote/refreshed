@@ -12,12 +12,12 @@ import "package:refreshed/get_navigation/src/routes/transitions_type.dart";
 /// 1) /home
 /// 2) /home/products/1234
 ///
-/// when popping on [History] mode, it will emulate a browser back button.
+/// when popping on [history] mode, it will emulate a browser back button.
 ///
 /// so the new _activePages stack will be:
 /// 1) /home
 ///
-/// when popping on [Page] mode, it will only remove the last part of the route
+/// when popping on [page] mode, it will only remove the last part of the route
 /// so the new _activePages stack will be:
 /// 1) /home
 /// 2) /home/products

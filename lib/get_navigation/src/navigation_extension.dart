@@ -31,6 +31,12 @@ extension PopupUtilsExtension on GetInterface {
     Duration? exitBottomSheetDuration,
     Curve? curve,
     BoxConstraints? contraints,
+    bool? showDragHandle = true,
+    Color? dragHandleColor,
+    Size? dragHandleSize,
+    Function(DragEndDetails, {required bool isClosing})? onDragEnd,
+    Function(DragStartDetails)? onDragStart,
+    Color? shadowColor,
   }) =>
       Navigator.of(overlayContext!, rootNavigator: useRootNavigator).push(
         GetModalBottomSheetRoute<T>(
@@ -40,7 +46,7 @@ extension PopupUtilsExtension on GetInterface {
           isScrollControlled: isScrollControlled,
           barrierLabel: MaterialLocalizations.of(key.currentContext!)
               .modalBarrierDismissLabel,
-          backgroundColor: backgroundColor ?? Colors.transparent,
+          backgroundColor: backgroundColor,
           elevation: elevation,
           shape: shape,
           removeTop: ignoreSafeArea ?? true,
@@ -55,6 +61,12 @@ extension PopupUtilsExtension on GetInterface {
               exitBottomSheetDuration ?? const Duration(milliseconds: 200),
           curve: curve,
           constraints: contraints,
+          showDragHandle: showDragHandle,
+          dragHandleColor: dragHandleColor,
+          dragHandleSize: dragHandleSize,
+          onDragEnd: onDragEnd,
+          onDragStart: onDragStart,
+          shadowColor: shadowColor,
         ),
       );
 

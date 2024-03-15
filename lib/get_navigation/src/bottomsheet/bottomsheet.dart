@@ -27,6 +27,12 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.curve,
     this.removeTop = true,
     this.constraints,
+    this.showDragHandle = true,
+    this.shadowColor,
+    this.dragHandleColor,
+    this.dragHandleSize,
+    this.onDragStart,
+    this.onDragEnd,
   }) {
     RouterReportManager.instance.reportCurrentRoute(this);
   }
@@ -78,6 +84,24 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
 
   /// Constraints for a box.
   final BoxConstraints? constraints;
+
+  /// Determines whether to show a drag handle for the bottom sheet.
+  final bool? showDragHandle;
+
+  /// The color of the drag handle for the bottom sheet.
+  final Color? dragHandleColor;
+
+  /// The size of the drag handle for the bottom sheet.
+  final Size? dragHandleSize;
+
+  /// Callback function invoked when the user finishes dragging the bottom sheet.
+  final Function(DragEndDetails details, {required bool isClosing})? onDragEnd;
+
+  /// Callback function invoked when the user starts dragging the bottom sheet.
+  final Function(DragStartDetails details)? onDragStart;
+
+  /// The color of the shadow displayed beneath the bottom sheet.
+  final Color? shadowColor;
 
   /// A label for the modal barrier that's shown behind the modal bottom sheet.
   @override
@@ -146,6 +170,13 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
           isScrollControlled: isScrollControlled,
           enableDrag: enableDrag,
           constraints: constraints,
+          showDragHandle: showDragHandle,
+          shadowColor: shadowColor,
+          dragHandleColor: dragHandleColor ?? sheetTheme.dragHandleColor,
+          dragHandleSize: dragHandleSize,
+          onDragEnd: onDragEnd,
+          onDragStart: onDragStart,
+          isPersistent: isPersistent ?? false,
         ),
       ),
     );
@@ -168,6 +199,12 @@ class _GetModalBottomSheet<T> extends StatefulWidget {
     this.enableDrag = true,
     this.isPersistent = false,
     this.constraints,
+    this.showDragHandle = true,
+    this.shadowColor,
+    this.dragHandleColor,
+    this.dragHandleSize,
+    this.onDragStart,
+    this.onDragEnd,
   });
   final bool isPersistent;
   final GetModalBottomSheetRoute<T>? route;
@@ -178,6 +215,12 @@ class _GetModalBottomSheet<T> extends StatefulWidget {
   final Clip? clipBehavior;
   final bool enableDrag;
   final BoxConstraints? constraints;
+  final bool? showDragHandle;
+  final Color? dragHandleColor;
+  final Size? dragHandleSize;
+  final Function(DragEndDetails, {required bool isClosing})? onDragEnd;
+  final Function(DragStartDetails)? onDragStart;
+  final Color? shadowColor;
 
   @override
   _GetModalBottomSheetState<T> createState() => _GetModalBottomSheetState<T>();
@@ -237,6 +280,12 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
                 clipBehavior: widget.clipBehavior,
                 enableDrag: widget.enableDrag,
                 constraints: widget.constraints,
+                showDragHandle: widget.showDragHandle,
+                dragHandleColor: widget.dragHandleColor,
+                dragHandleSize: widget.dragHandleSize,
+                onDragEnd: widget.onDragEnd,
+                onDragStart: widget.onDragStart,
+                shadowColor: widget.shadowColor,
               ),
             ),
           ),
