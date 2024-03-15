@@ -2,13 +2,11 @@
 
 This is a refreshed version of GetX, aimed at enhancing the robustness, reliability, and bug-free experience of using GetX for your Flutter projects. We understand that as a newcomer to Flutter and Dart ecosystem, you're eager to learn and create meaningful applications. This refreshed version of GetX is tailored to support your journey from a novice to a proficient developer.
 
-## New Features and Enhancements
-
-- **Compatibility with Latest Packages**: The refreshed GetX version is fully compatible with the latest versions of Flutter and Dart packages, ensuring seamless integration with your existing projects and compatibility with future updates.
+<!-- ## New Features and Enhancements
 
 - **Bug Fixes and Stability Improvements**: We've addressed various bugs and stability issues reported by the community to provide a more reliable experience when using GetX in your applications.
 
-- **Performance Optimization**: Our team has worked on optimizing performance to ensure that GetX continues to deliver high performance and minimal resource consumption.
+- **Performance Optimization**: Our team has worked on optimizing performance to ensure that GetX continues to deliver high performance and minimal resource consumption. -->
 
 <!-- - **Enhanced Documentation**: We've improved the documentation to make it more comprehensive and user-friendly, providing clearer instructions and examples to help you get started with GetX quickly.
 
@@ -17,6 +15,8 @@ This is a refreshed version of GetX, aimed at enhancing the robustness, reliabil
 - **Simplified Routing**: We've simplified the routing mechanism to make it more intuitive and easier to use, allowing you to navigate between screens with minimal boilerplate code. -->
 
 ## Why Choose Refreshed GetX?
+
+- **Compatibility with Latest Packages**: The Refreshed GetX version is fully compatible with the latest versions of Flutter and Dart packages, ensuring seamless integration with your existing projects and compatibility with future updates.
 
 - **Improved Stability**: With bug fixes and stability improvements, the refreshed GetX offers a more stable development environment, reducing the chances of encountering unexpected issues.
 
