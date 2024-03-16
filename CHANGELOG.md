@@ -1,3 +1,8 @@
+## 2.3.0
+
+- Rolled back web version to 0.4.0 to resolve package conflicts, ensuring compatibility and stability.
+- Resolved Snackbar margin issue, ensuring consistent and visually appealing UI presentation.
+
 ## 2.2.0
 
 - Implemented drag handle customization, including visibility, color, and size, along with drag start/end callbacks and shadow color support in the bottom sheet.

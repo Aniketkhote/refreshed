@@ -410,8 +410,6 @@ extension PopupUtilsExtension on GetInterface {
     String message, {
     Color? colorText,
     Duration? duration = const Duration(seconds: 3),
-
-    /// with instantInit = false you can put snackbar on initState
     bool instantInit = true,
     SnackPosition? snackPosition,
     Widget? titleText,
@@ -469,7 +467,7 @@ extension PopupUtilsExtension on GetInterface {
           ),
       snackPosition: snackPosition ?? SnackPosition.top,
       borderRadius: borderRadius ?? 15,
-      margin: margin ?? const EdgeInsets.symmetric(horizontal: 10),
+      margin: margin ?? const EdgeInsets.all(12),
       duration: duration,
       barBlur: barBlur ?? 7.0,
       backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
@@ -561,6 +559,7 @@ extension PopupUtilsExtension on GetInterface {
   }
 }
 
+/// Extension providing navigation functionalities
 extension NavigationExtension on GetInterface {
   /// **Navigation.push()** shortcut.<br><br>
   ///
@@ -623,26 +622,6 @@ extension NavigationExtension on GetInterface {
         rebuildStack: rebuildStack,
         preventDuplicateHandlingMode: preventDuplicateHandlingMode,
       );
-
-//   GetPageBuilder _resolvePage(dynamic page, String method) {
-//     if (page is GetPageBuilder) {
-//       return page;
-//     } else if (page is Widget) {
-//       Get.log(
-//           '''WARNING, consider using: "Get.$method(() => Page())"
-//instead of "Get.$method(Page())".
-// Using a widget function instead of a widget fully guarantees that the widget
-//and its controllers will be removed from memory when they are no longer used.
-//       ''');
-//       return () => page;
-//     } else if (page is String) {
-//       throw '''Unexpected String,
-// use toNamed() instead''';
-//     } else {
-//       throw '''Unexpected format,
-// you can only use widgets and widget functions here''';
-//     }
-//   }
 
   /// **Navigation.pushNamed()** shortcut.<br><br>
   ///
