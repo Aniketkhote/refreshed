@@ -224,7 +224,7 @@ class Rx<T> extends _RxImpl<T> {
     try {
       return (value as dynamic)?.toJson();
     } on Exception catch (_) {
-      throw "$T has not method [toJson]";
+      throw Exception("$T has not method [toJson]");
     }
   }
 }

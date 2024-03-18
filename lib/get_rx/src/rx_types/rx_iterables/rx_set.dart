@@ -2,7 +2,7 @@ part of "../rx_types.dart";
 
 class RxSet<E> extends GetListenable<Set<E>>
     with SetMixin<E>, RxObjectMixin<Set<E>> {
-  RxSet([super.initial = const {}]);
+  RxSet([super.initial = const <Never>{}]);
 
   /// Special override to push() element(s) in a reactive way
   /// inside the List,
@@ -35,7 +35,7 @@ class RxSet<E> extends GetListenable<Set<E>>
 
   @override
   bool add(E value) {
-    final hasAdded = this.value.add(value);
+    final bool hasAdded = this.value.add(value);
     if (hasAdded) {
       refresh();
     }
@@ -43,9 +43,7 @@ class RxSet<E> extends GetListenable<Set<E>>
   }
 
   @override
-  bool contains(Object? element) {
-    return value.contains(element);
-  }
+  bool contains(Object? element) => value.contains(element);
 
   @override
   Iterator<E> get iterator => value.iterator;
@@ -54,13 +52,11 @@ class RxSet<E> extends GetListenable<Set<E>>
   int get length => value.length;
 
   @override
-  E? lookup(Object? element) {
-    return value.lookup(element);
-  }
+  E? lookup(Object? element) => value.lookup(element);
 
   @override
   bool remove(Object? value) {
-    var hasRemoved = this.value.remove(value);
+    final bool hasRemoved = this.value.remove(value);
     if (hasRemoved) {
       refresh();
     }
@@ -68,9 +64,7 @@ class RxSet<E> extends GetListenable<Set<E>>
   }
 
   @override
-  Set<E> toSet() {
-    return value.toSet();
-  }
+  Set<E> toSet() => value.toSet();
 
   @override
   void addAll(Iterable<E> elements) {
@@ -104,20 +98,26 @@ class RxSet<E> extends GetListenable<Set<E>>
 }
 
 extension SetExtension<E> on Set<E> {
-  RxSet<E> get obs {
-    return RxSet<E>(<E>{})..addAll(this);
-  }
+  RxSet<E> get obs => RxSet<E>(<E>{})..addAll(this);
 
   /// Add [item] to [List<E>] only if [condition] is true.
-  void addIf(dynamic condition, E item) {
-    if (condition is Condition) condition = condition();
-    if (condition is bool && condition) add(item);
+  void addIf(condition, E item) {
+    if (condition is Condition) {
+      condition = condition();
+    }
+    if (condition is bool && condition) {
+      add(item);
+    }
   }
 
   /// Adds [Iterable<E>] to [List<E>] only if [condition] is true.
-  void addAllIf(dynamic condition, Iterable<E> items) {
-    if (condition is Condition) condition = condition();
-    if (condition is bool && condition) addAll(items);
+  void addAllIf(condition, Iterable<E> items) {
+    if (condition is Condition) {
+      condition = condition();
+    }
+    if (condition is bool && condition) {
+      addAll(items);
+    }
   }
 
   /// Replaces all existing items of this list with [item]

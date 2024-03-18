@@ -1,5 +1,6 @@
 part of "../rx_types.dart";
 
+/// Extension providing additional functionality for numeric values wrapped in an [Rx] object.
 extension RxNumExt<T extends num> on Rx<T> {
   /// Multiplication operator.
   num operator *(num other) => value * other;
@@ -263,6 +264,7 @@ extension RxNumExt<T extends num> on Rx<T> {
       value.toStringAsPrecision(precision);
 }
 
+/// Extension providing additional functionality for nullable numeric values wrapped in an [Rx] object.
 extension RxnNumExt<T extends num> on Rx<T?> {
   /// Multiplication operator.
   num? operator *(num other) {
@@ -571,24 +573,37 @@ extension RxnNumExt<T extends num> on Rx<T?> {
       value?.toStringAsPrecision(precision);
 }
 
+/// A reactive extension of [num] type, enabling reactive operations on numeric values.
 class RxNum extends Rx<num> {
+  /// Constructs a [RxNum] with the provided [initial] value.
   RxNum(super.initial);
 
+  /// Addition operator.
+  ///
+  /// Adds [other] to the current value, updates the value, and returns the new value.
   num operator +(num other) {
     value += other;
     return value;
   }
 
   /// Subtraction operator.
+  ///
+  /// Subtracts [other] from the current value, updates the value, and returns the new value.
   num operator -(num other) {
     value -= other;
     return value;
   }
 }
 
+/// A reactive extension of [num?] type, enabling reactive operations on nullable numeric values.
 class RxnNum extends Rx<num?> {
+  /// Constructs a [RxnNum] with an optional initial value.
   RxnNum([super.initial]);
 
+  /// Addition operator.
+  ///
+  /// If the current value is not `null`, adds [other] to it, updates the value, and returns the new value.
+  /// If the current value is `null`, returns `null`.
   num? operator +(num other) {
     if (value != null) {
       value = value! + other;
@@ -598,6 +613,9 @@ class RxnNum extends Rx<num?> {
   }
 
   /// Subtraction operator.
+  ///
+  /// If the current value is not `null`, subtracts [other] from it, updates the value, and returns the new value.
+  /// If the current value is `null`, returns `null`.
   num? operator -(num other) {
     if (value != null) {
       value = value! - other;
@@ -607,6 +625,7 @@ class RxnNum extends Rx<num?> {
   }
 }
 
+/// Extension providing additional functionality for double values wrapped in an [Rx] object.
 extension RxDoubleExt on Rx<double> {
   /// Addition operator.
   Rx<double> operator +(num other) {
@@ -623,6 +642,7 @@ extension RxDoubleExt on Rx<double> {
   /// Multiplication operator.
   double operator *(num other) => value * other;
 
+  /// modulo operator.
   double operator %(num other) => value % other;
 
   /// Division operator.
@@ -715,6 +735,7 @@ extension RxDoubleExt on Rx<double> {
   double truncateToDouble() => value.truncateToDouble();
 }
 
+/// Extension providing additional functionality for nullable double values wrapped in an [Rx] object.
 extension RxnDoubleExt on Rx<double?> {
   /// Addition operator.
   Rx<double?>? operator +(num other) {
@@ -742,6 +763,7 @@ extension RxnDoubleExt on Rx<double?> {
     return null;
   }
 
+  /// modulo operator.
   double? operator %(num other) {
     if (value != null) {
       return value! % other;
@@ -854,15 +876,21 @@ extension RxnDoubleExt on Rx<double?> {
   double? truncateToDouble() => value?.truncateToDouble();
 }
 
+/// A reactive extension of [double] type, enabling reactive operations on double values.
 class RxDouble extends Rx<double> {
+  /// Constructs a [RxDouble] with the provided [initial] value.
   RxDouble(super.initial);
 }
 
+/// A reactive extension of [double?] type, enabling reactive operations on nullable double values.
 class RxnDouble extends Rx<double?> {
+  /// Constructs a [RxnDouble] with an optional initial value.
   RxnDouble([super.initial]);
 }
 
+/// A reactive extension of [int] type, enabling reactive operations on integer values.
 class RxInt extends Rx<int> {
+  /// Constructs a [RxInt] with the provided [initial] value.
   RxInt(super.initial);
 
   /// Addition operator.
@@ -878,7 +906,9 @@ class RxInt extends Rx<int> {
   }
 }
 
+/// A reactive extension of [int?] type, enabling reactive operations on nullable integer values.
 class RxnInt extends Rx<int?> {
+  /// Constructs a [RxnInt] with an optional initial value.
   RxnInt([super.initial]);
 
   /// Addition operator.
@@ -898,6 +928,7 @@ class RxnInt extends Rx<int?> {
   }
 }
 
+/// Extension providing additional functionality for int values wrapped in an [Rx] object.
 extension RxIntExt on Rx<int> {
   /// Bit-wise and operator.
   ///
@@ -1095,6 +1126,7 @@ extension RxIntExt on Rx<int> {
   double truncateToDouble() => value.truncateToDouble();
 }
 
+/// Extension providing additional functionality for nullable int values wrapped in an [Rx] object.
 extension RxnIntExt on Rx<int?> {
   /// Bit-wise and operator.
   ///
@@ -1314,18 +1346,6 @@ extension RxnIntExt on Rx<int?> {
   /// +1 for values greater than zero.
   int? get sign => value?.sign;
 
-  /// Returns `this`.
-  int? round() => value;
-
-  /// Returns `this`.
-  int? floor() => value;
-
-  /// Returns `this`.
-  int? ceil() => value;
-
-  /// Returns `this`.
-  int? truncate() => value;
-
   /// Returns `this.toDouble()`.
   double? roundToDouble() => value?.roundToDouble();
 
@@ -1341,6 +1361,7 @@ extension RxnIntExt on Rx<int?> {
 
 /// An Rx object for managing boolean values.
 class RxBool extends Rx<bool> {
+  /// Constructs a [RxBool] with the provided [initial] value.
   RxBool(super.initial);
 
   @override
@@ -1349,6 +1370,7 @@ class RxBool extends Rx<bool> {
 
 /// An Rx object for managing nullable boolean values.
 class RxnBool extends Rx<bool?> {
+  /// Constructs a [RxnBool] with the provided [initial] value.
   RxnBool([super.initial]);
 
   @override

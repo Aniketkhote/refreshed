@@ -1,3 +1,7 @@
+## 2.4.0-dev
+
+- Added test cases for Rx extension methods.
+
 ## 2.3.1
 
 - Removed `round()`, `floor()`, `ceil()`, and `truncate()` extension methods from the int extension as they are not applicable to integers.

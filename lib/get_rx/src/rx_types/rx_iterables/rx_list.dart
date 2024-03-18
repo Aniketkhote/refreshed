@@ -6,47 +6,44 @@ class RxList<E> extends GetListenable<List<E>>
   /// Constructs an RxList.
   ///
   /// Optionally, an initial list can be provided.
-  RxList([List<E> initial = const []])
+  RxList([List<E> initial = const <Never>[]])
       : super(initial.isNotEmpty ? initial : List<E>.empty(growable: true));
 
   /// Constructs an RxList filled with a [fill] value.
-  factory RxList.filled(int length, E fill, {bool growable = false}) {
-    return RxList(List.filled(length, fill, growable: growable));
-  }
+  factory RxList.filled(int length, E fill, {bool growable = false}) =>
+      RxList(List.filled(length, fill, growable: growable));
 
   /// Constructs an empty RxList.
   ///
   /// If [growable] is true, the list is growable; otherwise, it's fixed-length.
-  factory RxList.empty({bool growable = false}) {
-    return RxList(List.empty(growable: growable));
-  }
+  factory RxList.empty({bool growable = false}) =>
+      RxList(List.empty(growable: growable));
 
   /// Constructs an RxList containing all [elements].
   ///
   /// If [growable] is true, the list is growable; otherwise, it's fixed-length.
-  factory RxList.from(Iterable elements, {bool growable = true}) {
-    return RxList(List.from(elements, growable: growable));
-  }
+  factory RxList.from(Iterable elements, {bool growable = true}) =>
+      RxList(List.from(elements, growable: growable));
 
   /// Constructs an RxList from [elements].
   ///
   /// If [growable] is true, the list is growable; otherwise, it's fixed-length.
-  factory RxList.of(Iterable<E> elements, {bool growable = true}) {
-    return RxList(List.of(elements, growable: growable));
-  }
+  factory RxList.of(Iterable<E> elements, {bool growable = true}) =>
+      RxList(List.of(elements, growable: growable));
 
   /// Constructs an RxList by generating values.
   ///
   /// If [growable] is true, the list is growable; otherwise, it's fixed-length.
-  factory RxList.generate(int length, E Function(int index) generator,
-      {bool growable = true}) {
-    return RxList(List.generate(length, generator, growable: growable));
-  }
+  factory RxList.generate(
+    int length,
+    E Function(int index) generator, {
+    bool growable = true,
+  }) =>
+      RxList(List.generate(length, generator, growable: growable));
 
   /// Constructs an unmodifiable RxList containing all [elements].
-  factory RxList.unmodifiable(Iterable<E> elements) {
-    return RxList(List.unmodifiable(elements));
-  }
+  factory RxList.unmodifiable(Iterable<E> elements) =>
+      RxList(List.unmodifiable(elements));
 
   @override
   Iterator<E> get iterator => value.iterator;
@@ -66,9 +63,7 @@ class RxList<E> extends GetListenable<List<E>>
   }
 
   @override
-  E operator [](int index) {
-    return value[index];
-  }
+  E operator [](int index) => value[index];
 
   @override
   void add(E element) {
@@ -84,7 +79,7 @@ class RxList<E> extends GetListenable<List<E>>
 
   @override
   bool remove(Object? element) {
-    final removed = value.remove(element);
+    final bool removed = value.remove(element);
     refresh();
     return removed;
   }
@@ -120,14 +115,10 @@ class RxList<E> extends GetListenable<List<E>>
   Iterable<E> get reversed => value.reversed;
 
   @override
-  Iterable<E> where(bool Function(E) test) {
-    return value.where(test);
-  }
+  Iterable<E> where(bool Function(E) test) => value.where(test);
 
   @override
-  Iterable<T> whereType<T>() {
-    return value.whereType<T>();
-  }
+  Iterable<T> whereType<T>() => value.whereType<T>();
 
   @override
   void sort([int Function(E a, E b)? compare]) {
@@ -144,23 +135,33 @@ extension ListExtension<E> on List<E> {
   ///
   /// If [item] is not null, it is added to the list.
   void addNonNull(E? item) {
-    if (item != null) add(item);
+    if (item != null) {
+      add(item);
+    }
   }
 
   /// Add [item] to List<E> only if [condition] is true.
   ///
   /// If [condition] is a boolean value and evaluates to true, [item] is added to the list.
-  void addIf(dynamic condition, E item) {
-    if (condition is Condition) condition = condition();
-    if (condition is bool && condition) add(item);
+  void addIf(condition, E item) {
+    if (condition is Condition) {
+      condition = condition();
+    }
+    if (condition is bool && condition) {
+      add(item);
+    }
   }
 
   /// Adds [Iterable<E>] to [List<E>] only if [condition] is true.
   ///
   /// If [condition] is a boolean value and evaluates to true, [items] are added to the list.
-  void addAllIf(dynamic condition, Iterable<E> items) {
-    if (condition is Condition) condition = condition();
-    if (condition is bool && condition) addAll(items);
+  void addAllIf(condition, Iterable<E> items) {
+    if (condition is Condition) {
+      condition = condition();
+    }
+    if (condition is bool && condition) {
+      addAll(items);
+    }
   }
 
   /// Replaces all existing items of this list with [item].
