@@ -28,7 +28,8 @@ jobs:
       - run: flutter pub get
       #- run: flutter analyze
       # run  flutter widgets tests  and unit tests
-      - run: flutter test --coverage
+      - run: flutter test
+      # - run: flutter test --coverage
       # Upload coverage reports to Codecov
       # https://github.com/marketplace/actions/codecov
-      - uses: codecov/codecov-action@v4
+      # - uses: codecov/codecov-action@v4
