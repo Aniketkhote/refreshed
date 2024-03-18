@@ -777,9 +777,7 @@ extension RxnDoubleExt on Rx<double?> {
   }
 
   /// Returns the absolute value of this [double].
-  double? abs() {
-    return value?.abs();
-  }
+  double? abs() => value?.abs();
 
   /// Returns the sign of the double's numerical value.
   ///
@@ -1084,18 +1082,6 @@ extension RxIntExt on Rx<int> {
   /// +1 for values greater than zero.
   int get sign => value.sign;
 
-  /// Returns `this`.
-  int round() => value.round();
-
-  /// Returns `this`.
-  int floor() => value.floor();
-
-  /// Returns `this`.
-  int ceil() => value.ceil();
-
-  /// Returns `this`.
-  int truncate() => value.truncate();
-
   /// Returns `this.toDouble()`.
   double roundToDouble() => value.roundToDouble();
 
@@ -1329,16 +1315,16 @@ extension RxnIntExt on Rx<int?> {
   int? get sign => value?.sign;
 
   /// Returns `this`.
-  int? round() => value?.round();
+  int? round() => value;
 
   /// Returns `this`.
-  int? floor() => value?.floor();
+  int? floor() => value;
 
   /// Returns `this`.
-  int? ceil() => value?.ceil();
+  int? ceil() => value;
 
   /// Returns `this`.
-  int? truncate() => value?.truncate();
+  int? truncate() => value;
 
   /// Returns `this.toDouble()`.
   double? roundToDouble() => value?.roundToDouble();
@@ -1351,4 +1337,85 @@ extension RxnIntExt on Rx<int?> {
 
   /// Returns `this.toDouble()`.
   double? truncateToDouble() => value?.truncateToDouble();
+}
+
+/// An Rx object for managing boolean values.
+class RxBool extends Rx<bool> {
+  RxBool(super.initial);
+
+  @override
+  String toString() => value ? "true" : "false";
+}
+
+/// An Rx object for managing nullable boolean values.
+class RxnBool extends Rx<bool?> {
+  RxnBool([super.initial]);
+
+  @override
+  String toString() => "$value";
+}
+
+/// Extension on [Rx<bool>] providing methods for boolean operations.
+extension RxBoolExt on Rx<bool> {
+  /// Returns `true` if the value is `true`.
+  bool get isTrue => value;
+
+  /// Returns `true` if the value is `false`.
+  bool get isFalse => !isTrue;
+
+  /// Performs a logical AND operation between the Rx value and [other].
+  bool operator &(bool other) => other && value;
+
+  /// Performs a logical OR operation between the Rx value and [other].
+  bool operator |(bool other) => other || value;
+
+  /// Performs a logical XOR operation between the Rx value and [other].
+  bool operator ^(bool other) => !other == value;
+
+  /// Toggles the boolean value of the Rx object between `true` and `false`.
+  void toggle() {
+    call(!value);
+    // return this;
+  }
+}
+
+/// Extension on [Rx<bool?>] providing methods for nullable boolean operations.
+extension RxnBoolExt on Rx<bool?> {
+  /// Returns `true` if the value is `true`.
+  bool? get isTrue => value;
+
+  /// Returns `true` if the value is `false`.
+  bool? get isFalse {
+    if (value != null) {
+      return !isTrue!;
+    }
+    return null;
+  }
+
+  /// Performs a logical AND operation between the Rx value and [other].
+  bool? operator &(bool other) {
+    if (value != null) {
+      return other && value!;
+    }
+    return null;
+  }
+
+  /// Performs a logical OR operation between the Rx value and [other].
+  bool? operator |(bool other) {
+    if (value != null) {
+      return other || value!;
+    }
+    return null;
+  }
+
+  /// Performs a logical XOR operation between the Rx value and [other].
+  bool? operator ^(bool other) => !other == value;
+
+  /// Toggles the boolean value of the Rx object between `true` and `false`.
+  void toggle() {
+    if (value != null) {
+      call(!value!);
+      // return this;
+    }
+  }
 }

@@ -1,3 +1,7 @@
+## 2.3.1
+
+- Removed `round()`, `floor()`, `ceil()`, and `truncate()` extension methods from the int extension as they are not applicable to integers.
+
 ## 2.3.0
 
 - Rolled back web version to 0.4.0 to resolve package conflicts, ensuring compatibility and stability.

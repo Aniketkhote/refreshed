@@ -110,9 +110,13 @@ mixin RxObjectMixin<T> on GetListenable<T> {
   /// added benefit that it primes the stream with the current [value], rather
   /// than waiting for the next [value]. This should not be called in [onInit]
   /// or anywhere else during the build process.
-  StreamSubscription<T> listenAndPump(void Function(T event) onData,
-      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
-    final subscription = listen(
+  StreamSubscription<T> listenAndPump(
+    void Function(T event) onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
+    final StreamSubscription<T> subscription = listen(
       onData,
       onError: onError,
       onDone: onDone,
@@ -132,7 +136,7 @@ mixin RxObjectMixin<T> on GetListenable<T> {
     // final listSubscriptions =
     //     _subscriptions[subject] ??= <StreamSubscription>[];
 
-    final sub = stream.listen((va) => value = va);
+    final StreamSubscription sub = stream.listen((va) => value = va);
     reportAdd(sub.cancel);
   }
 }
@@ -198,95 +202,12 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
   /// ```
   ///
   void trigger(T v) {
-    var firstRebuild = this.firstRebuild;
+    final bool firstRebuild = this.firstRebuild;
     value = v;
     // If it's not the first rebuild, the listeners have been called already
     // So we won't call them again.
     if (!firstRebuild && !sentToStream) {
       subject.add(v);
-    }
-  }
-}
-
-/// An Rx object for managing boolean values.
-class RxBool extends Rx<bool> {
-  RxBool(super.initial);
-
-  @override
-  String toString() {
-    return value ? "true" : "false";
-  }
-}
-
-/// An Rx object for managing nullable boolean values.
-class RxnBool extends Rx<bool?> {
-  RxnBool([super.initial]);
-
-  @override
-  String toString() {
-    return "$value";
-  }
-}
-
-/// Extension on [Rx<bool>] providing methods for boolean operations.
-extension RxBoolExt on Rx<bool> {
-  /// Returns `true` if the value is `true`.
-  bool get isTrue => value;
-
-  /// Returns `true` if the value is `false`.
-  bool get isFalse => !isTrue;
-
-  /// Performs a logical AND operation between the Rx value and [other].
-  bool operator &(bool other) => other && value;
-
-  /// Performs a logical OR operation between the Rx value and [other].
-  bool operator |(bool other) => other || value;
-
-  /// Performs a logical XOR operation between the Rx value and [other].
-  bool operator ^(bool other) => !other == value;
-
-  /// Toggles the boolean value of the Rx object between `true` and `false`.
-  void toggle() {
-    call(!value);
-    // return this;
-  }
-}
-
-/// Extension on [Rx<bool?>] providing methods for nullable boolean operations.
-extension RxnBoolExt on Rx<bool?> {
-  /// Returns `true` if the value is `true`.
-  bool? get isTrue => value;
-
-  /// Returns `true` if the value is `false`.
-  bool? get isFalse {
-    if (value != null) return !isTrue!;
-    return null;
-  }
-
-  /// Performs a logical AND operation between the Rx value and [other].
-  bool? operator &(bool other) {
-    if (value != null) {
-      return other && value!;
-    }
-    return null;
-  }
-
-  /// Performs a logical OR operation between the Rx value and [other].
-  bool? operator |(bool other) {
-    if (value != null) {
-      return other || value!;
-    }
-    return null;
-  }
-
-  /// Performs a logical XOR operation between the Rx value and [other].
-  bool? operator ^(bool other) => !other == value;
-
-  /// Toggles the boolean value of the Rx object between `true` and `false`.
-  void toggle() {
-    if (value != null) {
-      call(!value!);
-      // return this;
     }
   }
 }
