@@ -1,14 +1,13 @@
 import "dart:collection";
 
 import "package:flutter/foundation.dart";
-
 import "package:refreshed/refreshed.dart";
 
-// This callback remove the listener on addListener function
+/// This callback remove the listener on addListener function
 typedef Disposer = void Function();
 
-// replacing StateSetter, return if the Widget is mounted for extra validation.
-// if it brings overhead the extra call,
+/// replacing StateSetter, return if the Widget is mounted for extra validation.
+/// if it brings overhead the extra call,
 typedef GetStateUpdate = void Function();
 
 class ListNotifier extends Listenable
@@ -35,9 +34,8 @@ mixin ListNotifierSingleMixin on Listenable {
     return () => _updaters!.remove(listener);
   }
 
-  bool containsListener(GetStateUpdate listener) {
-    return _updaters?.contains(listener) ?? false;
-  }
+  bool containsListener(GetStateUpdate listener) =>
+      _updaters?.contains(listener) ?? false;
 
   @override
   void removeListener(VoidCallback listener) {
@@ -67,9 +65,9 @@ mixin ListNotifierSingleMixin on Listenable {
     //   scheduleMicrotask(() {
     //     _version++;
     //     _microtaskVersion = _version;
-    final list = _updaters?.toList() ?? [];
+    final List<GetStateUpdate> list = _updaters?.toList() ?? <GetStateUpdate>[];
 
-    for (var element in list) {
+    for (final GetStateUpdate element in list) {
       element();
     }
     //   });
@@ -117,9 +115,7 @@ mixin ListNotifierGroupMixin on Listenable {
     Notifier.instance.read(_updatersGroupIds![id]!);
   }
 
-  bool containsId(Object id) {
-    return _updatersGroupIds?.containsKey(id) ?? false;
-  }
+  bool containsId(Object id) => _updatersGroupIds?.containsKey(id) ?? false;
 
   @protected
   void refreshGroup(Object id) {
@@ -148,7 +144,9 @@ mixin ListNotifierGroupMixin on Listenable {
   @mustCallSuper
   void dispose() {
     assert(_debugAssertNotDisposed());
-    _updatersGroupIds?.forEach((key, value) => value.dispose());
+    _updatersGroupIds?.forEach(
+      (Object? key, ListNotifierSingleMixin value) => value.dispose(),
+    );
     _updatersGroupIds = null;
   }
 
@@ -179,7 +177,7 @@ class Notifier {
   }
 
   void read(ListNotifierSingleMixin updaters) {
-    final listener = _notifyData?.updater;
+    final GetStateUpdate? listener = _notifyData?.updater;
     if (listener != null && !updaters.containsListener(listener)) {
       updaters.addListener(listener);
       add(() => updaters.removeListener(listener));

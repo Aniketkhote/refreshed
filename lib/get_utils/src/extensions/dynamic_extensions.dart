@@ -1,3 +1,5 @@
+// ignore_for_file: no_runtimetype_tostring, avoid_dynamic_calls
+
 import "package:refreshed/get_utils/src/get_utils/get_utils.dart";
 
 /// Extension on dynamic to provide utility methods for dynamic objects.

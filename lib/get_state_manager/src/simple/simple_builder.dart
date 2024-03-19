@@ -1,7 +1,6 @@
 import "dart:async";
 
 import "package:flutter/widgets.dart";
-
 import "package:refreshed/get_state_manager/src/simple/list_notifier.dart";
 
 /// A callback function that is called when the value builder updates its value.
@@ -30,11 +29,11 @@ typedef ValueBuilderBuilder<T> = Widget Function(
 ///  ```
 class ValueBuilder<T> extends StatefulWidget {
   const ValueBuilder({
-    super.key,
     required this.initialValue,
+    required this.builder,
+    super.key,
     this.onDispose,
     this.onUpdate,
-    required this.builder,
   });
 
   /// The initial value of the state managed by the ValueBuilder.
@@ -90,7 +89,7 @@ class ObxElement = StatelessElement with StatelessObserverComponent;
 
 /// It's an experimental feature.
 class Observer extends ObxStatelessWidget {
-  const Observer({super.key, required this.builder});
+  const Observer({required this.builder, super.key});
   final WidgetBuilder builder;
 
   @override
@@ -115,17 +114,15 @@ mixin StatelessObserverComponent on StatelessElement {
   }
 
   @override
-  Widget build() {
-    return Notifier.instance.append(
-      NotifyData(disposers: _disposers!, updater: _getUpdate),
-      super.build,
-    );
-  }
+  Widget build() => Notifier.instance.append(
+        NotifyData(disposers: _disposers!, updater: _getUpdate),
+        super.build,
+      );
 
   @override
   void unmount() {
     super.unmount();
-    for (final disposer in _disposers!) {
+    for (final Disposer disposer in _disposers!) {
       disposer();
     }
     _disposers!.clear();

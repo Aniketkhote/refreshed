@@ -35,6 +35,7 @@ abstract class GetxController extends ListNotifier with GetLifeCycleMixin {
 /// this mixin allow to fetch data when the scroll is at the bottom or on the
 /// top
 mixin ScrollMixin on GetLifeCycleMixin {
+  /// Controller for managing scrolling behavior within a scrollable widget.
   final ScrollController scroll = ScrollController();
 
   @override

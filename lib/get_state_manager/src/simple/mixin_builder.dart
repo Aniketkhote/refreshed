@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-
 import "package:refreshed/get_state_manager/src/rx_flutter/rx_obx_widget.dart";
 import "package:refreshed/get_state_manager/src/simple/get_controllers.dart";
 import "package:refreshed/get_state_manager/src/simple/get_state.dart";
@@ -11,10 +10,10 @@ import "package:refreshed/get_state_manager/src/simple/get_state.dart";
 class MixinBuilder<T extends GetxController> extends StatelessWidget {
   /// Creates a MixinBuilder widget.
   const MixinBuilder({
+    required this.builder,
     super.key,
     this.init,
     this.global = true,
-    required this.builder,
     this.autoRemove = true,
     this.initState,
     this.dispose,
@@ -53,17 +52,15 @@ class MixinBuilder<T extends GetxController> extends StatelessWidget {
   final T? init;
 
   @override
-  Widget build(BuildContext context) {
-    return GetBuilder<T>(
-      init: init,
-      global: global,
-      autoRemove: autoRemove,
-      initState: initState,
-      dispose: dispose,
-      id: id,
-      didChangeDependencies: didChangeDependencies,
-      didUpdateWidget: didUpdateWidget,
-      builder: (controller) => Obx(() => builder.call(controller)),
-    );
-  }
+  Widget build(BuildContext context) => GetBuilder<T>(
+        init: init,
+        global: global,
+        autoRemove: autoRemove,
+        initState: initState,
+        dispose: dispose,
+        id: id,
+        didChangeDependencies: didChangeDependencies,
+        didUpdateWidget: didUpdateWidget,
+        builder: (T controller) => Obx(() => builder.call(controller)),
+      );
 }

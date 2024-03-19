@@ -6,22 +6,9 @@
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
 [![Discord Shield](https://img.shields.io/discord/1218986517297369088.svg?logo=discord)](https://discord.com/invite/e56kXWqU)
 
-
 # Refreshed GetX
 
 This is a refreshed version of GetX, aimed at enhancing the robustness, reliability, and bug-free experience of using GetX for your Flutter projects. We understand that as a newcomer to Flutter and Dart ecosystem, you're eager to learn and create meaningful applications. This refreshed version of GetX is tailored to support your journey from a novice to a proficient developer.
-
-<!-- ## New Features and Enhancements
-
-- **Bug Fixes and Stability Improvements**: We've addressed various bugs and stability issues reported by the community to provide a more reliable experience when using GetX in your applications.
-
-- **Performance Optimization**: Our team has worked on optimizing performance to ensure that GetX continues to deliver high performance and minimal resource consumption. -->
-
-<!-- - **Enhanced Documentation**: We've improved the documentation to make it more comprehensive and user-friendly, providing clearer instructions and examples to help you get started with GetX quickly.
-
-- **Updated Dependency Injection**: The dependency injection feature has been updated to provide better decoupling of dependencies, making your codebase cleaner and easier to maintain.
-
-- **Simplified Routing**: We've simplified the routing mechanism to make it more intuitive and easier to use, allowing you to navigate between screens with minimal boilerplate code. -->
 
 ## Why Choose Refreshed GetX?
 
@@ -34,6 +21,24 @@ This is a refreshed version of GetX, aimed at enhancing the robustness, reliabil
 - **Support for Latest Technologies**: By supporting the latest Flutter and Dart packages, refreshed GetX enables you to leverage the newest features and functionalities available in the ecosystem.
 
 - **Community-Driven Development**: We've listened to feedback from the community and incorporated many suggestions and improvements to make GetX even better.
+
+---
+
+# Changes Made in Package
+
+This README outlines the changes made to the package from its original GetX package to the refreshed version.
+
+## Decoupling of `get_connect` to `connectify`
+
+One significant change is the decoupling of `get_connect` to `connectify`. This alteration aims to streamline the connectivity-related functionalities within the package.
+
+## Removal of Animation Classes, Widget Extensions, Num, Duration and the responsive Extensions
+
+The animation classes, widget extensions, as well as num and duration extensions, have been removed from this package. Instead, we have integrated the Quickify package, which offers a plethora of utility and extension methods, allowing for faster and more efficient development.
+
+## Shift in Focus
+
+Our primary focus has shifted towards enhancing dependency injection, state management, and routing functionalities within the package. These areas are crucial for building robust and scalable applications, and we are committed to improving them further.
 
 ---
 

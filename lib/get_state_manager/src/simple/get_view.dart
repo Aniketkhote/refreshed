@@ -1,9 +1,8 @@
 import "package:flutter/widgets.dart";
-
-import "package:refreshed/instance_manager.dart";
-import "package:refreshed/utils.dart";
 import "package:refreshed/get_state_manager/src/simple/get_state.dart";
 import "package:refreshed/get_state_manager/src/simple/get_widget_cache.dart";
+import "package:refreshed/instance_manager.dart";
+import "package:refreshed/utils.dart";
 
 /// GetView is a great way of quickly access your Controller
 /// without having to call Get.find<AwesomeController>() yourself.
@@ -54,11 +53,11 @@ abstract class GetWidget<S extends GetLifeCycleMixin> extends GetWidgetCache {
   @protected
   final String? tag = null;
 
-  S get controller => GetWidget._cache[this] as S;
+  S get controller => GetWidget._cache[this]! as S;
 
   // static final _cache = <GetWidget, GetLifeCycleBase>{};
 
-  static final _cache = Expando<GetLifeCycleMixin>();
+  static final Expando<GetLifeCycleMixin> _cache = Expando<GetLifeCycleMixin>();
 
   @protected
   Widget build(BuildContext context);
@@ -101,10 +100,8 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Binder(
-      init: () => _controller,
-      child: widget!.build(context),
-    );
-  }
+  Widget build(BuildContext context) => Binder(
+        init: () => _controller,
+        child: widget!.build(context),
+      );
 }

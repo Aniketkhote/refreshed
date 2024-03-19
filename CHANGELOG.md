@@ -1,6 +1,10 @@
-## 2.4.0-dev
+## 2.4.0
 
-- Added test cases for Rx extension methods.
+- Implemented test cases for Rx extension methods.
+- Eliminated `responsiveValue` from context extension.
+- Removed Responsiveness-related classes.
+- Fixed missing imports
+- Fixed datatypes in rx values.
 
 ## 2.3.1
 

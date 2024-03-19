@@ -51,7 +51,9 @@ extension ResetInstance on GetInterface {
   bool resetInstance({bool clearRouteBindings = true}) {
     //  if (clearFactory) _factory.clear();
     // deleteAll(force: true);
-    if (clearRouteBindings) RouterReportManager.instance.clearRouteKeys();
+    if (clearRouteBindings) {
+      RouterReportManager.instance.clearRouteKeys();
+    }
     Inst._singl.clear();
 
     return true;
@@ -382,7 +384,9 @@ extension Inst on GetInterface {
 
     final _InstanceBuilderFactory? dep = _singl[newKey];
 
-    if (dep == null) return false;
+    if (dep == null) {
+      return false;
+    }
 
     final _InstanceBuilderFactory builder;
     if (dep.isDirty) {
@@ -500,7 +504,9 @@ extension Inst on GetInterface {
 
     final _InstanceBuilderFactory? builder =
         _getDependency<S>(tag: tag, key: newKey);
-    if (builder == null) return;
+    if (builder == null) {
+      return;
+    }
 
     if (builder.permanent && !force) {
       Get.log(

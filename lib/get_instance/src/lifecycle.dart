@@ -57,7 +57,7 @@ mixin GetLifeCycleMixin {
   /// Checks whether the controller has already been closed.
   bool get isClosed => _isClosed;
 
-  // Called when the controller is removed from memory.
+  /// Called when the controller is removed from memory.
   @mustCallSuper
   @nonVirtual
   void onDelete() {

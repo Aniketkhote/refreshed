@@ -3,10 +3,7 @@
 import "dart:async";
 
 import "package:flutter/material.dart";
-
-import "package:refreshed/instance_manager.dart";
-import "package:refreshed/get_state_manager/get_state_manager.dart";
-import "package:refreshed/get_state_manager/src/simple/list_notifier.dart";
+import "package:refreshed/refreshed.dart";
 
 /// Signature for a function that creates an object of type `T`.
 typedef InitBuilder<T> = T Function();
@@ -22,25 +19,21 @@ extension StateAccessExt on BuildContext {
   ///
   /// This method is used to listen for changes to a specific state type `T` and rebuilds
   /// the widget whenever the state changes.
-  T listen<T>() {
-    return Bind.of(this, rebuild: true);
-  }
+  T listen<T>() => Bind.of(this, rebuild: true);
 
   /// Gets the current value of state of type `T` without rebuilding the widget.
   ///
   /// This method is used to get the current value of a specific state type `T` without
   /// triggering a widget rebuild.
-  T get<T>() {
-    return Bind.of(this);
-  }
+  T get<T>() => Bind.of(this);
 }
 
 class GetBuilder<T extends GetxController> extends StatelessWidget {
   const GetBuilder({
+    required this.builder,
     super.key,
     this.init,
     this.global = true,
-    required this.builder,
     this.autoRemove = true,
     this.assignId = false,
     this.initState,
@@ -58,9 +51,9 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
   final bool autoRemove;
   final bool assignId;
   final Object Function(T value)? filter;
-  final void Function(BindElement<T> state)? initState,
-      dispose,
-      didChangeDependencies;
+  final void Function(BindElement<T> state)? initState;
+  final dispose;
+  final didChangeDependencies;
   final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
   final T? init;
@@ -93,8 +86,8 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
 
 abstract class Bind<T> extends StatelessWidget {
   const Bind({
-    super.key,
     required this.child,
+    super.key,
     this.init,
     this.global = true,
     this.autoRemove = true,
@@ -148,9 +141,9 @@ abstract class Bind<T> extends StatelessWidget {
   final bool autoRemove;
   final bool assignId;
   final Object Function(T value)? filter;
-  final void Function(BindElement<T> state)? initState,
-      dispose,
-      didChangeDependencies;
+  final void Function(BindElement<T> state)? initState;
+  final dispose;
+  final didChangeDependencies;
   final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
 
@@ -192,13 +185,12 @@ abstract class Bind<T> extends StatelessWidget {
     InstanceCreateBuilderCallback<S> builder, {
     String? tag,
     bool permanent = true,
-  }) {
-    return _FactoryBind<S>(
-      create: builder,
-      tag: tag,
-      global: false,
-    );
-  }
+  }) =>
+      _FactoryBind<S>(
+        create: builder,
+        tag: tag,
+        global: false,
+      );
 
   static Bind spawn<S>(
     InstanceBuilderCallback<S> builder, {
@@ -315,9 +307,11 @@ class _FactoryBind<T> extends Bind<T> {
   final Object Function(T value)? filter;
 
   @override
-  final void Function(BindElement<T> state)? initState,
-      dispose,
-      didChangeDependencies;
+  final void Function(BindElement<T> state)? initState;
+  @override
+  final dispose;
+  @override
+  final didChangeDependencies;
   @override
   final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
@@ -326,48 +320,44 @@ class _FactoryBind<T> extends Bind<T> {
   final Widget? child;
 
   @override
-  Bind<T> _copyWithChild(Widget child) {
-    return Bind<T>.builder(
-      init: init,
-      create: create,
-      global: global,
-      autoRemove: autoRemove,
-      assignId: assignId,
-      initState: initState,
-      filter: filter,
-      tag: tag,
-      dispose: dispose,
-      id: id,
-      didChangeDependencies: didChangeDependencies,
-      didUpdateWidget: didUpdateWidget,
-      child: child,
-    );
-  }
+  Bind<T> _copyWithChild(Widget child) => Bind<T>.builder(
+        init: init,
+        create: create,
+        global: global,
+        autoRemove: autoRemove,
+        assignId: assignId,
+        initState: initState,
+        filter: filter,
+        tag: tag,
+        dispose: dispose,
+        id: id,
+        didChangeDependencies: didChangeDependencies,
+        didUpdateWidget: didUpdateWidget,
+        child: child,
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return Binder<T>(
-      create: create,
-      global: global,
-      autoRemove: autoRemove,
-      assignId: assignId,
-      initState: initState,
-      filter: filter,
-      tag: tag,
-      dispose: dispose,
-      id: id,
-      didChangeDependencies: didChangeDependencies,
-      didUpdateWidget: didUpdateWidget,
-      child: child!,
-    );
-  }
+  Widget build(BuildContext context) => Binder<T>(
+        create: create,
+        global: global,
+        autoRemove: autoRemove,
+        assignId: assignId,
+        initState: initState,
+        filter: filter,
+        tag: tag,
+        dispose: dispose,
+        id: id,
+        didChangeDependencies: didChangeDependencies,
+        didUpdateWidget: didUpdateWidget,
+        child: child!,
+      );
 }
 
 class Binds extends StatelessWidget {
   Binds({
-    super.key,
     required this.binds,
     required this.child,
+    super.key,
   }) : assert(binds.isNotEmpty);
   final List<Bind<dynamic>> binds;
   final Widget child;
@@ -383,8 +373,8 @@ class Binder<T> extends InheritedWidget {
   ///
   /// The [child] argument is required
   const Binder({
-    super.key,
     required super.child,
+    super.key,
     this.init,
     this.global = true,
     this.autoRemove = true,
@@ -409,19 +399,18 @@ class Binder<T> extends InheritedWidget {
   final bool autoRemove;
   final bool assignId;
   final Object Function(T value)? filter;
-  final void Function(BindElement<T> state)? initState,
-      dispose,
-      didChangeDependencies;
+  final void Function(BindElement<T> state)? initState;
+  final dispose;
+  final didChangeDependencies;
   final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
 
   @override
-  bool updateShouldNotify(Binder<T> oldWidget) {
-    return oldWidget.id != id ||
-        oldWidget.global != global ||
-        oldWidget.autoRemove != autoRemove ||
-        oldWidget.assignId != assignId;
-  }
+  bool updateShouldNotify(Binder<T> oldWidget) =>
+      oldWidget.id != id ||
+      oldWidget.global != global ||
+      oldWidget.autoRemove != autoRemove ||
+      oldWidget.assignId != assignId;
 
   @override
   InheritedElement createElement() => BindElement<T>(this);
@@ -528,7 +517,7 @@ class BindElement<T> extends InheritedElement {
       _remove?.call();
       final StreamSubscription stream =
           localController.stream.listen((_) => filter());
-      _remove = () => stream.cancel();
+      _remove = stream.cancel;
     }
   }
 

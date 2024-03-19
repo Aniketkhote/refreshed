@@ -133,37 +133,4 @@ extension ContextExtension on BuildContext {
 
   /// same as [isDesktopOrLess]
   bool get isDesktop => isDesktopOrLess;
-
-  /// Returns a specific value according to the screen size
-  /// if the device width is higher than or equal to 1200 return
-  /// [desktop] value. if the device width is higher than  or equal to 600
-  /// and less than 1200 return [tablet] value.
-  /// if the device width is less than 300  return [watch] value.
-  /// in other cases return [mobile] value.
-  T responsiveValue<T>({
-    T? watch,
-    T? mobile,
-    T? tablet,
-    T? desktop,
-  }) {
-    assert(
-      watch != null || mobile != null || tablet != null || desktop != null,
-    );
-
-    final double deviceWidth = mediaQuerySize.width;
-    //big screen width can display smaller sizes
-    final Iterable<T> strictValues = <T?>[
-      if (deviceWidth >= 1200) desktop, //desktop is allowed
-      if (deviceWidth >= 600) tablet, //tablet is allowed
-      if (deviceWidth >= 300) mobile, //mobile is allowed
-      watch, //watch is allowed
-    ].whereType<T>();
-    final Iterable<T> looseValues = <T?>[
-      watch,
-      mobile,
-      tablet,
-      desktop,
-    ].whereType<T>();
-    return strictValues.firstOrNull ?? looseValues.first;
-  }
 }

@@ -1,7 +1,7 @@
 import "package:flutter/foundation.dart";
 import "package:flutter/widgets.dart";
 import "package:refreshed/get_core/get_core.dart";
-import "package:refreshed/get_instance/src/extension_instance.dart";
+import "package:refreshed/get_instance/src/instance_extension.dart";
 import "package:refreshed/get_instance/src/lifecycle.dart";
 import "package:refreshed/get_state_manager/src/simple/list_notifier.dart";
 
