@@ -52,13 +52,14 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
   final bool assignId;
   final Object Function(T value)? filter;
   final void Function(BindElement<T> state)? initState;
-  final dispose;
+  final Function(BindElement<T> state)? dispose;
   final didChangeDependencies;
   final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
   final T? init;
 
   @override
+  // ignore: prefer_expression_function_bodies
   Widget build(BuildContext context) {
     return Binder(
       init: init == null ? null : () => init!,
@@ -142,8 +143,8 @@ abstract class Bind<T> extends StatelessWidget {
   final bool assignId;
   final Object Function(T value)? filter;
   final void Function(BindElement<T> state)? initState;
-  final dispose;
-  final didChangeDependencies;
+  final Function(BindElement<T> state)? dispose;
+  final Function(BindElement<T> state)? didChangeDependencies;
   final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
 
@@ -309,9 +310,9 @@ class _FactoryBind<T> extends Bind<T> {
   @override
   final void Function(BindElement<T> state)? initState;
   @override
-  final dispose;
+  final Function(BindElement<T> state)? dispose;
   @override
-  final didChangeDependencies;
+  final Function(BindElement<T> state)? didChangeDependencies;
   @override
   final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
@@ -400,8 +401,8 @@ class Binder<T> extends InheritedWidget {
   final bool assignId;
   final Object Function(T value)? filter;
   final void Function(BindElement<T> state)? initState;
-  final dispose;
-  final didChangeDependencies;
+  final Function(BindElement<T> state)? dispose;
+  final Function(BindElement<T> state)? didChangeDependencies;
   final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
 

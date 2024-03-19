@@ -1,3 +1,7 @@
+## 2.4.1
+
+- Fixed pub points
+
 ## 2.4.0
 
 - Implemented test cases for Rx extension methods.
