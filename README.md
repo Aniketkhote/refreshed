@@ -32,9 +32,9 @@ This README outlines the changes made to the package from its original GetX pack
 
 One significant change is the decoupling of `get_connect` to `connectify`. This alteration aims to streamline the connectivity-related functionalities within the package.
 
-## Removal of Animation Classes, Widget Extensions, Num, Duration and the responsive Extensions
+## Removal of Animation Classes, Widget, Num, Duration and the responsive Extensions
 
-The animation classes, widget extensions, as well as num and duration extensions, have been removed from this package. Instead, we have integrated the Quickify package, which offers a plethora of utility and extension methods, allowing for faster and more efficient development.
+The animation classes, widget extensions, as well as num and duration extensions, have been removed from this package. Instead, we have integrated the Quickly package, which offers a plethora of utility and extension methods, allowing for faster and more efficient development.
 
 ## Shift in Focus
 
