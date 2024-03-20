@@ -101,7 +101,7 @@ void main() {
     Get.delete<Controller>();
     expect(
       () => Get.find<Controller>(),
-      throwsA(const m.TypeMatcher<String>()),
+      throwsA(const m.TypeMatcher<Exception>()),
     );
     Get.reset();
   });
@@ -160,11 +160,10 @@ void main() {
     });
 
     test("Get.delete test with disposable controller", () async {
-      // Get.put(DisposableController());
       expect(Get.delete<DisposableController>(), true);
       expect(
         () => Get.find<DisposableController>(),
-        throwsA(const m.TypeMatcher<String>()),
+        throwsA(const m.TypeMatcher<Exception>()),
       );
     });
 

@@ -95,10 +95,10 @@ class GetModalBottomSheetRoute<T> extends PopupRoute<T> {
   final Size? dragHandleSize;
 
   /// Callback function invoked when the user finishes dragging the bottom sheet.
-  final Function(DragEndDetails details, {required bool isClosing})? onDragEnd;
+  final BottomSheetDragEndHandler? onDragEnd;
 
   /// Callback function invoked when the user starts dragging the bottom sheet.
-  final Function(DragStartDetails details)? onDragStart;
+  final BottomSheetDragStartHandler? onDragStart;
 
   /// The color of the shadow displayed beneath the bottom sheet.
   final Color? shadowColor;
@@ -218,8 +218,8 @@ class _GetModalBottomSheet<T> extends StatefulWidget {
   final bool? showDragHandle;
   final Color? dragHandleColor;
   final Size? dragHandleSize;
-  final Function(DragEndDetails, {required bool isClosing})? onDragEnd;
-  final Function(DragStartDetails)? onDragStart;
+  final BottomSheetDragEndHandler? onDragEnd;
+  final BottomSheetDragStartHandler? onDragStart;
   final Color? shadowColor;
 
   @override

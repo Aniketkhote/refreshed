@@ -54,14 +54,14 @@ extension ResetInstance on GetInterface {
     if (clearRouteBindings) {
       RouterReportManager.instance.clearRouteKeys();
     }
-    Inst._singl.clear();
+    InstanceExtension._singl.clear();
 
     return true;
   }
 }
 
 /// Extension on `GetInterface` providing a convenient method to find instances of type `T`.
-extension Inst on GetInterface {
+extension InstanceExtension on GetInterface {
   /// Calls `find<T>()` to retrieve an instance of type `T`.
   T call<T>() => find<T>();
 
@@ -70,23 +70,26 @@ extension Inst on GetInterface {
   static final Map<String, _InstanceBuilderFactory> _singl =
       <String, _InstanceBuilderFactory>{};
 
-  /// Holds a reference to every registered callback when using
-  /// `Get.lazyPut()`
-  // static final Map<String, _Lazy> _factory = {};
+  /// async version of `Get.put()`.
+  /// Awaits for the resolution of the Future from `builder()` parameter and
+  /// stores the Instance returned.
+  Future<S> putAsync<S>(
+    AsyncInstanceBuilderCallback<S> builder, {
+    String? tag,
+    bool permanent = false,
+  }) async =>
+      put<S>(await builder(), tag: tag, permanent: permanent);
 
-  // void injector<S>(
-  //   InjectorBuilderCallback<S> fn, {
-  //   String? tag,
-  //   bool fenix = false,
-  //   //  bool permanent = false,
-  // }) {
-  //   lazyPut(
-  //     () => fn(this),
-  //     tag: tag,
-  //     fenix: fenix,
-  //     // permanent: permanent,
-  //   );
-  // }
+  /// Injects an instance `<S>` in memory to be globally accessible.
+  ///
+  /// No need to define the generic type `<S>` as it's inferred from
+  /// the [dependency]
+  ///
+  /// - [dependency] The Instance to be injected.
+  /// - [tag] optionally, use a [tag] as an "id" to create multiple records of
+  /// the same Type<[S]>
+  /// - [permanent] keeps the Instance in memory, not following
+  /// `Get.smartManagement` rules.
   S put<S>(
     S dependency, {
     String? tag,
@@ -263,13 +266,17 @@ extension Inst on GetInterface {
   /// Initializes the controller
   S _startController<S>({String? tag}) {
     final String key = _getKey(S, tag);
-    final i = _singl[key]!.getDependency() as S;
+    final S i = _singl[key]!.getDependency() as S;
     if (i is GetLifeCycleMixin) {
       i.onStart();
       if (tag == null) {
+        Get.log("....................................................");
         Get.log('Instance "$S" has been initialized');
+        Get.log("....................................................");
       } else {
+        Get.log("....................................................");
         Get.log('Instance "$S" with tag "$tag" has been initialized');
+        Get.log("....................................................");
       }
       if (!_singl[key]!.isSingleton!) {
         RouterReportManager.instance.appendRouteByCreate(i);
@@ -299,20 +306,21 @@ extension Inst on GetInterface {
       final _InstanceBuilderFactory? dep = _singl[key];
       if (dep == null) {
         if (tag == null) {
-          throw 'Class "$S" is not registered';
+          throw Exception('Class "$S" is not registered');
         } else {
-          throw 'Class "$S" with tag "$tag" is not registered';
+          throw Exception('Class "$S" with tag "$tag" is not registered');
         }
       }
 
       /// although dirty solution, the lifecycle starts inside
       /// `initDependencies`, so we have to return the instance from there
       /// to make it compatible with `Get.create()`.
-      final i = _initDependencies<S>(name: tag);
+      final S? i = _initDependencies<S>(name: tag);
       return i ?? dep.getDependency() as S;
     } else {
-      // ignore: lines_longer_than_80_chars
-      throw '"$S" not found. You need to call "Get.put($S())" or "Get.lazyPut(()=>$S())"';
+      throw Exception(
+        '"$S" not found. You need to call "Get.put($S())" or "Get.lazyPut(()=>$S())"',
+      );
     }
   }
 
@@ -397,13 +405,12 @@ extension Inst on GetInterface {
 
     if (builder.permanent && !force) {
       Get.log(
-        // ignore: lines_longer_than_80_chars
         '"$newKey" has been marked as permanent, SmartManagement is not authorized to delete it.',
         isError: true,
       );
       return false;
     }
-    final i = builder.dependency;
+    final S i = builder.dependency;
 
     if (i is GetxServiceMixin && !force) {
       return false;
@@ -421,14 +428,18 @@ extension Inst on GetInterface {
     } else {
       if (dep.lateRemove != null) {
         dep.lateRemove = null;
+        Get.log("....................................................");
         Get.log('"$newKey" deleted from memory');
+        Get.log("....................................................");
         return false;
       } else {
         _singl.remove(newKey);
         if (_singl.containsKey(newKey)) {
           Get.log('Error removing object "$newKey"', isError: true);
         } else {
+          Get.log("....................................................");
           Get.log('"$newKey" deleted from memory');
+          Get.log("....................................................");
         }
         return true;
       }
@@ -516,7 +527,7 @@ extension Inst on GetInterface {
       return;
     }
 
-    final i = builder.dependency;
+    final S i = builder.dependency;
 
     if (i is GetxServiceMixin && !force) {
       return;
@@ -615,9 +626,13 @@ class _InstanceBuilderFactory<S> {
 
   void _showInitLog() {
     if (tag == null) {
+      Get.log("....................................................");
       Get.log('Instance "$S" has been created');
+      Get.log("....................................................");
     } else {
+      Get.log("....................................................");
       Get.log('Instance "$S" has been created with tag "$tag"');
+      Get.log("....................................................");
     }
   }
 

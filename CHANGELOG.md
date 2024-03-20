@@ -1,3 +1,7 @@
+## 2.5.0
+
+- Reintroduced `putAsync` function
+
 ## 2.4.1
 
 - Fixed pub points

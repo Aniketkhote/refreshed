@@ -53,7 +53,7 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
   final Object Function(T value)? filter;
   final void Function(BindElement<T> state)? initState;
   final Function(BindElement<T> state)? dispose;
-  final didChangeDependencies;
+  final Function(BindElement<T> state)? didChangeDependencies;
   final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
   final T? init;
@@ -76,7 +76,7 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
       didUpdateWidget: didUpdateWidget,
       child: Builder(
         builder: (BuildContext context) {
-          final controller = Bind.of<T>(context, rebuild: true);
+          final T controller = Bind.of<T>(context, rebuild: true);
           return builder(controller);
         },
       ),
@@ -118,7 +118,6 @@ abstract class Bind<T> extends StatelessWidget {
     void Function(Binder<T> oldWidget, BindElement<T> state)? didUpdateWidget,
   }) =>
       _FactoryBind<T>(
-        // key: key,
         init: init,
         create: create,
         global: global,
@@ -167,15 +166,11 @@ abstract class Bind<T> extends StatelessWidget {
     InstanceBuilderCallback<S> builder, {
     String? tag,
     bool fenix = true,
-    // VoidCallback? onInit,
     VoidCallback? onClose,
   }) {
     Get.lazyPut<S>(builder, tag: tag, fenix: fenix);
     return _FactoryBind<S>(
       tag: tag,
-      // initState: (_) {
-      //   onInit?.call();
-      // },
       dispose: (_) {
         onClose?.call();
       },
@@ -263,7 +258,7 @@ abstract class Bind<T> extends StatelessWidget {
       // }
     }
 
-    final controller = inheritedElement.controller;
+    final T controller = inheritedElement.controller;
 
     return controller;
   }

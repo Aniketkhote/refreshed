@@ -34,8 +34,8 @@ extension PopupUtilsExtension on GetInterface {
     bool? showDragHandle = true,
     Color? dragHandleColor,
     Size? dragHandleSize,
-    Function(DragEndDetails, {required bool isClosing})? onDragEnd,
-    Function(DragStartDetails)? onDragStart,
+    BottomSheetDragEndHandler? onDragEnd,
+    BottomSheetDragStartHandler? onDragStart,
     Color? shadowColor,
   }) =>
       Navigator.of(overlayContext!, rootNavigator: useRootNavigator).push(
