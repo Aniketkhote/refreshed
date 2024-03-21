@@ -1,3 +1,8 @@
+## 2.5.1
+
+- Resolved scrolling issue by setting the default value of the persistent parameter to false during bottom sheet dragdown.
+- Enhanced clarity by renaming persistent to isPersistent to denote a boolean value for the parameter.
+
 ## 2.5.0
 
 - Reintroduced `putAsync` function

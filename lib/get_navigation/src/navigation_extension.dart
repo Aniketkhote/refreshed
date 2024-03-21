@@ -17,7 +17,7 @@ extension PopupUtilsExtension on GetInterface {
     Widget bottomsheet, {
     Color? backgroundColor,
     double? elevation,
-    bool persistent = true,
+    bool isPersistent = false,
     ShapeBorder? shape,
     Clip? clipBehavior,
     Color? barrierColor,
@@ -41,7 +41,7 @@ extension PopupUtilsExtension on GetInterface {
       Navigator.of(overlayContext!, rootNavigator: useRootNavigator).push(
         GetModalBottomSheetRoute<T>(
           builder: (_) => bottomsheet,
-          isPersistent: persistent,
+          isPersistent: isPersistent,
           theme: Theme.of(key.currentContext!),
           isScrollControlled: isScrollControlled,
           barrierLabel: MaterialLocalizations.of(key.currentContext!)
