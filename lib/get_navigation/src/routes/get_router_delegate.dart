@@ -7,7 +7,7 @@ import "package:refreshed/get_navigation/src/routes/new_path_route.dart";
 import "package:refreshed/route_manager.dart";
 import "package:refreshed/utils.dart";
 
-class GetDelegate extends RouterDelegate<RouteDecoder>
+class GetDelegate<T> extends RouterDelegate<RouteDecoder>
     with
         ChangeNotifier,
         PopNavigatorRouterDelegateMixin<RouteDecoder>,
@@ -92,8 +92,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     _routeTree.removeRoute(getPage);
   }
 
-  RouteDecoder matchRoute(String name, {PageSettings? arguments}) =>
-      _routeTree.matchRoute(name, arguments: arguments);
+  RouteDecoder<T> matchRoute(String name, {PageSettings? arguments}) =>
+      _routeTree.matchRoute(name, arguments: arguments) as RouteDecoder<T>;
 
   @override
   GlobalKey<NavigatorState> navigatorKey;
@@ -339,7 +339,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   @override
   Future<T?> toNamed<T>(
     String page, {
-    arguments,
+    Object? arguments,
     String? id,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -364,7 +364,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     String? id,
     String? routeName,
     bool fullscreenDialog = false,
-    arguments,
+    Object? arguments,
     List<BindingsInterface> bindings = const <BindingsInterface>[],
     bool preventDuplicates = true,
     bool? popGesture,
@@ -416,7 +416,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     String? id,
     String? routeName,
     bool fullscreenDialog = false,
-    arguments,
+    Object? arguments,
     List<BindingsInterface> bindings = const <BindingsInterface>[],
     bool preventDuplicates = true,
     bool? popGesture,
@@ -450,7 +450,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     bool? popGesture,
     String? id,
     String? routeName,
-    arguments,
+    Object? arguments,
     List<BindingsInterface> bindings = const <BindingsInterface>[],
     bool fullscreenDialog = false,
     Transition? transition,
@@ -490,7 +490,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   Future<T?>? offAllNamed<T>(
     String newRouteName, {
     // bool Function(GetPage route)? predicate,
-    arguments,
+    Object? arguments,
     String? id,
     Map<String, String>? parameters,
   }) async {
@@ -511,7 +511,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   Future<T?>? offNamedUntil<T>(
     String page, {
     bool Function(GetPage route)? predicate,
-    arguments,
+    Object? arguments,
     String? id,
     Map<String, String>? parameters,
   }) async {
@@ -534,7 +534,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   @override
   Future<T?> offNamed<T>(
     String page, {
-    arguments,
+    Object? arguments,
     String? id,
     Map<String, String>? parameters,
   }) async {

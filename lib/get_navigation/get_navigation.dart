@@ -1,4 +1,4 @@
-/// A Getx providing utilities and widgets for navigation management.
+/// A Refreshed providing utilities and widgets for navigation management.
 ///
 /// This includes features such as bottom sheets, route management,
 /// internationalization support, custom transitions, and snackbar display.

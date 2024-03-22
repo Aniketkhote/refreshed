@@ -372,7 +372,7 @@ class ConfigData<T> {
 /// To access the state of the [GetRoot] widget, you can use the
 /// [of] static method, passing the [BuildContext] of the widget
 /// where you want to access the state.
-class GetRoot extends StatefulWidget {
+class GetRoot<T> extends StatefulWidget {
   /// Constructs a [GetRoot] widget.
   ///
   /// The [config] parameter specifies the configuration data for the application.
@@ -384,7 +384,7 @@ class GetRoot extends StatefulWidget {
   });
 
   /// Configuration data for the application.
-  final ConfigData config;
+  final ConfigData<T> config;
 
   /// The child widget to be rendered within the application.
   final Widget child;
@@ -426,7 +426,7 @@ class GetRoot extends StatefulWidget {
 /// to handle the state and lifecycle of the [GetRoot] widget. It initializes
 /// configuration, manages dependencies, and responds to changes in the application's
 /// lifecycle.
-class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
+class GetRootState<T> extends State<GetRoot<T>> with WidgetsBindingObserver {
   static GetRootState? _controller;
 
   /// The singleton controller for [GetRootState].
@@ -442,7 +442,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   }
 
   /// Configuration data for the application.
-  late ConfigData config;
+  late ConfigData<T> config;
 
   @override
   void initState() {
@@ -628,7 +628,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   GlobalKey<NavigatorState> get key => rootDelegate.navigatorKey;
 
   /// Retrieves the root delegate.
-  GetDelegate get rootDelegate => config.routerDelegate! as GetDelegate;
+  GetDelegate<T> get rootDelegate => config.routerDelegate! as GetDelegate<T>;
 
   /// Retrieves the route information parser.
   RouteInformationParser<Object> get informationParser =>
@@ -642,21 +642,20 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     return key;
   }
 
-  Map<String, GetDelegate> keys = <String, GetDelegate>{};
+  Map<String, GetDelegate<T>> keys = <String, GetDelegate<T>>{};
 
   /// Nested key management for routing.
   ///
   /// Returns a delegate associated with the provided key.
-  GetDelegate? nestedKey(String? key) {
+  GetDelegate<T>? nestedKey(String? key) {
     if (key == null) {
       return rootDelegate;
     }
     keys.putIfAbsent(
       key,
-      () => GetDelegate(
+      () => GetDelegate<T>(
         showHashOnUrl: true,
-        //debugLabel: 'Getx nested key: ${key.toString()}',
-        pages: RouteDecoder.fromRoute(key).currentChildren ?? <GetPage>[],
+        pages: RouteDecoder<T>.fromRoute(key).currentChildren ?? <GetPage<T>>[],
       ),
     );
     return keys[key];

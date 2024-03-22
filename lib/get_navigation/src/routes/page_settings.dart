@@ -1,5 +1,4 @@
 import "package:flutter/widgets.dart";
-
 import "package:refreshed/route_manager.dart";
 
 /// Extension methods for [BuildContext] to provide convenient access to page-related information.
@@ -18,15 +17,13 @@ import "package:refreshed/route_manager.dart";
 /// final location = context.location;
 /// final delegate = context.delegate;
 /// ```
-extension PageArgExt on BuildContext {
+extension PageArgExtension<T> on BuildContext {
   /// Retrieves the route settings associated with the current modal route.
-  RouteSettings? get settings {
-    return ModalRoute.of(this)!.settings;
-  }
+  RouteSettings? get settings => ModalRoute.of(this)!.settings;
 
   /// Retrieves the [PageSettings] associated with the current modal route's settings arguments.
   PageSettings? get pageSettings {
-    final args = ModalRoute.of(this)?.settings.arguments;
+    final Object? args = ModalRoute.of(this)?.settings.arguments;
     if (args is PageSettings) {
       return args;
     }
@@ -35,7 +32,7 @@ extension PageArgExt on BuildContext {
 
   /// Retrieves the arguments associated with the current modal route's settings.
   dynamic get arguments {
-    final args = settings?.arguments;
+    final Object? args = settings?.arguments;
     if (args is PageSettings) {
       return args.arguments;
     } else {
@@ -45,30 +42,26 @@ extension PageArgExt on BuildContext {
 
   /// Retrieves the parameters associated with the current modal route's settings arguments.
   Map<String, String> get params {
-    final args = settings?.arguments;
+    final Object? args = settings?.arguments;
     if (args is PageSettings) {
       return args.params;
     } else {
-      return {};
+      return <String, String>{};
     }
   }
 
   /// Retrieves the [Router] associated with the current build context.
-  Router get router {
-    return Router.of(this);
-  }
+  Router<T> get router => Router.of(this);
 
   /// Retrieves the location (path) associated with the current build context.
   String get location {
-    final parser = router.routeInformationParser;
-    final config = delegate.currentConfiguration;
+    final RouteInformationParser? parser = router.routeInformationParser;
+    final RouteDecoder? config = delegate.currentConfiguration;
     return parser?.restoreRouteInformation(config)?.uri.path ?? "/";
   }
 
   /// Retrieves the delegate associated with the current router.
-  GetDelegate get delegate {
-    return router.routerDelegate as GetDelegate;
-  }
+  GetDelegate get delegate => router.routerDelegate as GetDelegate;
 }
 
 /// A custom implementation of [RouteSettings] representing settings specific to a page.
@@ -100,7 +93,7 @@ class PageSettings extends RouteSettings {
   final Uri uri;
 
   /// Parameters associated with the page.
-  final params = <String, String>{};
+  final Map<String, String> params = <String, String>{};
 
   /// Retrieves the path component of the URI.
   String get path => uri.path;
@@ -124,16 +117,17 @@ class PageSettings extends RouteSettings {
   PageSettings copy({
     Uri? uri,
     Object? arguments,
-  }) {
-    return PageSettings(
-      uri ?? this.uri,
-      arguments ?? this.arguments,
-    );
-  }
+  }) =>
+      PageSettings(
+        uri ?? this.uri,
+        arguments ?? this.arguments,
+      );
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     return other is PageSettings &&
         other.uri == uri &&

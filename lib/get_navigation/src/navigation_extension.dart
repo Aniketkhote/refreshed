@@ -560,7 +560,7 @@ extension PopupUtilsExtension on GetInterface {
 }
 
 /// Extension providing navigation functionalities
-extension NavigationExtension on GetInterface {
+extension NavigationExtension<T> on GetInterface {
   /// **Navigation.push()** shortcut.<br><br>
   ///
   /// Pushes a new `page` to the stack
@@ -583,7 +583,7 @@ extension NavigationExtension on GetInterface {
   ///
   /// If you're using the [BindingsInterface] api, you must define it here
   ///
-  /// By default, GetX will prevent you from push a route that you already in,
+  /// By default, Refreshed will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   Future<T?>? to<T extends Object?>(
     Widget Function() page, {
@@ -635,7 +635,7 @@ extension NavigationExtension on GetInterface {
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
   ///
-  /// By default, GetX will prevent you from push a route that you already in,
+  /// By default, Refreshed will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   ///
   /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
@@ -676,7 +676,7 @@ extension NavigationExtension on GetInterface {
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
   ///
-  /// By default, GetX will prevent you from push a route that you already in,
+  /// By default, Refreshed will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   ///
   /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
@@ -850,10 +850,7 @@ extension NavigationExtension on GetInterface {
 
   /// **Navigation.popUntil()** shortcut.<br><br>
   ///
-  /// Pop the current page, snackbar, dialog or bottomsheet in the stack
-  ///
-  /// if your set [closeOverlays] to true, Get.back() will close the
-  /// currently open snackbar/dialog/bottomsheet AND the current page
+  /// Pop the current page in the stack
   ///
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
@@ -1035,7 +1032,7 @@ extension NavigationExtension on GetInterface {
   ///
   /// If you're using the [BindingsInterface] api, you must define it here
   ///
-  /// By default, GetX will prevent you from push a route that you already in,
+  /// By default, Refreshed will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   Future<T?>? off<T>(
     Widget Function() page, {
@@ -1121,7 +1118,7 @@ extension NavigationExtension on GetInterface {
   ///
   /// If you're using the [BindingsInterface] api, you must define it here
   ///
-  /// By default, GetX will prevent you from push a route that you already in,
+  /// By default, Refreshed will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
   Future<T?>? offAll<T>(
     Widget Function() page, {
@@ -1241,16 +1238,6 @@ extension NavigationExtension on GetInterface {
       }
       key = keys[k]!;
     }
-
-    // if (_key.listenersLength == 0 && !testMode) {
-    //   throw """You are trying to use contextless navigation without
-    //   a GetMaterialApp or Get.key.
-    //   If you are testing your app, you can use:
-    //   [Get.testMode = true], or if you are running your app on
-    //   a physical device or emulator, you must exchange your [MaterialApp]
-    //   for a [GetMaterialApp].
-    //   """;
-    // }
 
     // Missing return statement for 'key' here in the original code
     return key;
@@ -1374,13 +1361,15 @@ extension NavigationExtension on GetInterface {
   /// Retrieves the global key for accessing the navigator state.
   GlobalKey<NavigatorState> get key => rootController.key;
 
-  /// Retrieves a map of keys associated with GetX delegates.
+  /// Retrieves a map of keys associated with Refreshed delegates.
   Map<String, GetDelegate> get keys => rootController.keys;
 
   /// Retrieves the root controller state.
-  GetRootState get rootController => GetRootState.controller;
+  GetRootState<T> get rootController =>
+      GetRootState.controller as GetRootState<T>;
 
-  ConfigData get _getxController => GetRootState.controller.config;
+  ConfigData<T> get _getxController =>
+      GetRootState.controller.config as ConfigData<T>;
 
   /// Retrieves the default setting for enabling the back gesture.
   bool get defaultPopGesture => _getxController.defaultPopGesture;

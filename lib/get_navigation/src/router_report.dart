@@ -2,10 +2,10 @@ import "dart:collection";
 
 import "package:refreshed/refreshed.dart";
 
-/// Manages the routing and memory management for instances associated with routes in GetX.
+/// Manages the routing and memory management for instances associated with routes in Refreshed.
 ///
 /// This class handles the tracking and disposal of instances linked to specific routes
-/// in a GetX application. It is particularly useful when managing the lifecycle
+/// in a Refreshed application. It is particularly useful when managing the lifecycle
 /// of instances created with `Get.create()` and associated with specific routes.
 ///
 /// Instances of this class can be accessed via the static [instance] getter.

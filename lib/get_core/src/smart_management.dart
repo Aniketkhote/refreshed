@@ -1,10 +1,10 @@
-/// GetX by default disposes unused controllers from memory,
+/// Refreshed by default disposes unused controllers from memory,
 /// Through different behaviors.
 enum SmartManagement {
   /// [SmartManagement.full] is the default one. Dispose classes that are
   /// not being used and were not set to be permanent. In the majority
   /// of the cases you will want to keep this config untouched.
-  /// If you new to GetX then don't change this.
+  /// If you new to Refreshed then don't change this.
   full,
 
   /// [SmartManagement.onlyBuilder] only controllers started in init:

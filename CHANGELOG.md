@@ -1,3 +1,8 @@
+## 2.5.2
+
+- Altered logger's initial print message from `GetX` to `Refreshed`.
+- Resolved linting issues.
+
 ## 2.5.1
 
 - Resolved scrolling issue by setting the default value of the persistent parameter to false during bottom sheet dragdown.
