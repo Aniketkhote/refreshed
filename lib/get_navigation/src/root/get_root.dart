@@ -15,7 +15,6 @@ class ConfigData<T> {
     required this.enableLog,
     required this.logWriterCallback,
     required this.smartManagement,
-    required this.binds,
     required this.transitionDuration,
     required this.defaultGlobalState,
     required this.getPages,
@@ -34,6 +33,7 @@ class ConfigData<T> {
     required this.initialRoute,
     required this.customTransition,
     required this.home,
+    this.binds,
     this.theme,
     this.darkTheme,
     this.themeMode,
@@ -75,7 +75,7 @@ class ConfigData<T> {
   final SmartManagement smartManagement;
 
   /// List of bindings for dependency injection.
-  final List<Bind<T>> binds;
+  final List<Bind<T>>? binds;
 
   /// Duration for route transition animations.
   final Duration? transitionDuration;

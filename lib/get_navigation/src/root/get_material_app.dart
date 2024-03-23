@@ -11,7 +11,7 @@ import "package:refreshed/instance_manager.dart";
 /// This widget is similar to MaterialApp, but with additional features provided
 /// by Refreshed, such as reactive state management, dependency injection, and
 /// navigation management.
-class GetMaterialApp extends StatelessWidget {
+class GetMaterialApp<T> extends StatelessWidget {
   /// Constructs a [GetMaterialApp] widget.
   const GetMaterialApp({
     super.key,
@@ -65,7 +65,7 @@ class GetMaterialApp extends StatelessWidget {
     this.transitionDuration,
     this.defaultGlobalState,
     this.smartManagement = SmartManagement.full,
-    this.binds = const <Bind>[],
+    this.binds,
     this.unknownRoute,
     this.highContrastTheme,
     this.highContrastDarkTheme,
@@ -124,7 +124,7 @@ class GetMaterialApp extends StatelessWidget {
     this.logWriterCallback,
     this.popGesture,
     this.smartManagement = SmartManagement.full,
-    this.binds = const <Bind>[],
+    this.binds,
     this.transitionDuration,
     this.defaultGlobalState,
     this.getPages,
@@ -280,7 +280,7 @@ class GetMaterialApp extends StatelessWidget {
   final SmartManagement smartManagement;
 
   /// The bindings for the app.
-  final List<Bind> binds;
+  final List<Bind<T>>? binds;
 
   /// The transition duration for page transitions.
   final Duration? transitionDuration;

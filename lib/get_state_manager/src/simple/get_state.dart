@@ -149,7 +149,7 @@ abstract class Bind<T> extends StatelessWidget {
 
   final Widget? child;
 
-  static Bind put<S>(
+  static Bind<S> put<S>(
     S dependency, {
     String? tag,
     bool permanent = false,
@@ -162,7 +162,7 @@ abstract class Bind<T> extends StatelessWidget {
     );
   }
 
-  static Bind lazyPut<S>(
+  static Bind<S> lazyPut<S>(
     InstanceBuilderCallback<S> builder, {
     String? tag,
     bool fenix = true,
@@ -177,7 +177,7 @@ abstract class Bind<T> extends StatelessWidget {
     );
   }
 
-  static Bind create<S>(
+  static Bind<S> create<S>(
     InstanceCreateBuilderCallback<S> builder, {
     String? tag,
     bool permanent = true,
@@ -188,7 +188,7 @@ abstract class Bind<T> extends StatelessWidget {
         global: false,
       );
 
-  static Bind spawn<S>(
+  static Bind<S> spawn<S>(
     InstanceBuilderCallback<S> builder, {
     String? tag,
     bool permanent = true,
@@ -349,18 +349,18 @@ class _FactoryBind<T> extends Bind<T> {
       );
 }
 
-class Binds extends StatelessWidget {
+class Binds<S> extends StatelessWidget {
   Binds({
     required this.binds,
     required this.child,
     super.key,
   }) : assert(binds.isNotEmpty);
-  final List<Bind<dynamic>> binds;
+  final List<Bind<S>> binds;
   final Widget child;
 
   @override
   Widget build(BuildContext context) => binds.reversed
-      .fold(child, (Widget widget, Bind e) => e._copyWithChild(widget));
+      .fold(child, (Widget widget, Bind<S> e) => e._copyWithChild(widget));
 }
 
 class Binder<T> extends InheritedWidget {
