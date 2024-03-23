@@ -1,5 +1,4 @@
 import "package:flutter/widgets.dart";
-
 import "package:refreshed/get_instance/src/bindings_interface.dart";
 import "package:refreshed/get_navigation/src/routes/get_route.dart";
 import "package:refreshed/get_navigation/src/routes/transitions_type.dart";
@@ -54,8 +53,8 @@ mixin IGetNavigation {
     String? id,
     String? routeName,
     bool fullscreenDialog = false,
-    dynamic arguments,
-    List<BindingsInterface> bindings = const [],
+    arguments,
+    List<BindingsInterface> bindings = const <BindingsInterface>[],
     bool preventDuplicates = true,
     bool? popGesture,
     bool showCupertinoParallax = true,
@@ -76,8 +75,8 @@ mixin IGetNavigation {
     String? id,
     String? routeName,
     bool fullscreenDialog = false,
-    dynamic arguments,
-    List<BindingsInterface> bindings = const [],
+    arguments,
+    List<BindingsInterface> bindings = const <BindingsInterface>[],
     bool preventDuplicates = true,
     bool? popGesture,
     bool showCupertinoParallax = true,
@@ -91,8 +90,8 @@ mixin IGetNavigation {
     bool? popGesture,
     String? id,
     String? routeName,
-    dynamic arguments,
-    List<BindingsInterface> bindings = const [],
+    arguments,
+    List<BindingsInterface> bindings = const <BindingsInterface>[],
     bool fullscreenDialog = false,
     Transition? transition,
     Curve? curve,
@@ -103,7 +102,7 @@ mixin IGetNavigation {
 
   Future<T?> toNamed<T>(
     String page, {
-    dynamic arguments,
+    arguments,
     String? id,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -111,7 +110,7 @@ mixin IGetNavigation {
 
   Future<T?> offNamed<T>(
     String page, {
-    dynamic arguments,
+    arguments,
     String? id,
     Map<String, String>? parameters,
   });
@@ -119,7 +118,7 @@ mixin IGetNavigation {
   Future<T?>? offAllNamed<T>(
     String newRouteName, {
     // bool Function(GetPage route)? predicate,
-    dynamic arguments,
+    arguments,
     String? id,
     Map<String, String>? parameters,
   });
@@ -127,7 +126,7 @@ mixin IGetNavigation {
   Future<T?>? offNamedUntil<T>(
     String page, {
     bool Function(GetPage route)? predicate,
-    dynamic arguments,
+    arguments,
     String? id,
     Map<String, String>? parameters,
   });

@@ -14,7 +14,7 @@ typedef GetControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
 );
 
 /// Extension methods for accessing state in the context of a widget build.
-extension StateAccessExt on BuildContext {
+extension StateAccessExtension on BuildContext {
   /// Listens for state changes of type `T` and rebuilds the widget when it changes.
   ///
   /// This method is used to listen for changes to a specific state type `T` and rebuilds
@@ -28,7 +28,12 @@ extension StateAccessExt on BuildContext {
   T get<T>() => Bind.of(this);
 }
 
+/// A widget that builds itself based on the latest value of a [GetxController].
+///
+/// The [GetBuilder] widget listens to changes in a specified [GetxController],
+/// and rebuilds its child widget whenever the controller changes its state.
 class GetBuilder<T extends GetxController> extends StatelessWidget {
+  /// Constructs a [GetBuilder] widget.
   const GetBuilder({
     required this.builder,
     super.key,
@@ -44,48 +49,70 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
     this.didChangeDependencies,
     this.didUpdateWidget,
   });
+
+  /// A function that builds the widget based on the latest state of the controller.
   final GetControllerBuilder<T> builder;
+
+  /// A flag indicating whether the controller should be treated as global.
   final bool global;
+
+  /// An identifier for the widget.
   final Object? id;
+
+  /// A tag for the widget.
   final String? tag;
+
+  /// A flag indicating whether the widget should be automatically removed when disposed.
   final bool autoRemove;
+
+  /// A flag indicating whether an identifier should be assigned to the widget.
   final bool assignId;
+
+  /// A function that filters the value of the controller.
   final Object Function(T value)? filter;
+
+  /// A callback function that is called when the widget is initialized.
   final void Function(BindElement<T> state)? initState;
+
+  /// A callback function that is called when the widget is disposed.
   final Function(BindElement<T> state)? dispose;
+
+  /// A callback function that is called when the widget's dependencies change.
   final Function(BindElement<T> state)? didChangeDependencies;
+
+  /// A callback function that is called when the widget is updated.
   final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
+
+  /// An initial value for the controller.
   final T? init;
 
   @override
-  // ignore: prefer_expression_function_bodies
-  Widget build(BuildContext context) {
-    return Binder(
-      init: init == null ? null : () => init!,
-      global: global,
-      autoRemove: autoRemove,
-      assignId: assignId,
-      initState: initState,
-      filter: filter,
-      tag: tag,
-      dispose: dispose,
-      id: id,
-      lazy: false,
-      didChangeDependencies: didChangeDependencies,
-      didUpdateWidget: didUpdateWidget,
-      child: Builder(
-        builder: (BuildContext context) {
-          final T controller = Bind.of<T>(context, rebuild: true);
-          return builder(controller);
-        },
-      ),
-    );
-    // return widget.builder(controller!);
-  }
+  Widget build(BuildContext context) => Binder<T>(
+        init: init == null ? null : () => init!,
+        global: global,
+        autoRemove: autoRemove,
+        assignId: assignId,
+        initState: initState,
+        filter: filter,
+        tag: tag,
+        dispose: dispose,
+        id: id,
+        lazy: false,
+        didChangeDependencies: didChangeDependencies,
+        didUpdateWidget: didUpdateWidget,
+        child: Builder(
+          builder: (BuildContext context) {
+            final T controller = Bind.of<T>(context, rebuild: true);
+            return builder(controller);
+          },
+        ),
+      );
 }
 
+/// Abstract class representing a binding widget responsible for managing a specific type of controller.
 abstract class Bind<T> extends StatelessWidget {
+  /// Constructs a [Bind] widget.
   const Bind({
     required this.child,
     super.key,
@@ -102,6 +129,7 @@ abstract class Bind<T> extends StatelessWidget {
     this.didUpdateWidget,
   });
 
+  /// Factory method to create a [Bind] widget using a builder pattern.
   factory Bind.builder({
     Widget? child,
     InitBuilder<T>? init,
@@ -133,22 +161,46 @@ abstract class Bind<T> extends StatelessWidget {
         child: child,
       );
 
+  /// Function to initialize the controller.
   final InitBuilder<T>? init;
 
+  /// Flag indicating whether the controller should be treated as global.
   final bool global;
+
+  /// Identifier for the widget.
   final Object? id;
+
+  /// Tag for the widget.
   final String? tag;
+
+  /// Flag indicating whether the widget should be automatically removed when disposed.
   final bool autoRemove;
+
+  /// Flag indicating whether an identifier should be assigned to the widget.
   final bool assignId;
+
+  /// Function to filter the value of the controller.
   final Object Function(T value)? filter;
+
+  /// Callback function that is called when the widget is initialized.
   final void Function(BindElement<T> state)? initState;
+
+  /// Callback function that is called when the widget is disposed.
   final Function(BindElement<T> state)? dispose;
+
+  /// Callback function that is called when the widget's dependencies change.
   final Function(BindElement<T> state)? didChangeDependencies;
+
+  /// Callback function that is called when the widget is updated.
   final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
 
+  /// Child widget that will receive the provided bindings.
   final Widget? child;
 
+  /// Creates a binding and puts the specified dependency into the GetX service locator.
+  ///
+  /// Returns the binding created.
   static Bind<S> put<S>(
     S dependency, {
     String? tag,
@@ -162,6 +214,9 @@ abstract class Bind<T> extends StatelessWidget {
     );
   }
 
+  /// Creates a lazy binding and puts the specified dependency into the GetX service locator.
+  ///
+  /// Returns the binding created.
   static Bind<S> lazyPut<S>(
     InstanceBuilderCallback<S> builder, {
     String? tag,
@@ -177,6 +232,9 @@ abstract class Bind<T> extends StatelessWidget {
     );
   }
 
+  /// Creates a binding and puts the specified dependency into the GetX service locator.
+  ///
+  /// Returns the binding created.
   static Bind<S> create<S>(
     InstanceCreateBuilderCallback<S> builder, {
     String? tag,
@@ -188,6 +246,9 @@ abstract class Bind<T> extends StatelessWidget {
         global: false,
       );
 
+  /// Creates a binding and puts the specified dependency into the GetX service locator.
+  ///
+  /// Returns the binding created.
   static Bind<S> spawn<S>(
     InstanceBuilderCallback<S> builder, {
     String? tag,
@@ -201,41 +262,51 @@ abstract class Bind<T> extends StatelessWidget {
     );
   }
 
+  /// Retrieves a dependency from the GetX service locator using the specified tag.
   static S find<S>({String? tag}) => Get.find<S>(tag: tag);
 
+  /// Deletes a dependency from the GetX service locator using the specified tag.
   static Future<bool> delete<S>({String? tag, bool force = false}) async =>
       Get.delete<S>(tag: tag, force: force);
 
+  /// Deletes all dependencies from the GetX service locator.
   static Future<void> deleteAll({bool force = false}) async =>
       Get.deleteAll(force: force);
 
+  /// Reloads all dependencies from the GetX service locator.
   static void reloadAll({bool force = false}) => Get.reloadAll(force: force);
 
+  /// Reloads a dependency from the GetX service locator using the specified tag.
   static void reload<S>({String? tag, String? key, bool force = false}) =>
       Get.reload<S>(tag: tag, key: key, force: force);
 
+  /// Checks if a dependency is registered in the GetX service locator using the specified tag.
   static bool isRegistered<S>({String? tag}) => Get.isRegistered<S>(tag: tag);
 
+  /// Checks if a dependency is prepared in the GetX service locator using the specified tag.
   static bool isPrepared<S>({String? tag}) => Get.isPrepared<S>(tag: tag);
 
-  static void replace<P>(P child, {String? tag}) {
+  /// Replaces the specified child widget with a new one.
+  static Future<void> replace<P>(P child, {String? tag}) async {
     final InstanceInfo info = Get.getInstanceInfo<P>(tag: tag);
     final bool permanent = info.isPermanent ?? false;
-    delete<P>(tag: tag, force: permanent);
+    await delete<P>(tag: tag, force: permanent);
     Get.put(child, tag: tag, permanent: permanent);
   }
 
-  static void lazyReplace<P>(
+  /// Lazily replaces the specified child widget with a new one.
+  static Future<void> lazyReplace<P>(
     InstanceBuilderCallback<P> builder, {
     String? tag,
     bool? fenix,
-  }) {
+  }) async {
     final InstanceInfo info = Get.getInstanceInfo<P>(tag: tag);
     final bool permanent = info.isPermanent ?? false;
-    delete<P>(tag: tag, force: permanent);
+    await delete<P>(tag: tag, force: permanent);
     Get.lazyPut(builder, tag: tag, fenix: fenix ?? permanent);
   }
 
+  /// Retrieves the dependency of type [T] from the nearest ancestor [Binder] widget.
   static T of<T>(
     BuildContext context, {
     bool rebuild = false,
@@ -246,16 +317,11 @@ abstract class Bind<T> extends StatelessWidget {
             as BindElement<T>?;
 
     if (inheritedElement == null) {
-      throw BindError(controller: "$T", tag: null);
+      throw BindError<String>(controller: "$T");
     }
 
     if (rebuild) {
-      // var newFilter = filter?.call(inheritedElement.controller!);
-      // if (newFilter != null) {
-      //  context.dependOnInheritedElement(inheritedElement, aspect: newFilter);
-      // } else {
       context.dependOnInheritedElement(inheritedElement);
-      // }
     }
 
     final T controller = inheritedElement.controller;
@@ -349,13 +415,19 @@ class _FactoryBind<T> extends Bind<T> {
       );
 }
 
+/// A widget responsible for managing a list of bindings and providing them to its child widget.
 class Binds<S> extends StatelessWidget {
+  /// Constructs a [Binds] widget with the provided bindings and child widget.
   Binds({
     required this.binds,
     required this.child,
     super.key,
-  }) : assert(binds.isNotEmpty);
+  }) : assert(binds.isNotEmpty, "binds should not be empty");
+
+  /// A list of bindings to be provided to the child widget.
   final List<Bind<S>> binds;
+
+  /// The child widget that will receive the provided bindings.
   final Widget child;
 
   @override
@@ -363,15 +435,16 @@ class Binds<S> extends StatelessWidget {
       .fold(child, (Widget widget, Bind<S> e) => e._copyWithChild(widget));
 }
 
+/// An inherited widget that updates its dependents when the controller sends notifications.
 class Binder<T> extends InheritedWidget {
-  /// Create an inherited widget that updates its dependents when [controller]
-  /// sends notifications.
+  /// Creates an inherited widget that updates its dependents when [controller] sends notifications.
   ///
-  /// The [child] argument is required
+  /// The [child] argument is required.
   const Binder({
     required super.child,
     super.key,
     this.init,
+    this.create,
     this.global = true,
     this.autoRemove = true,
     this.assignId = false,
@@ -383,21 +456,45 @@ class Binder<T> extends InheritedWidget {
     this.id,
     this.didChangeDependencies,
     this.didUpdateWidget,
-    this.create,
   });
 
+  /// Function to initialize the controller.
   final InitBuilder<T>? init;
+
+  /// Function to create an instance of the controller.
   final InstanceCreateBuilderCallback? create;
+
+  /// Flag indicating whether the controller should be treated as global.
   final bool global;
+
+  /// Identifier for the widget.
   final Object? id;
+
+  /// Tag for the widget.
   final String? tag;
+
+  /// Flag indicating whether the binding should be lazy.
   final bool lazy;
+
+  /// Flag indicating whether the widget should be automatically removed when disposed.
   final bool autoRemove;
+
+  /// Flag indicating whether an identifier should be assigned to the widget.
   final bool assignId;
+
+  /// Function to filter the value of the controller.
   final Object Function(T value)? filter;
+
+  /// Callback function that is called when the widget is initialized.
   final void Function(BindElement<T> state)? initState;
+
+  /// Callback function that is called when the widget is disposed.
   final Function(BindElement<T> state)? dispose;
+
+  /// Callback function that is called when the widget's dependencies change.
   final Function(BindElement<T> state)? didChangeDependencies;
+
+  /// Callback function that is called when the widget is updated.
   final void Function(Binder<T> oldWidget, BindElement<T> state)?
       didUpdateWidget;
 
@@ -413,24 +510,27 @@ class Binder<T> extends InheritedWidget {
 }
 
 /// The BindElement is responsible for injecting dependencies into the widget
-/// tree so that they can be observed
+/// tree so that they can be observed.
 class BindElement<T> extends InheritedElement {
+  /// Creates a [BindElement] associated with the given [Binder].
   BindElement(Binder<T> super.widget) {
     initState();
   }
 
+  /// List of disposer functions.
   final List<Disposer> disposers = <Disposer>[];
 
   InitBuilder<T>? _controllerBuilder;
 
   T? _controller;
 
+  /// Getter for the controller instance.
   T get controller {
     if (_controller == null) {
       _controller = _controllerBuilder?.call();
       _subscribeToController();
       if (_controller == null) {
-        throw BindError(controller: T, tag: widget.tag);
+        throw BindError<String>(controller: "$T", tag: widget.tag);
       }
       return _controller!;
     } else {
@@ -489,10 +589,10 @@ class BindElement<T> extends InheritedElement {
   /// setState "link" from the Controller.
   void _subscribeToController() {
     if (widget.filter != null) {
-      _filter = widget.filter!(_controller as T);
+      _filter = widget.filter!(controller);
     }
     final void Function() filter = _filter != null ? _filterUpdate : getUpdate;
-    final localController = _controller;
+    final T? localController = _controller;
 
     if (_needStart == true && localController is GetLifeCycleMixin) {
       localController.onStart();
@@ -509,22 +609,23 @@ class BindElement<T> extends InheritedElement {
       _remove?.call();
       localController.addListener(filter);
       _remove = () => localController.removeListener(filter);
-    } else if (localController is StreamController) {
+    } else if (localController is StreamController<T>) {
       _remove?.call();
-      final StreamSubscription stream =
+      final StreamSubscription<T> stream =
           localController.stream.listen((_) => filter());
       _remove = stream.cancel;
     }
   }
 
   void _filterUpdate() {
-    final Object newFilter = widget.filter!(_controller as T);
+    final Object newFilter = widget.filter!(controller);
     if (newFilter != _filter) {
       _filter = newFilter;
       getUpdate();
     }
   }
 
+  /// Disposes the resources associated with this element.
   void dispose() {
     widget.dispose?.call(this);
     if (_isCreator! || widget.assignId) {
@@ -576,11 +677,8 @@ class BindElement<T> extends InheritedElement {
     if (_dirty) {
       notifyClients(widget);
     }
-    // return Notifier.instance.notifyAppend(
-    //   NotifyData(
-    //       disposers: disposers, updater: getUpdate, throwException: false),
+
     return super.build();
-    //);
   }
 
   void getUpdate() {
@@ -601,12 +699,15 @@ class BindElement<T> extends InheritedElement {
   }
 }
 
+/// A class representing an error encountered during binding resolution.
 class BindError<T> extends Error {
-  /// Creates a [BindError]
-  BindError({required this.controller, required this.tag});
+  /// Creates a [BindError] with the provided controller and optional tag.
+  BindError({required this.controller, this.tag});
 
-  /// The type of the class the user tried to retrieve
+  /// The type of the class the user tried to retrieve.
   final T controller;
+
+  /// An optional tag associated with the binding.
   final String? tag;
 
   @override
@@ -615,8 +716,7 @@ class BindError<T> extends Error {
       return """Error: please specify type [<T>] when calling context.listen<T>() or context.find<T>() method.""";
     }
 
-    return """Error: No Bind<$controller>  ancestor found. To fix this, please add a Bind<$controller> widget ancestor to the current context.
-      """;
+    return """Error: No Bind<$controller> ancestor found. To fix this, please add a Bind<$controller> widget ancestor to the current context.""";
   }
 }
 
@@ -626,4 +726,4 @@ class BindError<T> extends Error {
 /// instance of Bindings to manage the
 /// dependencies() (via Get.put()) for the Route you are opening.
 // ignore: one_member_abstracts
-abstract class Binding extends BindingsInterface<List<Bind>> {}
+abstract class Binding<T> extends BindingsInterface<List<Bind<T>>> {}

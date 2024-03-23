@@ -82,16 +82,16 @@ mixin StateMixin<T> on ListNotifier {
   /// Fetches data asynchronously and updates the state accordingly.
   ///
   /// The [body] function should return a `Future` which resolves to the new state.
-  void futurize(
+  Future<void> futurize(
     Future<T> Function() body, {
     T? initialData,
     String? errorMessage,
     bool useEmpty = true,
-  }) {
-    final Future Function() compute = body;
+  }) async {
+    final Future<T> Function() compute = body;
     _value ??= initialData;
-    compute().then(
-      (newValue) {
+    await compute().then(
+      (T newValue) {
         if ((newValue == null || newValue._isEmpty()) && useEmpty) {
           status = GetStatus<T>.loading();
         } else {
@@ -99,8 +99,8 @@ mixin StateMixin<T> on ListNotifier {
         }
         refresh();
       },
-      onError: (err) {
-        status = GetStatus.error(errorMessage ?? err.toString());
+      onError: (Object err) {
+        status = GetStatus<T>.error(errorMessage ?? err.toString());
         refresh();
       },
     );
@@ -241,7 +241,7 @@ class Value<T> extends ListNotifier
 ///
 /// Extends [Value] and implements [GetLifeCycleMixin].
 abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
-  GetNotifier(super.initial);
+  GetNotifier(super.val);
 }
 
 /// Extension methods for the [StateMixin] class.
@@ -326,7 +326,7 @@ class ErrorStatus<T, S> extends GetStatus<T> {
   final S? error;
 
   @override
-  List get props => <S?>[error];
+  List<S?> get props => <S?>[error];
 }
 
 /// A status indicating that the state is empty.
@@ -336,7 +336,7 @@ class EmptyStatus<T> extends GetStatus<T> {
 }
 
 /// Extension methods for the [GetStatus] class.
-extension StatusDataExt<T> on GetStatus<T> {
+extension StatusDataExtension<T> on GetStatus<T> {
   /// Checks if the status indicates that the state is loading.
   bool get isLoading => this is LoadingStatus;
 

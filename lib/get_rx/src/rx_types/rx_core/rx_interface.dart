@@ -18,9 +18,7 @@ abstract class RxInterface<T> implements ValueListenable<T> {
 }
 
 /// Represents an error specific to the use of GetX or Obx.
-class ObxError {
-  const ObxError();
-
+class ObxError extends Error {
   /// Returns a formatted string describing the error.
   @override
   String toString() => """

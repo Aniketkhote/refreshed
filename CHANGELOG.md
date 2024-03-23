@@ -1,5 +1,9 @@
 ## 2.5.2
 
+- Resolved the issue related to generic types.
+
+## 2.5.2
+
 - Altered logger's initial print message from `GetX` to `Refreshed`.
 - Resolved linting issues.
 

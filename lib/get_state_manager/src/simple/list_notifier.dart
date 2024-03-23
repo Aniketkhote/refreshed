@@ -24,9 +24,6 @@ class ListNotifierGroup = ListNotifier with ListNotifierGroupMixin;
 mixin ListNotifierSingleMixin on Listenable {
   List<GetStateUpdate>? _updaters = <GetStateUpdate>[];
 
-  // final int _version = 0;
-  // final int _microtaskVersion = 0;
-
   @override
   Disposer addListener(GetStateUpdate listener) {
     assert(_debugAssertNotDisposed());
@@ -60,18 +57,11 @@ mixin ListNotifierSingleMixin on Listenable {
   }
 
   void _notifyUpdate() {
-    // if (_microtaskVersion == _version) {
-    //   _microtaskVersion++;
-    //   scheduleMicrotask(() {
-    //     _version++;
-    //     _microtaskVersion = _version;
     final List<GetStateUpdate> list = _updaters?.toList() ?? <GetStateUpdate>[];
 
     for (final GetStateUpdate element in list) {
       element();
     }
-    //   });
-    // }
   }
 
   bool get isDisposed => _updaters == null;
@@ -164,18 +154,25 @@ mixin ListNotifierGroupMixin on Listenable {
   }
 }
 
+/// A class responsible for managing notifications and listeners.
 class Notifier {
+  /// Constructs a [Notifier] instance.
   Notifier._();
 
+  /// Singleton instance of [Notifier].
   static Notifier? _instance;
+
+  /// Singleton instance of [Notifier].
   static Notifier get instance => _instance ??= Notifier._();
 
   NotifyData? _notifyData;
 
+  /// Adds a listener to the list of disposers.
   void add(VoidCallback listener) {
     _notifyData?.disposers.add(listener);
   }
 
+  /// Reads data from the provided [updaters] and adds listeners accordingly.
   void read(ListNotifierSingleMixin updaters) {
     final GetStateUpdate? listener = _notifyData?.updater;
     if (listener != null && !updaters.containsListener(listener)) {
@@ -184,24 +181,33 @@ class Notifier {
     }
   }
 
+  /// Appends data to the provided [data] and executes the [builder] function.
   T append<T>(NotifyData data, T Function() builder) {
     _notifyData = data;
-    final result = builder();
+    final T result = builder();
     if (data.disposers.isEmpty && data.throwException) {
-      throw const ObxError();
+      throw ObxError();
     }
     _notifyData = null;
     return result;
   }
 }
 
+/// Data class containing information about notifications and listeners.
 class NotifyData {
+  /// Constructs a [NotifyData] instance.
   const NotifyData({
     required this.updater,
     required this.disposers,
     this.throwException = true,
   });
+
+  /// Function that updates the state.
   final GetStateUpdate updater;
+
+  /// List of disposers.
   final List<VoidCallback> disposers;
+
+  /// Flag indicating whether to throw an exception if no disposers are present.
   final bool throwException;
 }

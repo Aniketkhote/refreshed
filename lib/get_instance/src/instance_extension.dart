@@ -270,13 +270,9 @@ extension InstanceExtension on GetInterface {
     if (i is GetLifeCycleMixin) {
       i.onStart();
       if (tag == null) {
-        Get.log("....................................................");
         Get.log('Instance "$S" has been initialized');
-        Get.log("....................................................");
       } else {
-        Get.log("....................................................");
         Get.log('Instance "$S" with tag "$tag" has been initialized');
-        Get.log("....................................................");
       }
       if (!_singl[key]!.isSingleton!) {
         RouterReportManager.instance.appendRouteByCreate(i);
@@ -428,18 +424,14 @@ extension InstanceExtension on GetInterface {
     } else {
       if (dep.lateRemove != null) {
         dep.lateRemove = null;
-        Get.log("....................................................");
         Get.log('"$newKey" deleted from memory');
-        Get.log("....................................................");
         return false;
       } else {
         _singl.remove(newKey);
         if (_singl.containsKey(newKey)) {
           Get.log('Error removing object "$newKey"', isError: true);
         } else {
-          Get.log("....................................................");
           Get.log('"$newKey" deleted from memory');
-          Get.log("....................................................");
         }
         return true;
       }
