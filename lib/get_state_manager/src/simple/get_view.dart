@@ -31,10 +31,16 @@ import "package:refreshed/utils.dart";
 /// }
 ///``
 abstract class GetView<T> extends StatelessWidget {
+  /// Creates a GetView associated with a specific key.
   const GetView({super.key});
 
-  final String? tag = null;
+  /// The tag used to locate the associated controller.
+  /// If null, the first instance of the controller type will be used.
+  String? get tag => null;
 
+  /// Retrieves the controller associated with this view.
+  ///
+  /// The controller is retrieved using GetX's `Get.find()` method, using the specified tag if provided.
   T get controller => Get.find<T>(tag: tag)!;
 
   @override
@@ -48,11 +54,15 @@ abstract class GetView<T> extends StatelessWidget {
 /// GetWidget will have your own controller, and will be call events as `onInit`
 /// and `onClose` when the controller get in/get out on memory.
 abstract class GetWidget<S extends GetLifeCycleMixin> extends GetWidgetCache {
+  /// Creates a GetView associated with a specific key.
   const GetWidget({super.key});
 
+  /// The tag used to locate the associated controller.
+  /// If null, the first instance of the controller type will be used.
   @protected
-  final String? tag = null;
+  String? get tag => null;
 
+  /// Retrieves the controller associated with this view.
   S get controller => GetWidget._cache[this]! as S;
 
   static final Expando<GetLifeCycleMixin> _cache = Expando<GetLifeCycleMixin>();
@@ -84,7 +94,7 @@ class _GetCache<S extends GetLifeCycleMixin> extends WidgetCache<GetWidget<S>> {
   }
 
   @override
-  void onClose() {
+  Future<void> onClose() async {
     if (_isCreator) {
       Get.asap(() {
         widget!.controller.onDelete();

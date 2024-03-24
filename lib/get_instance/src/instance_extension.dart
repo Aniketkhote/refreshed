@@ -569,7 +569,7 @@ typedef InstanceCreateBuilderCallback<S> = S Function(BuildContext _);
 typedef AsyncInstanceBuilderCallback<S> = Future<S> Function();
 
 /// Internal class used by GetX to register instances with `Get.put<S>()`.
-class _InstanceBuilderFactory<S> {
+class _InstanceBuilderFactory<T> {
   _InstanceBuilderFactory({
     required this.isSingleton,
     required this.builderFunc,
@@ -589,11 +589,11 @@ class _InstanceBuilderFactory<S> {
   bool fenix;
 
   /// Stores the actual object instance when [isSingleton]=true.
-  S? dependency;
+  T? dependency;
 
   /// Generates (and regenerates) the instance when [isSingleton]=false.
   /// Usually used by factory methods.
-  InstanceBuilderCallback<S> builderFunc;
+  InstanceBuilderCallback<T> builderFunc;
 
   /// Flag to persist the instance in memory,
   /// without considering `Get.smartManagement`.
@@ -603,7 +603,7 @@ class _InstanceBuilderFactory<S> {
   bool isInit = false;
 
   /// Reference to the instance that will be removed late (not immediately).
-  _InstanceBuilderFactory<S>? lateRemove;
+  _InstanceBuilderFactory<T>? lateRemove;
 
   /// Flag to indicate whether the instance is dirty and needs to be refreshed.
   bool isDirty = false;
@@ -613,18 +613,14 @@ class _InstanceBuilderFactory<S> {
 
   void _showInitLog() {
     if (tag == null) {
-      Get.log("....................................................");
-      Get.log('Instance "$S" has been created');
-      Get.log("....................................................");
+      Get.log('Instance "$T" has been created');
     } else {
-      Get.log("....................................................");
-      Get.log('Instance "$S" has been created with tag "$tag"');
-      Get.log("....................................................");
+      Get.log('Instance "$T" has been created with tag "$tag"');
     }
   }
 
   /// Gets the actual instance by its [builderFunc] or the persisted instance.
-  S getDependency() {
+  T getDependency() {
     if (isSingleton!) {
       if (dependency == null) {
         _showInitLog();
