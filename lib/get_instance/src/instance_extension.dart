@@ -40,7 +40,7 @@ class InstanceInfo {
 }
 
 /// Extension on GetInterface providing a method to reset all registered instances.
-extension ResetInstance on GetInterface {
+extension ResetInstance<T> on GetInterface {
   /// Clears all registered instances and/or tags.
   /// This method is particularly useful for cleaning up resources at the end or tearDown of unit tests.
   ///
@@ -49,8 +49,6 @@ extension ResetInstance on GetInterface {
   ///
   /// Returns `true` if the reset operation is successful.
   bool resetInstance({bool clearRouteBindings = true}) {
-    //  if (clearFactory) _factory.clear();
-    // deleteAll(force: true);
     if (clearRouteBindings) {
       RouterReportManager.instance.clearRouteKeys();
     }
@@ -61,14 +59,14 @@ extension ResetInstance on GetInterface {
 }
 
 /// Extension on `GetInterface` providing a convenient method to find instances of type `T`.
-extension InstanceExtension on GetInterface {
+extension InstanceExtension<T> on GetInterface {
   /// Calls `find<T>()` to retrieve an instance of type `T`.
-  T call<T>() => find<T>();
+  T call() => find<T>();
 
   /// Holds references to every registered Instance when using
   /// `Get.put()`
-  static final Map<String, _InstanceBuilderFactory> _singl =
-      <String, _InstanceBuilderFactory>{};
+  static final Map<String, _InstanceBuilderFactory<dynamic>> _singl =
+      <String, _InstanceBuilderFactory<dynamic>>{};
 
   /// async version of `Get.put()`.
   /// Awaits for the resolution of the Future from `builder()` parameter and
@@ -182,8 +180,9 @@ extension InstanceExtension on GetInterface {
 
     _InstanceBuilderFactory<S>? dep;
     if (_singl.containsKey(key)) {
-      final _InstanceBuilderFactory? newDep = _singl[key];
-      if (newDep == null || !newDep.isDirty) {
+      final _InstanceBuilderFactory<T> newDep =
+          _singl[key]! as _InstanceBuilderFactory<T>;
+      if (!newDep.isDirty) {
         return;
       } else {
         dep = newDep as _InstanceBuilderFactory<S>;
@@ -230,8 +229,9 @@ extension InstanceExtension on GetInterface {
     return i;
   }
 
+  /// Get instance info
   InstanceInfo getInstanceInfo<S>({String? tag}) {
-    final _InstanceBuilderFactory? build = _getDependency<S>(tag: tag);
+    final _InstanceBuilderFactory<T>? build = _getDependency<S>(tag: tag);
 
     return InstanceInfo(
       isPermanent: build?.permanent,
@@ -242,22 +242,24 @@ extension InstanceExtension on GetInterface {
     );
   }
 
-  _InstanceBuilderFactory? _getDependency<S>({String? tag, String? key}) {
+  _InstanceBuilderFactory<T>? _getDependency<S>({String? tag, String? key}) {
     final String newKey = key ?? _getKey(S, tag);
 
     if (!_singl.containsKey(newKey)) {
       Get.log('Instance "$newKey" is not registered.', isError: true);
       return null;
     } else {
-      return _singl[newKey];
+      return _singl[newKey]! as _InstanceBuilderFactory<T>;
     }
   }
 
+  /// Mark instance as a dirty
   void markAsDirty<S>({String? tag, String? key}) {
     final String newKey = key ?? _getKey(S, tag);
     if (_singl.containsKey(newKey)) {
-      final _InstanceBuilderFactory? dep = _singl[newKey];
-      if (dep != null && !dep.permanent) {
+      final _InstanceBuilderFactory<T> dep =
+          _singl[newKey]! as _InstanceBuilderFactory<T>;
+      if (!dep.permanent) {
         dep.isDirty = true;
       }
     }
@@ -281,6 +283,7 @@ extension InstanceExtension on GetInterface {
     return i;
   }
 
+  /// Registerd instance and if already exists  then it will return
   S putOrFind<S>(InstanceBuilderCallback<S> dep, {String? tag}) {
     final String key = _getKey(S, tag);
 
@@ -299,14 +302,8 @@ extension InstanceExtension on GetInterface {
   S find<S>({String? tag}) {
     final String key = _getKey(S, tag);
     if (isRegistered<S>(tag: tag)) {
-      final _InstanceBuilderFactory? dep = _singl[key];
-      if (dep == null) {
-        if (tag == null) {
-          throw Exception('Class "$S" is not registered');
-        } else {
-          throw Exception('Class "$S" with tag "$tag" is not registered');
-        }
-      }
+      final _InstanceBuilderFactory<T> dep =
+          _singl[key]! as _InstanceBuilderFactory<T>;
 
       /// although dirty solution, the lifecycle starts inside
       /// `initDependencies`, so we have to return the instance from there
@@ -386,13 +383,10 @@ extension InstanceExtension on GetInterface {
       return false;
     }
 
-    final _InstanceBuilderFactory? dep = _singl[newKey];
+    final _InstanceBuilderFactory<T> dep =
+        _singl[newKey]! as _InstanceBuilderFactory<T>;
 
-    if (dep == null) {
-      return false;
-    }
-
-    final _InstanceBuilderFactory builder;
+    final _InstanceBuilderFactory<T> builder;
     if (dep.isDirty) {
       builder = dep.lateRemove ?? dep;
     } else {
@@ -406,7 +400,7 @@ extension InstanceExtension on GetInterface {
       );
       return false;
     }
-    final S? i = builder.dependency;
+    final S? i = builder.dependency as S?;
 
     if (i is GetxServiceMixin && !force) {
       return false;
@@ -471,7 +465,8 @@ extension InstanceExtension on GetInterface {
   /// Get.reloadAll(force: true);
   /// ```
   void reloadAll({bool force = false}) {
-    _singl.forEach((String key, _InstanceBuilderFactory value) {
+    (_singl as Map<String, _InstanceBuilderFactory<T>>)
+        .forEach((String key, _InstanceBuilderFactory<T> value) {
       if (value.permanent && !force) {
         Get.log('Instance "$key" is permanent. Skipping reload');
       } else {
@@ -505,7 +500,7 @@ extension InstanceExtension on GetInterface {
   }) {
     final String newKey = key ?? _getKey(S, tag);
 
-    final _InstanceBuilderFactory? builder =
+    final _InstanceBuilderFactory<T>? builder =
         _getDependency<S>(tag: tag, key: newKey);
     if (builder == null) {
       return;
@@ -519,7 +514,7 @@ extension InstanceExtension on GetInterface {
       return;
     }
 
-    final S? i = builder.dependency;
+    final S? i = builder.dependency as S?;
 
     if (i is GetxServiceMixin && !force) {
       return;
@@ -545,7 +540,7 @@ extension InstanceExtension on GetInterface {
   bool isPrepared<S>({String? tag}) {
     final String newKey = _getKey(S, tag);
 
-    final _InstanceBuilderFactory? builder =
+    final _InstanceBuilderFactory<T>? builder =
         _getDependency<S>(tag: tag, key: newKey);
     if (builder == null) {
       return false;
