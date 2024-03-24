@@ -406,7 +406,7 @@ extension InstanceExtension on GetInterface {
       );
       return false;
     }
-    final S i = builder.dependency;
+    final S? i = builder.dependency;
 
     if (i is GetxServiceMixin && !force) {
       return false;
@@ -519,7 +519,7 @@ extension InstanceExtension on GetInterface {
       return;
     }
 
-    final S i = builder.dependency;
+    final S? i = builder.dependency;
 
     if (i is GetxServiceMixin && !force) {
       return;

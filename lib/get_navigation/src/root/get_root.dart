@@ -570,6 +570,8 @@ class GetRootState<T> extends State<GetRoot<T>> with WidgetsBindingObserver {
     final TargetPlatform platform = context.theme.platform;
     final PageTransitionsBuilder? matchingTransition =
         Get.theme.pageTransitionsTheme.builders[platform];
+
+    Get.log(matchingTransition.toString());
     switch (matchingTransition) {
       case CupertinoPageTransitionsBuilder():
         return Transition.cupertino;
