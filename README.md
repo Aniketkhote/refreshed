@@ -1,4 +1,4 @@
-[![pub package](https://img.shields.io/pub/v/refreshed.svg?label=get&color=blue)](https://pub.dev/packages/refreshed)
+[![pub package](https://img.shields.io/pub/v/refreshed.svg?label=refreshed&color=blue)](https://pub.dev/packages/refreshed)
 [![popularity](https://img.shields.io/pub/popularity/refreshed?logo=dart)](https://pub.dev/packages/refreshed/score)
 [![likes](https://img.shields.io/pub/likes/refreshed?logo=dart)](https://pub.dev/packages/refreshed/score)
 [![pub points](https://img.shields.io/pub/points/sentry?logo=dart)](https://pub.dev/packages/refreshed/score)
