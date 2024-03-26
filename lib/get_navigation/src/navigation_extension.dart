@@ -585,7 +585,7 @@ extension NavigationExtension<T> on GetInterface {
   ///
   /// By default, Refreshed will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
-  Future<T?>? to<T extends Object?>(
+  Future<T?>? to(
     Widget Function() page, {
     bool? opaque,
     Transition? transition,
@@ -639,7 +639,7 @@ extension NavigationExtension<T> on GetInterface {
   /// if you want to push anyway, set [preventDuplicates] to false
   ///
   /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
-  Future<T?>? toNamed<T>(
+  Future<T?>? toNamed(
     String page, {
     T? arguments,
     String? id,
@@ -680,7 +680,7 @@ extension NavigationExtension<T> on GetInterface {
   /// if you want to push anyway, set [preventDuplicates] to false
   ///
   /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
-  Future<T?>? offNamed<T>(
+  Future<T?>? offNamed(
     String page, {
     T? arguments,
     String? id,
@@ -740,7 +740,7 @@ extension NavigationExtension<T> on GetInterface {
   /// to make sure the dialog is closed
   ///
   /// Note: Always put a slash on the route name ('/page1'), to avoid unexpected errors
-  Future<T?>? offNamedUntil<T>(
+  Future<T?>? offNamedUntil(
     String page,
     bool Function(GetPage<dynamic>)? predicate, {
     String? id,
@@ -772,7 +772,7 @@ extension NavigationExtension<T> on GetInterface {
   /// The `offNamed()` pop a page, and goes to the next. The
   /// `offAndToNamed()` goes to the next page, and removes the previous one.
   /// The route transition animation is different.
-  Future<T?>? offAndToNamed<T>(
+  Future<T?>? offAndToNamed(
     String page, {
     T? arguments,
     String? id,
@@ -819,7 +819,7 @@ extension NavigationExtension<T> on GetInterface {
   /// as explained in documentation
   ///
   /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
-  Future<T?>? offAllNamed<T>(
+  Future<T?>? offAllNamed(
     String newRouteName, {
     // bool Function(GetPage<dynamic>)? predicate,
     T? arguments,
@@ -857,7 +857,7 @@ extension NavigationExtension<T> on GetInterface {
   ///
   /// It has the advantage of not needing context, so you can call
   /// from your business logic.
-  void back<T>({
+  void back({
     T? result,
     bool canPop = true,
     int times = 1,
@@ -891,7 +891,7 @@ extension NavigationExtension<T> on GetInterface {
   ///
   /// It has the advantage of not needing context, so you can call
   /// from your business logic.
-  Future<void> backLegacy<T>({
+  Future<void> backLegacy({
     T? result,
     bool closeOverlays = false,
     bool canPop = true,
@@ -976,7 +976,7 @@ extension NavigationExtension<T> on GetInterface {
   ///
   /// [id] is for when you are using nested navigation,
   /// as explained in documentation
-  void close<T extends Object>({
+  void close({
     bool closeAll = true,
     bool closeSnackbar = true,
     bool closeDialog = true,
@@ -1034,7 +1034,7 @@ extension NavigationExtension<T> on GetInterface {
   ///
   /// By default, Refreshed will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
-  Future<T?>? off<T>(
+  Future<T?>? off(
     Widget Function() page, {
     bool? opaque,
     Transition? transition,
@@ -1076,7 +1076,7 @@ extension NavigationExtension<T> on GetInterface {
   /// This method searches for a page in the navigation stack starting from the current one
   /// and navigates backward until it finds a page that satisfies the given predicate.
   /// Once the predicate condition is met, it stops navigation and returns the result.
-  Future<T?> offUntil<T>(
+  Future<T?> offUntil(
     Widget Function() page,
     bool Function(GetPage) predicate, [
     Object? arguments,
@@ -1120,7 +1120,7 @@ extension NavigationExtension<T> on GetInterface {
   ///
   /// By default, Refreshed will prevent you from push a route that you already in,
   /// if you want to push anyway, set [preventDuplicates] to false
-  Future<T?>? offAll<T>(
+  Future<T?>? offAll(
     Widget Function() page, {
     bool Function(GetPage<dynamic>)? predicate,
     bool? opaque,
@@ -1216,7 +1216,7 @@ extension NavigationExtension<T> on GetInterface {
   /// Returns:
   /// The nested delegate associated with the given key, if found.
   /// If no key is provided, returns the root delegate.
-  GetDelegate? nestedKey(String? key) => rootController.nestedKey(key);
+  GetDelegate<T>? nestedKey(String? key) => rootController.nestedKey(key);
 
   /// Function to search for a delegate by its route id.
   ///
@@ -1228,15 +1228,15 @@ extension NavigationExtension<T> on GetInterface {
   ///
   /// Throws:
   /// - If the provided route id is not found in the keys map.
-  GetDelegate searchDelegate(String? k) {
-    GetDelegate key;
+  GetDelegate<T> searchDelegate(String? k) {
+    GetDelegate<T> key;
     if (k == null) {
-      key = Get.rootController.rootDelegate;
+      key = Get.rootController.rootDelegate as GetDelegate<T>;
     } else {
       if (!keys.containsKey(k)) {
         throw Exception("Route id ($k) not found");
       }
-      key = keys[k]!;
+      key = keys[k]! as GetDelegate<T>;
     }
 
     // Missing return statement for 'key' here in the original code

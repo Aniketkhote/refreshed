@@ -11,25 +11,25 @@ class RxList<E> extends GetListenable<List<E>>
 
   /// Constructs an RxList filled with a [fill] value.
   factory RxList.filled(int length, E fill, {bool growable = false}) =>
-      RxList(List.filled(length, fill, growable: growable));
+      RxList<E>(List<E>.filled(length, fill, growable: growable));
 
   /// Constructs an empty RxList.
   ///
   /// If [growable] is true, the list is growable; otherwise, it's fixed-length.
   factory RxList.empty({bool growable = false}) =>
-      RxList(List.empty(growable: growable));
+      RxList<E>(List<E>.empty(growable: growable));
 
   /// Constructs an RxList containing all [elements].
   ///
   /// If [growable] is true, the list is growable; otherwise, it's fixed-length.
-  factory RxList.from(Iterable elements, {bool growable = true}) =>
-      RxList(List.from(elements, growable: growable));
+  factory RxList.from(Iterable<E> elements, {bool growable = true}) =>
+      RxList<E>(List<E>.from(elements, growable: growable));
 
   /// Constructs an RxList from [elements].
   ///
   /// If [growable] is true, the list is growable; otherwise, it's fixed-length.
   factory RxList.of(Iterable<E> elements, {bool growable = true}) =>
-      RxList(List.of(elements, growable: growable));
+      RxList<E>(List<E>.of(elements, growable: growable));
 
   /// Constructs an RxList by generating values.
   ///
@@ -39,11 +39,11 @@ class RxList<E> extends GetListenable<List<E>>
     E Function(int index) generator, {
     bool growable = true,
   }) =>
-      RxList(List.generate(length, generator, growable: growable));
+      RxList<E>(List<E>.generate(length, generator, growable: growable));
 
   /// Constructs an unmodifiable RxList containing all [elements].
   factory RxList.unmodifiable(Iterable<E> elements) =>
-      RxList(List.unmodifiable(elements));
+      RxList<E>(List<E>.unmodifiable(elements));
 
   @override
   Iterator<E> get iterator => value.iterator;
@@ -169,7 +169,7 @@ extension ListExtension<E> on List<E> {
   /// Clears the list and adds [item].
   void assign(E item) {
     if (this is RxList) {
-      (this as RxList).value.clear();
+      (this as RxList<E>).value.clear();
     }
     add(item);
   }
@@ -179,7 +179,7 @@ extension ListExtension<E> on List<E> {
   /// Clears the list and adds all elements from [items].
   void assignAll(Iterable<E> items) {
     if (this is RxList) {
-      (this as RxList).value.clear();
+      (this as RxList<E>).value.clear();
     }
     //clear();
     addAll(items);
