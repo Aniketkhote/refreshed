@@ -135,7 +135,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
     _activePages.add(res);
   }
 
-  Future<T?> _unsafeHistoryRemoveAt<T>(int index, T result) async {
+  Future<T?> _unsafeHistoryRemoveAt(int index, T? result) async {
     if (index == _activePages.length - 1 && _activePages.length > 1) {
       //removing WILL update the current route
       final RouteDecoder toCheck = _activePages[_activePages.length - 2];
@@ -184,17 +184,17 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
     await _unsafeHistoryAdd(config);
   }
 
-  Future<T?> _popHistory<T>(T result) async {
+  Future<T?> _popHistory(T? result) async {
     if (!_canPopHistory()) {
       return null;
     }
     return _doPopHistory(result);
   }
 
-  Future<T?> _doPopHistory<T>(T result) async =>
-      _unsafeHistoryRemoveAt<T>(_activePages.length - 1, result);
+  Future<T?> _doPopHistory(T? result) async =>
+      _unsafeHistoryRemoveAt(_activePages.length - 1, result);
 
-  Future<T?> _popPage<T>(T result) async {
+  Future<T?> _popPage(T? result) async {
     if (!_canPopPage()) {
       return null;
     }
@@ -202,7 +202,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   // returns the popped page
-  Future<T?> _doPopPage<T>(T result) async {
+  Future<T?> _doPopPage(T? result) async {
     final List<GetPage>? currentBranch =
         currentConfiguration?.currentTreeBranch;
     if (currentBranch != null && currentBranch.length > 1) {
@@ -225,7 +225,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
       }
 
       //create a new route with the remaining tree branch
-      final res = await _popHistory<T>(result);
+      final res = await _popHistory(result);
       await _pushHistory(
         RouteDecoder(
           remaining.toList(),
@@ -240,18 +240,18 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
     }
   }
 
-  Future<T?> _pop<T>(PopMode mode, T result) async {
+  Future<T?> _pop(PopMode mode, T? result) async {
     switch (mode) {
       case PopMode.history:
-        return _popHistory<T>(result);
+        return _popHistory(result);
       case PopMode.page:
-        return _popPage<T>(result);
+        return _popPage(result);
       default:
         return null;
     }
   }
 
-  Future<T?> popHistory<T>(T result) async => _popHistory<T>(result);
+  Future<T?> popHistory(T? result) async => _popHistory(result);
 
   bool _canPopHistory() => _activePages.length > 1;
 
@@ -337,7 +337,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<T?> toNamed<T>(
+  Future<T?> toNamed(
     String page, {
     Object? arguments,
     String? id,
@@ -355,7 +355,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<T?> to<T>(
+  Future<T?> to(
     Widget Function() page, {
     bool? opaque,
     Transition? transition,
@@ -407,7 +407,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<T?> off<T>(
+  Future<T?> off(
     Widget Function() page, {
     bool? opaque,
     Transition? transition,
@@ -443,7 +443,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<T?>? offAll<T>(
+  Future<T?>? offAll(
     Widget Function() page, {
     bool Function(GetPage route)? predicate,
     bool opaque = true,
@@ -487,7 +487,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<T?>? offAllNamed<T>(
+  Future<T?>? offAllNamed(
     String newRouteName, {
     // bool Function(GetPage route)? predicate,
     Object? arguments,
@@ -508,7 +508,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<T?>? offNamedUntil<T>(
+  Future<T?>? offNamedUntil(
     String page, {
     bool Function(GetPage route)? predicate,
     Object? arguments,
@@ -532,7 +532,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<T?> offNamed<T>(
+  Future<T?> offNamed(
     String page, {
     Object? arguments,
     String? id,
@@ -548,7 +548,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<T?> toNamedAndOffUntil<T>(
+  Future<T?> toNamedAndOffUntil(
     String page,
     bool Function(GetPage) predicate, [
     Object? data,
@@ -569,7 +569,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<T?> offUntil<T>(
+  Future<T?> offUntil(
     Widget Function() page,
     bool Function(GetPage) predicate, [
     Object? arguments,
@@ -578,11 +578,11 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
       _popWithResult();
     }
 
-    return to<T>(page, arguments: arguments);
+    return to(page, arguments: arguments);
   }
 
   @override
-  void removeRoute<T>(String name) {
+  void removeRoute(String name) {
     _activePages.remove(RouteDecoder.fromRoute(name));
   }
 
@@ -600,9 +600,9 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  Future<R?> backAndtoNamed<T, R>(
+  Future<R?> backAndtoNamed<R>(
     String page, {
-    T? result,
+    Object? result,
     Object? arguments,
   }) async {
     final PageSettings args = _buildPageSettings(page, arguments);
@@ -610,7 +610,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
     if (route == null) {
       return null;
     }
-    _popWithResult<T>(result);
+    _popWithResult<T>(result as T?);
     return _push<R>(route);
   }
 
@@ -804,7 +804,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
     }
 
     if (_canPop(popMode ?? backButtonPopMode)) {
-      await _pop(popMode ?? backButtonPopMode, result);
+      await _pop(popMode ?? backButtonPopMode, result as T?);
       notifyListeners();
       return true;
     }

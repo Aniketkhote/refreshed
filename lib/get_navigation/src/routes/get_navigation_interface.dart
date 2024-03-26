@@ -43,8 +43,8 @@ enum PreventDuplicateHandlingMode {
   recreate,
 }
 
-mixin IGetNavigation {
-  Future<T?> to<T>(
+mixin IGetNavigation<T> {
+  Future<T?> to(
     Widget Function() page, {
     bool? opaque,
     Transition? transition,
@@ -66,7 +66,7 @@ mixin IGetNavigation {
     PopMode popMode = PopMode.history,
   });
 
-  Future<T?> off<T>(
+  Future<T?> off(
     Widget Function() page, {
     bool? opaque,
     Transition? transition,
@@ -83,7 +83,7 @@ mixin IGetNavigation {
     double Function(BuildContext context)? gestureWidth,
   });
 
-  Future<T?>? offAll<T>(
+  Future<T?>? offAll(
     Widget Function() page, {
     bool Function(GetPage route)? predicate,
     bool opaque = true,
@@ -100,7 +100,7 @@ mixin IGetNavigation {
     double Function(BuildContext context)? gestureWidth,
   });
 
-  Future<T?> toNamed<T>(
+  Future<T?> toNamed(
     String page, {
     arguments,
     String? id,
@@ -108,14 +108,14 @@ mixin IGetNavigation {
     Map<String, String>? parameters,
   });
 
-  Future<T?> offNamed<T>(
+  Future<T?> offNamed(
     String page, {
     arguments,
     String? id,
     Map<String, String>? parameters,
   });
 
-  Future<T?>? offAllNamed<T>(
+  Future<T?>? offAllNamed(
     String newRouteName, {
     // bool Function(GetPage route)? predicate,
     arguments,
@@ -123,7 +123,7 @@ mixin IGetNavigation {
     Map<String, String>? parameters,
   });
 
-  Future<T?>? offNamedUntil<T>(
+  Future<T?>? offNamedUntil(
     String page, {
     bool Function(GetPage route)? predicate,
     arguments,
@@ -131,23 +131,23 @@ mixin IGetNavigation {
     Map<String, String>? parameters,
   });
 
-  Future<T?> toNamedAndOffUntil<T>(
+  Future<T?> toNamedAndOffUntil(
     String page,
     bool Function(GetPage) predicate, [
     Object? data,
   ]);
 
-  Future<T?> offUntil<T>(
+  Future<T?> offUntil(
     Widget Function() page,
     bool Function(GetPage) predicate, [
     Object? arguments,
   ]);
 
-  void removeRoute<T>(String name);
+  void removeRoute(String name);
 
   void back<T>([T? result]);
 
-  Future<R?> backAndtoNamed<T, R>(String page, {T? result, Object? arguments});
+  Future<R?> backAndtoNamed<R>(String page, {T? result, Object? arguments});
 
   void backUntil(bool Function(GetPage) predicate);
 

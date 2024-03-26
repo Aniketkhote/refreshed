@@ -752,7 +752,7 @@ extension NavigationExtension<T> on GetInterface {
       page = uri.toString();
     }
 
-    return searchDelegate(id).offNamedUntil<T>(
+    return searchDelegate(id).offNamedUntil(
       page,
       predicate: predicate,
       id: id,
@@ -831,7 +831,7 @@ extension NavigationExtension<T> on GetInterface {
       newRouteName = uri.toString();
     }
 
-    return searchDelegate(id).offAllNamed<T>(
+    return searchDelegate(id).offAllNamed(
       newRouteName,
       //predicate: predicate ?? (_) => false,
       arguments: arguments,
@@ -1137,7 +1137,7 @@ extension NavigationExtension<T> on GetInterface {
   }) {
     routeName ??= "/${page.runtimeType}";
     routeName = cleanRouteName(routeName);
-    return searchDelegate(id).offAll<T>(
+    return searchDelegate(id).offAll(
       page,
       predicate: predicate,
       opaque: opaque ?? true,
