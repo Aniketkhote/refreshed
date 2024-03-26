@@ -1,3 +1,7 @@
+## 2.5.5
+
+- Resolved linting issues.
+
 ## 2.5.4
 
 - Resolved nullable instance dependency issues where Null type was not compatible with Instance.
