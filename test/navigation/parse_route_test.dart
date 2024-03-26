@@ -1,3 +1,5 @@
+// ignore_for_file: unawaited_futures
+
 import "package:flutter/cupertino.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:refreshed/refreshed.dart";
@@ -59,12 +61,13 @@ void main() {
       ],
     );
 
-    final ParseRouteTree tree = ParseRouteTree(routes: <GetPage<dynamic>>[]);
+    final ParseRouteTree<dynamic> tree =
+        ParseRouteTree<dynamic>(routes: <GetPage<dynamic>>[]);
 
     tree.addRoute(pageTree);
 
     const String searchRoute = "/city/work/office/pen";
-    final RouteDecoder match = tree.matchRoute(searchRoute);
+    final RouteDecoder<dynamic> match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
     expect(match.route!.name, searchRoute);
     final Map<String, String> testRouteParam = match.route!.parameters!;
@@ -122,14 +125,15 @@ void main() {
       ),
     ];
 
-    final ParseRouteTree tree = ParseRouteTree(routes: pageTree);
+    final ParseRouteTree<dynamic> tree =
+        ParseRouteTree<dynamic>(routes: pageTree);
 
     // for (var p in pageTree) {
     //   tree.addRoute(p);
     // }
 
     const String searchRoute = "/city/work/office/pen";
-    final RouteDecoder match = tree.matchRoute(searchRoute);
+    final RouteDecoder<dynamic> match = tree.matchRoute(searchRoute);
     expect(match, isNotNull);
     expect(match.route!.name, searchRoute);
   });
@@ -138,7 +142,7 @@ void main() {
     "test params from dynamic route",
     (WidgetTester tester) async {
       await tester.pumpWidget(
-        GetMaterialApp(
+        GetMaterialApp<dynamic>(
           initialRoute: "/first/juan",
           getPages: <GetPage<dynamic>>[
             GetPage<dynamic>(page: Container.new, name: "/first/:name"),
@@ -188,7 +192,7 @@ void main() {
     "params in url by parameters",
     (WidgetTester tester) async {
       await tester.pumpWidget(
-        GetMaterialApp(
+        GetMaterialApp<dynamic>(
           initialRoute: "/first/juan",
           getPages: <GetPage<dynamic>>[
             GetPage<dynamic>(page: Container.new, name: "/first/:name"),

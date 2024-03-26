@@ -1,18 +1,21 @@
+// ignore_for_file: always_specify_types, unawaited_futures
+
 import "package:flutter/cupertino.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:refreshed/refreshed.dart";
 
 import "get_main_test.dart";
 
-class RedirectMiddleware extends GetMiddleware {
+class RedirectMiddleware<T> extends GetMiddleware<T> {
   @override
-  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async =>
-      RouteDecoder.fromRoute("/second");
+  Future<RouteDecoder<T>?> redirectDelegate(RouteDecoder<T> route) async =>
+      RouteDecoder<T>.fromRoute("/second");
 }
 
-class RedirectMiddlewareNull extends GetMiddleware {
+class RedirectMiddlewareNull<T> extends GetMiddleware<T> {
   @override
-  Future<RouteDecoder?> redirectDelegate(RouteDecoder route) async => null;
+  Future<RouteDecoder<T>?> redirectDelegate(RouteDecoder<T> route) async =>
+      null;
 }
 
 void main() {

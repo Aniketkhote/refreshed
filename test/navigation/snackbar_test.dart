@@ -6,7 +6,7 @@ void main() {
   testWidgets("test if Get.isSnackbarOpen works with Get.snackbar",
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      GetMaterialApp(
+      GetMaterialApp<dynamic>(
         popGesture: true,
         home: ElevatedButton(
           child: const Text("Open Snackbar"),
@@ -36,7 +36,7 @@ void main() {
 
   testWidgets("Get.rawSnackbar test", (WidgetTester tester) async {
     await tester.pumpWidget(
-      GetMaterialApp(
+      GetMaterialApp<dynamic>(
         popGesture: true,
         home: ElevatedButton(
           child: const Text("Open Snackbar"),
@@ -74,7 +74,7 @@ void main() {
     const Text messageTwo = Text("titleTwo");
 
     await tester.pumpWidget(
-      GetMaterialApp(
+      GetMaterialApp<dynamic>(
         popGesture: true,
         home: ElevatedButton(
           child: const Text("Open Snackbar"),
@@ -121,7 +121,7 @@ void main() {
     );
 
     await tester.pumpWidget(
-      GetMaterialApp(
+      GetMaterialApp<dynamic>(
         home: Scaffold(
           body: Builder(
             builder: (BuildContext context) => Column(
@@ -172,7 +172,7 @@ void main() {
     late final SnackbarController getBarController;
 
     await tester.pumpWidget(
-      GetMaterialApp(
+      GetMaterialApp<dynamic>(
         home: Scaffold(
           body: Builder(
             builder: (BuildContext context) => Column(
@@ -228,7 +228,7 @@ void main() {
 
     late final GetSnackBar getBar;
 
-    await tester.pumpWidget(const GetMaterialApp(home: Scaffold()));
+    await tester.pumpWidget(const GetMaterialApp<dynamic>(home: Scaffold()));
 
     await tester.pump();
 

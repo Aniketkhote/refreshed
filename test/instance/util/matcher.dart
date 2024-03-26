@@ -25,6 +25,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// ignore_for_file: always_specify_types, avoid_annotating_with_dynamic
+
 import "package:flutter_test/flutter_test.dart";
 
 class FunctionMatcher<T> extends CustomMatcher {
@@ -61,7 +63,8 @@ class HavingMatcher<T> implements TypeMatcher<T> {
 
   @override
   bool matches(dynamic item, Map matchState) {
-    for (var matcher in <Matcher>[_parent].followedBy(_functionMatchers)) {
+    for (final Matcher matcher
+        in <Matcher>[_parent].followedBy(_functionMatchers)) {
       if (!matcher.matches(item, matchState)) {
         addStateInfo(matchState, {"matcher": matcher});
         return false;

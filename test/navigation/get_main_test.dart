@@ -1,3 +1,5 @@
+// ignore_for_file: unawaited_futures, always_specify_types
+
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:refreshed/refreshed.dart";
