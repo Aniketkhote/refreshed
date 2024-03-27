@@ -7,14 +7,14 @@ import "package:refreshed/get_navigation/src/routes/new_path_route.dart";
 import "package:refreshed/route_manager.dart";
 import "package:refreshed/utils.dart";
 
-class GetDelegate<T> extends RouterDelegate<RouteDecoder>
+class GetDelegate<T> extends RouterDelegate<RouteDecoder<T>>
     with
         ChangeNotifier,
-        PopNavigatorRouterDelegateMixin<RouteDecoder>,
-        IGetNavigation {
+        PopNavigatorRouterDelegateMixin<RouteDecoder<T>>,
+        IGetNavigation<T> {
   GetDelegate({
-    required List<GetPage> pages,
-    GetPage? notFoundRoute,
+    required List<GetPage<T>> pages,
+    GetPage<T>? notFoundRoute,
     this.navigatorObservers,
     this.transitionDelegate,
     this.backButtonPopMode = PopMode.history,
@@ -39,8 +39,8 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
     Get.log("GetDelegate is created !");
   }
   factory GetDelegate.createDelegate({
-    GetPage<dynamic>? notFoundRoute,
-    List<GetPage> pages = const <GetPage>[],
+    GetPage<T>? notFoundRoute,
+    List<GetPage<dynamic>> pages = const <GetPage<dynamic>>[],
     List<NavigatorObserver>? navigatorObservers,
     TransitionDelegate<dynamic>? transitionDelegate,
     PopMode backButtonPopMode = PopMode.history,
@@ -54,7 +54,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
         transitionDelegate: transitionDelegate,
         backButtonPopMode: backButtonPopMode,
         preventDuplicateHandlingMode: preventDuplicateHandlingMode,
-        pages: pages,
+        pages: pages as List<GetPage<T>>,
         navigatorKey: navigatorKey,
       );
 
@@ -329,7 +329,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   @protected
-  void _popWithResult<T>([T? result]) {
+  void _popWithResult([T? result]) {
     final Completer? completer = _activePages.removeLast().route?.completer;
     if (completer?.isCompleted == false) {
       completer!.complete(result);
@@ -610,7 +610,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
     if (route == null) {
       return null;
     }
-    _popWithResult<T>(result as T?);
+    _popWithResult(result as T?);
     return _push<R>(route);
   }
 
@@ -770,12 +770,12 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  RouteDecoder? get currentConfiguration {
+  RouteDecoder<T>? get currentConfiguration {
     if (_activePages.isEmpty) {
       return null;
     }
     final RouteDecoder route = _activePages.last;
-    return route;
+    return route as RouteDecoder<T>;
   }
 
   Future<bool> handlePopupRoutes({
@@ -813,13 +813,14 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder>
   }
 
   @override
-  void back<T>([T? result]) {
+  void back([T? result]) {
     _checkIfCanBack();
-    _popWithResult<T>(result);
+    _popWithResult(result);
     notifyListeners();
   }
 
-  bool _onPopVisualRoute(Route<dynamic> route, result) {
+  // ignore: avoid_annotating_with_dynamic
+  bool _onPopVisualRoute(Route<dynamic> route, dynamic result) {
     final bool didPop = route.didPop(result);
     if (!didPop) {
       return false;

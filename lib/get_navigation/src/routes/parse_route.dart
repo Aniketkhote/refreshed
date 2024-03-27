@@ -21,16 +21,16 @@ class RouteDecoder<T> {
     );
     return decoder;
   }
-  final List<GetPage> currentTreeBranch;
+  final List<GetPage<T>> currentTreeBranch;
   final PageSettings? pageSettings;
 
-  GetPage? get route =>
+  GetPage<T>? get route =>
       currentTreeBranch.isEmpty ? null : currentTreeBranch.last;
 
   GetPage routeOrUnknown(GetPage onUnknow) =>
       currentTreeBranch.isEmpty ? onUnknow : currentTreeBranch.last;
 
-  set route(GetPage? getPage) {
+  set route(GetPage<T>? getPage) {
     if (getPage == null) {
       return;
     }
@@ -41,14 +41,14 @@ class RouteDecoder<T> {
     }
   }
 
-  List<GetPage>? get currentChildren => route?.children;
+  List<GetPage<T>>? get currentChildren => route!.children as List<GetPage<T>>;
 
   Map<String, String> get parameters =>
       pageSettings?.params ?? <String, String>{};
 
   dynamic get args => pageSettings?.arguments;
 
-  T? arguments<T>() {
+  T? arguments() {
     final Object? args = pageSettings?.arguments;
     if (args is T) {
       return pageSettings?.arguments as T;
@@ -58,7 +58,7 @@ class RouteDecoder<T> {
   }
 
   void replaceArguments(Object? arguments) {
-    final GetPage? newRoute = route;
+    final GetPage<T>? newRoute = route;
     if (newRoute != null) {
       final int index = currentTreeBranch.indexOf(newRoute);
       currentTreeBranch[index] = newRoute.copyWith(arguments: arguments);
@@ -89,7 +89,7 @@ class ParseRouteTree<T> {
     required this.routes,
   });
 
-  final List<GetPage> routes;
+  final List<GetPage<T>> routes;
 
   RouteDecoder<T> matchRoute(String name, {PageSettings? arguments}) {
     final Uri uri = Uri.parse(name);
@@ -108,14 +108,18 @@ class ParseRouteTree<T> {
       cumulativePaths.add(curPath);
     }
 
-    final List<MapEntry<String, GetPage>> treeBranch = cumulativePaths
-        .map((String e) => MapEntry(e, _findRoute(e)))
-        .where((MapEntry<String, GetPage?> element) => element.value != null)
+    final List<MapEntry<String, GetPage<T>>> treeBranch = cumulativePaths
+        .map((String e) => MapEntry<String, GetPage<T>?>(e, _findRoute(e)))
+        .where((MapEntry<String, GetPage<T>?> element) => element.value != null)
 
         ///Prevent page be disposed
         .map(
-          (MapEntry<String, GetPage?> e) =>
-              MapEntry(e.key, e.value!.copyWith(key: ValueKey(e.key))),
+          (MapEntry<String, GetPage<T>?> e) => MapEntry<String, GetPage<T>>(
+            e.key,
+            e.value!.copyWith(
+              key: ValueKey<String>(e.key),
+            ),
+          ),
         )
         .toList();
 
@@ -123,16 +127,16 @@ class ParseRouteTree<T> {
         Map<String, String>.from(uri.queryParameters);
     if (treeBranch.isNotEmpty) {
       //route is found, do further parsing to get nested query params
-      final MapEntry<String, GetPage> lastRoute = treeBranch.last;
+      final MapEntry<String, GetPage<T>> lastRoute = treeBranch.last;
       final Map<String, String> parsedParams =
           _parseParams(name, lastRoute.value.path);
       if (parsedParams.isNotEmpty) {
         params.addAll(parsedParams);
       }
       //copy parameters to all pages.
-      final List<GetPage> mappedTreeBranch = treeBranch
+      final List<GetPage<T>> mappedTreeBranch = treeBranch
           .map(
-            (MapEntry<String, GetPage> e) => e.value.copyWith(
+            (MapEntry<String, GetPage<T>> e) => e.value.copyWith(
               parameters: <String, String>{
                 if (e.value.parameters != null) ...e.value.parameters!,
                 ...params,
@@ -143,7 +147,7 @@ class ParseRouteTree<T> {
           .toList();
       arguments?.params.clear();
       arguments?.params.addAll(params);
-      return RouteDecoder(
+      return RouteDecoder<T>(
         mappedTreeBranch,
         arguments,
       );
@@ -154,7 +158,7 @@ class ParseRouteTree<T> {
 
     //route not found
     return RouteDecoder<T>(
-      treeBranch.map((MapEntry<String, GetPage> e) => e.value).toList(),
+      treeBranch.map((MapEntry<String, GetPage<T>> e) => e.value).toList(),
       arguments,
     );
   }
@@ -178,38 +182,42 @@ class ParseRouteTree<T> {
     }
   }
 
-  void addRoute<T>(GetPage<T> route) {
+  void addRoute(GetPage<T> route) {
     routes.add(route);
 
     // Add Page children.
-    for (final GetPage page in _flattenPage(route)) {
+    for (final GetPage<T> page in _flattenPage(route)) {
       addRoute(page);
     }
   }
 
-  List<GetPage<T>> _flattenPage(GetPage route) {
-    final List<GetPage> result = <GetPage>[];
+  List<GetPage<T>> _flattenPage(GetPage<T> route) {
+    final List<GetPage<T>> result = <GetPage<T>>[];
     if (route.children.isEmpty) {
-      return result as List<GetPage<T>>;
+      return result;
     }
 
     final String parentPath = route.name;
-    for (final GetPage page in route.children) {
+    for (final GetPage<T> page in route.children as List<GetPage<T>>) {
       // Add Parent middlewares to children
-      final List<GetMiddleware> parentMiddlewares = <GetMiddleware>[
-        if (page.middlewares.isNotEmpty) ...page.middlewares,
-        if (route.middlewares.isNotEmpty) ...route.middlewares,
+      final List<GetMiddleware<T>> parentMiddlewares = <GetMiddleware<T>>[
+        if (page.middlewares.isNotEmpty)
+          ...page.middlewares as List<GetMiddleware<T>>,
+        if (route.middlewares.isNotEmpty)
+          ...route.middlewares as List<GetMiddleware<T>>,
       ];
 
-      final List<BindingsInterface> parentBindings = <BindingsInterface>[
-        if (page.binding != null) page.binding!,
-        if (page.bindings.isNotEmpty) ...page.bindings,
-        if (route.bindings.isNotEmpty) ...route.bindings,
+      final List<BindingsInterface<T>> parentBindings = <BindingsInterface<T>>[
+        if (page.binding != null) page.binding! as BindingsInterface<T>,
+        if (page.bindings.isNotEmpty)
+          ...page.bindings as List<BindingsInterface<T>>,
+        if (route.bindings.isNotEmpty)
+          ...route.bindings as List<BindingsInterface<T>>,
       ];
 
-      final List<Bind> parentBinds = <Bind>[
-        if (page.binds.isNotEmpty) ...page.binds,
-        if (route.binds.isNotEmpty) ...route.binds,
+      final List<Bind<T>> parentBinds = <Bind<T>>[
+        if (page.binds.isNotEmpty) ...page.binds as List<Bind<T>>,
+        if (route.binds.isNotEmpty) ...route.binds as List<Bind<T>>,
       ];
 
       result.add(
@@ -222,39 +230,41 @@ class ParseRouteTree<T> {
         ),
       );
 
-      final List<GetPage> children = _flattenPage(page);
-      for (final GetPage child in children) {
+      final List<GetPage<T>> children = _flattenPage(page);
+      for (final GetPage<T> child in children) {
         result.add(
           _addChild(
             child,
             parentPath,
-            <GetMiddleware>[
+            <GetMiddleware<T>>[
               ...parentMiddlewares,
-              if (child.middlewares.isNotEmpty) ...child.middlewares,
+              if (child.middlewares.isNotEmpty)
+                ...child.middlewares as List<GetMiddleware<T>>,
             ],
-            <BindingsInterface>[
+            <BindingsInterface<T>>[
               ...parentBindings,
-              if (child.binding != null) child.binding!,
-              if (child.bindings.isNotEmpty) ...child.bindings,
+              if (child.binding != null) child.binding! as BindingsInterface<T>,
+              if (child.bindings.isNotEmpty)
+                ...child.bindings as List<BindingsInterface<T>>,
             ],
-            <Bind>[
+            <Bind<T>>[
               ...parentBinds,
-              if (child.binds.isNotEmpty) ...child.binds,
+              if (child.binds.isNotEmpty) ...child.binds as List<Bind<T>>,
             ],
           ),
         );
       }
     }
-    return result as List<GetPage<T>>;
+    return result;
   }
 
   /// Change the Path for a [GetPage]
-  GetPage _addChild(
-    GetPage origin,
+  GetPage<T> _addChild(
+    GetPage<T> origin,
     String parentPath,
-    List<GetMiddleware> middlewares,
-    List<BindingsInterface> bindings,
-    List<Bind> binds,
+    List<GetMiddleware<T>> middlewares,
+    List<BindingsInterface<T>> bindings,
+    List<Bind<T>> binds,
   ) =>
       origin.copyWith(
         middlewares: middlewares,
@@ -266,9 +276,9 @@ class ParseRouteTree<T> {
         // key:
       );
 
-  GetPage? _findRoute(String name) {
-    final GetPage? value = routes.firstWhereOrNull(
-      (GetPage route) => route.path.regex.hasMatch(name),
+  GetPage<T>? _findRoute(String name) {
+    final GetPage<T>? value = routes.firstWhereOrNull(
+      (GetPage<T> route) => route.path.regex.hasMatch(name),
     );
 
     return value;

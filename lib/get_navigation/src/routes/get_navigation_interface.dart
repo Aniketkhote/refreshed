@@ -53,7 +53,7 @@ mixin IGetNavigation<T> {
     String? id,
     String? routeName,
     bool fullscreenDialog = false,
-    arguments,
+    Object? arguments,
     List<BindingsInterface> bindings = const <BindingsInterface>[],
     bool preventDuplicates = true,
     bool? popGesture,
@@ -75,7 +75,7 @@ mixin IGetNavigation<T> {
     String? id,
     String? routeName,
     bool fullscreenDialog = false,
-    arguments,
+    Object? arguments,
     List<BindingsInterface> bindings = const <BindingsInterface>[],
     bool preventDuplicates = true,
     bool? popGesture,
@@ -90,7 +90,7 @@ mixin IGetNavigation<T> {
     bool? popGesture,
     String? id,
     String? routeName,
-    arguments,
+    Object? arguments,
     List<BindingsInterface> bindings = const <BindingsInterface>[],
     bool fullscreenDialog = false,
     Transition? transition,
@@ -102,7 +102,7 @@ mixin IGetNavigation<T> {
 
   Future<T?> toNamed(
     String page, {
-    arguments,
+    Object? arguments,
     String? id,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -110,15 +110,14 @@ mixin IGetNavigation<T> {
 
   Future<T?> offNamed(
     String page, {
-    arguments,
+    Object? arguments,
     String? id,
     Map<String, String>? parameters,
   });
 
   Future<T?>? offAllNamed(
     String newRouteName, {
-    // bool Function(GetPage route)? predicate,
-    arguments,
+    Object? arguments,
     String? id,
     Map<String, String>? parameters,
   });
@@ -126,7 +125,7 @@ mixin IGetNavigation<T> {
   Future<T?>? offNamedUntil(
     String page, {
     bool Function(GetPage route)? predicate,
-    arguments,
+    Object? arguments,
     String? id,
     Map<String, String>? parameters,
   });
@@ -145,7 +144,7 @@ mixin IGetNavigation<T> {
 
   void removeRoute(String name);
 
-  void back<T>([T? result]);
+  void back([T? result]);
 
   Future<R?> backAndtoNamed<R>(String page, {T? result, Object? arguments});
 

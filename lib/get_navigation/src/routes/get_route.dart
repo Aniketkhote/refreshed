@@ -24,13 +24,13 @@ class GetPage<T> extends Page<T> {
     this.reverseTransitionDuration,
     this.popGesture,
     this.binding,
-    this.bindings = const <BindingsInterface>[],
-    this.binds = const <Bind>[],
+    this.bindings = const <BindingsInterface<dynamic>>[],
+    this.binds = const <Bind<dynamic>>[],
     this.transition,
     this.customTransition,
     this.fullscreenDialog = false,
-    this.children = const <GetPage>[],
-    this.middlewares = const <GetMiddleware>[],
+    this.children = const <GetPage<dynamic>>[],
+    this.middlewares = const <GetMiddleware<dynamic>>[],
     this.unknownRoute,
     this.arguments,
     this.showCupertinoParallax = true,
@@ -84,13 +84,13 @@ class GetPage<T> extends Page<T> {
   final double Function(BuildContext context)? gestureWidth;
 
   /// The bindings to be associated with the route.
-  final BindingsInterface? binding;
+  final BindingsInterface<dynamic>? binding;
 
   /// Additional bindings to be associated with the route.
-  final List<BindingsInterface> bindings;
+  final List<BindingsInterface<dynamic>> bindings;
 
   /// Data binding configurations for the route.
-  final List<Bind> binds;
+  final List<Bind<dynamic>> binds;
 
   /// Custom transition animation for the route.
   final CustomTransition? customTransition;
@@ -121,16 +121,16 @@ class GetPage<T> extends Page<T> {
   final bool inheritParentPath;
 
   /// The nested routes.
-  final List<GetPage> children;
+  final List<GetPage<dynamic>> children;
 
   /// Middlewares for the route.
-  final List<GetMiddleware> middlewares;
+  final List<GetMiddleware<dynamic>> middlewares;
 
   /// The path regex for the route.
   final PathDecoded path;
 
   /// The unknown route for handling navigation to undefined routes.
-  final GetPage? unknownRoute;
+  final GetPage<dynamic>? unknownRoute;
 
   /// Whether to show the Cupertino-style parallax effect for iOS.
   final bool showCupertinoParallax;
@@ -151,17 +151,17 @@ class GetPage<T> extends Page<T> {
     Alignment? alignment,
     bool? maintainState,
     bool? opaque,
-    List<BindingsInterface>? bindings,
+    List<BindingsInterface<dynamic>>? bindings,
     BindingsInterface<T>? binding,
-    List<Bind>? binds,
+    List<Bind<dynamic>>? binds,
     CustomTransition? customTransition,
     Duration? transitionDuration,
     Duration? reverseTransitionDuration,
     bool? fullscreenDialog,
     RouteSettings? settings,
     List<GetPage<T>>? children,
-    GetPage? unknownRoute,
-    List<GetMiddleware>? middlewares,
+    GetPage<dynamic>? unknownRoute,
+    List<GetMiddleware<dynamic>>? middlewares,
     bool? preventDuplicates,
     double Function(BuildContext context)? gestureWidth,
     bool? participatesInRootNavigator,
@@ -170,7 +170,7 @@ class GetPage<T> extends Page<T> {
     Completer<T?>? completer,
     bool? inheritParentPath,
   }) =>
-      GetPage(
+      GetPage<T>(
         key: key ?? this.key,
         participatesInRootNavigator:
             participatesInRootNavigator ?? this.participatesInRootNavigator,

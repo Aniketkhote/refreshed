@@ -873,10 +873,10 @@ extension NavigationExtension<T> on GetInterface {
     } else {
       if (canPop) {
         if (searchDelegate(id).canBack) {
-          return searchDelegate(id).back<T>(result);
+          return searchDelegate(id).back(result);
         }
       } else {
-        return searchDelegate(id).back<T>(result);
+        return searchDelegate(id).back(result);
       }
     }
   }
