@@ -1,3 +1,7 @@
+## 2.5.6
+
+- Updated route parsing for better compatibility with HTTP app links.
+
 ## 2.5.5
 
 - Resolved linting issues.

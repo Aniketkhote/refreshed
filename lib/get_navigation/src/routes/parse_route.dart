@@ -287,17 +287,19 @@ class ParseRouteTree<T> {
   Map<String, String> _parseParams(String path, PathDecoded routePath) {
     final Map<String, String> params = <String, String>{};
     final int idx = path.indexOf("?");
-    if (idx > -1) {
-      path = path.substring(0, idx);
-      final Uri? uri = Uri.tryParse(path);
-      if (uri != null) {
-        params.addAll(uri.queryParameters);
-      }
+    final Uri? uri = Uri.tryParse(path);
+    if (uri == null) {
+      return params;
     }
-    final RegExpMatch? paramsMatch = routePath.regex.firstMatch(path);
-
+    if (idx > -1) {
+      params.addAll(uri.queryParameters);
+    }
+    final RegExpMatch? paramsMatch = routePath.regex.firstMatch(uri.path);
+    if (paramsMatch == null) {
+      return params;
+    }
     for (int i = 0; i < routePath.keys.length; i++) {
-      final String param = Uri.decodeQueryComponent(paramsMatch![i + 1]!);
+      final String param = Uri.decodeQueryComponent(paramsMatch[i + 1]!);
       params[routePath.keys[i]!] = param;
     }
     return params;

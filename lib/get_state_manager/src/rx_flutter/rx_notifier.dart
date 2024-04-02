@@ -336,7 +336,7 @@ class EmptyStatus<T> extends GetStatus<T> {
 }
 
 /// Extension methods for the [GetStatus] class.
-extension StatusDataExtension<T> on GetStatus<T> {
+extension StatusDataExtension<T, S> on GetStatus<T> {
   /// Checks if the status indicates that the state is loading.
   bool get isLoading => this is LoadingStatus;
 
@@ -356,9 +356,9 @@ extension StatusDataExtension<T> on GetStatus<T> {
   String get errorMessage {
     final bool isError = this is ErrorStatus;
     if (isError) {
-      final ErrorStatus err = this as ErrorStatus;
+      final ErrorStatus<T, S> err = this as ErrorStatus<T, S>;
       if (err.error != null && err.error is String) {
-        return err.error as String;
+        return err.error! as String;
       }
     }
     return "";

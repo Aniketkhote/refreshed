@@ -152,6 +152,11 @@ void main() {
               page: Container.new,
               name: "/last/:id/:name/profile",
             ),
+            GetPage<dynamic>(page: Container.new, name: "/first/second/:token"),
+            GetPage<dynamic>(
+              page: Container.new,
+              name: "/last/:id/:name/profile",
+            ),
           ],
         ),
       );
@@ -185,6 +190,12 @@ void main() {
       expect(Get.parameters["id"], "1234");
       expect(Get.parameters["name"], "ana");
       expect(Get.parameters["job"], "dev");
+
+      Get.toNamed(
+        "https://www.example.com/first/second/fa9662f4-ec3f-11ee-a806-169a3915b383",
+      );
+      await tester.pumpAndSettle();
+      expect(Get.parameters["token"], "fa9662f4-ec3f-11ee-a806-169a3915b383");
     },
   );
 
