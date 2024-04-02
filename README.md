@@ -4,7 +4,8 @@
 [![pub points](https://img.shields.io/pub/points/sentry?logo=dart)](https://pub.dev/packages/refreshed/score)
 ![building](https://github.com/Aniketkhote/refreshed/workflows/build/badge.svg)
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
-[![Discord Shield](https://img.shields.io/discord/1218986517297369088.svg?logo=discord)](https://discord.com/invite/e56kXWqU)
+
+<!-- [![Discord Shield](https://img.shields.io/discord/1218986517297369088.svg?logo=discord)](https://discord.com/invite/e56kXWqU) -->
 
 # Refreshed GetX
 
