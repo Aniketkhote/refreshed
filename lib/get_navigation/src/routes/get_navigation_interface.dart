@@ -146,7 +146,7 @@ mixin IGetNavigation<T> {
 
   void back([T? result]);
 
-  Future<R?> backAndtoNamed<R>(String page, {T? result, Object? arguments});
+  Future<T?> backAndtoNamed(String page, {T? result, Object? arguments});
 
   void backUntil(bool Function(GetPage) predicate);
 
