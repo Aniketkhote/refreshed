@@ -1,3 +1,8 @@
+## 2.5.7
+
+- Resolved linting issues.
+- Resolved the issue related to generic types.
+
 ## 2.5.6
 
 - Updated route parsing for better compatibility with HTTP app links.

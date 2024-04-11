@@ -75,7 +75,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder<T>>
   final ParseRouteTree<T> _routeTree =
       ParseRouteTree<T>(routes: <GetPage<T>>[]);
 
-  List<GetPage> get registeredRoutes => _routeTree.routes;
+  List<GetPage<T>> get registeredRoutes => _routeTree.routes;
 
   void addPages(List<GetPage<T>> getPages) {
     _routeTree.addRoutes(getPages);
@@ -511,7 +511,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder<T>>
   @override
   Future<T?>? offNamedUntil(
     String page, {
-    bool Function(GetPage route)? predicate,
+    bool Function(GetPage<T> route)? predicate,
     Object? arguments,
     String? id,
     Map<String, String>? parameters,
@@ -541,7 +541,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder<T>>
     Map<String, String>? parameters,
   }) async {
     final PageSettings args = _buildPageSettings(page, arguments);
-    final RouteDecoder? route = _getRouteDecoder(args);
+    final RouteDecoder<T>? route = _getRouteDecoder(args);
     if (route == null) {
       return null;
     }
@@ -608,7 +608,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder<T>>
     Object? arguments,
   }) async {
     final PageSettings args = _buildPageSettings(page, arguments);
-    final RouteDecoder? route = _getRouteDecoder(args);
+    final RouteDecoder<T>? route = _getRouteDecoder(args);
     if (route == null) {
       return null;
     }
@@ -625,7 +625,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder<T>>
     PopMode popMode = PopMode.history,
   }) async {
     // remove history or page entries until you meet route
-    RouteDecoder? iterator = currentConfiguration;
+    RouteDecoder<T>? iterator = currentConfiguration;
     while (_canPop(popMode) && iterator != null) {
       //the next line causes wasm compile error if included in the while loop
       //https://github.com/flutter/flutter/issues/140110
@@ -652,7 +652,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder<T>>
     final int index = _activePages.length > 1 ? _activePages.length - 1 : 0;
     _routeTree.addRoute(page);
 
-    final RouteDecoder? activePage = _getRouteDecoder(arguments);
+    final RouteDecoder<T>? activePage = _getRouteDecoder(arguments);
 
     _activePages[index] = activePage!;
 
@@ -828,18 +828,8 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder<T>>
       return false;
     }
     _popWithResult(result);
-    // final settings = route.settings;
-    // if (settings is GetPage) {
-    //   final config = _activePages.cast<RouteDecoder?>().firstWhere(
-    //         (element) => element?.route == settings,
-    //         orElse: () => null,
-    //       );
-    //   if (config != null) {
-    //     _removeHistoryEntry(config, result);
-    //   }
-    // }
+
     notifyListeners();
-    //return !route.navigator!.userGestureInProgress;
     return true;
   }
 }
