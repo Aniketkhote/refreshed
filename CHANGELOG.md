@@ -1,3 +1,7 @@
+## 2.5.8
+
+- Removed unused params from `GetCupertinoApp` .
+
 ## 2.5.7
 
 - Resolved linting issues.

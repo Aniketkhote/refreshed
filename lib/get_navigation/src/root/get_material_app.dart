@@ -289,10 +289,10 @@ class GetMaterialApp<T> extends StatelessWidget {
   final bool? defaultGlobalState;
 
   /// The pages for the app's navigation.
-  final List<GetPage>? getPages;
+  final List<GetPage<T>>? getPages;
 
   /// The unknown route for the app.
-  final GetPage? unknownRoute;
+  final GetPage<T>? unknownRoute;
 
   /// The route information provider for the app.
   final RouteInformationProvider? routeInformationProvider;
@@ -313,8 +313,8 @@ class GetMaterialApp<T> extends StatelessWidget {
   final bool useInheritedMediaQuery;
 
   @override
-  Widget build(BuildContext context) => GetRoot(
-        config: ConfigData(
+  Widget build(BuildContext context) => GetRoot<T>(
+        config: ConfigData<T>(
           backButtonDispatcher: backButtonDispatcher,
           binds: binds,
           customTransition: customTransition,

@@ -2,7 +2,6 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:refreshed/get_core/get_core.dart";
-import "package:refreshed/get_instance/get_instance.dart";
 import "package:refreshed/get_navigation/get_navigation.dart";
 import "package:refreshed/get_navigation/src/root/get_root.dart";
 import "package:refreshed/get_state_manager/get_state_manager.dart";
@@ -13,7 +12,7 @@ import "package:refreshed/get_utils/get_utils.dart";
 /// This widget is similar to CupertinoApp, but with additional features provided
 /// by Refreshed, such as reactive state management, dependency injection, and
 /// navigation management.
-class GetCupertinoApp extends StatelessWidget {
+class GetCupertinoApp<T> extends StatelessWidget {
   /// Constructs a [GetCupertinoApp] widget.
   const GetCupertinoApp({
     super.key,
@@ -39,7 +38,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.onInit,
     this.onDispose,
     this.locale,
-    this.binds = const <Bind>[],
+    this.binds,
     this.scrollBehavior,
     this.fallbackLocale,
     this.localizationsDelegates,
@@ -53,7 +52,6 @@ class GetCupertinoApp extends StatelessWidget {
     this.debugShowCheckedModeBanner = true,
     this.shortcuts,
     this.smartManagement = SmartManagement.full,
-    this.initialBinding,
     this.useInheritedMediaQuery = false,
     this.unknownRoute,
     this.routingCallback,
@@ -102,7 +100,7 @@ class GetCupertinoApp extends StatelessWidget {
     this.showSemanticsDebugger = false,
     this.debugShowCheckedModeBanner = true,
     this.shortcuts,
-    this.binds = const <Bind>[],
+    this.binds,
     this.scrollBehavior,
     this.actions,
     this.customTransition,
@@ -120,7 +118,6 @@ class GetCupertinoApp extends StatelessWidget {
     this.logWriterCallback,
     this.popGesture,
     this.smartManagement = SmartManagement.full,
-    this.initialBinding,
     this.transitionDuration,
     this.defaultGlobalState,
     this.getPages,
@@ -257,9 +254,6 @@ class GetCupertinoApp extends StatelessWidget {
   /// The smart management strategy for state management.
   final SmartManagement smartManagement;
 
-  /// The initial bindings for dependency injection.
-  final BindingsInterface? initialBinding;
-
   /// The duration for transition animations.
   final Duration? transitionDuration;
 
@@ -267,10 +261,10 @@ class GetCupertinoApp extends StatelessWidget {
   final bool? defaultGlobalState;
 
   /// The pages for navigation.
-  final List<GetPage>? getPages;
+  final List<GetPage<T>>? getPages;
 
   /// The unknown route page for navigation.
-  final GetPage? unknownRoute;
+  final GetPage<T>? unknownRoute;
 
   /// The route information provider for routing.
   final RouteInformationProvider? routeInformationProvider;
@@ -294,14 +288,14 @@ class GetCupertinoApp extends StatelessWidget {
   final bool useInheritedMediaQuery;
 
   /// The list of bindings for dependency injection.
-  final List<Bind> binds;
+  final List<Bind<T>>? binds;
 
   /// The scroll behavior for scrolling.
   final ScrollBehavior? scrollBehavior;
 
   @override
-  Widget build(BuildContext context) => GetRoot(
-        config: ConfigData(
+  Widget build(BuildContext context) => GetRoot<T>(
+        config: ConfigData<T>(
           backButtonDispatcher: backButtonDispatcher,
           binds: binds,
           customTransition: customTransition,

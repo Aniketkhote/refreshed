@@ -390,7 +390,7 @@ class GetRoot<T> extends StatefulWidget {
   final Widget child;
 
   @override
-  State<GetRoot> createState() => GetRootState();
+  State<GetRoot<T>> createState() => GetRootState<T>();
 
   /// Retrieves the state of the [GetRoot] widget from the given [BuildContext].
   ///
@@ -485,8 +485,8 @@ class GetRootState<T> extends State<GetRoot<T>> with WidgetsBindingObserver {
     if (config.routerDelegate == null) {
       final GetDelegate newDelegate = GetDelegate.createDelegate(
         pages: config.getPages ??
-            <GetPage>[
-              GetPage(
+            <GetPage<T>>[
+              GetPage<T>(
                 name: cleanRouteName("/${config.home.runtimeType}"),
                 page: () => config.home!,
               ),
@@ -506,8 +506,8 @@ class GetRootState<T> extends State<GetRoot<T>> with WidgetsBindingObserver {
     }
 
     if (config.routeInformationParser == null) {
-      final GetInformationParser newRouteInformationParser =
-          GetInformationParser.createInformationParser(
+      final GetInformationParser<T> newRouteInformationParser =
+          GetInformationParser<T>.createInformationParser(
         initialRoute: config.initialRoute ??
             config.getPages?.first.name ??
             cleanRouteName("/${config.home.runtimeType}"),
