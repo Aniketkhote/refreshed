@@ -681,6 +681,10 @@ class BindElement<T> extends InheritedElement {
     return super.build();
   }
 
+  /// Marks the widget as dirty and schedules a rebuild.
+  ///
+  /// This method sets the `_dirty` flag to `true`, indicating that the widget needs to be updated.
+  /// It then schedules a rebuild of the widget by calling [markNeedsBuild()].
   void getUpdate() {
     _dirty = true;
     markNeedsBuild();

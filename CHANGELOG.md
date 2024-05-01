@@ -1,3 +1,7 @@
+## 2.6.0
+
+- Added explicit type declaration to `Bind.lazyPut()` method, replacing `Bind.lazyPut(() => CountController())` with `Bind.lazyPut<CountController>(() => CountController())`.
+
 ## 2.5.8
 
 - Removed unused params from `GetCupertinoApp` .
