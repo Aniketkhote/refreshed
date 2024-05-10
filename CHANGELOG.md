@@ -1,3 +1,8 @@
+## 2.6.1
+
+- Resolved linting issues.
+- Added Binding Example Demo
+
 ## 2.6.0
 
 - Added explicit type declaration to `Bind.lazyPut()` method, replacing `Bind.lazyPut(() => CountController())` with `Bind.lazyPut<CountController>(() => CountController())`.
