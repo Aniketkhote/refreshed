@@ -1,12 +1,13 @@
-import "package:flutter/widgets.dart";
+// ignore_for_file: avoid_annotating_with_dynamic
 
+import "package:flutter/widgets.dart";
 import "package:refreshed/refreshed.dart";
 
 class GetNavigator extends Navigator {
   GetNavigator({
+    required List<GetPage> super.pages,
     super.key,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required List<GetPage> super.pages,
     List<NavigatorObserver>? observers,
     super.reportsRouteUpdateToEngine,
     TransitionDelegate? transitionDelegate,
@@ -15,14 +16,14 @@ class GetNavigator extends Navigator {
   }) : super(
           //keys should be optional
           onPopPage: onPopPage ??
-              (route, result) {
-                final didPop = route.didPop(result);
+              (Route route, result) {
+                final bool didPop = route.didPop(result);
                 if (!didPop) {
                   return false;
                 }
                 return true;
               },
-          observers: [
+          observers: <NavigatorObserver>[
             // GetObserver(null, Get.routing),
             HeroController(),
             ...?observers,
@@ -31,9 +32,9 @@ class GetNavigator extends Navigator {
               transitionDelegate ?? const DefaultTransitionDelegate<dynamic>(),
         );
   GetNavigator.onGenerateRoute({
+    required List<GetPage> super.pages,
     GlobalKey<NavigatorState>? super.key,
     bool Function(Route<dynamic>, dynamic)? onPopPage,
-    required List<GetPage> super.pages,
     List<NavigatorObserver>? observers,
     super.reportsRouteUpdateToEngine,
     TransitionDelegate? transitionDelegate,
@@ -42,18 +43,18 @@ class GetNavigator extends Navigator {
   }) : super(
           //keys should be optional
           onPopPage: onPopPage ??
-              (route, result) {
-                final didPop = route.didPop(result);
+              (Route route, result) {
+                final bool didPop = route.didPop(result);
                 if (!didPop) {
                   return false;
                 }
                 return true;
               },
-          onGenerateRoute: (settings) {
-            final selectedPageList =
-                pages.where((element) => element.name == settings.name);
+          onGenerateRoute: (RouteSettings settings) {
+            final Iterable<GetPage> selectedPageList =
+                pages.where((GetPage element) => element.name == settings.name);
             if (selectedPageList.isNotEmpty) {
-              final selectedPage = selectedPageList.first;
+              final GetPage selectedPage = selectedPageList.first;
               return GetPageRoute(
                 page: selectedPage.page,
                 settings: settings,
@@ -61,8 +62,7 @@ class GetNavigator extends Navigator {
             }
             return null;
           },
-          observers: [
-            // GetObserver(),
+          observers: <NavigatorObserver>[
             ...?observers,
           ],
           transitionDelegate:

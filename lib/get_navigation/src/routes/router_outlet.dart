@@ -1,23 +1,24 @@
-import "package:flutter/material.dart";
+// ignore_for_file: avoid_annotating_with_dynamic
 
+import "package:flutter/material.dart";
 import "package:refreshed/refreshed.dart";
 
 class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
     extends StatefulWidget {
   RouterOutlet({
-    Key? key,
-    TDelegate? delegate,
     required Iterable<GetPage> Function(T currentNavStack) pickPages,
     required Widget Function(
       BuildContext context,
       TDelegate,
       Iterable<GetPage>? page,
     ) pageBuilder,
+    Key? key,
+    TDelegate? delegate,
   }) : this.builder(
-          builder: (context) {
+          builder: (BuildContext context) {
             final currentConfig = context.delegate.currentConfiguration as T?;
             final rDelegate = context.delegate as TDelegate;
-            var picked =
+            Iterable<GetPage>? picked =
                 currentConfig == null ? null : pickPages(currentConfig);
             if (picked?.isEmpty ?? true) {
               picked = null;
@@ -29,9 +30,9 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
         );
 
   RouterOutlet.builder({
+    required this.builder,
     super.key,
     TDelegate? delegate,
-    required this.builder,
   }) : routerDelegate = delegate ?? Get.delegate<TDelegate, T>()!;
   final TDelegate routerDelegate;
   final Widget Function(BuildContext context) builder;
@@ -55,7 +56,7 @@ class RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
   void didChangeDependencies() {
     super.didChangeDependencies();
     disposer?.call();
-    final router = Router.of(context);
+    final Router<Object?> router = Router.of(context);
     delegate ??= router.routerDelegate;
     delegate?.addListener(_listener);
     disposer = () => delegate?.removeListener(_listener);
@@ -79,19 +80,19 @@ class RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
 
 class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
   GetRouterOutlet({
+    required String initialRoute,
     Key? key,
     String? anchorRoute,
-    required String initialRoute,
     Iterable<GetPage> Function(Iterable<GetPage> afterAnchor)? filterPages,
     GetDelegate? delegate,
     String? restorationScopeId,
   }) : this.pickPages(
           restorationScopeId: restorationScopeId,
-          pickPages: (config) {
+          pickPages: (RouteDecoder config) {
             Iterable<GetPage<dynamic>> ret;
             if (anchorRoute == null) {
               // jump the ancestor path
-              final length = Uri.parse(initialRoute).pathSegments.length;
+              final int length = Uri.parse(initialRoute).pathSegments.length;
 
               return config.currentTreeBranch
                   .skip(length)
@@ -105,23 +106,30 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
             return ret;
           },
           key: key,
-          emptyPage: (delegate) =>
+          emptyPage: (GetDelegate delegate) =>
               delegate.matchRoute(initialRoute).route ?? delegate.notFoundRoute,
           navigatorKey: Get.nestedKey(anchorRoute)?.navigatorKey,
           delegate: delegate,
         );
   GetRouterOutlet.pickPages({
+    required super.pickPages,
     super.key,
     Widget Function(GetDelegate delegate)? emptyWidget,
     GetPage Function(GetDelegate delegate)? emptyPage,
-    required super.pickPages,
-    bool Function(Route<dynamic>, dynamic)? onPopPage,
+    bool Function(
+      Route<dynamic>,
+      dynamic,
+    )? onPopPage,
     String? restorationScopeId,
     GlobalKey<NavigatorState>? navigatorKey,
     GetDelegate? delegate,
   }) : super(
-          pageBuilder: (context, rDelegate, pages) {
-            final pageRes = <GetPage?>[
+          pageBuilder: (
+            BuildContext context,
+            GetDelegate rDelegate,
+            Iterable<GetPage>? pages,
+          ) {
+            final Iterable<GetPage> pageRes = <GetPage?>[
               ...?pages,
               if (pages == null || pages.isEmpty) emptyPage?.call(rDelegate),
             ].whereType<GetPage>();
@@ -133,8 +141,8 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
                 child: GetNavigator(
                   restorationScopeId: restorationScopeId,
                   onPopPage: onPopPage ??
-                      (route, result) {
-                        final didPop = route.didPop(result);
+                      (Route route, result) {
+                        final bool didPop = route.didPop(result);
                         if (!didPop) {
                           return false;
                         }
@@ -145,14 +153,14 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
                 ),
               );
             }
-            return (emptyWidget?.call(rDelegate) ?? const SizedBox.shrink());
+            return emptyWidget?.call(rDelegate) ?? const SizedBox.shrink();
           },
           delegate: delegate ?? Get.rootController.rootDelegate,
         );
 
   GetRouterOutlet.builder({
-    super.key,
     required super.builder,
+    super.key,
     String? route,
     GetDelegate? routerDelegate,
   }) : super.builder(
@@ -165,36 +173,26 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
 
 class InheritedNavigator extends InheritedWidget {
   const InheritedNavigator({
-    super.key,
     required super.child,
     required this.navigatorKey,
+    super.key,
   });
   final GlobalKey<NavigatorState> navigatorKey;
 
-  static InheritedNavigator? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<InheritedNavigator>();
-  }
+  static InheritedNavigator? of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<InheritedNavigator>();
 
   @override
-  bool updateShouldNotify(InheritedNavigator oldWidget) {
-    return true;
-  }
+  bool updateShouldNotify(InheritedNavigator oldWidget) => true;
 }
 
-extension NavKeyExt on BuildContext {
-  GlobalKey<NavigatorState>? get parentNavigatorKey {
-    return InheritedNavigator.of(this)?.navigatorKey;
-  }
-}
-
-extension PagesListExt on List<GetPage> {
+extension PagesListExt<T> on List<GetPage<T>> {
   /// Returns the route and all following routes after the given route.
-  Iterable<GetPage> pickFromRoute(String route) {
-    return skipWhile((value) => value.name != route);
-  }
+  Iterable<GetPage<T>> pickFromRoute(String route) =>
+      skipWhile((GetPage<T> value) => value.name != route);
 
   /// Returns the routes after the given route.
-  Iterable<GetPage> pickAfterRoute(String route) {
+  Iterable<GetPage<T>> pickAfterRoute(String route) {
     // If the provided route is root, we take the first route after root.
     if (route == "/") {
       return pickFromRoute(route).skip(1).take(1);
@@ -212,9 +210,9 @@ typedef NavigatorItemBuilderBuilder = Widget Function(
 
 class IndexedRouteBuilder<T> extends StatelessWidget {
   const IndexedRouteBuilder({
-    super.key,
     required this.builder,
     required this.routes,
+    super.key,
   });
   final List<String> routes;
   final NavigatorItemBuilderBuilder builder;
@@ -231,8 +229,8 @@ class IndexedRouteBuilder<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final location = context.location;
-    final index = _getCurrentIndex(location);
+    final String location = context.location;
+    final int index = _getCurrentIndex(location);
 
     return builder(context, routes, index);
   }
@@ -251,7 +249,7 @@ mixin RouterListenerMixin<T extends StatefulWidget> on State<T> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     disposer?.call();
-    final router = Router.of(context);
+    final Router<Object?> router = Router.of(context);
     delegate ??= router.routerDelegate as GetDelegate;
 
     delegate?.addListener(_listener);
@@ -267,25 +265,21 @@ mixin RouterListenerMixin<T extends StatefulWidget> on State<T> {
 
 class RouterListenerInherited extends InheritedWidget {
   const RouterListenerInherited({
-    super.key,
     required super.child,
+    super.key,
   });
 
-  static RouterListenerInherited? of(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<RouterListenerInherited>();
-  }
+  static RouterListenerInherited? of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<RouterListenerInherited>();
 
   @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    return true;
-  }
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) => true;
 }
 
 class RouterListener extends StatefulWidget {
   const RouterListener({
-    super.key,
     required this.builder,
+    super.key,
   });
   final WidgetBuilder builder;
 
@@ -296,13 +290,12 @@ class RouterListener extends StatefulWidget {
 class RouteListenerState extends State<RouterListener>
     with RouterListenerMixin {
   @override
-  Widget build(BuildContext context) {
-    return RouterListenerInherited(child: Builder(builder: widget.builder));
-  }
+  Widget build(BuildContext context) =>
+      RouterListenerInherited(child: Builder(builder: widget.builder));
 }
 
 class BackButtonCallback extends StatefulWidget {
-  const BackButtonCallback({super.key, required this.builder});
+  const BackButtonCallback({required this.builder, super.key});
   final WidgetBuilder builder;
 
   @override
@@ -316,7 +309,7 @@ class RouterListenerState extends State<BackButtonCallback>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final router = Router.of(context);
+    final Router<Object?> router = Router.of(context);
     backButtonDispatcher =
         router.backButtonDispatcher!.createChildBackButtonDispatcher();
   }

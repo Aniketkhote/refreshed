@@ -324,7 +324,7 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder<T>>
     }
 
     final PageSettings pageSettings = _buildPageSettings(notFoundRoute.name);
-    final RouteDecoder? routeDecoder = _getRouteDecoder(pageSettings);
+    final RouteDecoder<T>? routeDecoder = _getRouteDecoder(pageSettings);
 
     await _push(routeDecoder!);
   }

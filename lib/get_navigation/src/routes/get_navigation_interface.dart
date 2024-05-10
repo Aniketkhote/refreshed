@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import "package:flutter/widgets.dart";
 import "package:refreshed/get_instance/src/bindings_interface.dart";
 import "package:refreshed/get_navigation/src/routes/get_route.dart";
@@ -43,7 +45,9 @@ enum PreventDuplicateHandlingMode {
   recreate,
 }
 
+/// A mixin for navigation functionality.
 mixin IGetNavigation<T> {
+  /// Navigates to a new page and returns a result of type [T].
   Future<T?> to(
     Widget Function() page, {
     bool? opaque,
@@ -61,11 +65,13 @@ mixin IGetNavigation<T> {
     double Function(BuildContext context)? gestureWidth,
   });
 
+  /// Pops the navigation stack until the specified [fullRoute].
   Future<void> popModeUntil(
     String fullRoute, {
     PopMode popMode = PopMode.history,
   });
 
+  /// Navigates off the current page and returns a result of type [T].
   Future<T?> off(
     Widget Function() page, {
     bool? opaque,
@@ -83,6 +89,7 @@ mixin IGetNavigation<T> {
     double Function(BuildContext context)? gestureWidth,
   });
 
+  /// Navigates off all pages and returns a result of type [T].
   Future<T?>? offAll(
     Widget Function() page, {
     bool Function(GetPage route)? predicate,
@@ -100,6 +107,7 @@ mixin IGetNavigation<T> {
     double Function(BuildContext context)? gestureWidth,
   });
 
+  /// Navigates to a named page and returns a result of type [T].
   Future<T?> toNamed(
     String page, {
     Object? arguments,
@@ -108,6 +116,7 @@ mixin IGetNavigation<T> {
     Map<String, String>? parameters,
   });
 
+  /// Navigates off a named page and returns a result of type [T].
   Future<T?> offNamed(
     String page, {
     Object? arguments,
@@ -115,6 +124,7 @@ mixin IGetNavigation<T> {
     Map<String, String>? parameters,
   });
 
+  /// Navigates off all named pages and returns a result of type [T].
   Future<T?>? offAllNamed(
     String newRouteName, {
     Object? arguments,
@@ -122,6 +132,7 @@ mixin IGetNavigation<T> {
     Map<String, String>? parameters,
   });
 
+  /// Navigates off a named page until a certain condition is met and returns a result of type [T].
   Future<T?>? offNamedUntil(
     String page, {
     bool Function(GetPage route)? predicate,
@@ -130,25 +141,32 @@ mixin IGetNavigation<T> {
     Map<String, String>? parameters,
   });
 
+  /// Navigates to a named page and pops pages until a certain condition is met, returns a result of type [T].
   Future<T?> toNamedAndOffUntil(
     String page,
     bool Function(GetPage) predicate, [
     Object? data,
   ]);
 
+  /// Navigates off a page until a certain condition is met, returns a result of type [T].
   Future<T?> offUntil(
     Widget Function() page,
     bool Function(GetPage) predicate, [
     Object? arguments,
   ]);
 
+  /// Removes a route from the navigation stack.
   void removeRoute(String name);
 
+  /// Navigates back in the navigation stack.
   void back([T? result]);
 
+  /// Navigates back to a named page with an optional result and arguments.
   Future<T?> backAndtoNamed(String page, {T? result, Object? arguments});
 
+  /// Navigates back until a certain condition is met.
   void backUntil(bool Function(GetPage) predicate);
 
+  /// Navigates to an unknown page.
   void goToUnknownPage([bool clearPages = true]);
 }

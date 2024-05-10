@@ -1,7 +1,6 @@
 import "package:flutter/cupertino.dart";
-
-import "package:refreshed/refreshed.dart";
 import "package:refreshed/get_navigation/src/router_report.dart";
+import "package:refreshed/refreshed.dart";
 
 /// A mixin that provides route lifecycle event reporting to a [RouterReportManager].
 ///
@@ -77,7 +76,7 @@ class GetPageRoute<T> extends PageRoute<T>
     this.barrierDismissible = false,
     this.barrierColor,
     BindingsInterface? binding,
-    List<BindingsInterface> bindings = const [],
+    List<BindingsInterface> bindings = const <BindingsInterface>[],
     this.binds,
     this.routeName,
     this.page,
@@ -87,7 +86,9 @@ class GetPageRoute<T> extends PageRoute<T>
     this.maintainState = true,
     super.fullscreenDialog,
     this.middlewares,
-  }) : bindings = (binding == null) ? bindings : [...bindings, binding];
+  }) : bindings = (binding == null)
+            ? bindings
+            : <BindingsInterface>[...bindings, binding];
 
   @override
   final Duration transitionDuration;
@@ -127,7 +128,7 @@ class GetPageRoute<T> extends PageRoute<T>
   @override
   void dispose() {
     super.dispose();
-    final middlewareRunner = MiddlewareRunner(middlewares);
+    final MiddlewareRunner middlewareRunner = MiddlewareRunner(middlewares);
     middlewareRunner.runOnPageDispose();
     _child = null;
   }
@@ -135,19 +136,22 @@ class GetPageRoute<T> extends PageRoute<T>
   Widget? _child;
 
   Widget _getChild() {
-    if (_child != null) return _child!;
-    final middlewareRunner = MiddlewareRunner(middlewares);
+    if (_child != null) {
+      return _child!;
+    }
+    final MiddlewareRunner middlewareRunner = MiddlewareRunner(middlewares);
 
-    final localBinds = [if (binds != null) ...binds!];
+    final List<Bind> localBinds = <Bind>[if (binds != null) ...binds!];
 
-    final bindingsToBind = middlewareRunner
+    final List<Object>? bindingsToBind = middlewareRunner
         .runOnBindingsStart(bindings.isNotEmpty ? bindings : localBinds);
 
-    final pageToBuild = middlewareRunner.runOnPageBuildStart(page)!;
+    final GetPageBuilder pageToBuild =
+        middlewareRunner.runOnPageBuildStart(page)!;
 
     if (bindingsToBind != null && bindingsToBind.isNotEmpty) {
       if (bindingsToBind is List<BindingsInterface>) {
-        for (final item in bindingsToBind) {
+        for (final BindingsInterface item in bindingsToBind) {
           final dep = item.dependencies();
           if (dep is List<Bind>) {
             _child = Binds(
@@ -168,9 +172,7 @@ class GetPageRoute<T> extends PageRoute<T>
   }
 
   @override
-  Widget buildContent(BuildContext context) {
-    return _getChild();
-  }
+  Widget buildContent(BuildContext context) => _getChild();
 
   @override
   final String? title;
