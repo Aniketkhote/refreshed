@@ -251,7 +251,7 @@ extension PopupUtilsExtension on GetInterface {
             child: Text(
               textConfirm ?? "Ok",
               style: TextStyle(
-                color: confirmTextColor ?? theme.colorScheme.background,
+                color: confirmTextColor ?? theme.colorScheme.surface,
               ),
             ),
             onPressed: () {
