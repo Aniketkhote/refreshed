@@ -17,8 +17,8 @@ class HomeBinding extends Binding {
   @override
   List<Bind> dependencies() {
     return [
-      Bind.lazyPut<CountController>(() => CountController(), fenix: true),
-      Bind.lazyPut<ProfileController>(() => ProfileController(), fenix: true),
+      Bind.lazyPut<CountController>(() => CountController()), // With type
+      Bind.lazyPut(() => ProfileController()), // Without type
     ];
   }
 }

@@ -1,5 +1,3 @@
-// ignore_for_file: overridden_fields
-
 import "dart:async";
 
 import "package:flutter/material.dart";
@@ -201,7 +199,7 @@ abstract class Bind<T> extends StatelessWidget {
   /// Creates a binding and puts the specified dependency into the GetX service locator.
   ///
   /// Returns the binding created.
-  static Bind<S> put<S>(
+  static Bind<dynamic> put<S>(
     S dependency, {
     String? tag,
     bool permanent = false,
@@ -217,7 +215,7 @@ abstract class Bind<T> extends StatelessWidget {
   /// Creates a lazy binding and puts the specified dependency into the GetX service locator.
   ///
   /// Returns the binding created.
-  static Bind<S> lazyPut<S>(
+  static Bind<dynamic> lazyPut<S>(
     InstanceBuilderCallback<S> builder, {
     String? tag,
     bool fenix = true,
@@ -235,7 +233,7 @@ abstract class Bind<T> extends StatelessWidget {
   /// Creates a binding and puts the specified dependency into the GetX service locator.
   ///
   /// Returns the binding created.
-  static Bind<S> create<S>(
+  static Bind<dynamic> create<S>(
     InstanceCreateBuilderCallback<S> builder, {
     String? tag,
     bool permanent = true,
@@ -249,7 +247,7 @@ abstract class Bind<T> extends StatelessWidget {
   /// Creates a binding and puts the specified dependency into the GetX service locator.
   ///
   /// Returns the binding created.
-  static Bind<S> spawn<S>(
+  static Bind<dynamic> spawn<S>(
     InstanceBuilderCallback<S> builder, {
     String? tag,
     bool permanent = true,
@@ -594,7 +592,7 @@ class BindElement<T> extends InheritedElement {
     final void Function() filter = _filter != null ? _filterUpdate : getUpdate;
     final T? localController = _controller;
 
-    if (_needStart == true && localController is GetLifeCycleMixin) {
+    if (_needStart! && localController is GetLifeCycleMixin) {
       localController.onStart();
       _needStart = false;
       _wasStarted = true;

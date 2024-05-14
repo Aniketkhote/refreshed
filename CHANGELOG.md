@@ -1,3 +1,7 @@
+## 2.6.2
+
+- Made explicit Bind type declaration optional to maintain compatibility with older projects.
+
 ## 2.6.1
 
 - Resolved linting issues.
