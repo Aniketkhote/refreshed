@@ -1,3 +1,7 @@
+## 2.6.3
+
+- Fixed `CupertinoRouteTransitionMixin.isPopGestureInProgress` member not found issue.
+
 ## 2.6.2
 
 - Made explicit Bind type declaration optional to maintain compatibility with older projects.

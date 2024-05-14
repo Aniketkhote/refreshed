@@ -411,8 +411,7 @@ Cannot read the previousTitle for a route that has not yet been installed""",
     // In the middle of a back gesture drag, let the transition be linear to
     // match finger motions.
     final GetPageRoute<T> route = rawRoute as GetPageRoute<T>;
-    final bool linearTransition =
-        CupertinoRouteTransitionMixin.isPopGestureInProgress(route);
+    final bool linearTransition = route.popGestureInProgress;
     final Curve finalCurve = route.curve ?? Get.defaultTransitionCurve;
     final bool hasCurve = route.curve != null;
     if (route.fullscreenDialog && route.transition == null) {
