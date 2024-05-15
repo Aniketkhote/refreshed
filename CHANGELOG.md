@@ -1,3 +1,7 @@
+## 2.6.4
+
+- Resolved asynchronous issue in `replace` and `lazyReplace` DI methods.
+
 ## 2.6.3
 
 - Fixed `CupertinoRouteTransitionMixin.isPopGestureInProgress` member not found issue.

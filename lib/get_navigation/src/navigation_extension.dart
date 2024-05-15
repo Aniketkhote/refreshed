@@ -1081,14 +1081,14 @@ extension NavigationExtension<T> on GetInterface {
     bool Function(GetPage) predicate, [
     Object? arguments,
     String? id,
-  ]) {
-    // Delegate the navigation operation to the appropriate delegate based on the provided ID
-    return searchDelegate(id).offUntil(
-      page,
-      predicate,
-      arguments,
-    );
-  }
+  ])
+      // Delegate the navigation operation to the appropriate delegate based on the provided ID
+      =>
+      searchDelegate(id).offUntil(
+        page,
+        predicate,
+        arguments,
+      );
 
   ///
   /// Push a `page` and pop several pages in the stack

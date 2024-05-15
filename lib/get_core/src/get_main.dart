@@ -9,5 +9,5 @@ import "package:refreshed/get_core/src/get_interface.dart";
 class _GetImpl extends GetInterface {}
 
 /// Global instance of GetX controller.
-// ignore: non_constant_identifier_names
-final Get = _GetImpl();
+// ignore: non_constant_identifier_names, library_private_types_in_public_api
+final _GetImpl Get = _GetImpl();

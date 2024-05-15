@@ -1,7 +1,7 @@
 import "package:flutter/widgets.dart";
 import "package:refreshed/get_navigation/src/router_report.dart";
 
-/// A custom [PopupRoute] used by GetX for displaying dialog routes.
+/// A custom [PopupRoute] used by Refreshed for displaying dialog routes.
 ///
 /// This route provides a customizable dialog transition and allows the
 /// specification of various properties such as barrier color, duration,

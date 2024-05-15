@@ -1,6 +1,6 @@
 name: refreshed
 description: "Enhanced GetX for Flutter: Stability, Performance, Beginner-Friendly."
-version: 2.6.3
+version: 2.6.4
 repository: "https://github.com/Aniketkhote/refreshed"
 
 environment:

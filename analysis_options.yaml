@@ -25,7 +25,6 @@ linter:
     - avoid_js_rounded_ints
     - avoid_multiple_declarations_per_line
     - avoid_null_checks_in_equality_operators
-    # - avoid_positional_boolean_parameters
     - avoid_print
     - avoid_private_typedef_functions
     - avoid_redundant_argument_values
@@ -48,12 +47,10 @@ linter:
     - camel_case_extensions
     - camel_case_types
     - cancel_subscriptions
-    # - cascade_invocations
     - cast_nullable_to_non_nullable
     - close_sinks
     - collection_methods_unrelated_type
     - combinators_ordering
-    # - comment_references
     - conditional_uri_does_not_exist
     - constant_identifier_names
     - control_flow_in_finally
@@ -62,7 +59,6 @@ linter:
     - depend_on_referenced_packages
     - deprecated_consistency
     - deprecated_member_use_from_same_package
-    # - diagnostic_describe_all_properties
     - directives_ordering
     - discarded_futures
     - do_not_use_environment
@@ -84,7 +80,6 @@ linter:
     - library_names
     - library_prefixes
     - library_private_types_in_public_api
-    # - lines_longer_than_80_chars
     - literal_only_boolean_expressions
     - matching_super_parameters
     - missing_whitespace_between_adjacent_strings
@@ -126,7 +121,6 @@ linter:
     - prefer_final_in_for_each
     - prefer_final_locals
     - prefer_for_elements_to_map_fromIterable
-    # - prefer_foreach
     - prefer_function_declarations_over_variables
     - prefer_generic_function_type_aliases
     - prefer_if_elements_to_conditional_expressions
@@ -183,7 +177,6 @@ linter:
     - unnecessary_parenthesis
     - unnecessary_raw_strings
     - unnecessary_statements
-    # - unnecessary_string_escapes
     - unnecessary_string_interpolations
     - unnecessary_this
     - unnecessary_to_list_in_spreads

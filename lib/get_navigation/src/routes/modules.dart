@@ -58,22 +58,22 @@ class Dependencies {
   bool isPrepared<S>({String? tag}) => Get.isPrepared<S>(tag: tag);
 
   /// Replaces a registered dependency with a new one.
-  void replace<P>(P child, {String? tag}) {
+  Future<void> replace<P>(P child, {String? tag}) async {
     final InstanceInfo info = Get.getInstanceInfo<P>(tag: tag);
     final bool permanent = info.isPermanent ?? false;
-    delete<P>(tag: tag, force: permanent);
+    await delete<P>(tag: tag, force: permanent);
     put(child, tag: tag, permanent: permanent);
   }
 
   /// Registers a lazy singleton dependency, replacing any existing dependency.
-  void lazyReplace<P>(
+  Future<void> lazyReplace<P>(
     InstanceBuilderCallback<P> builder, {
     String? tag,
     bool? fenix,
-  }) {
+  }) async {
     final InstanceInfo info = Get.getInstanceInfo<P>(tag: tag);
     final bool permanent = info.isPermanent ?? false;
-    delete<P>(tag: tag, force: permanent);
+    await delete<P>(tag: tag, force: permanent);
     lazyPut(builder, tag: tag, fenix: fenix ?? permanent);
   }
 }

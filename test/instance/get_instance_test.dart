@@ -39,7 +39,7 @@ void main() {
 
   test("Get.put tag test", () async {
     final Controller instance = Get.put<Controller>(Controller(), tag: "one");
-    final Controller instance2 = Get.put<Controller>(Controller(), tag: "two");
+    final Controller instance2 = Get.put(Controller(), tag: "two");
     expect(instance == instance2, false);
     expect(
       Get.find<Controller>(tag: "one") == Get.find<Controller>(tag: "two"),

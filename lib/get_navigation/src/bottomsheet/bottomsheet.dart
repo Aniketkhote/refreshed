@@ -286,6 +286,7 @@ class _GetModalBottomSheetState<T> extends State<_GetModalBottomSheet<T>> {
                 onDragEnd: widget.onDragEnd,
                 onDragStart: widget.onDragStart,
                 shadowColor: widget.shadowColor,
+                key: widget.key,
               ),
             ),
           ),
