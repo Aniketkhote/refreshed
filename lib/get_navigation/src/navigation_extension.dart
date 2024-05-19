@@ -646,10 +646,6 @@ extension NavigationExtension<T> on GetInterface {
     bool preventDuplicates = true,
     Map<String, String>? parameters,
   }) {
-    // if (preventDuplicates && page == currentRoute) {
-    //   return null;
-    // }
-
     if (parameters != null) {
       final Uri uri = Uri(path: page, queryParameters: parameters);
       page = uri.toString();
@@ -686,10 +682,6 @@ extension NavigationExtension<T> on GetInterface {
     String? id,
     Map<String, String>? parameters,
   }) {
-    // if (preventDuplicates && page == currentRoute) {
-    //   return null;
-    // }
-
     if (parameters != null) {
       final Uri uri = Uri(path: page, queryParameters: parameters);
       page = uri.toString();
@@ -698,7 +690,6 @@ extension NavigationExtension<T> on GetInterface {
       page,
       arguments: arguments,
       id: id,
-      // preventDuplicates: preventDuplicates,
       parameters: parameters,
     );
   }
@@ -821,7 +812,6 @@ extension NavigationExtension<T> on GetInterface {
   /// Note: Always put a slash on the route ('/page1'), to avoid unexpected errors
   Future<T?>? offAllNamed(
     String newRouteName, {
-    // bool Function(GetPage<dynamic>)? predicate,
     T? arguments,
     String? id,
     Map<String, String>? parameters,
@@ -833,7 +823,6 @@ extension NavigationExtension<T> on GetInterface {
 
     return searchDelegate(id).offAllNamed(
       newRouteName,
-      //predicate: predicate ?? (_) => false,
       arguments: arguments,
       id: id,
       parameters: parameters,

@@ -5,6 +5,7 @@ import "package:refreshed/instance_manager.dart";
 /// A class to manage dependencies within the application.
 class Dependencies {
   /// Registers a lazy singleton dependency.
+  /// fenix: true on it which means it's able to be reconstructed in case it got disposed of before.
   void lazyPut<S>(
     InstanceBuilderCallback<S> builder, {
     String? tag,
@@ -37,12 +38,11 @@ class Dependencies {
       Get.put<S>(dependency, tag: tag, permanent: permanent);
 
   /// Deletes a registered dependency.
-  Future<bool> delete<S>({String? tag, bool force = false}) async =>
+  bool delete<S>({String? tag, bool force = false}) =>
       Get.delete<S>(tag: tag, force: force);
 
   /// Deletes all registered dependencies.
-  Future<void> deleteAll({bool force = false}) async =>
-      Get.deleteAll(force: force);
+  void deleteAll({bool force = false}) => Get.deleteAll(force: force);
 
   /// Reloads all registered dependencies.
   void reloadAll({bool force = false}) => Get.reloadAll(force: force);
@@ -58,22 +58,22 @@ class Dependencies {
   bool isPrepared<S>({String? tag}) => Get.isPrepared<S>(tag: tag);
 
   /// Replaces a registered dependency with a new one.
-  Future<void> replace<P>(P child, {String? tag}) async {
+  void replace<P>(P child, {String? tag}) async {
     final InstanceInfo info = Get.getInstanceInfo<P>(tag: tag);
     final bool permanent = info.isPermanent ?? false;
-    await delete<P>(tag: tag, force: permanent);
+    delete<P>(tag: tag, force: permanent);
     put(child, tag: tag, permanent: permanent);
   }
 
   /// Registers a lazy singleton dependency, replacing any existing dependency.
-  Future<void> lazyReplace<P>(
+  void lazyReplace<P>(
     InstanceBuilderCallback<P> builder, {
     String? tag,
     bool? fenix,
-  }) async {
+  }) {
     final InstanceInfo info = Get.getInstanceInfo<P>(tag: tag);
     final bool permanent = info.isPermanent ?? false;
-    await delete<P>(tag: tag, force: permanent);
+    delete<P>(tag: tag, force: permanent);
     lazyPut(builder, tag: tag, fenix: fenix ?? permanent);
   }
 }

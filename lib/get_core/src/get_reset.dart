@@ -9,8 +9,6 @@ extension ResetExtension on GetInterface {
   void reset({bool clearRouteBindings = true}) {
     Get
       ..resetInstance(clearRouteBindings: clearRouteBindings)
-      // Get.clearRouteTree();
       ..clearTranslations();
-    // Get.resetRootNavigator();
   }
 }

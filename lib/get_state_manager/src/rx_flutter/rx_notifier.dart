@@ -120,8 +120,6 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
       _controller =
           StreamController<T>.broadcast(onCancel: addListener(_streamListener));
       _controller?.add(_value);
-
-      ///TODO: report to controller dispose
     }
     return _controller!;
   }
@@ -245,7 +243,7 @@ abstract class GetNotifier<T> extends Value<T> with GetLifeCycleMixin {
 }
 
 /// Extension methods for the [StateMixin] class.
-extension StateExt<T> on StateMixin<T> {
+extension StateExtension<T> on StateMixin<T> {
   /// Builds a widget based on the current state.
   ///
   /// This method provides a convenient way to build widgets based on the state's status.

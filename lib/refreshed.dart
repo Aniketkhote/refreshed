@@ -4,8 +4,8 @@
 /// with improved state management, navigation handling, animation effects, and other functionalities.
 library refreshed;
 
-export "get_common/get_reset.dart";
 export "get_core/get_core.dart";
+export "get_core/src/get_reset.dart";
 export "get_instance/get_instance.dart";
 export "get_navigation/get_navigation.dart";
 export "get_rx/get_rx.dart";

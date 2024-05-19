@@ -25,8 +25,10 @@ abstract class GetxController extends ListNotifier with GetLifeCycleMixin {
     if (ids == null) {
       refresh();
     } else {
-      for (int i = 0; i < ids.length; i++) {
-        refreshGroup(ids[i]);
+      // Use a Set to avoid duplicate ids and improve lookup time
+      final uniqueIds = ids.toSet();
+      for (final id in uniqueIds) {
+        refreshGroup(id);
       }
     }
   }
@@ -81,6 +83,7 @@ mixin ScrollMixin on GetLifeCycleMixin {
   @override
   void onClose() {
     scroll.removeListener(_listener);
+    scroll.dispose();
     super.onClose();
   }
 }

@@ -138,7 +138,6 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
 
   @override
   void initState() {
-    // var isPrepared = Get.isPrepared<T>(tag: widget.tag);
     final bool isRegistered = Get.isRegistered<T>(tag: widget.tag);
 
     if (widget.global) {

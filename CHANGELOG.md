@@ -1,6 +1,8 @@
-## 2.6.4
+## 2.7.0
 
-- Resolved asynchronous issue in `replace` and `lazyReplace` DI methods.
+- Upgraded flutter to version `3.22.0`
+- Resolved asynchronous issues in replace and lazyReplace Dependency Injection (DI) methods.
+- Improved overall performance.
 
 ## 2.6.3
 

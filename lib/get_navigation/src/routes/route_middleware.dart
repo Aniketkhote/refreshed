@@ -267,6 +267,5 @@ class PageRedirect {
     final Map<String, String?> parameters =
         Map<String, String?>.from(Get.parameters);
     parameters.addEntries(route.parameters!.entries);
-    // Get.parameters = parameters;
   }
 }

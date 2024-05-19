@@ -22,14 +22,6 @@ class GetUtils {
   /// Checks if data is null.
   static bool isNull(value) => value == null;
 
-  /// In dart2js (in flutter v1.17) a var by default is undefined.
-  /// *Use this only if you are in version <- 1.17*.
-  /// So we assure the null type in json conversions to avoid the
-  /// "value":value==null?null:value; someVar.nil will force the null type
-  /// if the var is null or undefined.
-  /// `nil` taken from ObjC just to have a shorter syntax.
-  static dynamic nil(s) => s;
-
   /// Checks if data is null or blank (empty or only contains whitespace).
   static bool? isNullOrBlank(value) {
     if (isNull(value)) {

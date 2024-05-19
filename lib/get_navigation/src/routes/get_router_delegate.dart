@@ -2,10 +2,8 @@ import "dart:async";
 
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:refreshed/get_instance/src/bindings_interface.dart";
-import "package:refreshed/get_navigation/src/routes/new_path_route.dart";
-import "package:refreshed/route_manager.dart";
-import "package:refreshed/utils.dart";
+
+import "../../../refreshed.dart";
 
 class GetDelegate<T> extends RouterDelegate<RouteDecoder<T>>
     with
@@ -376,10 +374,6 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder<T>>
         PreventDuplicateHandlingMode.reorderRoutes,
   }) async {
     routeName = cleanRouteName("/${page.runtimeType}");
-    // if (preventDuplicateHandlingMode ==
-    //PreventDuplicateHandlingMode.Recreate) {
-    //   routeName = routeName + page.hashCode.toString();
-    // }
 
     final GetPage<T> getPage = GetPage<T>(
       name: routeName,
@@ -490,7 +484,6 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder<T>>
   @override
   Future<T?>? offAllNamed(
     String newRouteName, {
-    // bool Function(GetPage route)? predicate,
     Object? arguments,
     String? id,
     Map<String, String>? parameters,
@@ -723,7 +716,6 @@ class GetDelegate<T> extends RouterDelegate<RouteDecoder<T>>
   Future<T?> _push(RouteDecoder decoder, {bool rebuildStack = true}) async {
     final RouteDecoder? mid = await runMiddleware(decoder);
     final RouteDecoder res = mid ?? decoder;
-    // if (res == null) res = decoder;
 
     final PreventDuplicateHandlingMode preventDuplicateHandlingMode =
         res.route?.preventDuplicateHandlingMode ??
