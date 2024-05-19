@@ -8,6 +8,7 @@ export "get_route.dart";
 export "get_router_delegate.dart";
 export "get_transition_mixin.dart";
 export "modules.dart";
+export "new_path_route.dart";
 export "observers/route_observer.dart";
 export "page_settings.dart";
 export "parse_route.dart";
