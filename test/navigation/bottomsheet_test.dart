@@ -59,27 +59,6 @@ void main() {
 
     expect(Get.isBottomSheetOpen, false);
 
-    // expect(() => Get.bottomSheet(Container(), isScrollControlled: null),
-    //     throwsAssertionError);
-
-    // expect(() => Get.bottomSheet(Container(), isDismissible: null),
-    //     throwsAssertionError);
-
-    // expect(() => Get.bottomSheet(Container(), enableDrag: null),
-    //     throwsAssertionError);
-
     await tester.pumpAndSettle();
   });
-
-  // testWidgets(
-  //   "GetMaterialApp with debugShowMaterialGrid null",
-  //   (tester) async {
-  //     expect(
-  //       () => GetMaterialApp(
-  //         debugShowMaterialGrid: null,
-  //       ),
-  //       throwsAssertionError,
-  //     );
-  //   },
-  // );
 }

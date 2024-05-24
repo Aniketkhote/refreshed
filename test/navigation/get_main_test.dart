@@ -422,8 +422,6 @@ void main() {
       ),
     );
 
-    // await tester.pump();
-
     Get.to(() => const FirstScreen());
     await tester.pumpAndSettle();
 
@@ -445,8 +443,6 @@ void main() {
         child: Container(),
       ),
     );
-
-    // await tester.pump();
 
     Get.to(() => const FirstScreen());
     await tester.pumpAndSettle();

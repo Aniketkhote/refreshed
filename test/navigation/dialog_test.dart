@@ -49,14 +49,11 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(YourDialogWidget), findsOneWidget);
-    // expect(Get.isDialogOpen, true);
 
     Get.backLegacy();
     await tester.pumpAndSettle();
 
     expect(find.byType(YourDialogWidget), findsNothing);
-    // expect(Get.isDialogOpen, false);
-    // await tester.pumpAndSettle();
   });
 }
 
