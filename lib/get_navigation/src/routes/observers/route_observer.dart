@@ -171,7 +171,6 @@ class GetObserver extends NavigatorObserver {
   }
 }
 
-//TODO: Use copyWith, and remove mutate variables
 class Routing {
   Routing({
     this.current = "",

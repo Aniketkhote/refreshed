@@ -165,7 +165,7 @@ extension PopupUtilsExtension on GetInterface {
 
   /// Custom UI Dialog.
   Future<T?> defaultDialog<T>({
-    String title = "Alert",
+    String? title,
     EdgeInsetsGeometry? titlePadding,
     TextStyle? titleStyle,
     Widget? content,
@@ -271,7 +271,9 @@ extension PopupUtilsExtension on GetInterface {
           Radius.circular(radius),
         ),
       ),
-      title: Text(title, textAlign: TextAlign.center, style: titleStyle),
+      title: title!.isNotEmpty && custom == null
+          ? Text(title, textAlign: TextAlign.center, style: titleStyle)
+          : const SizedBox.shrink(),
       content: custom ??
           Column(
             mainAxisSize: MainAxisSize.min,

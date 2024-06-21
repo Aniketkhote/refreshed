@@ -1,3 +1,7 @@
+## 2.7.1
+
+- Fixed issue where the dialog displayed the default title instead of custom title.
+
 ## 2.7.0
 
 - Upgraded flutter to version `3.22.0`

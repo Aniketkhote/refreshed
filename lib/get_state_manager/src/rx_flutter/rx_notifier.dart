@@ -267,15 +267,11 @@ extension StateExtension<T> on StateMixin<T> {
                     child: Text("An error occurred: ${status.errorMessage}"),
                   );
           } else if (status.isEmpty) {
-            return onEmpty ??
-                const SizedBox
-                    .shrink(); // Also can be widget(null); but is risky
+            return onEmpty ?? const SizedBox.shrink();
           } else if (status.isSuccess) {
             return widget(value);
           } else if (status.isCustom) {
-            return onCustom?.call(_) ??
-                const SizedBox
-                    .shrink(); // Also can be widget(null); but is risky
+            return onCustom?.call(_) ?? const SizedBox.shrink();
           }
           return widget(value);
         },
