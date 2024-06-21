@@ -263,7 +263,8 @@ extension PopupUtilsExtension on GetInterface {
     }
 
     final Widget baseAlertDialog = AlertDialog(
-      titlePadding: titlePadding ?? const EdgeInsets.all(8),
+      titlePadding: titlePadding ??
+          (title != null ? const EdgeInsets.all(8) : EdgeInsets.zero),
       contentPadding: contentPadding ?? const EdgeInsets.all(8),
       backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
       shape: RoundedRectangleBorder(
@@ -271,7 +272,7 @@ extension PopupUtilsExtension on GetInterface {
           Radius.circular(radius),
         ),
       ),
-      title: title!.isNotEmpty && custom == null
+      title: title != null
           ? Text(title, textAlign: TextAlign.center, style: titleStyle)
           : const SizedBox.shrink(),
       content: custom ??

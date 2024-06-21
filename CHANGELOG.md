@@ -1,3 +1,7 @@
+## 2.7.2
+
+- Fixed padding issue in dialog.
+
 ## 2.7.1
 
 - Fixed issue where the dialog displayed the default title instead of custom title.
