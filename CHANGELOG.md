@@ -1,3 +1,7 @@
+## 2.8.0
+
+- Reintroduced Rxn<Model>
+
 ## 2.7.2
 
 - Fixed padding issue in dialog.

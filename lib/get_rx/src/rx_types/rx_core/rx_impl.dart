@@ -229,6 +229,20 @@ class Rx<T> extends _RxImpl<T> {
   }
 }
 
+/// Extension providing additional functionality for nullable class values wrapped in an [Rx] object.
+class Rxn<T> extends Rx<T?> {
+  Rxn([super.initial]);
+
+  @override
+  dynamic toJson() {
+    try {
+      return (value as dynamic)?.toJson();
+    } on Exception catch (_) {
+      throw '$T has not method [toJson]';
+    }
+  }
+}
+
 /// Extension on [String] providing methods to create reactive strings.
 extension StringExtension on String {
   /// Returns a `RxString` with [this] `String` as initial value.
