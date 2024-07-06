@@ -52,7 +52,7 @@ class Obx extends ObxWidget {
 /// false.obs,
 /// ),
 /// ```
-class ObxValue<T extends RxInterface<T>> extends ObxWidget {
+class ObxValue<T extends RxInterface> extends ObxWidget {
   /// Constructs an [ObxValue] widget with the given [builder] and [data].
   const ObxValue(this.builder, this.data, {super.key});
 
