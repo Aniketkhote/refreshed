@@ -1,3 +1,7 @@
+## 2.8.1
+
+- Fixed futurize empty state handling by correctly triggering `onEmpty` when the result is neither `null` nor has data.
+
 ## 2.8.0
 
 - Reintroduced Rxn<Model>

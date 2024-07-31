@@ -86,24 +86,24 @@ mixin StateMixin<T> on ListNotifier {
     Future<T> Function() body, {
     T? initialData,
     String? errorMessage,
-    bool useEmpty = true,
   }) async {
     final Future<T> Function() compute = body;
     _value ??= initialData;
-    await compute().then(
-      (T newValue) {
-        if ((newValue == null || newValue._isEmpty()) && useEmpty) {
-          status = GetStatus<T>.loading();
+    await compute().then((T newValue) {
+      if (newValue == null) {
+        status = GetStatus<T>.loading();
+      } else {
+        if (newValue._isEmpty()) {
+          status = GetStatus<T>.empty();
         } else {
           status = GetStatus<T>.success(newValue);
         }
-        refresh();
-      },
-      onError: (Object err) {
-        status = GetStatus<T>.error(errorMessage ?? err.toString());
-        refresh();
-      },
-    );
+      }
+      refresh();
+    }, onError: (Object err) {
+      status = GetStatus<T>.error(errorMessage ?? err.toString());
+      refresh();
+    });
   }
 }
 
