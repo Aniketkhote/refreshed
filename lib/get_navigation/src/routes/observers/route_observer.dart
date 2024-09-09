@@ -1,13 +1,12 @@
-import "package:flutter/cupertino.dart";
-import "package:flutter/material.dart";
-import "package:refreshed/get_core/get_core.dart";
-import "package:refreshed/get_navigation/get_navigation.dart";
-import "package:refreshed/get_navigation/src/dialog/dialog_route.dart";
-import "package:refreshed/get_navigation/src/router_report.dart";
-import "package:refreshed/instance_manager.dart";
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:refreshed/get_core/get_core.dart';
+import 'package:refreshed/get_navigation/get_navigation.dart';
+import 'package:refreshed/get_navigation/src/dialog/dialog_route.dart';
+import 'package:refreshed/get_navigation/src/router_report.dart';
+import 'package:refreshed/instance_manager.dart';
 
-/// Extracts the name of a route based on it's instance type
-/// or null if not possible.
+/// Extracts the name of a route based on its instance type or returns null if not possible.
 String? _extractRouteName(Route? route) {
   if (route?.settings.name != null) {
     return route!.settings.name;
@@ -28,10 +27,11 @@ String? _extractRouteName(Route? route) {
   return null;
 }
 
+/// A custom NavigatorObserver for tracking route changes and managing routing data.
 class GetObserver extends NavigatorObserver {
   GetObserver([this.routing, this._routeSend]);
-  final Function(Routing?)? routing;
 
+  final Function(Routing?)? routing;
   final Routing? _routeSend;
 
   @override
@@ -45,15 +45,12 @@ class GetObserver extends NavigatorObserver {
     } else if (currentRoute.isGetPageRoute) {
       Get.log("CLOSE TO ROUTE ${currentRoute.name}");
     }
+
     if (previousRoute != null) {
       RouterReportManager.instance.reportCurrentRoute(previousRoute);
     }
 
-    // Here we use a 'inverse didPush set', meaning that we use
-    // previous route instead of 'route' because this is
-    // a 'inverse push'
     _routeSend?.update((Routing value) {
-      // Only PageRoute is allowed to change current value
       if (previousRoute is PageRoute) {
         value.current = _extractRouteName(previousRoute) ?? "";
         value.previous = newRoute.name ?? "";
@@ -84,11 +81,12 @@ class GetObserver extends NavigatorObserver {
     }
 
     RouterReportManager.instance.reportCurrentRoute(route);
-    _routeSend!.update((Routing value) {
-      // Only PageRoute is allowed to change current value
+
+    _routeSend?.update((Routing value) {
       if (route is PageRoute) {
         value.current = newRoute.name ?? "";
       }
+
       final String? previousRouteName = _extractRouteName(previousRoute);
       if (previousRouteName != null) {
         value.previous = previousRouteName;
@@ -98,14 +96,11 @@ class GetObserver extends NavigatorObserver {
       value.route = route;
       value.isBack = false;
       value.removed = "";
-      value.isBottomSheet =
-          newRoute.isBottomSheet ? true : value.isBottomSheet ?? false;
-      value.isDialog = newRoute.isDialog ? true : value.isDialog ?? false;
+      value.isBottomSheet = newRoute.isBottomSheet;
+      value.isDialog = newRoute.isDialog;
     });
 
-    if (routing != null) {
-      routing!(_routeSend);
-    }
+    routing?.call(_routeSend);
   }
 
   @override
@@ -113,14 +108,16 @@ class GetObserver extends NavigatorObserver {
     super.didRemove(route, previousRoute);
     final String? routeName = _extractRouteName(route);
     final _RouteData currentRoute = _RouteData.ofRoute(route);
+    final previousRouteName = _extractRouteName(previousRoute);
 
     Get.log("REMOVING ROUTE $routeName");
+    Get.log("PREVIOUS ROUTE $previousRouteName");
 
     _routeSend?.update((Routing value) {
       value.route = previousRoute;
       value.isBack = false;
       value.removed = routeName ?? "";
-      value.previous = routeName ?? "";
+      value.previous = previousRouteName ?? '';
       value.isBottomSheet =
           currentRoute.isBottomSheet ? false : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
@@ -131,6 +128,7 @@ class GetObserver extends NavigatorObserver {
         route is CupertinoPageRoute) {
       RouterReportManager.instance.reportRouteWillDispose(route);
     }
+
     routing?.call(_routeSend);
   }
 
@@ -149,7 +147,6 @@ class GetObserver extends NavigatorObserver {
     }
 
     _routeSend?.update((Routing value) {
-      // Only PageRoute is allowed to change current value
       if (newRoute is PageRoute) {
         value.current = newName ?? "";
       }
@@ -163,6 +160,7 @@ class GetObserver extends NavigatorObserver {
           currentRoute.isBottomSheet ? false : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
+
     if (oldRoute is GetPageRoute) {
       RouterReportManager.instance.reportRouteWillDispose(oldRoute);
     }
@@ -171,6 +169,8 @@ class GetObserver extends NavigatorObserver {
   }
 }
 
+/// Represents the current state of routing, including the current route,
+/// previous route, arguments, and other relevant information.
 class Routing {
   Routing({
     this.current = "",
@@ -182,6 +182,7 @@ class Routing {
     this.isBottomSheet,
     this.isDialog,
   });
+
   String current;
   String previous;
   dynamic args;
@@ -196,7 +197,7 @@ class Routing {
   }
 }
 
-/// This is basically a util for rules about 'what a route is'
+/// Utility class for determining the type of a route.
 class _RouteData {
   _RouteData({
     required this.name,
@@ -211,6 +212,7 @@ class _RouteData {
         isDialog: route is GetDialogRoute,
         isBottomSheet: route is GetModalBottomSheetRoute,
       );
+
   final bool isGetPageRoute;
   final bool isBottomSheet;
   final bool isDialog;

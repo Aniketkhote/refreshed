@@ -3,24 +3,23 @@ import "dart:collection";
 import "package:flutter/foundation.dart";
 import "package:refreshed/refreshed.dart";
 
-/// This callback remove the listener on addListener function
+/// This callback removes the listener when called.
 typedef Disposer = void Function();
 
-/// replacing StateSetter, return if the Widget is mounted for extra validation.
-/// if it brings overhead the extra call,
+/// Replaces StateSetter, returning whether the Widget is mounted for extra validation.
+/// If this brings overhead, consider removing the extra call.
 typedef GetStateUpdate = void Function();
 
 class ListNotifier extends Listenable
     with ListNotifierSingleMixin, ListNotifierGroupMixin {}
 
 /// A Notifier with single listeners
-class ListNotifierSingle = ListNotifier with ListNotifierSingleMixin;
+class ListNotifierSingle extends ListNotifier with ListNotifierSingleMixin {}
 
-/// A notifier with group of listeners identified by id
-class ListNotifierGroup = ListNotifier with ListNotifierGroupMixin;
+/// A Notifier with a group of listeners identified by id
+class ListNotifierGroup extends ListNotifier with ListNotifierGroupMixin {}
 
-/// This mixin add to Listenable the addListener, removerListener and
-/// containsListener implementation
+/// This mixin adds to Listenable the addListener, removeListener, and containsListener implementations.
 mixin ListNotifierSingleMixin on Listenable {
   List<GetStateUpdate>? _updaters = <GetStateUpdate>[];
 
@@ -58,7 +57,6 @@ mixin ListNotifierSingleMixin on Listenable {
 
   void _notifyUpdate() {
     final List<GetStateUpdate> list = _updaters?.toList() ?? <GetStateUpdate>[];
-
     for (final GetStateUpdate element in list) {
       element();
     }
@@ -69,8 +67,9 @@ mixin ListNotifierSingleMixin on Listenable {
   bool _debugAssertNotDisposed() {
     assert(() {
       if (isDisposed) {
-        throw FlutterError("""A $runtimeType was used after being disposed.\n
-'Once you have called dispose() on a $runtimeType, it can no longer be used.""");
+        throw FlutterError("A $runtimeType was used after being disposed.\n"
+            "Once you have called dispose() on a $runtimeType, "
+            "it can no longer be used.");
       }
       return true;
     }());
@@ -100,7 +99,7 @@ mixin ListNotifierGroupMixin on Listenable {
   }
 
   @protected
-  void notifyGroupChildrens(Object id) {
+  void notifyGroupChildren(Object id) {
     assert(_debugAssertNotDisposed());
     Notifier.instance.read(_updatersGroupIds![id]!);
   }
@@ -116,8 +115,9 @@ mixin ListNotifierGroupMixin on Listenable {
   bool _debugAssertNotDisposed() {
     assert(() {
       if (_updatersGroupIds == null) {
-        throw FlutterError("""A $runtimeType was used after being disposed.\n
-'Once you have called dispose() on a $runtimeType, it can no longer be used.""");
+        throw FlutterError("A $runtimeType was used after being disposed.\n"
+            "Once you have called dispose() on a $runtimeType, "
+            "it can no longer be used.");
       }
       return true;
     }());
@@ -145,8 +145,8 @@ mixin ListNotifierGroupMixin on Listenable {
     return _updatersGroupIds![key]!.addListener(listener);
   }
 
-  /// To dispose an [id] from future updates(), this ids are registered
-  /// by `GetBuilder()` or similar, so is a way to unlink the state change with
+  /// To dispose of an [id] from future updates(), these ids are registered
+  /// by `GetBuilder()` or similar, so this is a way to unlink the state change with
   /// the Widget from the Controller.
   void disposeId(Object id) {
     _updatersGroupIds?[id]?.dispose();

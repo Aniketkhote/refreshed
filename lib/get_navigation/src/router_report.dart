@@ -130,6 +130,8 @@ class RouterReportManager<T> {
       }
     }
 
+    _routesKey.remove(routeName);
+
     keysToRemove.clear();
   }
 }

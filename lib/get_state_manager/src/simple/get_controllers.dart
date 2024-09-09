@@ -19,14 +19,11 @@ abstract class GetxController extends ListNotifier with GetLifeCycleMixin {
   /// The [condition] parameter determines whether the rebuild should occur.
   /// If [condition] is `false`, no rebuild will be triggered.
   void update([List<Object>? ids, bool condition = true]) {
-    if (!condition) {
-      return;
-    }
+    if (!condition) return;
     if (ids == null) {
       refresh();
     } else {
-      // Use a Set to avoid duplicate ids and improve lookup time
-      final uniqueIds = ids.toSet();
+      final uniqueIds = ids.toSet(); // Use a Set to avoid duplicate ids
       for (final id in uniqueIds) {
         refreshGroup(id);
       }
@@ -34,85 +31,84 @@ abstract class GetxController extends ListNotifier with GetLifeCycleMixin {
   }
 }
 
-/// this mixin allow to fetch data when the scroll is at the bottom or on the
-/// top
+/// Mixin to manage scroll events when the scroll position is at the top or bottom.
 mixin ScrollMixin on GetLifeCycleMixin {
-  /// Controller for managing scrolling behavior within a scrollable widget.
-  final ScrollController scroll = ScrollController();
+  late final ScrollController scroll;
 
   @override
   void onInit() {
     super.onInit();
-    scroll.addListener(_listener);
+    scroll = ScrollController();
+    scroll.addListener(_scrollListener);
   }
 
   bool _canFetchBottom = true;
-
   bool _canFetchTop = true;
 
-  Future<void> _listener() async {
+  Future<void> _scrollListener() async {
     if (scroll.position.atEdge) {
-      await _checkIfCanLoadMore();
+      await _handleScrollEdge();
     }
   }
 
-  Future<void> _checkIfCanLoadMore() async {
+  Future<void> _handleScrollEdge() async {
     if (scroll.position.pixels == 0) {
-      if (!_canFetchTop) {
-        return;
+      if (_canFetchTop) {
+        _canFetchTop = false;
+        await _safeScrollCallback(onTopScroll);
+        _canFetchTop = true;
       }
-      _canFetchTop = false;
-      await onTopScroll();
-      _canFetchTop = true;
     } else {
-      if (!_canFetchBottom) {
-        return;
+      if (_canFetchBottom) {
+        _canFetchBottom = false;
+        await _safeScrollCallback(onEndScroll);
+        _canFetchBottom = true;
       }
-      _canFetchBottom = false;
-      await onEndScroll();
-      _canFetchBottom = true;
     }
   }
 
-  /// this method is called when the scroll is at the bottom
+  Future<void> _safeScrollCallback(Future<void> Function() callback) async {
+    try {
+      await callback();
+    } catch (e) {
+      // Optionally handle any exceptions here
+    }
+  }
+
+  /// Called when the scroll reaches the bottom.
   Future<void> onEndScroll();
 
-  /// this method is called when the scroll is at the top
+  /// Called when the scroll reaches the top.
   Future<void> onTopScroll();
 
   @override
   void onClose() {
-    scroll.removeListener(_listener);
+    scroll.removeListener(_scrollListener);
     scroll.dispose();
     super.onClose();
   }
 }
 
-/// A clean controller to be used with only Rx variables
+/// A clean controller to be used with only Rx variables.
 abstract class RxController with GetLifeCycleMixin {}
 
-/// A recommended way to use Getx with Future fetching
+/// A recommended way to use Getx with Future fetching.
 abstract class StateController<T> extends GetxController with StateMixin<T> {}
 
 /// A controller with super lifecycles (including native lifecycles)
-/// and StateMixins
+/// and StateMixins.
 abstract class SuperController<T> extends FullLifeCycleController
     with FullLifeCycleMixin, StateMixin<T> {}
 
-/// A controller with super lifecycles (including native lifecycles)
+/// A controller with super lifecycles (including native lifecycles).
 abstract class FullLifeCycleController extends GetxController
     with WidgetsBindingObserver {}
 
-/// A mixin that provides a full lifecycle implementation for controllers.
+/// Mixin that provides a full lifecycle implementation for controllers.
 ///
 /// This mixin enhances a controller with lifecycle methods such as initialization,
 /// disposal, and handling of app lifecycle states.
 mixin FullLifeCycleMixin on FullLifeCycleController {
-  /// Called when the controller is initialized.
-  ///
-  /// This method should be overridden to perform initialization logic
-  /// specific to the controller. It is invoked after the parent's `onInit`
-  /// method is called.
   @mustCallSuper
   @override
   void onInit() {
@@ -120,11 +116,6 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
     ambiguate(Engine.instance)!.addObserver(this);
   }
 
-  /// Called when the controller is disposed.
-  ///
-  /// This method should be overridden to perform cleanup logic
-  /// specific to the controller. It is invoked before the parent's `onClose`
-  /// method is called.
   @mustCallSuper
   @override
   void onClose() {
@@ -132,24 +123,25 @@ mixin FullLifeCycleMixin on FullLifeCycleController {
     super.onClose();
   }
 
-  /// Called when the app lifecycle state changes.
-  ///
-  /// This method should be overridden to handle app lifecycle state changes.
-  /// The [state] parameter indicates the new app lifecycle state.
   @mustCallSuper
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
         onResumed();
+        break;
       case AppLifecycleState.inactive:
         onInactive();
+        break;
       case AppLifecycleState.paused:
         onPaused();
+        break;
       case AppLifecycleState.detached:
         onDetached();
+        break;
       case AppLifecycleState.hidden:
         onHidden();
+        break;
     }
   }
 

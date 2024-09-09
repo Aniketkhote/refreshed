@@ -1,7 +1,6 @@
 import "dart:async";
 
 import "package:flutter/widgets.dart";
-
 import "package:refreshed/get_navigation/src/routes/get_route.dart";
 
 class RouteMatcher {

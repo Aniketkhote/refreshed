@@ -89,21 +89,21 @@ mixin StateMixin<T> on ListNotifier {
   }) async {
     final Future<T> Function() compute = body;
     _value ??= initialData;
-    await compute().then((T newValue) {
+
+    try {
+      final T newValue = await compute();
       if (newValue == null) {
         status = GetStatus<T>.loading();
+      } else if (newValue._isEmpty()) {
+        status = GetStatus<T>.empty();
       } else {
-        if (newValue._isEmpty()) {
-          status = GetStatus<T>.empty();
-        } else {
-          status = GetStatus<T>.success(newValue);
-        }
+        status = GetStatus<T>.success(newValue);
       }
+    } catch (error) {
+      status = GetStatus<T>.error(errorMessage ?? error.toString());
+    } finally {
       refresh();
-    }, onError: (Object err) {
-      status = GetStatus<T>.error(errorMessage ?? err.toString());
-      refresh();
-    });
+    }
   }
 }
 
@@ -249,14 +249,14 @@ extension StateExtension<T> on StateMixin<T> {
   /// This method provides a convenient way to build widgets based on the state's status.
   /// It takes a [NotifierBuilder] function as a parameter, which defines the widget to be built based on the state's value.
   Widget obx(
-    NotifierBuilder<T?> widget, {
+    NotifierBuilder<T> widget, {
     Widget Function(String? error)? onError,
     Widget? onLoading,
     Widget? onEmpty,
     WidgetBuilder? onCustom,
   }) =>
       Observer(
-        builder: (_) {
+        builder: (context) {
           if (status.isLoading) {
             return onLoading ??
                 const Center(child: CircularProgressIndicator());
@@ -271,7 +271,7 @@ extension StateExtension<T> on StateMixin<T> {
           } else if (status.isSuccess) {
             return widget(value);
           } else if (status.isCustom) {
-            return onCustom?.call(_) ?? const SizedBox.shrink();
+            return onCustom?.call(context) ?? const SizedBox.shrink();
           }
           return widget(value);
         },
@@ -346,13 +346,23 @@ extension StatusDataExtension<T, S> on GetStatus<T> {
   /// Checks if the status is a custom status.
   bool get isCustom => !isLoading && !isSuccess && !isError && !isEmpty;
 
+  dynamic get error {
+    if (this is ErrorStatus) {
+      return (this as ErrorStatus).error;
+    }
+    return null;
+  }
+
   /// Gets the error message associated with the status.
   String get errorMessage {
     final bool isError = this is ErrorStatus;
     if (isError) {
       final ErrorStatus<T, S> err = this as ErrorStatus<T, S>;
-      if (err.error != null && err.error is String) {
-        return err.error! as String;
+      if (err.error != null) {
+        if (err.error is String) {
+          return err.error as String;
+        }
+        return err.error.toString();
       }
     }
     return "";

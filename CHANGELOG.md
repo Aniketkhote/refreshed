@@ -1,3 +1,7 @@
+## 2.9.0
+
+- Up to date with Getx package.
+
 ## 2.8.1
 
 - Fixed futurize empty state handling by correctly triggering `onEmpty` when the result is neither `null` nor has data.

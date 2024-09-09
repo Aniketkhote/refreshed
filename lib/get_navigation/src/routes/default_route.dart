@@ -86,9 +86,8 @@ class GetPageRoute<T> extends PageRoute<T>
     this.maintainState = true,
     super.fullscreenDialog,
     this.middlewares,
-  }) : bindings = (binding == null)
-            ? bindings
-            : <BindingsInterface>[...bindings, binding];
+  })  : bindings = (binding == null) ? bindings : [...bindings, binding],
+        _middlewareRunner = MiddlewareRunner(middlewares);
 
   @override
   final Duration transitionDuration;
@@ -125,11 +124,12 @@ class GetPageRoute<T> extends PageRoute<T>
   @override
   final bool maintainState;
 
+  final MiddlewareRunner _middlewareRunner;
+
   @override
   void dispose() {
     super.dispose();
-    final MiddlewareRunner middlewareRunner = MiddlewareRunner(middlewares);
-    middlewareRunner.runOnPageDispose();
+    _middlewareRunner.runOnPageDispose();
     _child = null;
   }
 
@@ -139,15 +139,14 @@ class GetPageRoute<T> extends PageRoute<T>
     if (_child != null) {
       return _child!;
     }
-    final MiddlewareRunner middlewareRunner = MiddlewareRunner(middlewares);
 
     final List<Bind> localBinds = <Bind>[if (binds != null) ...binds!];
 
-    final List<Object>? bindingsToBind = middlewareRunner
+    final List<Object>? bindingsToBind = _middlewareRunner
         .runOnBindingsStart(bindings.isNotEmpty ? bindings : localBinds);
 
     final GetPageBuilder pageToBuild =
-        middlewareRunner.runOnPageBuildStart(page)!;
+        _middlewareRunner.runOnPageBuildStart(page)!;
 
     if (bindingsToBind != null && bindingsToBind.isNotEmpty) {
       if (bindingsToBind is List<BindingsInterface>) {
@@ -156,19 +155,19 @@ class GetPageRoute<T> extends PageRoute<T>
           if (dep is List<Bind>) {
             _child = Binds(
               binds: dep,
-              child: middlewareRunner.runOnPageBuilt(pageToBuild()),
+              child: _middlewareRunner.runOnPageBuilt(pageToBuild()),
             );
           }
         }
       } else if (bindingsToBind is List<Bind>) {
         _child = Binds(
           binds: bindingsToBind,
-          child: middlewareRunner.runOnPageBuilt(pageToBuild()),
+          child: _middlewareRunner.runOnPageBuilt(pageToBuild()),
         );
       }
     }
 
-    return _child ??= middlewareRunner.runOnPageBuilt(pageToBuild());
+    return _child ??= _middlewareRunner.runOnPageBuilt(pageToBuild());
   }
 
   @override

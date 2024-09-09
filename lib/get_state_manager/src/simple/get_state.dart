@@ -714,11 +714,12 @@ class BindError<T> extends Error {
 
   @override
   String toString() {
-    if (controller == "dynamic") {
+    final type = T.toString();
+    if (type == "dynamic") {
       return """Error: please specify type [<T>] when calling context.listen<T>() or context.find<T>() method.""";
     }
 
-    return """Error: No Bind<$controller> ancestor found. To fix this, please add a Bind<$controller> widget ancestor to the current context.""";
+    return """Error: No Bind<$type> ancestor found. To fix this, please add a Bind<$type> widget ancestor to the current context.""";
   }
 }
 

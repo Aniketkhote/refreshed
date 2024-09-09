@@ -1,20 +1,67 @@
-import "dart:async";
+// ignore_for_file: overridden_fields
 
-import "package:flutter/foundation.dart";
-import "package:flutter/material.dart";
-import "package:refreshed/refreshed.dart";
+import 'dart:async';
 
-/// A page configuration for a route within the GetX navigation system.
-///
-/// This class extends [Page] and provides additional properties and methods specific to GetX routing.
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+import '../../../get_instance/src/bindings_interface.dart';
+import '../../../get_state_manager/src/simple/get_state.dart';
+import '../../get_navigation.dart';
+
 class GetPage<T> extends Page<T> {
-  /// Creates a [GetPage] with the specified configuration.
+  final GetPageBuilder page;
+  final bool? popGesture;
+  final Map<String, String>? parameters;
+  final String? title;
+  final Transition? transition;
+  final Curve curve;
+  final bool? participatesInRootNavigator;
+  final Alignment? alignment;
+  final bool maintainState;
+  final bool opaque;
+  final double Function(BuildContext context)? gestureWidth;
+  final BindingsInterface? binding;
+  final List<BindingsInterface> bindings;
+  final List<Bind> binds;
+  final CustomTransition? customTransition;
+  final Duration? transitionDuration;
+  final Duration? reverseTransitionDuration;
+  final bool fullscreenDialog;
+  final bool preventDuplicates;
+  final Completer<T?>? completer;
+  // @override
+  // final LocalKey? key;
+
+  // @override
+  // RouteSettings get settings => this;
+
+  @override
+  final Object? arguments;
+
+  @override
+  final String name;
+
+  final bool inheritParentPath;
+
+  final List<GetPage> children;
+  final List<GetMiddleware> middlewares;
+  final PathDecoded path;
+  final GetPage? unknownRoute;
+  final bool showCupertinoParallax;
+
+  final PreventDuplicateHandlingMode preventDuplicateHandlingMode;
+
+  static void _defaultPopInvokedHandler(bool didPop, Object? result) {}
+
   GetPage({
     required this.name,
     required this.page,
     this.title,
     this.participatesInRootNavigator,
     this.gestureWidth,
+    // RouteSettings settings,
     this.maintainState = true,
     this.curve = Curves.linear,
     this.alignment,
@@ -24,13 +71,13 @@ class GetPage<T> extends Page<T> {
     this.reverseTransitionDuration,
     this.popGesture,
     this.binding,
-    this.bindings = const <BindingsInterface<dynamic>>[],
-    this.binds = const <Bind<dynamic>>[],
+    this.bindings = const [],
+    this.binds = const [],
     this.transition,
     this.customTransition,
     this.fullscreenDialog = false,
-    this.children = const <GetPage<dynamic>>[],
-    this.middlewares = const <GetMiddleware<dynamic>>[],
+    this.children = const <GetPage>[],
+    this.middlewares = const [],
     this.unknownRoute,
     this.arguments,
     this.showCupertinoParallax = true,
@@ -40,105 +87,19 @@ class GetPage<T> extends Page<T> {
     this.completer,
     this.inheritParentPath = true,
     LocalKey? key,
+    super.canPop,
+    super.onPopInvoked = _defaultPopInvokedHandler,
+    super.restorationId,
   })  : path = _nameToRegex(name),
-        assert(
-          name.startsWith("/"),
-          "It is necessary to start route name [$name] with a slash: /$name",
-        ),
+        assert(name.startsWith('/'),
+            'It is necessary to start route name [$name] with a slash: /$name'),
         super(
-          key: key ?? ValueKey<String>(name),
+          key: key ?? ValueKey(name),
           name: name,
+          // arguments: Get.arguments,
         );
+  // settings = RouteSettings(name: name, arguments: Get.arguments);
 
-  /// The builder function that returns the widget for the route.
-  final GetPageBuilder page;
-
-  /// Whether the route should support pop gesture to navigate back.
-  final bool? popGesture;
-
-  /// Parameters associated with the route.
-  final Map<String, String>? parameters;
-
-  /// The title of the route.
-  final String? title;
-
-  /// The transition animation to use when navigating to the route.
-  final Transition? transition;
-
-  /// The animation curve for the transition.
-  final Curve curve;
-
-  /// Whether the route should be displayed as a fullscreen dialog.
-  final bool? participatesInRootNavigator;
-
-  /// The alignment of the route within the screen.
-  final Alignment? alignment;
-
-  /// Whether the route should maintain its state when pushed or popped.
-  final bool maintainState;
-
-  /// Whether the route should obscure the entire screen.
-  final bool opaque;
-
-  /// The width of the gesture area for edge-swipe navigation.
-  final double Function(BuildContext context)? gestureWidth;
-
-  /// The bindings to be associated with the route.
-  final BindingsInterface<dynamic>? binding;
-
-  /// Additional bindings to be associated with the route.
-  final List<BindingsInterface<dynamic>> bindings;
-
-  /// Data binding configurations for the route.
-  final List<Bind<dynamic>> binds;
-
-  /// Custom transition animation for the route.
-  final CustomTransition? customTransition;
-
-  /// The duration of the transition animation.
-  final Duration? transitionDuration;
-
-  /// The duration of the reverse transition animation.
-  final Duration? reverseTransitionDuration;
-
-  /// Whether the route should be displayed as a fullscreen dialog.
-  final bool fullscreenDialog;
-
-  /// Whether to prevent duplicate routes.
-  final bool preventDuplicates;
-
-  /// A completer for the route.
-  final Completer<T?>? completer;
-
-  @override
-  final Object? arguments;
-
-  /// The route name.
-  @override
-  final String name;
-
-  /// Whether to inherit the parent path for nested routes.
-  final bool inheritParentPath;
-
-  /// The nested routes.
-  final List<GetPage<dynamic>> children;
-
-  /// Middlewares for the route.
-  final List<GetMiddleware<dynamic>> middlewares;
-
-  /// The path regex for the route.
-  final PathDecoded path;
-
-  /// The unknown route for handling navigation to undefined routes.
-  final GetPage<dynamic>? unknownRoute;
-
-  /// Whether to show the Cupertino-style parallax effect for iOS.
-  final bool showCupertinoParallax;
-
-  /// The handling mode for preventing duplicate routes.
-  final PreventDuplicateHandlingMode preventDuplicateHandlingMode;
-
-  /// Creates a copy of this [GetPage] with the given fields replaced by the new values.
   GetPage<T> copyWith({
     LocalKey? key,
     String? name,
@@ -151,62 +112,70 @@ class GetPage<T> extends Page<T> {
     Alignment? alignment,
     bool? maintainState,
     bool? opaque,
-    List<BindingsInterface<dynamic>>? bindings,
-    BindingsInterface<T>? binding,
-    List<Bind<dynamic>>? binds,
+    List<BindingsInterface>? bindings,
+    BindingsInterface? binding,
+    List<Bind>? binds,
     CustomTransition? customTransition,
     Duration? transitionDuration,
     Duration? reverseTransitionDuration,
     bool? fullscreenDialog,
     RouteSettings? settings,
     List<GetPage<T>>? children,
-    GetPage<dynamic>? unknownRoute,
-    List<GetMiddleware<dynamic>>? middlewares,
+    GetPage? unknownRoute,
+    List<GetMiddleware>? middlewares,
     bool? preventDuplicates,
-    double Function(BuildContext context)? gestureWidth,
+    final double Function(BuildContext context)? gestureWidth,
     bool? participatesInRootNavigator,
     Object? arguments,
     bool? showCupertinoParallax,
     Completer<T?>? completer,
     bool? inheritParentPath,
-  }) =>
-      GetPage<T>(
-        key: key ?? this.key,
-        participatesInRootNavigator:
-            participatesInRootNavigator ?? this.participatesInRootNavigator,
-        preventDuplicates: preventDuplicates ?? this.preventDuplicates,
-        name: name ?? this.name,
-        page: page ?? this.page,
-        popGesture: popGesture ?? this.popGesture,
-        parameters: parameters ?? this.parameters,
-        title: title ?? this.title,
-        transition: transition ?? this.transition,
-        curve: curve ?? this.curve,
-        alignment: alignment ?? this.alignment,
-        maintainState: maintainState ?? this.maintainState,
-        opaque: opaque ?? this.opaque,
-        bindings: bindings ?? this.bindings,
-        binds: binds ?? this.binds,
-        binding: binding ?? this.binding,
-        customTransition: customTransition ?? this.customTransition,
-        transitionDuration: transitionDuration ?? this.transitionDuration,
-        reverseTransitionDuration:
-            reverseTransitionDuration ?? this.reverseTransitionDuration,
-        fullscreenDialog: fullscreenDialog ?? this.fullscreenDialog,
-        children: children ?? this.children,
-        unknownRoute: unknownRoute ?? this.unknownRoute,
-        middlewares: middlewares ?? this.middlewares,
-        gestureWidth: gestureWidth ?? this.gestureWidth,
-        arguments: arguments ?? this.arguments,
-        showCupertinoParallax:
-            showCupertinoParallax ?? this.showCupertinoParallax,
-        completer: completer ?? this.completer,
-        inheritParentPath: inheritParentPath ?? this.inheritParentPath,
-      );
+    bool? canPop,
+    PopInvokedWithResultCallback<T>? onPopInvoked,
+    String? restorationId,
+  }) {
+    return GetPage(
+      key: key ?? this.key,
+      participatesInRootNavigator:
+          participatesInRootNavigator ?? this.participatesInRootNavigator,
+      preventDuplicates: preventDuplicates ?? this.preventDuplicates,
+      name: name ?? this.name,
+      page: page ?? this.page,
+      popGesture: popGesture ?? this.popGesture,
+      parameters: parameters ?? this.parameters,
+      title: title ?? this.title,
+      transition: transition ?? this.transition,
+      curve: curve ?? this.curve,
+      alignment: alignment ?? this.alignment,
+      maintainState: maintainState ?? this.maintainState,
+      opaque: opaque ?? this.opaque,
+      bindings: bindings ?? this.bindings,
+      binds: binds ?? this.binds,
+      binding: binding ?? this.binding,
+      customTransition: customTransition ?? this.customTransition,
+      transitionDuration: transitionDuration ?? this.transitionDuration,
+      reverseTransitionDuration:
+          reverseTransitionDuration ?? this.reverseTransitionDuration,
+      fullscreenDialog: fullscreenDialog ?? this.fullscreenDialog,
+      children: children ?? this.children,
+      unknownRoute: unknownRoute ?? this.unknownRoute,
+      middlewares: middlewares ?? this.middlewares,
+      gestureWidth: gestureWidth ?? this.gestureWidth,
+      arguments: arguments ?? this.arguments,
+      showCupertinoParallax:
+          showCupertinoParallax ?? this.showCupertinoParallax,
+      completer: completer ?? this.completer,
+      inheritParentPath: inheritParentPath ?? this.inheritParentPath,
+      canPop: canPop ?? this.canPop,
+      onPopInvoked: onPopInvoked ?? this.onPopInvoked,
+      restorationId: restorationId ?? restorationId,
+    );
+  }
 
   @override
   Route<T> createRoute(BuildContext context) {
-    final GetPageRoute<T> page = PageRedirect(
+    // return GetPageRoute<T>(settings: this, page: page);
+    final page = PageRedirect(
       route: this,
       settings: this,
       unknownRoute: unknownRoute,
@@ -216,35 +185,29 @@ class GetPage<T> extends Page<T> {
   }
 
   static PathDecoded _nameToRegex(String path) {
-    final List<String?> keys = <String?>[];
+    var keys = <String?>[];
 
     String recursiveReplace(Match pattern) {
-      final StringBuffer buffer = StringBuffer("(?:");
+      var buffer = StringBuffer('(?:');
 
-      if (pattern[1] != null) {
-        buffer.write(".");
-      }
-      buffer.write(r"([\w%+-._~!$&'()*,;=:@]+))");
-      if (pattern[3] != null) {
-        buffer.write("?");
-      }
+      if (pattern[1] != null) buffer.write('.');
+      buffer.write('([\\w%+-._~!\$&\'()*,;=:@]+))');
+      if (pattern[3] != null) buffer.write('?');
 
       keys.add(pattern[2]);
       return "$buffer";
     }
 
-    final String stringPath = "$path/?"
-        .replaceAllMapped(RegExp(r"(\.)?:(\w+)(\?)?"), recursiveReplace)
-        .replaceAll("//", "/");
+    var stringPath = '$path/?'
+        .replaceAllMapped(RegExp(r'(\.)?:(\w+)(\?)?'), recursiveReplace)
+        .replaceAll('//', '/');
 
-    return PathDecoded(RegExp("^$stringPath\$"), keys);
+    return PathDecoded(RegExp('^$stringPath\$'), keys);
   }
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
+    if (identical(this, other)) return true;
     return other is GetPage<T> && other.key == key;
   }
 
@@ -253,30 +216,25 @@ class GetPage<T> extends Page<T> {
       '${objectRuntimeType(this, 'Page')}("$name", $key, $arguments)';
 
   @override
-  int get hashCode => key.hashCode;
+  int get hashCode {
+    return key.hashCode;
+  }
 }
 
-/// Represents a decoded path pattern used for route matching.
 @immutable
 class PathDecoded {
-  /// Creates a [PathDecoded] with the specified regex and keys.
-  const PathDecoded(this.regex, this.keys);
-
-  /// The regular expression used for route matching.
   final RegExp regex;
-
-  /// The list of keys extracted from the path pattern.
   final List<String?> keys;
+  const PathDecoded(this.regex, this.keys);
 
   @override
   int get hashCode => regex.hashCode;
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
+    if (identical(this, other)) return true;
 
-    return other is PathDecoded && other.regex == regex;
+    return other is PathDecoded &&
+        other.regex == regex; // && listEquals(other.keys, keys);
   }
 }
