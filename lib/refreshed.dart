@@ -2,7 +2,7 @@
 ///
 /// This library exports various sub-modules and utilities that can be used to build Flutter applications
 /// with improved state management, navigation handling, animation effects, and other functionalities.
-library refreshed;
+library;
 
 export "get_core/get_core.dart";
 export "get_core/src/get_reset.dart";

@@ -19,7 +19,7 @@
 /// This library is part of the GetX state management solution for Flutter,
 /// providing a simple and efficient way to manage application state and build
 /// reactive user interfaces.
-library rx_types;
+library;
 
 import "dart:async";
 import "dart:collection";

@@ -2,7 +2,7 @@
 /// It exports essential components such as the Flutter engine integration,
 /// interfaces, main functionalities, logging utilities, smart management features,
 /// and various type definitions.
-library get_core;
+library;
 
 export "src/flutter_engine.dart";
 export "src/get_interface.dart";

@@ -2,7 +2,7 @@
 ///
 /// This includes features such as bottom sheets, route management,
 /// internationalization support, custom transitions, and snackbar display.
-library get_navigation;
+library;
 
 export "src/bottomsheet/bottomsheet.dart";
 export "src/navigation_extension.dart";
