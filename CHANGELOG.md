@@ -1,3 +1,8 @@
+## 2.10.0
+
+- Removed `Get.backLegacy()` method
+- Updated package compatibility to support Flutter version `3.27.0`
+
 ## 2.9.0
 
 - Up to date with Getx package.

@@ -50,7 +50,7 @@ void main() {
 
     expect(find.byType(YourDialogWidget), findsOneWidget);
 
-    Get.backLegacy();
+    Get.close();
     await tester.pumpAndSettle();
 
     expect(find.byType(YourDialogWidget), findsNothing);

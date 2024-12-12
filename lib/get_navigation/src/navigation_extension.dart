@@ -443,7 +443,7 @@ extension ExtensionSnackbar on GetInterface {
         margin: margin ?? const EdgeInsets.symmetric(horizontal: 10),
         duration: duration,
         barBlur: barBlur ?? 7.0,
-        backgroundColor: backgroundColor ?? Colors.grey.withOpacity(0.2),
+        backgroundColor: backgroundColor ?? Colors.grey.withValues(alpha: 0.2),
         icon: icon,
         shouldIconPulse: shouldIconPulse ?? true,
         maxWidth: maxWidth,
@@ -824,47 +824,6 @@ extension GetNavigationExt on GetInterface {
         }
       } else {
         return searchDelegate(id).back<T>(result);
-      }
-    }
-  }
-
-  /// Pop the current page, snackbar, dialog or bottomsheet in the stack
-  ///
-  /// if your set [closeOverlays] to true, Get.back() will close the
-  /// currently open snackbar/dialog/bottomsheet AND the current page
-  ///
-  /// [id] is for when you are using nested navigation,
-  /// as explained in documentation
-  ///
-  /// It has the advantage of not needing context, so you can call
-  /// from your business logic.
-  void backLegacy<T>({
-    T? result,
-    bool closeOverlays = false,
-    bool canPop = true,
-    int times = 1,
-    String? id,
-  }) {
-    if (closeOverlays) {
-      closeAllOverlays();
-    }
-
-    if (times < 1) {
-      times = 1;
-    }
-
-    if (times > 1) {
-      var count = 0;
-      return searchDelegate(id).navigatorKey.currentState?.popUntil((route) {
-        return count++ == times;
-      });
-    } else {
-      if (canPop) {
-        if (searchDelegate(id).navigatorKey.currentState?.canPop() == true) {
-          return searchDelegate(id).navigatorKey.currentState?.pop<T>(result);
-        }
-      } else {
-        return searchDelegate(id).navigatorKey.currentState?.pop<T>(result);
       }
     }
   }

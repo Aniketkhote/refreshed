@@ -529,8 +529,7 @@ void main() {
     expect(find.byType(FirstScreen), findsOneWidget);
   });
 
-  testWidgets(
-      "Get.back with closeOverlays pops both snackbar and current route",
+  testWidgets("Get.back with Get.close pops both snackbar and current route",
       (tester) async {
     await tester.pumpWidget(
       Wrapper(
@@ -547,7 +546,8 @@ void main() {
     await tester.pumpAndSettle();
     Get.snackbar('title', "message");
     await tester.pumpAndSettle();
-    Get.backLegacy(closeOverlays: true);
+    Get.back();
+    Get.close();
 
     await tester.pumpAndSettle();
 

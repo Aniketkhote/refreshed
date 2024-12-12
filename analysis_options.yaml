@@ -2,4 +2,5 @@ analyzer:
   errors:
     no_wildcard_variable_uses: ignore
     overridden_fields: ignore
+    unintended_html_in_doc_comment: ignore
 include: package:flutter_lints/flutter.yaml

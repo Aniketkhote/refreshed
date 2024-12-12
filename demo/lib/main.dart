@@ -43,7 +43,7 @@ class MyController extends GetxController {
   }
 
   Future<void> closeSheet() async {
-    Get.backLegacy();
+    Get.close();
   }
 }
 

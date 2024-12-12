@@ -54,7 +54,7 @@ void main() {
 
     expect(Get.isBottomSheetOpen, true);
 
-    Get.backLegacy();
+    Get.close();
     await tester.pumpAndSettle();
 
     expect(Get.isBottomSheetOpen, false);
