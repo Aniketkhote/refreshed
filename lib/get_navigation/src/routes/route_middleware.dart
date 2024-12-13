@@ -192,8 +192,6 @@ class PageRedirect {
       transitionDuration: r.transitionDuration ?? Get.defaultTransitionDuration,
       reverseTransitionDuration:
           r.reverseTransitionDuration ?? Get.defaultTransitionDuration,
-      // performIncomeAnimation: _r.performIncomeAnimation,
-      // performOutGoingAnimation: _r.performOutGoingAnimation,
       transition: r.transition,
       popGesture: r.popGesture,
       fullscreenDialog: r.fullscreenDialog,

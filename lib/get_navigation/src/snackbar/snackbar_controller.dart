@@ -106,8 +106,10 @@ class SnackbarController {
   void _configureSnackBarDisplay() {
     assert(
       !_transitionCompleter.isCompleted,
-      "Cannot configure a snackbar after disposing it.",
+      "Snackbar configuration cannot be modified after it has been disposed. "
+      "Ensure that you are not attempting to configure a snackbar after it has been closed or removed from the widget tree.",
     );
+
     _controller = _createAnimationController();
     _configureAlignment(snackbar.snackPosition);
     _snackbarStatus = snackbar.snackbarStatus;
@@ -138,8 +140,10 @@ class SnackbarController {
   Animation<Alignment> _createAnimation() {
     assert(
       !_transitionCompleter.isCompleted,
-      "Cannot create a animation from a disposed snackbar",
+      "Cannot create or modify an animation for a snackbar that has already been disposed. "
+      "Ensure the snackbar is still active before attempting to configure its animation.",
     );
+
     return AlignmentTween(begin: _initialAlignment, end: _endAlignment).animate(
       CurvedAnimation(
         parent: _controller,
@@ -155,8 +159,10 @@ class SnackbarController {
   AnimationController _createAnimationController() {
     assert(
       !_transitionCompleter.isCompleted,
-      "Cannot create a animationController from a disposed snackbar",
+      "Cannot create an animationController for a snackbar that has already been disposed. "
+      "Ensure the snackbar is still active before attempting to create an animationController.",
     );
+
     assert(snackbar.animationDuration >= Duration.zero);
     return AnimationController(
       duration: snackbar.animationDuration,
@@ -309,7 +315,8 @@ class SnackbarController {
   void _removeEntry() {
     assert(
       !_transitionCompleter.isCompleted,
-      "Cannot remove entry from a disposed snackbar",
+      "Cannot remove an entry from a snackbar that has already been disposed. "
+      "Ensure the snackbar is still active before attempting to remove it.",
     );
 
     _cancelTimer();
@@ -331,8 +338,10 @@ class SnackbarController {
 
     assert(
       !_transitionCompleter.isCompleted,
-      "Cannot remove overlay from a disposed snackbar",
+      "Cannot remove the overlay from a snackbar that has already been disposed. "
+      "Ensure the snackbar is still active before attempting to remove the overlay.",
     );
+
     _controller.dispose();
     _overlayEntries.clear();
     _transitionCompleter.complete();

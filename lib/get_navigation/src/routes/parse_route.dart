@@ -56,14 +56,6 @@ class RouteDecoder {
     }
   }
 
-  // void replaceArguments(Object? arguments) {
-  //   final newRoute = route;
-  //   if (newRoute != null) {
-  //     final index = currentTreeBranch.indexOf(newRoute);
-  //     currentTreeBranch[index] = newRoute.copyWith(arguments: arguments);
-  //   }
-  // }
-
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;

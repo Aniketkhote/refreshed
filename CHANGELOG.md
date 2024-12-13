@@ -1,3 +1,7 @@
+## 2.10.1
+
+- Enhanced log and exception messages for improved clarity and troubleshooting.
+
 ## 2.10.0
 
 - Removed `Get.backLegacy()` method

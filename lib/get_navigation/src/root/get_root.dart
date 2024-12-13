@@ -300,9 +300,11 @@ class GetRoot extends StatefulWidget {
     assert(() {
       if (root == null) {
         throw FlutterError(
-          'GetRoot operation requested with a context that does not include a GetRoot.\n'
-          'The context used must be that of a '
-          'widget that is a descendant of a GetRoot widget.',
+          'GetRoot operation requested with a context that does not include a GetRoot widget.\n'
+          'Ensure that the context used is a descendant of a GetRoot widget. This typically means '
+          'that the GetRoot widget is missing from your widget tree or the current context is not '
+          'properly linked to it. Please check your widget hierarchy and ensure that GetRoot is properly '
+          'set up in your app.',
         );
       }
       return true;
@@ -315,7 +317,11 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   static GetRootState? _controller;
   static GetRootState get controller {
     if (_controller == null) {
-      throw Exception('GetRoot is not part of the three');
+      throw Exception(
+        'GetRoot is not part of the widget tree.\n'
+        'Ensure that GetRoot is properly included in the widget tree as an ancestor widget. '
+        'The context used must be a descendant of a GetRoot widget for the operation to work correctly.',
+      );
     } else {
       return _controller!;
     }
@@ -360,7 +366,10 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
 
   void onInit() {
     if (config.getPages == null && config.home == null) {
-      throw 'You need add pages or home';
+      throw Exception(
+        'You must specify either "getPages" or "home" in the configuration.\n'
+        'Please provide one of these to define the navigation structure for your app.',
+      );
     }
 
     if (config.routerDelegate == null) {

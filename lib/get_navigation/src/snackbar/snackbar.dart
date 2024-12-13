@@ -384,7 +384,8 @@ class GetSnackBarState extends State<GetSnackBar>
       widget.userInputForm != null ||
           ((widget.message != null && widget.message!.isNotEmpty) ||
               widget.messageText != null),
-      "You need to either use message[String], or messageText[Widget] or define a userInputForm[Form] in GetSnackbar",
+      "You must provide either a message (String), a messageText (Widget), or a userInputForm (Form) in GetSnackbar. "
+      "Ensure at least one of these properties is defined.",
     );
 
     _isTitlePresent = widget.title != null || widget.titleText != null;
