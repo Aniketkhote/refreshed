@@ -25,24 +25,6 @@ This is a refreshed version of GetX, aimed at enhancing the robustness, reliabil
 
 ---
 
-# Changes Made in Package
-
-This README outlines the changes made to the package from its original GetX package to the refreshed version.
-
-## Decoupling of `get_connect` to `connectify`
-
-One significant change is the decoupling of `get_connect` to `connectify`. This alteration aims to streamline the connectivity-related functionalities within the package.
-
-## Removal of Animation Classes, Widget, Num, Duration and the responsive Extensions
-
-The animation classes, widget extensions, as well as num and duration extensions, have been removed from this package. Instead, we have integrated the Quickly package, which offers a plethora of utility and extension methods, allowing for faster and more efficient development.
-
-## Shift in Focus
-
-Our primary focus has shifted towards enhancing dependency injection, state management, and routing functionalities within the package. These areas are crucial for building robust and scalable applications, and we are committed to improving them further.
-
----
-
 ## Get Started
 
 To get started with the refreshed version of GetX, simply include it as a dependency in your Flutter project and follow the updated documentation to explore its features and capabilities.
@@ -50,5 +32,3 @@ To get started with the refreshed version of GetX, simply include it as a depend
 For more information about GetX, please visit the [original GetX package](https://github.com/jonataslaw/getx).
 
 We understand that starting out in Flutter can be challenging, and we're here to support you on your journey. Your feedback and contributions are valuable to us as we strive to make GetX more accessible and useful for developers of all skill levels. Together, let's create amazing Flutter applications with GetX! Happy coding!
-
-**Note**: As a newcomer to Flutter and Dart ecosystem, your input is invaluable in shaping the future of GetX. Your experiences and insights help us tailor the library to better suit the needs of developers at all skill levels. Don't hesitate to reach out with your questions, suggestions, or ideas for improvement. We're here to help you become a proficient developer with GetX!
