@@ -56,148 +56,26 @@ class Menu extends StatelessWidget {
     return Scaffold(
       body: ListView(
         shrinkWrap: true,
-        children: [
-          ListTile(
+        children: List.generate(
+          20,
+          (index) => ListTile(
             onTap: () {
               ctrl.closeSheet();
+              Get.snackbar("Success", 'Deleted post ${index + 1}');
+              // Get.showSnackbar(GetSnackBar(
+              //   message: 'Deleted post ${index + 1}',
+              // ));
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(content: Text('This is a SnackBar')),
+              // );
             },
             leading: const Icon(
               Icons.delete,
               color: Colors.red,
             ),
-            title: const Text('Delete post'),
+            title: Text('Delete post ${index + 1}'),
           ),
-          ListTile(
-            onTap: () {
-              ctrl.closeSheet();
-            },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            title: const Text('Delete post'),
-          ),
-          ListTile(
-            onTap: () {
-              ctrl.closeSheet();
-            },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            title: const Text('Delete post'),
-          ),
-          ListTile(
-            onTap: () {
-              ctrl.closeSheet();
-            },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            title: const Text('Delete post'),
-          ),
-          ListTile(
-            onTap: () {
-              ctrl.closeSheet();
-            },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            title: const Text('Delete post'),
-          ),
-          ListTile(
-            onTap: () {
-              ctrl.closeSheet();
-            },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            title: const Text('Delete post'),
-          ),
-          ListTile(
-            onTap: () {
-              ctrl.closeSheet();
-            },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            title: const Text('Delete post'),
-          ),
-          ListTile(
-            onTap: () {
-              ctrl.closeSheet();
-            },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            title: const Text('Delete post'),
-          ),
-          ListTile(
-            onTap: () {
-              ctrl.closeSheet();
-            },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            title: const Text('Delete post'),
-          ),
-          ListTile(
-            onTap: () {
-              ctrl.closeSheet();
-            },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            title: const Text('Delete post'),
-          ),
-          ListTile(
-            onTap: () {
-              ctrl.closeSheet();
-            },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            title: const Text('Delete post'),
-          ),
-          ListTile(
-            onTap: () {
-              ctrl.closeSheet();
-            },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            title: const Text('Delete post'),
-          ),
-          ListTile(
-            onTap: () {
-              ctrl.closeSheet();
-            },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            title: const Text('Delete post'),
-          ),
-          ListTile(
-            onTap: () {
-              ctrl.closeSheet();
-            },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            title: const Text('Delete post'),
-          ),
-        ],
+        ),
       ),
     );
   }

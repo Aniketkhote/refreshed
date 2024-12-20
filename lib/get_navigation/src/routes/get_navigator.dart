@@ -7,22 +7,13 @@ class GetNavigator extends Navigator {
   GetNavigator({
     required List<GetPage> super.pages,
     super.key,
-    bool Function(Route<dynamic>, dynamic)? onPopPage,
+    super.onPopPage,
     List<NavigatorObserver>? observers,
     super.reportsRouteUpdateToEngine,
     TransitionDelegate? transitionDelegate,
     super.initialRoute,
     super.restorationScopeId,
   }) : super(
-          //keys should be optional
-          onPopPage: onPopPage ??
-              (Route route, result) {
-                final bool didPop = route.didPop(result);
-                if (!didPop) {
-                  return false;
-                }
-                return true;
-              },
           observers: <NavigatorObserver>[
             // GetObserver(null, Get.routing),
             HeroController(),
@@ -34,22 +25,13 @@ class GetNavigator extends Navigator {
   GetNavigator.onGenerateRoute({
     required List<GetPage> super.pages,
     GlobalKey<NavigatorState>? super.key,
-    bool Function(Route<dynamic>, dynamic)? onPopPage,
+    super.onPopPage,
     List<NavigatorObserver>? observers,
     super.reportsRouteUpdateToEngine,
     TransitionDelegate? transitionDelegate,
     super.initialRoute,
     super.restorationScopeId,
   }) : super(
-          //keys should be optional
-          onPopPage: onPopPage ??
-              (Route route, result) {
-                final bool didPop = route.didPop(result);
-                if (!didPop) {
-                  return false;
-                }
-                return true;
-              },
           onGenerateRoute: (RouteSettings settings) {
             final Iterable<GetPage> selectedPageList =
                 pages.where((GetPage element) => element.name == settings.name);

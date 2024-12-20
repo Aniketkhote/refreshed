@@ -17,7 +17,7 @@ extension ExtensionBottomSheet on GetInterface {
     Widget bottomsheet, {
     Color? backgroundColor,
     double? elevation,
-    bool persistent = true,
+    bool isPersistent = false,
     ShapeBorder? shape,
     Clip? clipBehavior,
     Color? barrierColor,
@@ -26,6 +26,7 @@ extension ExtensionBottomSheet on GetInterface {
     bool useRootNavigator = false,
     bool isDismissible = true,
     bool enableDrag = true,
+    bool showDragHandle = true,
     RouteSettings? settings,
     Duration? enterBottomSheetDuration,
     Duration? exitBottomSheetDuration,
@@ -34,15 +35,13 @@ extension ExtensionBottomSheet on GetInterface {
     return Navigator.of(overlayContext!, rootNavigator: useRootNavigator)
         .push(GetModalBottomSheetRoute<T>(
       builder: (_) => bottomsheet,
-      isPersistent: persistent,
-      // theme: Theme.of(key.currentContext, shadowThemeOnly: true),
+      isPersistent: isPersistent,
       theme: Theme.of(key.currentContext!),
       isScrollControlled: isScrollControlled,
-
       barrierLabel: MaterialLocalizations.of(key.currentContext!)
           .modalBarrierDismissLabel,
-
-      backgroundColor: backgroundColor ?? Colors.transparent,
+      backgroundColor:
+          backgroundColor ?? context!.theme.bottomSheetTheme.backgroundColor,
       elevation: elevation,
       shape: shape,
       removeTop: ignoreSafeArea ?? true,
@@ -51,6 +50,7 @@ extension ExtensionBottomSheet on GetInterface {
       modalBarrierColor: barrierColor,
       settings: settings,
       enableDrag: enableDrag,
+      showDragHandle: showDragHandle,
       enterBottomSheetDuration:
           enterBottomSheetDuration ?? const Duration(milliseconds: 250),
       exitBottomSheetDuration:
@@ -80,7 +80,6 @@ extension ExtensionDialog on GetInterface {
   }) {
     assert(debugCheckHasMaterialLocalizations(context!));
 
-    //  final theme = Theme.of(context, shadowThemeOnly: true);
     final theme = Theme.of(context!);
     return generalDialog<T>(
       pageBuilder: (buildContext, animation, secondaryAnimation) {

@@ -37,7 +37,7 @@ class GetSnackBar extends StatefulWidget {
     this.borderColor,
     this.borderWidth = 1.0,
     this.disableSelfAlignment = false,
-    this.backgroundColor = const Color(0xFF303030),
+    this.backgroundColor,
     this.leftBarIndicatorColor,
     this.boxShadows,
     this.backgroundGradient,
@@ -96,7 +96,7 @@ class GetSnackBar extends StatefulWidget {
   final Widget? messageText;
 
   /// Will be ignored if [backgroundGradient] is not null
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// If not null, shows a left vertical colored bar on notification.
   /// It is not possible to use it with a [Form] and I do not recommend
@@ -311,9 +311,8 @@ class GetSnackBarState extends State<GetSnackBar>
   }
 
   Material _snackBar(BuildContext context) => Material(
-        color: widget.snackStyle == SnackStyle.floating
-            ? Colors.transparent
-            : widget.backgroundColor,
+        color: widget.backgroundColor ??
+            context.theme.snackBarTheme.backgroundColor,
         child: SafeArea(
           minimum: widget.snackPosition == SnackPosition.bottom
               ? EdgeInsets.only(
@@ -344,7 +343,8 @@ class GetSnackBarState extends State<GetSnackBar>
                           height: snapshot.data!.height,
                           width: snapshot.data!.width,
                           decoration: BoxDecoration(
-                            color: Colors.transparent,
+                            color: widget.backgroundColor ??
+                                context.theme.snackBarTheme.backgroundColor,
                             borderRadius:
                                 BorderRadius.circular(widget.borderRadius),
                           ),
@@ -477,7 +477,8 @@ class GetSnackBarState extends State<GetSnackBar>
             ? BoxConstraints(maxWidth: widget.maxWidth!)
             : null,
         decoration: BoxDecoration(
-          color: widget.backgroundColor,
+          color: widget.backgroundColor ??
+              context.theme.snackBarTheme.backgroundColor,
           gradient: widget.backgroundGradient,
           boxShadow: widget.boxShadows,
           borderRadius: BorderRadius.circular(widget.borderRadius),
@@ -519,7 +520,8 @@ class GetSnackBarState extends State<GetSnackBar>
           ? BoxConstraints(maxWidth: widget.maxWidth!)
           : null,
       decoration: BoxDecoration(
-        color: widget.backgroundColor,
+        color: widget.backgroundColor ??
+            context.theme.snackBarTheme.backgroundColor,
         gradient: widget.backgroundGradient,
         boxShadow: widget.boxShadows,
         borderRadius: BorderRadius.circular(widget.borderRadius),
@@ -564,9 +566,9 @@ class GetSnackBarState extends State<GetSnackBar>
                         child: widget.titleText ??
                             Text(
                               widget.title ?? "",
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.white,
+                                color: context.textTheme.bodyLarge!.color,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -583,9 +585,9 @@ class GetSnackBarState extends State<GetSnackBar>
                       child: widget.messageText ??
                           Text(
                             widget.message ?? "",
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
-                              color: Colors.white,
+                              color: context.textTheme.bodyLarge!.color,
                             ),
                           ),
                     ),

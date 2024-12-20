@@ -1,6 +1,8 @@
 ## 2.10.1
 
-- Enhanced log and exception messages for improved clarity and troubleshooting.
+- Improved log and exception messages for easier troubleshooting and better understanding of issues.
+- Set the default background color of the bottom sheet to `bottomSheetTheme.backgroundColor`.
+- Renamed `persistent` to `isPersistent` for clearer and more intuitive naming.
 
 ## 2.10.0
 
