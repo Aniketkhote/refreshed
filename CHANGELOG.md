@@ -1,5 +1,11 @@
 ## 2.10.1
 
+- Improved RxIterable methods
+- `addIf()` and `addAllIf()` methods now conditionally add elements based on simple bool checks
+- Methods like add(), remove(), and clear() now consistently call refresh() to notify listeners of changes
+
+## 2.10.1
+
 - Improved log and exception messages for easier troubleshooting and better understanding of issues.
 - Set the default background color of the bottom sheet to `bottomSheetTheme.backgroundColor`.
 - Renamed `persistent` to `isPersistent` for clearer and more intuitive naming.

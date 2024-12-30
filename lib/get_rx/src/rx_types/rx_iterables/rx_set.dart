@@ -8,7 +8,6 @@ class RxSet<E> extends GetListenable<Set<E>>
   /// inside the List,
   RxSet<E> operator +(Set<E> val) {
     addAll(val);
-    //refresh();
     return this;
   }
 
@@ -16,22 +15,6 @@ class RxSet<E> extends GetListenable<Set<E>>
     fn(value);
     refresh();
   }
-
-  // @override
-  // @protected
-  // Set<E> get value {
-  //   return subject.value;
-  //   // RxInterface.proxy?.addListener(subject);
-  //   // return _value;
-  // }
-
-  // @override
-  // @protected
-  // set value(Set<E> val) {
-  //   if (value == val) return;
-  //   value = val;
-  //   refresh();
-  // }
 
   @override
   bool add(E value) {
@@ -98,35 +81,30 @@ class RxSet<E> extends GetListenable<Set<E>>
 }
 
 extension SetExtension<E> on Set<E> {
+  /// Converts the Set to a reactive RxSet.
   RxSet<E> get obs => RxSet<E>(<E>{})..addAll(this);
 
-  /// Add [item] to [List<E>] only if [condition] is true.
-  void addIf(condition, E item) {
-    if (condition is Condition) {
-      condition = condition();
-    }
-    if (condition is bool && condition) {
+  /// Add [item] to the Set only if [condition] is true.
+  void addIf(bool condition, E item) {
+    if (condition) {
       add(item);
     }
   }
 
-  /// Adds [Iterable<E>] to [List<E>] only if [condition] is true.
-  void addAllIf(condition, Iterable<E> items) {
-    if (condition is Condition) {
-      condition = condition();
-    }
-    if (condition is bool && condition) {
+  /// Adds [Iterable<E>] to the Set only if [condition] is true.
+  void addAllIf(bool condition, Iterable<E> items) {
+    if (condition) {
       addAll(items);
     }
   }
 
-  /// Replaces all existing items of this list with [item]
+  /// Replaces all existing items of this Set with [item]
   void assign(E item) {
     clear();
     add(item);
   }
 
-  /// Replaces all existing items of this list with [items]
+  /// Replaces all existing items of this Set with [items]
   void assignAll(Iterable<E> items) {
     clear();
     addAll(items);

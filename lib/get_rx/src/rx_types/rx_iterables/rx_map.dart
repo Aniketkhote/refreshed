@@ -40,59 +40,54 @@ class RxMap<K, V> extends GetListenable<Map<K, V>>
     refresh();
     return val;
   }
+
+  // Ensure that the `refresh()` method is available for the `RxMap` class
+  @override
+  void refresh() {
+    super.refresh();
+  }
 }
 
 extension MapExtension<K, V> on Map<K, V> {
+  /// Converts the Map to a reactive RxMap.
   RxMap<K, V> get obs => RxMap<K, V>(this);
 
-  void addIf(condition, K key, V value) {
-    if (condition is Condition) {
-      condition = condition();
-    }
-    if (condition is bool && condition) {
+  /// Adds a key-value pair to the map if the condition is true.
+  void addIf(bool condition, K key, V value) {
+    if (condition) {
       this[key] = value;
     }
   }
 
-  void addAllIf(condition, Map<K, V> values) {
-    if (condition is Condition) {
-      condition = condition();
-    }
-    if (condition is bool && condition) {
+  /// Adds all key-value pairs from another map if the condition is true.
+  void addAllIf(bool condition, Map<K, V> values) {
+    if (condition) {
       addAll(values);
     }
   }
 
+  /// Assigns a new key-value pair to the map, clearing the existing map if it's an RxMap.
   void assign(K key, V val) {
     if (this is RxMap) {
       final RxMap<K, V> map = this as RxMap<K, V>;
-      // map._value;
       map.value.clear();
-      this[key] = val;
+      map[key] = val;
+      map.refresh();
     } else {
       clear();
       this[key] = val;
     }
   }
 
+  /// Assigns all key-value pairs from another map to this map.
   void assignAll(Map<K, V> val) {
-    if (val is RxMap && this is RxMap) {
-      if ((val as RxMap<K, V>).value == (this as RxMap<K, V>).value) {
-        return;
-      }
-    }
     if (this is RxMap) {
       final RxMap<K, V> map = this as RxMap<K, V>;
-      if (map.value == val) {
-        return;
+      if (map.value != val) {
+        map.value = val;
+        map.refresh();
       }
-      map.value = val;
-      // ignore: invalid_use_of_protected_member
-      map.refresh();
     } else {
-      if (this == val) {
-        return;
-      }
       clear();
       addAll(val);
     }

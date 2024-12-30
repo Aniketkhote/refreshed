@@ -125,6 +125,21 @@ class RxList<E> extends GetListenable<List<E>>
     value.sort(compare);
     refresh();
   }
+
+  /// A batch update function that can be used to add or remove multiple items and refresh only once.
+  void batchUpdate(void Function() updates) {
+    updates();
+    refresh();
+  }
+
+  @override
+  void clear() {
+    value.clear();
+    refresh();
+  }
+
+  @override
+  String toString() => 'RxList(${value.join(', ')})';
 }
 
 extension ListExtension<E> on List<E> {
@@ -143,11 +158,8 @@ extension ListExtension<E> on List<E> {
   /// Add [item] to List<E> only if [condition] is true.
   ///
   /// If [condition] is a boolean value and evaluates to true, [item] is added to the list.
-  void addIf(condition, E item) {
-    if (condition is Condition) {
-      condition = condition();
-    }
-    if (condition is bool && condition) {
+  void addIf(bool condition, E item) {
+    if (condition) {
       add(item);
     }
   }
@@ -155,11 +167,8 @@ extension ListExtension<E> on List<E> {
   /// Adds [Iterable<E>] to [List<E>] only if [condition] is true.
   ///
   /// If [condition] is a boolean value and evaluates to true, [items] are added to the list.
-  void addAllIf(condition, Iterable<E> items) {
-    if (condition is Condition) {
-      condition = condition();
-    }
-    if (condition is bool && condition) {
+  void addAllIf(bool condition, Iterable<E> items) {
+    if (condition) {
       addAll(items);
     }
   }
@@ -181,7 +190,6 @@ extension ListExtension<E> on List<E> {
     if (this is RxList) {
       (this as RxList<E>).value.clear();
     }
-    //clear();
     addAll(items);
   }
 }
