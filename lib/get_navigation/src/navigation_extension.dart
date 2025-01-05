@@ -167,109 +167,96 @@ extension ExtensionDialog on GetInterface {
     String middleText = "\n",
     TextStyle? middleTextStyle,
     double radius = 20.0,
-    //   ThemeData themeData,
     List<Widget>? actions,
-
-    // onWillPop Scope
     PopInvokedWithResultCallback<T>? onWillPop,
-
-    // the navigator used to push the dialog
     GlobalKey<NavigatorState>? navigatorKey,
   }) {
-    var leanCancel = onCancel != null || textCancel != null;
-    var leanConfirm = onConfirm != null || textConfirm != null;
-    actions ??= [];
+    // Helper function to create buttons
+    Widget buildButton({
+      required String text,
+      required VoidCallback? onPressed,
+      Color? textColor,
+      Color? backgroundColor,
+      bool isOutlined = false,
+    }) {
+      return TextButton(
+        style: TextButton.styleFrom(
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          backgroundColor: isOutlined ? null : backgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radius),
+            side: isOutlined
+                ? BorderSide(color: backgroundColor ?? Colors.grey, width: 2)
+                : BorderSide.none,
+          ),
+        ),
+        onPressed: onPressed,
+        child: Text(text, style: TextStyle(color: textColor)),
+      );
+    }
 
+    // Initialize actions
+    actions ??= [];
     if (cancel != null) {
       actions.add(cancel);
-    } else {
-      if (leanCancel) {
-        actions.add(TextButton(
-          style: TextButton.styleFrom(
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                    color: buttonColor ?? theme.colorScheme.secondary,
-                    width: 2,
-                    style: BorderStyle.solid),
-                borderRadius: BorderRadius.circular(radius)),
-          ),
-          onPressed: () {
-            if (onCancel == null) {
-              closeAllDialogs();
-            } else {
-              onCancel.call();
-            }
-          },
-          child: Text(
-            textCancel ?? "Cancel",
-            style: TextStyle(
-                color: cancelTextColor ?? theme.colorScheme.secondary),
-          ),
-        ));
-      }
+    } else if (onCancel != null || textCancel != null) {
+      actions.add(buildButton(
+        text: textCancel ?? "Cancel",
+        onPressed: onCancel ?? closeAllDialogs,
+        textColor: cancelTextColor ?? buttonColor ?? Colors.grey,
+        isOutlined: true,
+      ));
     }
+
     if (confirm != null) {
       actions.add(confirm);
-    } else {
-      if (leanConfirm) {
-        actions.add(TextButton(
-            style: TextButton.styleFrom(
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              backgroundColor: buttonColor ?? theme.colorScheme.secondary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(radius)),
-            ),
-            child: Text(
-              textConfirm ?? "Ok",
-              style: TextStyle(
-                  color: confirmTextColor ?? theme.colorScheme.surface),
-            ),
-            onPressed: () {
-              onConfirm?.call();
-            }));
-      }
+    } else if (onConfirm != null || textConfirm != null) {
+      actions.add(buildButton(
+        text: textConfirm ?? "Ok",
+        onPressed: onConfirm,
+        textColor: confirmTextColor ?? Colors.white,
+        backgroundColor: buttonColor ?? context!.theme.primaryColor,
+      ));
     }
 
+    // Build the dialog
     Widget baseAlertDialog = AlertDialog(
-      titlePadding: titlePadding ?? const EdgeInsets.all(8),
+      titlePadding: custom != null
+          ? EdgeInsets.zero
+          : titlePadding ?? const EdgeInsets.all(8),
       contentPadding: contentPadding ?? const EdgeInsets.all(8),
-
-      backgroundColor: backgroundColor ?? theme.dialogBackgroundColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(radius))),
-      title: Text(title, textAlign: TextAlign.center, style: titleStyle),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          content ??
-              Text(middleText,
-                  textAlign: TextAlign.center, style: middleTextStyle),
-          const SizedBox(height: 16),
-          ButtonTheme(
-            minWidth: 78.0,
-            height: 34.0,
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8,
-              runSpacing: 8,
-              children: actions,
-            ),
-          )
-        ],
-      ),
-      // actions: actions, // ?? <Widget>[cancelButton, confirmButton],
+      backgroundColor: backgroundColor ?? Colors.white,
+      shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
+      title: custom != null
+          ? const SizedBox.shrink()
+          : Text(title, textAlign: TextAlign.center, style: titleStyle),
+      content: custom ??
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              content ??
+                  Text(middleText,
+                      textAlign: TextAlign.center, style: middleTextStyle),
+              const SizedBox(height: 16),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
+                children: actions,
+              ),
+            ],
+          ),
       buttonPadding: EdgeInsets.zero,
     );
 
+    // Return the dialog
     return dialog<T>(
       onWillPop != null
           ? PopScope<T>(
               onPopInvokedWithResult: (didPop, result) =>
                   onWillPop(didPop, result),
-              // onPopInvoked: onWillPop,
               child: baseAlertDialog,
             )
           : baseAlertDialog,
@@ -380,8 +367,6 @@ extension ExtensionSnackbar on GetInterface {
     String message, {
     Color? colorText,
     Duration? duration = const Duration(seconds: 3),
-
-    /// with instantInit = false you can put snackbar on initState
     bool instantInit = true,
     SnackPosition? snackPosition,
     Widget? titleText,

@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.2.6 <4.0.0"
+  sdk: ">=3.4.0 <4.0.0"
 
 dependency_overrides:
   refreshed:
@@ -36,8 +36,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  get_test: 4.0.1
-  flutter_lints: ^3.0.1
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

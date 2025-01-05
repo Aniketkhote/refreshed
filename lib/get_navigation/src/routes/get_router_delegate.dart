@@ -383,10 +383,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
         PreventDuplicateHandlingMode.reorderRoutes,
   }) async {
     routeName = _cleanRouteName("/${page.runtimeType}");
-    // if (preventDuplicateHandlingMode ==
-    //PreventDuplicateHandlingMode.Recreate) {
-    //   routeName = routeName + page.hashCode.toString();
-    // }
 
     final getPage = GetPage<T>(
       name: routeName,
@@ -496,7 +492,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   @override
   Future<T?>? offAllNamed<T>(
     String newRouteName, {
-    // bool Function(GetPage route)? predicate,
     dynamic arguments,
     String? id,
     Map<String, String>? parameters,
@@ -647,8 +642,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
     final activePage = _getRouteDecoder(arguments);
 
-    // final activePage = _configureRouterDecoder<T>(route!, arguments);
-
     _activePages[index] = activePage!;
 
     notifyListeners();
@@ -727,8 +720,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   Future<T?> _push<T>(RouteDecoder decoder, {bool rebuildStack = true}) async {
     var res = await runMiddleware(decoder);
     if (res == null) return null;
-    // final res = mid ?? decoder;
-    // if (res == null) res = decoder;
 
     final preventDuplicateHandlingMode =
         res.route?.preventDuplicateHandlingMode ??
@@ -830,18 +821,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       return false;
     }
     _popWithResult(result);
-    // final settings = route.settings;
-    // if (settings is GetPage) {
-    //   final config = _activePages.cast<RouteDecoder?>().firstWhere(
-    //         (element) => element?.route == settings,
-    //         orElse: () => null,
-    //       );
-    //   if (config != null) {
-    //     _removeHistoryEntry(config, result);
-    //   }
-    // }
+
     notifyListeners();
-    //return !route.navigator!.userGestureInProgress;
     return true;
   }
 }

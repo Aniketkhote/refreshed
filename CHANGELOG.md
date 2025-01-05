@@ -1,4 +1,9 @@
-## 2.10.1
+## 2.10.3
+
+- Fixed custom widget not working in `defaultDialog`
+- Set the default button background color to `context.theme.primaryColor`
+
+## 2.10.2
 
 - Improved RxIterable methods
 - `addIf()` and `addAllIf()` methods now conditionally add elements based on simple bool checks

@@ -14,15 +14,6 @@ jobs:
       # Checkout the code
       - uses: actions/checkout@v4
 
-      # Cache Flutter dependencies
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.pub-cache
-          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-flutter-
-
       # Setup Flutter environment
       - uses: subosito/flutter-action@v2
         with:
@@ -30,7 +21,7 @@ jobs:
           channel: "stable"
 
       # Run flutter doctor to verify the setup
-      - run: flutter doctor
+      - run: dart doctor
 
       # Install dependencies
       - run: dart pub get

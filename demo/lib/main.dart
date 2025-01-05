@@ -68,6 +68,9 @@ class Menu extends StatelessWidget {
               // ScaffoldMessenger.of(context).showSnackBar(
               //   SnackBar(content: Text('This is a SnackBar')),
               // );
+              Get.defaultDialog(
+                onConfirm: () => Get.close(),
+              );
             },
             leading: const Icon(
               Icons.delete,
