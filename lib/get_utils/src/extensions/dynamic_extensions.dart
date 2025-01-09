@@ -6,7 +6,7 @@ import "package:refreshed/get_utils/src/get_utils/get_utils.dart";
 extension DynamicExtension on dynamic {
   /// Checks if the dynamic object is null, empty, or consists only of whitespace.
   /// Returns `true` if the object is blank; otherwise, returns `false`.
-  bool? get isBlank => GetUtils.isBlank(this);
+  bool get isBlank => GetUtils.isBlank(this);
 
   /// Prints an error message with optional additional [info].
   /// Allows specifying a custom [logFunction] to handle the printing.

@@ -5,12 +5,15 @@ import "package:refreshed/utils.dart";
 /// standard dart types that contains it.
 ///
 /// This is here to for the 'DRY'
-bool? _isEmpty(value) {
+bool _isEmpty(dynamic value) {
+  if (value == null) {
+    return true;
+  }
   if (value is String) {
     return value.trim().isEmpty;
   }
   if (value is Iterable || value is Map) {
-    return value.isEmpty as bool?;
+    return value.isEmpty;
   }
   return false;
 }
@@ -34,7 +37,7 @@ class GetUtils {
   }
 
   /// Checks if data is null or blank (empty or only contains whitespace).
-  static bool? isBlank(value) => _isEmpty(value);
+  static bool isBlank(value) => _isEmpty(value);
 
   /// Checks if string is int or double.
   static bool isNum(String value) {

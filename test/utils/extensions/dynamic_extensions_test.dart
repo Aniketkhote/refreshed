@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_annotating_with_dynamic
-
 import "package:flutter_test/flutter_test.dart";
 import "package:refreshed/utils.dart";
 
