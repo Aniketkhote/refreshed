@@ -5,60 +5,6 @@ part of "../rx_types.dart";
 /// of those `Widgets` and Rx values.
 
 mixin RxObjectMixin<T> on GetListenable<T> {
-  //late T _value;
-
-  /// Makes a direct update of [value] adding it to the Stream
-  /// useful when you make use of Rx for custom Types to refresh your UI.
-  ///
-  /// Sample:
-  /// ```
-  ///  class Person {
-  ///     String name, last;
-  ///     int age;
-  ///     Person({this.name, this.last, this.age});
-  ///     @override
-  ///     String toString() => '$name $last, $age years old';
-  ///  }
-  ///
-  /// final person = Person(name: 'John', last: 'Doe', age: 18).obs;
-  /// person.value.name = 'Roi';
-  /// person.refresh();
-  /// print( person );
-  /// ```
-  // void refresh() {
-  //   subject.add(value);
-  // }
-
-  /// updates the value to `null` and adds it to the Stream.
-  /// Even with null-safety coming, is still an important feature to support, as
-  /// `call()` doesn't accept `null` values. For instance,
-  /// `InputDecoration.errorText` has to be null to not show the "error state".
-  ///
-  /// Sample:
-  /// ```
-  /// final inputError = ''.obs..nil();
-  /// print('${inputError.runtimeType}: $inputError'); // outputs > RxString: null
-  /// ```
-  // void nil() {
-  //   subject.add(_value = null);
-  // }
-
-  /// Makes this Rx looks like a function so you can update a new
-  /// value using `rx(someOtherValue)`. Practical to assign the Rx directly
-  /// to some Widget that has a signature ::onChange( value )
-  ///
-  /// Example:
-  /// ```
-  /// final myText = 'GetX rocks!'.obs;
-  ///
-  /// // in your Constructor, just to check it works :P
-  /// ever( myText, print ) ;
-  ///
-  /// // in your build(BuildContext) {
-  /// TextField(
-  ///   onChanged: myText,
-  /// ),
-  ///```
   @override
   T call([T? v]) {
     if (v != null) {
@@ -128,14 +74,11 @@ mixin RxObjectMixin<T> on GetListenable<T> {
     return subscription;
   }
 
-  /// Binds an existing `Stream<T>` to this Rx<T> to keep the values in sync.
+  /// Binds an existing `Stream<T>` to this `Rx<T>` to keep the values in sync.
   /// You can bind multiple sources to update the value.
   /// Closing the subscription will happen automatically when the observer
   /// Widget (`GetX` or `Obx`) gets unmounted from the Widget tree.
   void bindStream(Stream<T> stream) {
-    // final listSubscriptions =
-    //     _subscriptions[subject] ??= <StreamSubscription>[];
-
     final StreamSubscription sub = stream.listen((va) => value = va);
     reportAdd(sub.cancel);
   }
@@ -186,8 +129,8 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
   ///
   /// For example, supposed we have a `int seconds = 2` and we want to animate
   /// from invisible to visible a widget in two seconds:
-  /// RxEvent<int>.call(seconds);
-  /// then after a click happens, you want to call a RxEvent<int>.call(seconds).
+  /// `RxEvent<int>.call(seconds);`
+  /// then after a click happens, you want to call a `RxEvent<int>.call(seconds)`.
   /// By doing `call(seconds)`, if the value being held is the same,
   /// the listeners won't trigger, hence we need this new `trigger` function.
   /// This will refresh the listener of an AnimatedWidget and will keep

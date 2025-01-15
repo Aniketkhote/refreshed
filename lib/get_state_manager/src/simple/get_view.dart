@@ -5,7 +5,7 @@ import "package:refreshed/instance_manager.dart";
 import "package:refreshed/utils.dart";
 
 /// GetView is a great way of quickly access your Controller
-/// without having to call Get.find<AwesomeController>() yourself.
+/// without having to call `Get.find<AwesomeController>()` yourself.
 ///
 /// Sample:
 /// ```
@@ -48,7 +48,7 @@ abstract class GetView<T> extends StatelessWidget {
 }
 
 /// GetWidget is a great way of quickly access your individual Controller
-/// without having to call Get.find<AwesomeController>() yourself.
+/// without having to call `Get.find<AwesomeController>()` yourself.
 /// Get save you controller on cache, so, you can to use Get.create() safely
 /// GetWidget is perfect to multiples instance of a same controller. Each
 /// GetWidget will have your own controller, and will be call events as `onInit`

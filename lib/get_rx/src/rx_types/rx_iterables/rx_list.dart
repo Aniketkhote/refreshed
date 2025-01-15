@@ -143,7 +143,7 @@ class RxList<E> extends GetListenable<List<E>>
 }
 
 extension ListExtension<E> on List<E> {
-  /// Converts a List<E> into an RxList<E>.
+  /// Converts a `List<E>` into an `RxList<E>`.
   RxList<E> get obs => RxList<E>(this);
 
   /// Add [item] to [List<E>] only if [item] is not null.
@@ -155,7 +155,7 @@ extension ListExtension<E> on List<E> {
     }
   }
 
-  /// Add [item] to List<E> only if [condition] is true.
+  /// Add [item] to `List<E>` only if [condition] is true.
   ///
   /// If [condition] is a boolean value and evaluates to true, [item] is added to the list.
   void addIf(bool condition, E item) {
