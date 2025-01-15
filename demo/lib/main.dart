@@ -61,16 +61,16 @@ class Menu extends StatelessWidget {
           (index) => ListTile(
             onTap: () {
               ctrl.closeSheet();
-              Get.snackbar("Success", 'Deleted post ${index + 1}');
+              snackbarSuccess('Deleted post ${index + 1}', "Success");
               // Get.showSnackbar(GetSnackBar(
               //   message: 'Deleted post ${index + 1}',
               // ));
               // ScaffoldMessenger.of(context).showSnackBar(
               //   SnackBar(content: Text('This is a SnackBar')),
               // );
-              Get.defaultDialog(
-                onConfirm: () => Get.close(),
-              );
+              // Get.defaultDialog(
+              //   onConfirm: () => Get.close(),
+              // );
             },
             leading: const Icon(
               Icons.delete,
@@ -79,6 +79,27 @@ class Menu extends StatelessWidget {
             title: Text('Delete post ${index + 1}'),
           ),
         ),
+      ),
+    );
+  }
+
+  void snackbarSuccess(String message, [String? title]) {
+    if (Get.isSnackbarOpen) {
+      return;
+    }
+
+    Get.snackbar(
+      title ?? 'Success',
+      message,
+      borderRadius: 25,
+      isDismissible: true,
+      backgroundColor: Colors.grey[900],
+      shouldIconPulse: true,
+      colorText: Colors.white70,
+      margin: const EdgeInsets.all(16),
+      icon: const Icon(
+        Icons.check,
+        color: Colors.green,
       ),
     );
   }

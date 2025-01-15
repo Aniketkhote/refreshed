@@ -1,3 +1,7 @@
+## 2.10.4
+
+- Resolved an issue where the `SnackBar` widget's background color was not being applied correctly.
+
 ## 2.10.3
 
 - Fixed custom widget not working in `defaultDialog`

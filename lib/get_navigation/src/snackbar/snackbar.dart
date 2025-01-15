@@ -311,8 +311,6 @@ class GetSnackBarState extends State<GetSnackBar>
   }
 
   Material _snackBar(BuildContext context) => Material(
-        color: widget.backgroundColor ??
-            context.theme.snackBarTheme.backgroundColor,
         child: SafeArea(
           minimum: widget.snackPosition == SnackPosition.bottom
               ? EdgeInsets.only(
