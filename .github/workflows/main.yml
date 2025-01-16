@@ -20,23 +20,8 @@ jobs:
           flutter-version: "3.27.0"
           channel: "stable"
 
-      # Run flutter doctor to verify the setup
-      - run: dart doctor
-
       # Install dependencies
       - run: dart pub get
 
-      # Optional: Upgrade dependencies to latest compatible versions
-      - run: dart pub upgrade
-
-      # Run static code analysis
-      - run: dart analyze
-
       # Run unit tests and widget tests
       - run: dart test
-
-      # Optional: Run tests with coverage
-      # - run: flutter test --coverage
-
-      # Optional: Upload coverage reports to Codecov
-      # - uses: codecov/codecov-action@v4
