@@ -155,10 +155,8 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
   }
 }
 
-/// Foundation class used for custom `Types` outside the common native Dart
-/// types.
-/// For example, any custom "Model" class, like User().obs will use `Rx` as
-/// wrapper.
+/// A foundation class that wraps a value of type [T] in a reactive container.
+/// This class provides the ability to track and manage the state of the wrapped value.
 class Rx<T> extends _RxImpl<T> {
   Rx(super.initial);
 
@@ -172,7 +170,7 @@ class Rx<T> extends _RxImpl<T> {
   }
 }
 
-/// Extension providing additional functionality for nullable class values wrapped in an [Rx] object.
+/// A specialized version of [Rx] for nullable types ([T?]).
 class Rxn<T> extends Rx<T?> {
   Rxn([super.initial]);
 
@@ -210,16 +208,14 @@ extension BoolExtension on bool {
   RxBool get obs => RxBool(this);
 }
 
-/// Extension on [T] providing methods to create reactive instances of type [T].
+/// Generic extension for creating reactive instances of any custom type [T].
 extension RxT<T extends Object> on T {
   /// Returns a `Rx` instance with [this] `T` as initial value.
   Rx<T> get obs => Rx<T>(this);
 }
 
-/// This method will replace the old `.obs` method.
-/// It's a breaking change, but it is essential to avoid conflicts with
-/// the new dart 3 features. T will be inferred by contextual type inference
-/// rather than the extension type.
+/// A new method to replace the old `.obs` getter. This method avoids conflicts with
+/// Dart 3 features by using contextual type inference to determine [T].
 extension RxTnew on Object {
   /// Returns a `Rx` instance with [this] `T` as initial value.
   Rx<T> obs<T>() => Rx<T>(this as T);

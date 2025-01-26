@@ -1,3 +1,9 @@
+## 3.0.0-beta.1
+
+- Removed `mini_stream` dependency as it was not widely used or relevant to the package functionality.
+- Updated Snackbar background to match the Material 3 UI for better design consistency.
+- Fixed the `unknownRoute` issue: if the route is invalid, it now properly navigates to the 404 route.
+
 ## 2.10.4
 
 - Resolved an issue where the `SnackBar` widget's background color was not being applied correctly.

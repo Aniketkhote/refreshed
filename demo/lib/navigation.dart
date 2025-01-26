@@ -36,7 +36,7 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () => Get.toNamed('/screenA'),
+              onPressed: () => Get.toNamed('/screenAjj'),
               child: Text('Go to Screen A'),
             ),
             ElevatedButton(
@@ -73,7 +73,7 @@ class ScreenA extends StatelessWidget {
             Text('This is Screen A'),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => Get.back(),
+              onPressed: () => Get.offNamed('/'),
               child: Text('Back to Home'),
             ),
             ElevatedButton(
@@ -101,7 +101,7 @@ class ScreenB extends StatelessWidget {
             Text('This is Screen B'),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => Get.back(),
+              onPressed: () => Get.offNamed('/'),
               child: Text('Back to Home'),
             ),
             ElevatedButton(

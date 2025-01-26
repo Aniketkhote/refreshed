@@ -33,10 +33,9 @@ class GetInformationParser extends RouteInformationParser<RouteDecoder> {
           .registeredRoutes
           .any((element) => element.name == '/')) {
         location = initialRoute;
-        Get.log(
-            'No route found for "/", redirecting to initialRoute: $initialRoute');
+        Get.log('No route found, redirecting to initialRoute: $initialRoute');
       } else {
-        Get.log('Root route ("/") is valid, continuing with it');
+        Get.log('Root route is valid, continuing with it');
       }
     }
 

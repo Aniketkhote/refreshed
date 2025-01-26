@@ -13,16 +13,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
+      theme: ThemeData(primaryColor: Colors.deepPurpleAccent),
       home: Scaffold(
         appBar: AppBar(),
-        body: const SafeArea(child: Menu()),
+        body: Center(
+          child: ElevatedButton(
+              onPressed: () => Get.to(() => MyWidget()), child: Text("Go")),
+        ),
         floatingActionButton: FloatingActionButton(
-          // onPressed: () => Get.snackbar(
-          //   "Title",
-          //   "Message",
-          //   snackPosition: SnackPosition.bottom,
-          //   leftBarIndicatorColor: Colors.deepOrange,
-          // ),
           onPressed: () => Get.bottomSheet(const Menu()),
           tooltip: 'Increment',
           child: const Icon(Icons.ads_click),
@@ -32,7 +30,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyController extends GetxController {
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: GetX(
+        init: RegisterController(),
+        tag: DateTime.now().millisecondsSinceEpoch.toString(),
+        builder: (ctrl) => Text('new controller: ${ctrl.counter.value}'),
+      ),
+    );
+  }
+}
+
+class RegisterController extends GetxController {
   RxInt counter = 0.obs;
   final myList = RxList<int>([1, 2, 3, 4, 5]);
 
@@ -52,7 +66,7 @@ class Menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ctrl = Get.put(MyController());
+    final ctrl = Get.put(RegisterController());
     return Scaffold(
       body: ListView(
         shrinkWrap: true,
@@ -91,16 +105,7 @@ class Menu extends StatelessWidget {
     Get.snackbar(
       title ?? 'Success',
       message,
-      borderRadius: 25,
-      isDismissible: true,
-      backgroundColor: Colors.grey[900],
-      shouldIconPulse: true,
-      colorText: Colors.white70,
-      margin: const EdgeInsets.all(16),
-      icon: const Icon(
-        Icons.check,
-        color: Colors.green,
-      ),
+      snackPosition: SnackPosition.bottom,
     );
   }
 }

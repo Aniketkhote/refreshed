@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:refreshed/get_navigation/src/routes/not_found_page.dart';
 
 import '../../../get_instance/src/bindings_interface.dart';
 import '../../../get_utils/src/platform/platform.dart';
@@ -71,8 +72,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     return _routeTree.matchRoute(name, arguments: arguments);
   }
 
-  // GlobalKey<NavigatorState> get navigatorKey => Get.key;
-
   @override
   GlobalKey<NavigatorState> navigatorKey;
 
@@ -91,12 +90,8 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     GlobalKey<NavigatorState>? navigatorKey,
     required List<GetPage> pages,
   })  : navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>(),
-        notFoundRoute = notFoundRoute ??= GetPage(
-          name: '/404',
-          page: () => const Scaffold(
-            body: Center(child: Text('Route not found')),
-          ),
-        ) {
+        notFoundRoute = notFoundRoute ??=
+            GetPage(name: '/404', page: () => NotFoundPage()) {
     if (!showHashOnUrl && GetPlatform.isWeb) setUrlStrategy();
     addPages(pages);
     addPage(notFoundRoute);
@@ -141,12 +136,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     if (res == null) return;
     _activePages.add(res);
   }
-
-  // Future<T?> _unsafeHistoryRemove<T>(RouteDecoder config, T result) async {
-  //   var index = _activePages.indexOf(config);
-  //   if (index >= 0) return _unsafeHistoryRemoveAt(index, result);
-  //   return null;
-  // }
 
   Future<T?> _unsafeHistoryRemoveAt<T>(int index, T result) async {
     if (index == _activePages.length - 1 && _activePages.length > 1) {
@@ -224,11 +213,9 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
       //check if current route is the same as the previous route
       if (prevHistoryEntry != null) {
-        //if so, pop the entire _activePages entry
         final newLocation = remaining.last.name;
         final prevLocation = prevHistoryEntry.pageSettings?.name;
         if (newLocation == prevLocation) {
-          //pop the entire _activePages entry
           return await _popHistory(result);
         }
       }
@@ -239,7 +226,6 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
         RouteDecoder(
           remaining.toList(),
           null,
-          //TOOD: persist state??
         ),
       );
       return res;

@@ -338,15 +338,6 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     super.initState();
   }
 
-  // @override
-  // void didUpdateWidget(covariant GetRoot oldWidget) {
-  //   if (oldWidget.config != widget.config) {
-  //     config = widget.config;
-  //   }
-
-  //   super.didUpdateWidget(oldWidget);
-  // }
-
   void onClose() {
     config.onDispose?.call();
     Get.clearTranslations();
@@ -429,16 +420,10 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
       config = config.copyWith(defaultTransition: getThemeTransition());
     }
 
-    // defaultOpaqueRoute = config.opaqueRoute ?? true;
-    // defaultPopGesture = config.popGesture ?? GetPlatform.isIOS;
-    // defaultTransitionDuration =
-    //     config.transitionDuration ?? Duration(milliseconds: 300);
-
     Future(() => onReady());
   }
 
   set parameters(Map<String, String?> newParameters) {
-    // rootController.parameters = newParameters;
     config = config.copyWith(parameters: newParameters);
   }
 
@@ -531,7 +516,6 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
       key,
       () => GetDelegate(
         showHashOnUrl: true,
-        //debugLabel: 'Getx nested key: ${key.toString()}',
         pages: RouteDecoder.fromRoute(key).currentChildren ?? [],
       ),
     );
@@ -543,14 +527,28 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     return widget.child;
   }
 
+  /// Cleans up and formats the route name by removing unwanted characters
+  /// and ensuring it is properly formatted as a valid URI.
+  ///
+  /// [name] The route name to be cleaned and formatted.
+  ///
+  /// Returns a valid URI string, or the original name if parsing fails.
   String cleanRouteName(String name) {
+    // Edge case: Handle empty or null route names.
+    if (name.isEmpty) {
+      return '/'; // Default route or handle as needed.
+    }
+
+    // Remove unwanted parts of the route name.
     name = name.replaceAll('() => ', '');
 
-    /// uncomment for URL styling.
-    // name = name.paramCase!;
+    // Ensure the route starts with a '/'.
     if (!name.startsWith('/')) {
       name = '/$name';
     }
-    return Uri.tryParse(name)?.toString() ?? name;
+
+    // Try parsing the route name into a valid URI and return it.
+    Uri? uri = Uri.tryParse(name);
+    return uri?.toString() ?? name; // Return the original name if invalid URI.
   }
 }

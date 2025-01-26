@@ -84,9 +84,7 @@ class ParseRouteTree {
     final uri = Uri.parse(name);
     final split = uri.path.split('/').where((element) => element.isNotEmpty);
     var curPath = '/';
-    final cumulativePaths = <String>[
-      '/',
-    ];
+    final cumulativePaths = <String>[];
     for (var item in split) {
       if (curPath.endsWith('/')) {
         curPath += item;
@@ -94,6 +92,10 @@ class ParseRouteTree {
         curPath += '/$item';
       }
       cumulativePaths.add(curPath);
+    }
+
+    if (cumulativePaths.isEmpty) {
+      cumulativePaths.add('/');
     }
 
     final treeBranch = cumulativePaths
@@ -244,7 +246,6 @@ class ParseRouteTree {
           : origin.name,
       bindings: bindings,
       binds: binds,
-      // key:
     );
   }
 

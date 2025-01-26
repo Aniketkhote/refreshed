@@ -223,19 +223,6 @@ class GetMaterialApp extends StatelessWidget {
         darkTheme: darkTheme,
         themeMode: themeMode,
       ),
-      // binds: [
-      //   Bind.lazyPut<GetMaterialController>(
-      //     () => GetMaterialController(
-
-      //     ),
-      //     onClose: () {
-      //       Get.clearTranslations();
-      //       RouterReportManager.dispose();
-      //       Get.resetInstance(clearRouteBindings: true);
-      //     },
-      //   ),
-      //   ...binds,
-      // ],
       child: Builder(builder: (context) {
         final controller = GetRoot.of(context);
         return MaterialApp.router(

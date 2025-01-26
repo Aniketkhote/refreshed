@@ -311,6 +311,8 @@ class GetSnackBarState extends State<GetSnackBar>
   }
 
   Material _snackBar(BuildContext context) => Material(
+        elevation: 1,
+        borderRadius: BorderRadius.circular(widget.borderRadius),
         child: SafeArea(
           minimum: widget.snackPosition == SnackPosition.bottom
               ? EdgeInsets.only(
@@ -340,12 +342,8 @@ class GetSnackBarState extends State<GetSnackBar>
                         child: Container(
                           height: snapshot.data!.height,
                           width: snapshot.data!.width,
-                          decoration: BoxDecoration(
-                            color: widget.backgroundColor ??
-                                context.theme.snackBarTheme.backgroundColor,
-                            borderRadius:
-                                BorderRadius.circular(widget.borderRadius),
-                          ),
+                          color: widget.backgroundColor ??
+                              context.theme.snackBarTheme.backgroundColor,
                         ),
                       ),
                     );

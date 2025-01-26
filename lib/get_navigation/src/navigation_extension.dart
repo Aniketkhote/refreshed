@@ -403,56 +403,58 @@ extension ExtensionSnackbar on GetInterface {
     Form? userInputForm,
   }) {
     final getSnackBar = GetSnackBar(
-        snackbarStatus: snackbarStatus,
-        titleText: titleText ??
-            Text(
-              title,
-              style: TextStyle(
-                color: colorText ?? iconColor ?? Colors.black,
-                fontWeight: FontWeight.w800,
-                fontSize: 16,
-              ),
+      snackbarStatus: snackbarStatus,
+      titleText: titleText ??
+          Text(
+            title,
+            style: TextStyle(
+              color: colorText ?? iconColor ?? context!.theme.iconTheme.color,
+              fontWeight: FontWeight.w800,
+              fontSize: 16,
             ),
-        messageText: messageText ??
-            Text(
-              message,
-              style: TextStyle(
-                color: colorText ?? iconColor ?? Colors.black,
-                fontWeight: FontWeight.w300,
-                fontSize: 14,
-              ),
+          ),
+      messageText: messageText ??
+          Text(
+            message,
+            style: TextStyle(
+              color: colorText ?? iconColor ?? context!.theme.iconTheme.color,
+              fontWeight: FontWeight.w300,
+              fontSize: 14,
             ),
-        snackPosition: snackPosition ?? SnackPosition.top,
-        borderRadius: borderRadius ?? 15,
-        margin: margin ?? const EdgeInsets.symmetric(horizontal: 10),
-        duration: duration,
-        barBlur: barBlur ?? 7.0,
-        backgroundColor: backgroundColor ?? Colors.grey.withValues(alpha: 0.2),
-        icon: icon,
-        shouldIconPulse: shouldIconPulse ?? true,
-        maxWidth: maxWidth,
-        padding: padding ?? const EdgeInsets.all(16),
-        borderColor: borderColor,
-        borderWidth: borderWidth,
-        leftBarIndicatorColor: leftBarIndicatorColor,
-        boxShadows: boxShadows,
-        backgroundGradient: backgroundGradient,
-        mainButton: mainButton,
-        onTap: onTap,
-        onHover: onHover,
-        isDismissible: isDismissible ?? true,
-        dismissDirection: dismissDirection,
-        showProgressIndicator: showProgressIndicator ?? false,
-        progressIndicatorController: progressIndicatorController,
-        progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
-        progressIndicatorValueColor: progressIndicatorValueColor,
-        snackStyle: snackStyle ?? SnackStyle.floating,
-        forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
-        reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
-        animationDuration: animationDuration ?? const Duration(seconds: 1),
-        overlayBlur: overlayBlur ?? 0.0,
-        overlayColor: overlayColor ?? Colors.transparent,
-        userInputForm: userInputForm);
+          ),
+      snackPosition: snackPosition ?? SnackPosition.top,
+      borderRadius: borderRadius ?? 15,
+      margin: margin ?? const EdgeInsets.all(10),
+      duration: duration,
+      barBlur: barBlur ?? 7.0,
+      backgroundColor:
+          backgroundColor ?? context!.theme.snackBarTheme.backgroundColor,
+      icon: icon,
+      shouldIconPulse: shouldIconPulse ?? true,
+      maxWidth: maxWidth,
+      padding: padding ?? const EdgeInsets.all(16),
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      leftBarIndicatorColor: leftBarIndicatorColor,
+      boxShadows: boxShadows,
+      backgroundGradient: backgroundGradient,
+      mainButton: mainButton,
+      onTap: onTap,
+      onHover: onHover,
+      isDismissible: isDismissible ?? true,
+      dismissDirection: dismissDirection,
+      showProgressIndicator: showProgressIndicator ?? false,
+      progressIndicatorController: progressIndicatorController,
+      progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
+      progressIndicatorValueColor: progressIndicatorValueColor,
+      snackStyle: snackStyle ?? SnackStyle.floating,
+      forwardAnimationCurve: forwardAnimationCurve ?? Curves.easeOutCirc,
+      reverseAnimationCurve: reverseAnimationCurve ?? Curves.easeOutCirc,
+      animationDuration: animationDuration ?? const Duration(seconds: 1),
+      overlayBlur: overlayBlur ?? 0.0,
+      overlayColor: overlayColor ?? Colors.transparent,
+      userInputForm: userInputForm,
+    );
 
     final controller = SnackbarController(getSnackBar);
 
@@ -761,14 +763,13 @@ extension GetNavigationExt on GetInterface {
 
     return searchDelegate(id).offAllNamed<T>(
       newRouteName,
-      //predicate: predicate ?? (_) => false,
       arguments: arguments,
       id: id,
       parameters: parameters,
     );
   }
 
-  /// Returns true if a Snackbar, Dialog or BottomSheet is currently OPEN
+  /// Returns true if a Snackbar, Dialog, or BottomSheet is currently open.
   bool get isOverlaysOpen =>
       (isSnackbarOpen || isDialogOpen! || isBottomSheetOpen!);
 
@@ -812,15 +813,19 @@ extension GetNavigationExt on GetInterface {
     }
   }
 
-  void closeAllDialogsAndBottomSheets(
-    String? id,
-  ) {
-    // It can not be divided, because dialogs and bottomsheets can not be consecutive
-    while ((isDialogOpen! && isBottomSheetOpen!)) {
+  /// Closes all dialogs and bottom sheets that are currently open.
+  ///
+  /// [id] is for when using nested navigation.
+  void closeAllDialogsAndBottomSheets(String? id) {
+    // Close both dialogs and bottom sheets concurrently
+    while ((isDialogOpen! || isBottomSheetOpen!)) {
       closeOverlay(id: id);
     }
   }
 
+  /// Closes all dialogs that are currently open.
+  ///
+  /// [id] is for when using nested navigation.
   void closeAllDialogs({
     String? id,
   }) {
@@ -829,10 +834,16 @@ extension GetNavigationExt on GetInterface {
     }
   }
 
+  /// Closes the currently open overlay (Snackbar, Dialog, or BottomSheet).
+  ///
+  /// [id] is for when using nested navigation.
   void closeOverlay({String? id}) {
     searchDelegate(id).navigatorKey.currentState?.pop();
   }
 
+  /// Closes all bottom sheets that are currently open.
+  ///
+  /// [id] is for when using nested navigation.
   void closeAllBottomSheets({
     String? id,
   }) {
@@ -841,17 +852,18 @@ extension GetNavigationExt on GetInterface {
     }
   }
 
+  /// Closes all overlays (Dialogs, Snackbars, and BottomSheets) at once.
   void closeAllOverlays() {
     closeAllDialogsAndBottomSheets(null);
     closeAllSnackbars();
   }
 
-  /// **Navigation.popUntil()** (with predicate) shortcut .<br><br>
+  /// Closes specific overlays based on the provided flags.
   ///
-  /// Close as many routes as defined by [times]
-  ///
-  /// [id] is for when you are using nested navigation,
-  /// as explained in documentation
+  /// [closeAll] determines if all overlays should be closed.
+  /// [closeSnackbar], [closeDialog], [closeBottomSheet] control which specific overlays to close.
+  /// [id] is for nested navigation.
+  /// [result] is the result passed back when closing the overlays.
   void close<T extends Object>({
     bool closeAll = true,
     bool closeSnackbar = true,
@@ -1083,16 +1095,6 @@ extension GetNavigationExt on GetInterface {
       key = keys[k]!;
     }
 
-    // if (_key.listenersLength == 0 && !testMode) {
-    //   throw """You are trying to use contextless navigation without
-    //   a GetMaterialApp or Get.key.
-    //   If you are testing your app, you can use:
-    //   [Get.testMode = true], or if you are running your app on
-    //   a physical device or emulator, you must exchange your [MaterialApp]
-    //   for a [GetMaterialApp].
-    //   """;
-    // }
-
     return key;
   }
 
@@ -1200,12 +1202,6 @@ extension GetNavigationExt on GetInterface {
 
   /// give access to FocusScope.of(context)
   FocusNode? get focusScope => FocusManager.instance.primaryFocus;
-
-  // /// give access to Immutable MediaQuery.of(context).size.height
-  // double get height => MediaQuery.of(context).size.height;
-
-  // /// give access to Immutable MediaQuery.of(context).size.width
-  // double get width => MediaQuery.of(context).size.width;
 
   GlobalKey<NavigatorState> get key => rootController.key;
 

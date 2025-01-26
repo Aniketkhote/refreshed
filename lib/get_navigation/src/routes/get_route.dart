@@ -61,7 +61,6 @@ class GetPage<T> extends Page<T> {
     this.title,
     this.participatesInRootNavigator,
     this.gestureWidth,
-    // RouteSettings settings,
     this.maintainState = true,
     this.curve = Curves.linear,
     this.alignment,
@@ -96,9 +95,7 @@ class GetPage<T> extends Page<T> {
         super(
           key: key ?? ValueKey(name),
           name: name,
-          // arguments: Get.arguments,
         );
-  // settings = RouteSettings(name: name, arguments: Get.arguments);
 
   GetPage<T> copyWith({
     LocalKey? key,
@@ -174,7 +171,6 @@ class GetPage<T> extends Page<T> {
 
   @override
   Route<T> createRoute(BuildContext context) {
-    // return GetPageRoute<T>(settings: this, page: page);
     final page = PageRedirect(
       route: this,
       settings: this,
