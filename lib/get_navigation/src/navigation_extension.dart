@@ -1246,14 +1246,8 @@ extension GetNavigationExt on GetInterface {
     return rootController.rootDelegate.arguments<T>();
   }
 
-  // set parameters(Map<String, String?> newParameters) {
-  //   rootController.parameters = newParameters;
-  // }
-
-  // @Deprecated('Use GetTestMode.active=true instead')
   set testMode(bool isTest) => GetTestMode.active = isTest;
 
-  // @Deprecated('Use GetTestMode.active instead')
   bool get testMode => GetTestMode.active;
 
   Map<String, String?> get parameters {

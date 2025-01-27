@@ -1,3 +1,10 @@
+## 3.0.0-beta.2
+
+- Optimized Middleware implementation for improved performance and maintainability.
+- Streamlined route matching to enhance efficiency in path resolution.
+- Improved route tree management for better handling of route additions and deletions.
+- Enhanced handling of parameters and child routes for cleaner, more efficient code.
+
 ## 3.0.0-beta.1
 
 - Removed `mini_stream` dependency as it was not widely used or relevant to the package functionality.

@@ -1,5 +1,3 @@
-// ignore_for_file: overridden_fields
-
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -31,11 +29,6 @@ class GetPage<T> extends Page<T> {
   final bool fullscreenDialog;
   final bool preventDuplicates;
   final Completer<T?>? completer;
-  // @override
-  // final LocalKey? key;
-
-  // @override
-  // RouteSettings get settings => this;
 
   @override
   final Object? arguments;
@@ -230,7 +223,6 @@ class PathDecoded {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is PathDecoded &&
-        other.regex == regex; // && listEquals(other.keys, keys);
+    return other is PathDecoded && other.regex == regex;
   }
 }

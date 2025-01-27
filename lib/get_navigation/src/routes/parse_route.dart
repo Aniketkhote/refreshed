@@ -2,15 +2,22 @@ import 'package:flutter/foundation.dart';
 
 import '../../../refreshed.dart';
 
+/// A class that decodes a route and provides information about the current
+/// route tree branch and associated page settings.
 @immutable
 class RouteDecoder {
   const RouteDecoder(
     this.currentTreeBranch,
     this.pageSettings,
   );
+
+  /// List of [GetPage] representing the current branch of the route tree.
   final List<GetPage> currentTreeBranch;
+
+  /// The settings of the current page, including parameters and arguments.
   final PageSettings? pageSettings;
 
+  /// Factory constructor to create a [RouteDecoder] from a given route [location].
   factory RouteDecoder.fromRoute(String location) {
     var uri = Uri.parse(location);
     final args = PageSettings(uri);
@@ -24,12 +31,15 @@ class RouteDecoder {
     return decoder;
   }
 
+  /// Returns the last [GetPage] in the current tree branch, or `null` if the branch is empty.
   GetPage? get route =>
       currentTreeBranch.isEmpty ? null : currentTreeBranch.last;
 
+  /// Returns the last [GetPage] in the current tree branch, or [onUnknow] if the branch is empty.
   GetPage routeOrUnknown(GetPage onUnknow) =>
       currentTreeBranch.isEmpty ? onUnknow : currentTreeBranch.last;
 
+  /// Sets the last [GetPage] in the current tree branch.
   set route(GetPage? getPage) {
     if (getPage == null) return;
     if (currentTreeBranch.isEmpty) {
@@ -39,18 +49,20 @@ class RouteDecoder {
     }
   }
 
+  /// Retrieves the children of the current route, if any.
   List<GetPage>? get currentChildren => route?.children;
 
+  /// Retrieves the parameters of the current page settings.
   Map<String, String> get parameters => pageSettings?.params ?? {};
 
-  dynamic get args {
-    return pageSettings?.arguments;
-  }
+  /// Retrieves the arguments passed to the current page.
+  dynamic get args => pageSettings?.arguments;
 
+  /// Retrieves the arguments cast to a specific type [T], or `null` if not matching.
   T? arguments<T>() {
     final args = pageSettings?.arguments;
     if (args is T) {
-      return pageSettings?.arguments as T;
+      return args;
     } else {
       return null;
     }
@@ -73,24 +85,25 @@ class RouteDecoder {
       'RouteDecoder(currentTreeBranch: $currentTreeBranch, pageSettings: $pageSettings)';
 }
 
+/// A class representing a parsed route tree that manages route matching
+/// and manipulation for nested routing structures.
 class ParseRouteTree {
   ParseRouteTree({
     required this.routes,
   });
 
+  /// List of all defined routes in the application.
   final List<GetPage> routes;
 
+  /// Matches a given [name] to the appropriate route in the tree and returns a [RouteDecoder].
+  /// Optionally, [arguments] can be passed to customize the page settings.
   RouteDecoder matchRoute(String name, {PageSettings? arguments}) {
     final uri = Uri.parse(name);
     final split = uri.path.split('/').where((element) => element.isNotEmpty);
     var curPath = '/';
     final cumulativePaths = <String>[];
     for (var item in split) {
-      if (curPath.endsWith('/')) {
-        curPath += item;
-      } else {
-        curPath += '/$item';
-      }
+      curPath = curPath.endsWith('/') ? curPath + item : '$curPath/$item';
       cumulativePaths.add(curPath);
     }
 
@@ -101,20 +114,16 @@ class ParseRouteTree {
     final treeBranch = cumulativePaths
         .map((e) => MapEntry(e, _findRoute(e)))
         .where((element) => element.value != null)
-
-        ///Prevent page be disposed
         .map((e) => MapEntry(e.key, e.value!.copyWith(key: ValueKey(e.key))))
         .toList();
 
     final params = Map<String, String>.from(uri.queryParameters);
     if (treeBranch.isNotEmpty) {
-      //route is found, do further parsing to get nested query params
       final lastRoute = treeBranch.last;
       final parsedParams = _parseParams(name, lastRoute.value.path);
       if (parsedParams.isNotEmpty) {
         params.addAll(parsedParams);
       }
-      //copy parameters to all pages.
       final mappedTreeBranch = treeBranch
           .map(
             (e) => e.value.copyWith(
@@ -137,25 +146,27 @@ class ParseRouteTree {
     arguments?.params.clear();
     arguments?.params.addAll(params);
 
-    //route not found
     return RouteDecoder(
       treeBranch.map((e) => e.value).toList(),
       arguments,
     );
   }
 
+  /// Adds a list of routes to the route tree.
   void addRoutes<T>(List<GetPage<T>> getPages) {
     for (final route in getPages) {
       addRoute(route);
     }
   }
 
+  /// Removes a list of routes from the route tree.
   void removeRoutes<T>(List<GetPage<T>> getPages) {
     for (final route in getPages) {
       removeRoute(route);
     }
   }
 
+  /// Removes a specific route from the route tree.
   void removeRoute<T>(GetPage<T> route) {
     routes.remove(route);
     for (var page in _flattenPage(route)) {
@@ -163,15 +174,15 @@ class ParseRouteTree {
     }
   }
 
+  /// Adds a specific route to the route tree.
   void addRoute<T>(GetPage<T> route) {
     routes.add(route);
-
-    // Add Page children.
     for (var page in _flattenPage(route)) {
       addRoute(page);
     }
   }
 
+  /// Flattens a route to include all its children recursively.
   List<GetPage> _flattenPage(GetPage route) {
     final result = <GetPage>[];
     if (route.children.isEmpty) {
@@ -180,7 +191,6 @@ class ParseRouteTree {
 
     final parentPath = route.name;
     for (var page in route.children) {
-      // Add Parent middlewares to children
       final parentMiddlewares = [
         if (page.middlewares.isNotEmpty) ...page.middlewares,
         if (route.middlewares.isNotEmpty) ...route.middlewares
@@ -231,7 +241,7 @@ class ParseRouteTree {
     return result;
   }
 
-  /// Change the Path for a [GetPage]
+  /// Updates a [GetPage] with a new path and inherited properties.
   GetPage _addChild(
     GetPage origin,
     String parentPath,
@@ -249,14 +259,14 @@ class ParseRouteTree {
     );
   }
 
+  /// Finds a route by its name in the route tree.
   GetPage? _findRoute(String name) {
-    final value = routes.firstWhereOrNull(
+    return routes.firstWhereOrNull(
       (route) => route.path.regex.hasMatch(name),
     );
-
-    return value;
   }
 
+  /// Parses parameters from the path based on the route's regex.
   Map<String, String> _parseParams(String path, PathDecoded routePath) {
     final params = <String, String>{};
     var idx = path.indexOf('?');
@@ -277,8 +287,9 @@ class ParseRouteTree {
   }
 }
 
+/// Extension on [List] to provide a `firstWhereOrNull` method.
 extension FirstWhereOrNullExt<T> on List<T> {
-  /// The first element satisfying [test], or `null` if there are none.
+  /// Returns the first element satisfying [test], or `null` if none are found.
   T? firstWhereOrNull(bool Function(T element) test) {
     for (var element in this) {
       if (test(element)) return element;

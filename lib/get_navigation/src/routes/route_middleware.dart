@@ -98,17 +98,33 @@ abstract class GetMiddleware {
   void onPageDispose() {}
 }
 
+/// A class to manage and execute a list of [GetMiddleware] in a prioritized manner.
+///
+/// This class ensures that middlewares are sorted by priority and provides
+/// methods to run middleware hooks for various stages of a page's lifecycle.
 class MiddlewareRunner {
+  /// Creates an instance of [MiddlewareRunner].
+  ///
+  /// If [middlewares] is provided, it will be sorted by priority.
   MiddlewareRunner(List<GetMiddleware>? middlewares)
       : _middlewares = middlewares != null
             ? (List.of(middlewares)..sort(_compareMiddleware))
             : const [];
 
+  /// The list of middlewares managed by this runner, sorted by priority.
   final List<GetMiddleware> _middlewares;
 
+  /// Compares two [GetMiddleware] objects by their priority.
+  ///
+  /// A lower priority value indicates higher priority.
   static int _compareMiddleware(GetMiddleware a, GetMiddleware b) =>
       a.priority.compareTo(b.priority);
 
+  /// Runs the `onPageCalled` hook for each middleware in sequence.
+  ///
+  /// This method allows middlewares to modify or replace the provided [page].
+  ///
+  /// Returns the modified or replaced [GetPage], or `null` if all middlewares return `null`.
   GetPage? runOnPageCalled(GetPage? page) {
     for (final middleware in _middlewares) {
       page = middleware.onPageCalled(page);
@@ -116,6 +132,11 @@ class MiddlewareRunner {
     return page;
   }
 
+  /// Runs the `redirect` hook for each middleware in sequence.
+  ///
+  /// This method allows middlewares to intercept and redirect a [route].
+  ///
+  /// Returns a [RouteSettings] object for redirection, or `null` if no redirection is needed.
   RouteSettings? runRedirect(String? route) {
     for (final middleware in _middlewares) {
       final redirectTo = middleware.redirect(route);
@@ -126,6 +147,11 @@ class MiddlewareRunner {
     return null;
   }
 
+  /// Runs the `onBindingsStart` hook for each middleware in sequence.
+  ///
+  /// This method allows middlewares to modify or replace the list of [bindings].
+  ///
+  /// Returns the modified list of bindings, or `null` if all middlewares return `null`.
   List<R>? runOnBindingsStart<R>(List<R>? bindings) {
     for (final middleware in _middlewares) {
       bindings = middleware.onBindingsStart(bindings);
@@ -133,6 +159,11 @@ class MiddlewareRunner {
     return bindings;
   }
 
+  /// Runs the `onPageBuildStart` hook for each middleware in sequence.
+  ///
+  /// This method allows middlewares to modify or replace the [page] builder.
+  ///
+  /// Returns the modified [GetPageBuilder], or `null` if all middlewares return `null`.
   GetPageBuilder? runOnPageBuildStart(GetPageBuilder? page) {
     for (final middleware in _middlewares) {
       page = middleware.onPageBuildStart(page);
@@ -140,6 +171,11 @@ class MiddlewareRunner {
     return page;
   }
 
+  /// Runs the `onPageBuilt` hook for each middleware in sequence.
+  ///
+  /// This method allows middlewares to modify or replace the built [page] widget.
+  ///
+  /// Returns the modified [Widget].
   Widget runOnPageBuilt(Widget page) {
     for (final middleware in _middlewares) {
       page = middleware.onPageBuilt(page);
@@ -147,6 +183,9 @@ class MiddlewareRunner {
     return page;
   }
 
+  /// Runs the `onPageDispose` hook for each middleware in sequence.
+  ///
+  /// This method is called when a page is disposed, allowing middlewares to perform cleanup.
   void runOnPageDispose() {
     for (final middleware in _middlewares) {
       middleware.onPageDispose();
@@ -154,12 +193,29 @@ class MiddlewareRunner {
   }
 }
 
+/// A class to handle page redirection in a GetX navigation context.
+///
+/// This class manages redirections based on middlewares, unknown routes,
+/// and other routing configurations.
 class PageRedirect {
+  /// The current route being processed.
   GetPage? route;
+
+  /// The route to display when the current route is unknown.
   GetPage? unknownRoute;
+
+  /// The settings for the current route.
   RouteSettings? settings;
+
+  /// Indicates whether the current route is unknown.
   bool isUnknown;
 
+  /// Creates an instance of [PageRedirect].
+  ///
+  /// - [route]: The initial route.
+  /// - [unknownRoute]: The fallback route for unknown pages.
+  /// - [isUnknown]: Whether the route is unknown (default is `false`).
+  /// - [settings]: The route settings for the current route.
   PageRedirect({
     this.route,
     this.unknownRoute,
@@ -167,12 +223,22 @@ class PageRedirect {
     this.settings,
   });
 
-  // redirect all pages that needes redirecting
+  /// Returns a [GetPageRoute] for the provided route.
+  ///
+  /// This method processes the [rou] and [unk] routes, running any required
+  /// middleware checks and returning the appropriate page route.
   GetPageRoute<T> getPageToRoute<T>(
       GetPage rou, GetPage? unk, BuildContext context) {
-    while (needRecheck(context)) {}
+    // Process middleware and recheck if needed.
+    while (needRecheck(context)) {
+      // Prevent infinite loops by ensuring settings or route changes are valid.
+      if (settings == null || route == null) break;
+    }
+
+    // Use the unknown route if the current route is marked as unknown.
     final r = (isUnknown ? unk : rou)!;
 
+    // Create and return the GetPageRoute.
     return GetPageRoute<T>(
       page: r.page,
       parameter: r.parameters,
@@ -199,41 +265,43 @@ class PageRedirect {
     );
   }
 
-  /// check if redirect is needed
+  /// Checks if a redirect is needed based on the current context and settings.
+  ///
+  /// Returns `true` if the route needs to be rechecked; otherwise, `false`.
   bool needRecheck(BuildContext context) {
-    if (settings == null && route != null) {
-      settings = route;
-    }
+    // Set default settings if null.
+    settings ??= route;
+
+    // Match the route using the context's delegate.
     final match = context.delegate.matchRoute(settings!.name!);
 
-    // No Match found
+    // If no matching route is found, mark it as unknown.
     if (match.route == null) {
       isUnknown = true;
       return false;
     }
 
-    // No middlewares found return match.
-    if (match.route!.middlewares.isEmpty) {
-      return false;
-    }
+    // If the route has no middlewares, no recheck is needed.
+    if (match.route!.middlewares.isEmpty) return false;
 
+    // Run middlewares for the matched route.
     final runner = MiddlewareRunner(match.route!.middlewares);
     route = runner.runOnPageCalled(match.route);
     addPageParameter(route!);
 
-    final newSettings = runner.runRedirect(settings!.name);
-    if (newSettings == null) {
-      return false;
-    }
-    settings = newSettings;
-    return true;
+    // Run redirect logic for the current route.
+    settings = runner.runRedirect(settings!.name) ?? settings;
+
+    // Recheck if the settings or route has changed.
+    return settings != match.route;
   }
 
+  /// Adds parameters from the provided [route] to the global [Get.parameters].
   void addPageParameter(GetPage route) {
     if (route.parameters == null) return;
 
+    // Merge the route's parameters with the existing global parameters.
     final parameters = Map<String, String?>.from(Get.parameters);
     parameters.addEntries(route.parameters!.entries);
-    // Get.parameters = parameters;
   }
 }

@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_annotating_with_dynamic
-
 import "package:flutter/widgets.dart";
 import "package:refreshed/refreshed.dart";
 
@@ -15,7 +13,6 @@ class GetNavigator extends Navigator {
     super.restorationScopeId,
   }) : super(
           observers: <NavigatorObserver>[
-            // GetObserver(null, Get.routing),
             HeroController(),
             ...?observers,
           ],

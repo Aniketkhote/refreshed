@@ -1,110 +1,215 @@
-import "dart:async";
+import 'dart:async';
 
-import "package:flutter/widgets.dart";
-import "package:refreshed/get_navigation/src/routes/get_route.dart";
+import 'package:flutter/widgets.dart';
+import 'package:refreshed/get_navigation/get_navigation.dart';
 
+/// Manages the route matching and navigation tree.
 class RouteMatcher {
   final RouteNode _root = RouteNode("/", "/");
 
+  /// Adds a route to the tree.
   RouteNode addRoute(String path) {
     final segments = _parsePath(path);
     var currentNode = _root;
 
     for (final segment in segments) {
-      final existingChild = currentNode.findChild(segment);
-      if (existingChild != null) {
-        currentNode = existingChild;
-      } else {
-        final newChild = RouteNode(segment, path);
-        currentNode.addChild(newChild);
-        currentNode = newChild;
-      }
+      currentNode = currentNode.findOrAddChild(segment, path);
     }
     return currentNode;
   }
 
+  /// Removes a route from the tree.
   void removeRoute(String path) {
     final segments = _parsePath(path);
     var currentNode = _root;
-    RouteNode? nodeToDelete;
 
     // Traverse the tree to find the node to delete
     for (final segment in segments) {
       final child = currentNode.findChild(segment);
-      if (child == null) {
-        return; // Node not found, nothing to delete
-      }
-      if (child.nodeSegments.length == segments.length) {
-        nodeToDelete = child;
-        break;
-      }
+      if (child == null) return; // Node not found, nothing to delete
       currentNode = child;
     }
 
-    if (nodeToDelete == null) {
-      return; // Node not found, nothing to delete
-    }
-
-    final parent = nodeToDelete.parent!;
-    parent.nodeSegments.remove(nodeToDelete);
+    // Remove the node if it exists
+    currentNode.parent?.removeChild(currentNode);
   }
 
-  RouteNode? _findChild(RouteNode currentNode, String segment) {
-    return currentNode.nodeSegments
-        .firstWhereOrNull((node) => node.matches(segment));
-  }
-
+  /// Matches a route and returns the result.
   MatchResult? matchRoute(String path) {
     final uri = Uri.parse(path);
     final segments = _parsePath(uri.path);
     var currentNode = _root;
     final parameters = <String, String>{};
-    final urlParameters = uri.queryParameters;
 
     for (final segment in segments) {
-      if (segment.isEmpty) continue;
-      final child = _findChild(currentNode, segment);
-      if (child == null) {
-        return null;
-      } else {
-        if (child.path.startsWith(":")) {
-          parameters[child.path.substring(1)] = segment;
-        }
+      final child = currentNode.findMatchingChild(segment);
+      if (child == null) return null;
 
-        if (child.nodeSegments.length == segments.length) {
-          return null;
-        }
-
-        currentNode = child;
+      if (child.isParameter) {
+        parameters[child.path.substring(1)] = segment;
       }
+      currentNode = child;
     }
 
     return MatchResult(
       currentNode,
       parameters,
       path,
-      urlParameters: urlParameters,
+      urlParameters: uri.queryParameters,
     );
   }
 
+  /// Splits a path into its segments.
   List<String> _parsePath(String path) {
     return path.split("/").where((segment) => segment.isNotEmpty).toList();
   }
 }
 
+/// Represents the result of a route match.
+class MatchResult {
+  MatchResult(
+    this.node,
+    this.parameters,
+    this.currentPath, {
+    this.urlParameters = const {},
+  });
+
+  final RouteNode node;
+  final String currentPath;
+  final Map<String, String> parameters;
+  final Map<String, String> urlParameters;
+
+  @override
+  String toString() =>
+      "MatchResult(node: $node, currentPath: $currentPath, parameters: $parameters, urlParameters: $urlParameters)";
+}
+
+/// Represents a node in the routing tree.
+class RouteNode {
+  RouteNode(this.path, this.originalPath, {this.parent});
+
+  final String path;
+  final String originalPath;
+  RouteNode? parent;
+  final List<RouteNode> children = [];
+
+  /// Checks if the node represents a parameter (e.g., ":id").
+  bool get isParameter => path.startsWith(":");
+
+  /// Gets the full path of the node.
+  String get fullPath {
+    if (parent == null) return "/";
+    final parentPath = parent!.fullPath == "/" ? "" : parent!.fullPath;
+    return "$parentPath/$path";
+  }
+
+  /// Finds a child node by name or creates a new one.
+  RouteNode findOrAddChild(String name, String fullPath) {
+    return findChild(name) ?? _addChild(RouteNode(name, fullPath));
+  }
+
+  /// Finds a child node by name.
+  RouteNode? findChild(String name) {
+    return children.firstWhereOrNull((node) => node.path == name);
+  }
+
+  /// Finds a matching child node.
+  RouteNode? findMatchingChild(String name) {
+    return children.firstWhereOrNull((node) => node.matches(name));
+  }
+
+  /// Adds a child node.
+  RouteNode _addChild(RouteNode child) {
+    children.add(child);
+    child.parent = this;
+    return child;
+  }
+
+  /// Removes a child node.
+  void removeChild(RouteNode child) {
+    children.remove(child);
+  }
+
+  /// Checks if the node matches a given name.
+  bool matches(String name) {
+    return name == path || path == "*" || isParameter;
+  }
+
+  @override
+  String toString() =>
+      "RouteNode(path: $path, children: $children, fullPath: $fullPath)";
+}
+
+/// Manages the routing tree and handles route operations.
+class RouteTree {
+  static final instance = RouteTree();
+
+  final Map<String, GetPage> tree = {};
+  final RouteMatcher matcher = RouteMatcher();
+
+  /// Adds a single route to the tree.
+  void addRoute(GetPage route) {
+    matcher.addRoute(route.name);
+    tree[route.name] = route;
+    _handleChildren(route);
+  }
+
+  /// Adds multiple routes to the tree.
+  void addRoutes(List<GetPage> routes) {
+    for (final route in routes) {
+      addRoute(route);
+    }
+  }
+
+  /// Handles child routes recursively.
+  void _handleChildren(GetPage route) {
+    for (var child in route.children) {
+      final mergedRoute = child.copyWith(
+        name: route.inheritParentPath
+            ? "${route.name}/${child.name}".replaceAll("//", "/")
+            : child.name,
+        middlewares: [...route.middlewares, ...child.middlewares],
+        bindings: [...route.bindings, ...child.bindings],
+      );
+      addRoute(mergedRoute);
+    }
+  }
+
+  /// Removes a single route from the tree.
+  void removeRoute(GetPage route) {
+    matcher.removeRoute(route.name);
+    tree.remove(route.name);
+  }
+
+  /// Removes multiple routes from the tree.
+  void removeRoutes(List<GetPage> routes) {
+    for (final route in routes) {
+      removeRoute(route);
+    }
+  }
+
+  /// Matches a route by its path.
+  RouteTreeResult? matchRoute(String path) {
+    final matchResult = matcher.matchRoute(path);
+    if (matchResult != null) {
+      final route = tree[matchResult.node.originalPath];
+      return RouteTreeResult(route: route, matchResult: matchResult);
+    }
+    return null;
+  }
+}
+
+/// Represents the result of a route tree match.
 class RouteTreeResult {
   RouteTreeResult({
     required this.route,
     required this.matchResult,
   });
+
   final GetPage? route;
   final MatchResult matchResult;
 
-  @override
-  String toString() {
-    return "RouteTreeResult(route: $route, matchResult: $matchResult)";
-  }
-
+  /// Configures the route with additional arguments.
   RouteTreeResult configure(String page, Object? arguments) {
     return copyWith(
       route: route?.copyWith(
@@ -116,6 +221,7 @@ class RouteTreeResult {
     );
   }
 
+  /// Creates a copy of the result with updated properties.
   RouteTreeResult copyWith({
     GetPage? route,
     MatchResult? matchResult,
@@ -125,141 +231,9 @@ class RouteTreeResult {
       matchResult: matchResult ?? this.matchResult,
     );
   }
-}
-
-class RouteTree {
-  static final instance = RouteTree();
-  final Map<String, GetPage> tree = {};
-  final RouteMatcher matcher = RouteMatcher();
-
-  void addRoute(GetPage route) {
-    matcher.addRoute(route.name);
-    tree[route.name] = route;
-    handleChild(route);
-  }
-
-  void addRoutes(List<GetPage> routes) {
-    for (var route in routes) {
-      addRoute(route);
-    }
-  }
-
-  void handleChild(GetPage route) {
-    final children = route.children;
-    for (var child in children) {
-      final middlewares = List.of(route.middlewares);
-      final bindings = List.of(route.bindings);
-      middlewares.addAll(child.middlewares);
-      bindings.addAll(child.bindings);
-      child = child.copyWith(middlewares: middlewares, bindings: bindings);
-      if (child.inheritParentPath) {
-        child = child.copyWith(
-          name: ("${route.path}/${child.path}").replaceAll(r"//", "/"),
-        );
-      }
-      addRoute(child);
-    }
-  }
-
-  void removeRoute(GetPage route) {
-    matcher.removeRoute(route.name);
-    tree.remove(route.name);
-  }
-
-  void removeRoutes(List<GetPage> routes) {
-    for (var route in routes) {
-      removeRoute(route);
-    }
-  }
-
-  RouteTreeResult? matchRoute(String path) {
-    final matchResult = matcher.matchRoute(path);
-    if (matchResult != null) {
-      final route = tree[matchResult.node.originalPath];
-      return RouteTreeResult(
-        route: route,
-        matchResult: matchResult,
-      );
-    }
-    return null;
-  }
-}
-
-/// A class representing the result of a route matching operation.
-class MatchResult {
-  MatchResult(
-    this.node,
-    this.parameters,
-    this.currentPath, {
-    this.urlParameters = const {},
-  });
-
-  /// The route found that matches the result
-  final RouteNode node;
-
-  /// The current path of match, eg: adding 'user/:id' the match result for 'user/123' will be: 'user/123'
-  final String currentPath;
-
-  /// Route parameters eg: adding 'user/:id' the match result for 'user/123' will be: {id: 123}
-  final Map<String, String> parameters;
-
-  /// Route url parameters eg: adding 'user' the match result for 'user?foo=bar' will be: {foo: bar}
-  final Map<String, String> urlParameters;
 
   @override
-  String toString() =>
-      "MatchResult(node: $node, currentPath: $currentPath, parameters: $parameters, urlParameters: $urlParameters)";
-}
-
-// A class representing a node in a routing tree.
-class RouteNode {
-  RouteNode(this.path, this.originalPath, {this.parent});
-  String path;
-  String originalPath;
-  RouteNode? parent;
-  List<RouteNode> nodeSegments = [];
-
-  bool get isRoot => parent == null;
-
-  String get fullPath {
-    if (isRoot) {
-      return "/";
-    } else {
-      final parentPath = parent?.fullPath == "/" ? "" : parent?.fullPath;
-      return "$parentPath/$path";
-    }
-  }
-
-  bool get hasChildren => nodeSegments.isNotEmpty;
-
-  void addChild(RouteNode child) {
-    nodeSegments.add(child);
-    child.parent = this;
-  }
-
-  RouteNode? findChild(String name) {
-    return nodeSegments.firstWhereOrNull((node) => node.path == name);
-  }
-
-  bool matches(String name) {
-    return name == path || path == "*" || path.startsWith(":");
-  }
-
-  @override
-  String toString() =>
-      "RouteNode(name: $path, nodeSegments: $nodeSegments, fullPath: $fullPath )";
-}
-
-/// Extension providing a `firstWhereOrNull` function to find the first element satisfying a condition.
-///
-/// This extension adds a method `firstWhereOrNull` to iterables, allowing you to find the first
-/// element that satisfies the provided condition, or `null` if no such element exists.
-extension FirstWhereOrNullExt<T> on Iterable<T> {
-  /// Finds the first element satisfying the provided condition, or `null` if none is found.
-  T? firstWhereOrNull(bool Function(T element) test) {
-    for (var element in this) {
-      if (test(element)) return element;
-    }
-    return null;
+  String toString() {
+    return "RouteTreeResult(route: $route, matchResult: $matchResult)";
   }
 }
