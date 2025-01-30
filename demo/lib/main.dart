@@ -17,8 +17,19 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(),
         body: Center(
-          child: ElevatedButton(
-              onPressed: () => Get.to(() => MyWidget()), child: Text("Go")),
+          child: Column(
+            spacing: 24,
+            children: [
+              ElevatedButton(
+                onPressed: () => Get.to(() => MyWidget()),
+                child: Text("My Widget"),
+              ),
+              ElevatedButton(
+                onPressed: () => Get.to(() => Menu()),
+                child: Text("Menu"),
+              ),
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => Get.bottomSheet(const Menu()),
@@ -61,7 +72,7 @@ class RegisterController extends GetxController {
   }
 }
 
-class Menu extends StatelessWidget {
+class Menu extends GetView {
   const Menu({super.key});
 
   @override

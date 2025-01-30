@@ -68,19 +68,6 @@ void main() {
     expect(find.text("lazy 0"), findsOneWidget);
     expect(find.text("single 0"), findsOneWidget);
   });
-
-  // testWidgets(
-  //   "MixinBuilder with build null",
-  //   (test) async {
-  //     expect(
-  //       () => GetBuilder<Controller>(
-  //         init: Controller(),
-  //         builder: null,
-  //       ),
-  //       throwsAssertionError,
-  //     );
-  //   },
-  // );
 }
 
 class Controller extends GetxController {

@@ -1,3 +1,11 @@
+## 3.0.0-beta.3
+
+- Refactored `GetSingleTickerProviderStateMixin` and `GetTickerProviderStateMixin` for better performance and memory management.
+- Improved assertion handling to provide clearer error messages and prevent unintended ticker leaks.
+- Enhanced `didChangeDependencies` to ensure proper ticker muting based on `TickerMode` changes.
+- Optimized `_WidgetTicker` lifecycle management to prevent redundant operations and improve efficiency.
+- Added detailed doc comments to `GetX` for better API documentation and improved developer experience.
+
 ## 3.0.0-beta.2
 
 - Optimized Middleware implementation for improved performance and maintainability.

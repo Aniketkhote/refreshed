@@ -10,19 +10,21 @@ typedef Disposer = void Function();
 /// If this brings overhead, consider removing the extra call.
 typedef GetStateUpdate = void Function();
 
+/// A notifier that supports both single and grouped listeners.
 class ListNotifier extends Listenable
     with ListNotifierSingleMixin, ListNotifierGroupMixin {}
 
-/// A Notifier with single listeners
+/// A Notifier that supports single listeners.
 class ListNotifierSingle extends ListNotifier with ListNotifierSingleMixin {}
 
-/// A Notifier with a group of listeners identified by id
+/// A Notifier that supports a group of listeners identified by an ID.
 class ListNotifierGroup extends ListNotifier with ListNotifierGroupMixin {}
 
-/// This mixin adds to Listenable the addListener, removeListener, and containsListener implementations.
+/// This mixin adds listener management capabilities to Listenable.
 mixin ListNotifierSingleMixin on Listenable {
   List<GetStateUpdate>? _updaters = <GetStateUpdate>[];
 
+  /// Adds a listener and returns a [Disposer] to remove it later.
   @override
   Disposer addListener(GetStateUpdate listener) {
     assert(_debugAssertNotDisposed());
@@ -30,26 +32,31 @@ mixin ListNotifierSingleMixin on Listenable {
     return () => _updaters!.remove(listener);
   }
 
+  /// Checks if a given listener is already registered.
   bool containsListener(GetStateUpdate listener) =>
       _updaters?.contains(listener) ?? false;
 
+  /// Removes a registered listener.
   @override
   void removeListener(VoidCallback listener) {
     assert(_debugAssertNotDisposed());
     _updaters!.remove(listener);
   }
 
+  /// Notifies all registered listeners of an update.
   @protected
   void refresh() {
     assert(_debugAssertNotDisposed());
     _notifyUpdate();
   }
 
+  /// Reports that a read operation has occurred.
   @protected
   void reportRead() {
     Notifier.instance.read(this);
   }
 
+  /// Reports a new listener addition.
   @protected
   void reportAdd(VoidCallback disposer) {
     Notifier.instance.add(disposer);
@@ -62,6 +69,7 @@ mixin ListNotifierSingleMixin on Listenable {
     }
   }
 
+  /// Checks if the notifier has been disposed.
   bool get isDisposed => _updaters == null;
 
   bool _debugAssertNotDisposed() {
@@ -76,11 +84,13 @@ mixin ListNotifierSingleMixin on Listenable {
     return true;
   }
 
+  /// Returns the number of active listeners.
   int get listenersLength {
     assert(_debugAssertNotDisposed());
     return _updaters!.length;
   }
 
+  /// Disposes of the notifier, preventing further updates.
   @mustCallSuper
   void dispose() {
     assert(_debugAssertNotDisposed());
@@ -88,6 +98,7 @@ mixin ListNotifierSingleMixin on Listenable {
   }
 }
 
+/// A mixin for managing a group of listeners identified by an ID.
 mixin ListNotifierGroupMixin on Listenable {
   HashMap<Object?, ListNotifierSingleMixin>? _updatersGroupIds =
       HashMap<Object?, ListNotifierSingleMixin>();
@@ -98,14 +109,17 @@ mixin ListNotifierGroupMixin on Listenable {
     }
   }
 
+  /// Notifies all children of a given group ID.
   @protected
   void notifyGroupChildren(Object id) {
     assert(_debugAssertNotDisposed());
     Notifier.instance.read(_updatersGroupIds![id]!);
   }
 
+  /// Checks if a specific ID exists in the group.
   bool containsId(Object id) => _updatersGroupIds?.containsKey(id) ?? false;
 
+  /// Refreshes all listeners associated with a specific ID.
   @protected
   void refreshGroup(Object id) {
     assert(_debugAssertNotDisposed());
@@ -124,6 +138,7 @@ mixin ListNotifierGroupMixin on Listenable {
     return true;
   }
 
+  /// Removes a specific listener from a group by ID.
   void removeListenerId(Object id, VoidCallback listener) {
     assert(_debugAssertNotDisposed());
     if (_updatersGroupIds!.containsKey(id)) {
@@ -131,6 +146,7 @@ mixin ListNotifierGroupMixin on Listenable {
     }
   }
 
+  /// Disposes all listeners in the group.
   @mustCallSuper
   void dispose() {
     assert(_debugAssertNotDisposed());
@@ -140,14 +156,13 @@ mixin ListNotifierGroupMixin on Listenable {
     _updatersGroupIds = null;
   }
 
+  /// Adds a listener to a specific group ID.
   Disposer addListenerId(Object? key, GetStateUpdate listener) {
     _updatersGroupIds![key] ??= ListNotifierSingle();
     return _updatersGroupIds![key]!.addListener(listener);
   }
 
-  /// To dispose of an [id] from future updates(), these ids are registered
-  /// by `GetBuilder()` or similar, so this is a way to unlink the state change with
-  /// the Widget from the Controller.
+  /// Disposes of a specific ID from future updates.
   void disposeId(Object id) {
     _updatersGroupIds?[id]?.dispose();
     _updatersGroupIds!.remove(id);

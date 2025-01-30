@@ -7,21 +7,27 @@ import 'package:refreshed/get_state_manager/src/simple/list_notifier.dart';
 
 /// A typedef for a function that builds a widget based on a [GetX] controller.
 ///
-/// This typedef defines the signature of a builder function that takes a [T] controller,
-/// which extends [GetLifeCycleMixin], and returns a [Widget].
+/// This function signature is used to define how the widget will be built
+/// based on the state of the controller. The controller must extend [GetLifeCycleMixin].
 typedef GetXControllerBuilder<T extends GetLifeCycleMixin> = Widget Function(
     T controller);
 
 /// A widget that manages the lifecycle of a [GetX] controller and rebuilds
 /// its child widget whenever the controller's state changes.
 ///
-/// The [GetX] widget is designed to work with controllers that extend [GetLifeCycleMixin].
-/// It manages the lifecycle of the controller and updates its child widget when the controller's state changes.
+/// The [GetX] widget listens to the state of the controller, and whenever
+/// the controller's state changes, it triggers a rebuild of the widget.
+/// It is designed to work with controllers that extend [GetLifeCycleMixin].
+///
+/// The controller can be registered globally or locally, and the widget
+/// provides hooks for lifecycle events like [initState], [dispose], and others.
 class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
   /// Constructs a [GetX] widget.
   ///
-  /// [builder] is required and must not be null. It is used to build the widget
-  /// based on the controller's state.
+  /// The [builder] function is required and is used to build the widget
+  /// based on the controller's state. Other parameters control the lifecycle
+  /// behavior of the controller, such as whether it should be registered globally,
+  /// and whether it should be automatically removed when the widget is disposed.
   const GetX({
     required this.builder,
     super.key,
@@ -70,61 +76,34 @@ class GetX<T extends GetLifeCycleMixin> extends StatefulWidget {
   final void Function(GetX<T> oldWidget, GetXState<T> state)? didUpdateWidget;
 
   /// The initial controller to use.
+  ///
+  /// If the controller is not registered globally, this controller will be used
+  /// to initialize the widget.
   final T? init;
 
   /// An optional tag to identify the controller when registered globally.
   final String? tag;
 
   @override
-  StatefulElement createElement() => StatefulElement(this);
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty<T>('controller', init))
-      ..add(DiagnosticsProperty<String>('tag', tag))
-      ..add(
-          ObjectFlagProperty<GetXControllerBuilder<T>>.has('builder', builder))
-      ..add(DiagnosticsProperty<bool>('global', global))
-      ..add(DiagnosticsProperty<bool>('autoRemove', autoRemove))
-      ..add(DiagnosticsProperty<bool>('assignId', assignId))
-      ..add(ObjectFlagProperty<void Function(GetXState<T>)?>.has(
-          'initState', initState))
-      ..add(ObjectFlagProperty<void Function(GetXState<T>)?>.has(
-          'dispose', dispose))
-      ..add(ObjectFlagProperty<void Function(GetXState<T>)?>.has(
-          'didChangeDependencies', didChangeDependencies))
-      ..add(ObjectFlagProperty<void Function(GetX<T>, GetXState<T>)?>.has(
-          'didUpdateWidget', didUpdateWidget));
-  }
-
-  @override
   GetXState<T> createState() => GetXState<T>();
 }
 
-/// The state for the [GetX] widget.
-///
-/// Manages the lifecycle of the controller and rebuilds the child widget
-/// whenever the controller's state changes.
 class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   T? controller;
-  bool? _isCreator = false;
-  final List<Disposer> disposers = <Disposer>[];
+  bool _isCreator = false;
+  final List<Disposer> disposers = [];
 
   @override
   void initState() {
     super.initState();
 
+    // Register the controller globally if necessary, or use the provided local controller.
     if (widget.global) {
       final bool isRegistered = Get.isRegistered<T>(tag: widget.tag);
+      _isCreator = !isRegistered || Get.isPrepared<T>(tag: widget.tag);
+      controller = isRegistered ? Get.find<T>(tag: widget.tag) : widget.init;
 
-      if (isRegistered) {
-        _isCreator = Get.isPrepared<T>(tag: widget.tag);
-        controller = Get.find<T>(tag: widget.tag);
-      } else {
-        controller = widget.init;
-        _isCreator = true;
+      if (!isRegistered) {
         Get.put<T>(controller!, tag: widget.tag);
       }
     } else {
@@ -135,6 +114,7 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
 
     widget.initState?.call(this);
 
+    // Trigger onStart if the controller is globally registered and smart management is enabled.
     if (widget.global && Get.smartManagement == SmartManagement.onlyBuilder) {
       controller?.onStart();
     }
@@ -154,26 +134,29 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
 
   @override
   void dispose() {
-    if (widget.dispose != null) {
-      widget.dispose!(this);
+    // Call the provided dispose callback, if any.
+    widget.dispose?.call(this);
+
+    // Remove the controller if it was created locally or is marked for removal.
+    if ((_isCreator || widget.assignId) &&
+        widget.autoRemove &&
+        Get.isRegistered<T>(tag: widget.tag)) {
+      Get.delete<T>(tag: widget.tag);
     }
 
-    if (_isCreator! || widget.assignId) {
-      if (widget.autoRemove && Get.isRegistered<T>(tag: widget.tag)) {
-        Get.delete<T>(tag: widget.tag);
-      }
-    }
-
-    for (final Disposer disposer in disposers) {
+    // Clean up any disposers.
+    for (final disposer in disposers) {
       disposer();
     }
     disposers.clear();
 
     controller = null;
-    _isCreator = null;
     super.dispose();
   }
 
+  /// Updates the state of the widget.
+  ///
+  /// This function triggers a rebuild of the widget by calling [setState].
   void _update() {
     if (mounted) {
       setState(() {});

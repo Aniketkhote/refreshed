@@ -73,19 +73,6 @@ void main() {
 
     expect(find.text("Count2: 1"), findsOneWidget);
   });
-
-  // testWidgets(
-  //   "MixinBuilder with build null",
-  //   (tester) async {
-  //     expect(
-  //       () => MixinBuilder<Controller>(
-  //         init: Controller(),
-  //         builder: null,
-  //       ),
-  //       throwsAssertionError,
-  //     );
-  //   },
-  // );
 }
 
 class Controller extends GetxController {
