@@ -18,3 +18,4 @@ export "src/routes/route_middleware.dart";
 export "src/routes/transitions_type.dart";
 export "src/snackbar/snackbar.dart";
 export "src/snackbar/snackbar_controller.dart";
+export 'src/snackbar/snackbar_enums.dart';
