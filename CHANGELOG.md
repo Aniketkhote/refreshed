@@ -1,3 +1,17 @@
+## 3.0.0-beta.4
+
+- Removed methods from `RxDouble` and `RxnDouble` as they were not relevant to the package functionality:
+
+  - `abs()`, `sign()`, `round()`, `floor()`, `ceil()`, `truncate()`, etc.
+
+- Removed methods from `IntExt` and `IntnExt` that were unnecessary for the intended functionality:
+
+  - Shift operations, mathematical operations (e.g., `modPow`, `gcd`, etc.), bitwise operations (`bitLength`, `toUnsigned()`, `toSigned()`), negation (`operator -()`), and parity checks (`isEven`, `isOdd`).
+
+- Removed methods from `RxString` and `RxnString` as they were not relevant to the package functionality:
+
+  - `pad()`, `startsWith()`, `endsWith()`, `contains()`, `toLowerCase()`, `toUpperCase()`, `substring()`, etc.
+
 ## 3.0.0-beta.3
 
 - Refactored `GetSingleTickerProviderStateMixin` and `GetTickerProviderStateMixin` for better performance and memory management.

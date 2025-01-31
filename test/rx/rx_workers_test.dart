@@ -158,38 +158,6 @@ void main() {
     expect(4, timesCalled);
   });
 
-  test("Rx String with non null values", () async {
-    final Rx<String> reactiveString = Rx<String>("abc");
-    String? currentString;
-    reactiveString.listen((String newString) {
-      currentString = newString;
-    });
-
-    expect(reactiveString.endsWith("c"), true);
-
-    // we call 3
-    reactiveString("b");
-
-    await Future.delayed(Duration.zero);
-    expect(currentString, "b");
-  });
-
-  test("Rx String with null values", () async {
-    final Rx<String?> reactiveString = Rx<String?>(null);
-    String? currentString;
-
-    reactiveString.listen((String? newString) {
-      currentString = newString;
-    });
-
-    // we call 3
-    reactiveString("abc");
-
-    await Future.delayed(Duration.zero);
-    expect(reactiveString.endsWith("c"), true);
-    expect(currentString, "abc");
-  });
-
   test('Number of times "ever" is called in RxList', () async {
     final RxList<int> list = <int>[1, 2, 3].obs;
     int count = 0;
