@@ -5,6 +5,10 @@ class NotFoundPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textColor = theme.textTheme.bodyLarge?.color ?? Colors.black54;
+    final dividerColor = theme.dividerColor;
+
     return Scaffold(
       body: Center(
         child: Row(
@@ -13,24 +17,20 @@ class NotFoundPage extends StatelessWidget {
           children: [
             Text(
               '404',
-              style: TextStyle(
-                fontSize: 48,
+              style: theme.textTheme.headlineLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             Container(
               height: 48,
               width: 1,
-              color: Colors.grey,
+              color: dividerColor,
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             Text(
               'This page could not be found.',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black54,
-              ),
+              style: theme.textTheme.bodyLarge?.copyWith(color: textColor),
             ),
           ],
         ),

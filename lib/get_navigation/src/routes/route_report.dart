@@ -1,46 +1,45 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
+import 'package:refreshed/get_navigation/src/router_report.dart';
+import 'package:refreshed/get_navigation/src/routes/default_route.dart';
 
-import "package:refreshed/get_navigation/src/router_report.dart";
-import "package:refreshed/get_navigation/src/routes/default_route.dart";
-
-/// A StatefulWidget that reports its route lifecycle events to a [RouterReportManager].
+/// A widget that tracks and reports its route lifecycle events.
 ///
-/// This widget is designed to be used within a routing system where you need
-/// to track the lifecycle events of a route, such as when it is initialized
-/// and disposed.
+/// This widget is useful in navigation systems where tracking route
+/// initialization and disposal events is required. It integrates with
+/// [RouterReportManager] to report these events.
 ///
-/// Example:
-///
+/// Example usage:
 /// ```dart
 /// RouteReport(
-///   builder: (context) {
-///     return SomeWidget();
-///   },
+///   builder: (context) => SomeWidget(),
 /// )
 /// ```
 class RouteReport extends StatefulWidget {
-  /// Constructs a RouteReport widget.
+  /// Creates a [RouteReport] widget.
   ///
-  /// The [builder] parameter is required and must not be null. It defines
-  /// the widget tree for this route.
-  const RouteReport({super.key, required this.builder});
+  /// The [builder] parameter is required and specifies the widget tree
+  /// for this route.
+  const RouteReport({
+    super.key,
+    required this.builder,
+  });
 
-  /// A callback that builds the widget tree for this route.
+  /// A function that returns the widget tree for this route.
   final WidgetBuilder builder;
 
   @override
   RouteReportState createState() => RouteReportState();
 }
 
-/// The state for [RouteReport].
+/// The state associated with [RouteReport].
 ///
-/// This state mixin adds lifecycle event reporting to the route.
-/// It reports route initialization and disposal to a [RouterReportManager].
+/// This state reports route lifecycle events such as initialization and disposal
+/// to the [RouterReportManager].
 class RouteReportState extends State<RouteReport> with RouteReportMixin {
   @override
   void initState() {
-    RouterReportManager.instance.reportCurrentRoute(this);
     super.initState();
+    RouterReportManager.instance.reportCurrentRoute(this);
   }
 
   @override
@@ -50,7 +49,5 @@ class RouteReportState extends State<RouteReport> with RouteReportMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return widget.builder(context);
-  }
+  Widget build(BuildContext context) => widget.builder(context);
 }

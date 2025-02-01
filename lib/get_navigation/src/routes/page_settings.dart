@@ -5,50 +5,20 @@ import "package:refreshed/route_manager.dart";
 ///
 /// These extension methods facilitate accessing page settings, arguments, parameters,
 /// router information, and delegate within a build context.
-///
-/// Example usage:
-///
-/// ```dart
-/// final settings = context.settings;
-/// final pageSettings = context.pageSettings;
-/// final arguments = context.arguments;
-/// final params = context.params;
-/// final router = context.router;
-/// final location = context.location;
-/// final delegate = context.delegate;
-/// ```
 extension PageArgExtension<T> on BuildContext {
   /// Retrieves the route settings associated with the current modal route.
   RouteSettings? get settings => ModalRoute.of(this)!.settings;
 
   /// Retrieves the [PageSettings] associated with the current modal route's settings arguments.
-  PageSettings? get pageSettings {
-    final Object? args = ModalRoute.of(this)?.settings.arguments;
-    if (args is PageSettings) {
-      return args;
-    }
-    return null;
-  }
+  PageSettings? get pageSettings => settings?.arguments is PageSettings
+      ? settings!.arguments as PageSettings
+      : null;
 
   /// Retrieves the arguments associated with the current modal route's settings.
-  dynamic get arguments {
-    final Object? args = settings?.arguments;
-    if (args is PageSettings) {
-      return args.arguments;
-    } else {
-      return args;
-    }
-  }
+  dynamic get arguments => pageSettings?.arguments ?? settings?.arguments;
 
   /// Retrieves the parameters associated with the current modal route's settings arguments.
-  Map<String, String> get params {
-    final Object? args = settings?.arguments;
-    if (args is PageSettings) {
-      return args.params;
-    } else {
-      return <String, String>{};
-    }
-  }
+  Map<String, String> get params => pageSettings?.params ?? {};
 
   /// Retrieves the [Router] associated with the current build context.
   Router<T> get router => Router.of(this);
@@ -65,22 +35,8 @@ extension PageArgExtension<T> on BuildContext {
 }
 
 /// A custom implementation of [RouteSettings] representing settings specific to a page.
-///
-/// This class extends [RouteSettings] to provide additional functionality and data
-/// related to a page's URI, path, parameters, and query parameters.
-///
-/// Example usage:
-///
-/// ```dart
-/// final pageSettings = PageSettings(Uri.parse('/example'));
-/// final path = pageSettings.path;
-/// final queryParameters = pageSettings.query;
-/// ```
 class PageSettings extends RouteSettings {
   /// Constructs a [PageSettings] object with the given URI and optional arguments.
-  ///
-  /// The [uri] parameter specifies the URI associated with the page settings.
-  /// The optional [arguments] parameter can be provided to pass additional arguments.
   PageSettings(
     this.uri, [
     Object? arguments,
@@ -111,9 +67,6 @@ class PageSettings extends RouteSettings {
   String toString() => name;
 
   /// Creates a copy of this [PageSettings] object with optional parameters overridden.
-  ///
-  /// The optional [uri] parameter allows specifying a new URI for the copy.
-  /// The optional [arguments] parameter allows specifying new arguments for the copy.
   PageSettings copy({
     Uri? uri,
     Object? arguments,
@@ -124,16 +77,12 @@ class PageSettings extends RouteSettings {
       );
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-
-    return other is PageSettings &&
-        other.uri == uri &&
-        other.arguments == arguments;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PageSettings &&
+          other.uri == uri &&
+          other.arguments == arguments);
 
   @override
-  int get hashCode => uri.hashCode ^ arguments.hashCode;
+  int get hashCode => Object.hash(uri, arguments);
 }

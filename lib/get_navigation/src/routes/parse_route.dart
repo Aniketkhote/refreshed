@@ -23,6 +23,7 @@ class RouteDecoder {
     final args = PageSettings(uri);
     final decoder =
         (Get.rootController.rootDelegate).matchRoute(location, arguments: args);
+
     decoder.route = decoder.route?.copyWith(
       completer: null,
       arguments: args,
@@ -31,13 +32,18 @@ class RouteDecoder {
     return decoder;
   }
 
-  /// Returns the last [GetPage] in the current tree branch, or `null` if the branch is empty.
+  /// Returns the last [GetPage] in the current tree branch, or `null` if empty.
   GetPage? get route =>
-      currentTreeBranch.isEmpty ? null : currentTreeBranch.last;
+      currentTreeBranch.isNotEmpty ? currentTreeBranch.last : null;
 
-  /// Returns the last [GetPage] in the current tree branch, or [onUnknow] if the branch is empty.
-  GetPage routeOrUnknown(GetPage onUnknow) =>
-      currentTreeBranch.isEmpty ? onUnknow : currentTreeBranch.last;
+  /// Returns the last [GetPage] or a default fallback [onUnknown].
+  GetPage routeOrUnknown(GetPage onUnknown) => route ?? onUnknown;
+
+  /// Retrieves the children of the current route, if any.
+  List<GetPage>? get currentChildren => route?.children;
+
+  /// Retrieves the parameters of the current page settings.
+  Map<String, String> get parameters => pageSettings?.params ?? {};
 
   /// Sets the last [GetPage] in the current tree branch.
   set route(GetPage? getPage) {
@@ -49,54 +55,36 @@ class RouteDecoder {
     }
   }
 
-  /// Retrieves the children of the current route, if any.
-  List<GetPage>? get currentChildren => route?.children;
-
-  /// Retrieves the parameters of the current page settings.
-  Map<String, String> get parameters => pageSettings?.params ?? {};
-
   /// Retrieves the arguments passed to the current page.
   dynamic get args => pageSettings?.arguments;
 
-  /// Retrieves the arguments cast to a specific type [T], or `null` if not matching.
-  T? arguments<T>() {
-    final args = pageSettings?.arguments;
-    if (args is T) {
-      return args;
-    } else {
-      return null;
-    }
-  }
+  /// Retrieves arguments cast to a specific type [T], or `null` if type mismatch.
+  T? arguments<T>() => args is T ? args as T : null;
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is RouteDecoder &&
-        listEquals(other.currentTreeBranch, currentTreeBranch) &&
-        other.pageSettings == pageSettings;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RouteDecoder &&
+          listEquals(other.currentTreeBranch, currentTreeBranch) &&
+          other.pageSettings == pageSettings);
 
   @override
-  int get hashCode => currentTreeBranch.hashCode ^ pageSettings.hashCode;
+  int get hashCode => Object.hash(currentTreeBranch, pageSettings);
 
   @override
   String toString() =>
-      'RouteDecoder(currentTreeBranch: $currentTreeBranch, pageSettings: $pageSettings)';
+      'RouteDecoder(branch: $currentTreeBranch, settings: $pageSettings)';
 }
 
 /// A class representing a parsed route tree that manages route matching
 /// and manipulation for nested routing structures.
 class ParseRouteTree {
-  ParseRouteTree({
-    required this.routes,
-  });
+  ParseRouteTree({required this.routes});
 
   /// List of all defined routes in the application.
   final List<GetPage> routes;
 
   /// Matches a given [name] to the appropriate route in the tree and returns a [RouteDecoder].
-  /// Optionally, [arguments] can be passed to customize the page settings.
   RouteDecoder matchRoute(String name, {PageSettings? arguments}) {
     final uri = Uri.parse(name);
     final split = uri.path.split('/').where((element) => element.isNotEmpty);
@@ -184,104 +172,42 @@ class ParseRouteTree {
 
   /// Flattens a route to include all its children recursively.
   List<GetPage> _flattenPage(GetPage route) {
-    final result = <GetPage>[];
-    if (route.children.isEmpty) {
-      return result;
-    }
-
+    if (route.children.isEmpty) return [];
     final parentPath = route.name;
-    for (var page in route.children) {
-      final parentMiddlewares = [
-        if (page.middlewares.isNotEmpty) ...page.middlewares,
-        if (route.middlewares.isNotEmpty) ...route.middlewares
-      ];
 
-      final parentBindings = [
-        if (page.binding != null) page.binding!,
-        if (page.bindings.isNotEmpty) ...page.bindings,
-        if (route.bindings.isNotEmpty) ...route.bindings
-      ];
-
-      final parentBinds = [
-        if (page.binds.isNotEmpty) ...page.binds,
-        if (route.binds.isNotEmpty) ...route.binds
-      ];
-
-      result.add(
-        _addChild(
-          page,
-          parentPath,
-          parentMiddlewares,
-          parentBindings,
-          parentBinds,
-        ),
-      );
-
-      final children = _flattenPage(page);
-      for (var child in children) {
-        result.add(_addChild(
-          child,
-          parentPath,
-          [
-            ...parentMiddlewares,
-            if (child.middlewares.isNotEmpty) ...child.middlewares,
-          ],
-          [
-            ...parentBindings,
-            if (child.binding != null) child.binding!,
-            if (child.bindings.isNotEmpty) ...child.bindings,
-          ],
-          [
-            ...parentBinds,
-            if (child.binds.isNotEmpty) ...child.binds,
-          ],
-        ));
-      }
-    }
-    return result;
+    return route.children.expand((page) {
+      final updatedPage = _addChild(page, parentPath, route);
+      return [updatedPage, ..._flattenPage(updatedPage)];
+    }).toList();
   }
 
-  /// Updates a [GetPage] with a new path and inherited properties.
-  GetPage _addChild(
-    GetPage origin,
-    String parentPath,
-    List<GetMiddleware> middlewares,
-    List<BindingsInterface> bindings,
-    List<Bind> binds,
-  ) {
+  /// Updates a [GetPage] with inherited properties.
+  GetPage _addChild(GetPage origin, String parentPath, GetPage parent) {
     return origin.copyWith(
-      middlewares: middlewares,
+      middlewares: [...parent.middlewares, ...origin.middlewares],
       name: origin.inheritParentPath
           ? (parentPath + origin.name).replaceAll(r'//', '/')
           : origin.name,
-      bindings: bindings,
-      binds: binds,
+      bindings: [...parent.bindings, ...origin.bindings],
+      binds: [...parent.binds, ...origin.binds],
     );
   }
 
   /// Finds a route by its name in the route tree.
-  GetPage? _findRoute(String name) {
-    return routes.firstWhereOrNull(
-      (route) => route.path.regex.hasMatch(name),
-    );
-  }
+  GetPage? _findRoute(String name) =>
+      routes.firstWhereOrNull((route) => route.path.regex.hasMatch(name));
 
   /// Parses parameters from the path based on the route's regex.
   Map<String, String> _parseParams(String path, PathDecoded routePath) {
     final params = <String, String>{};
-    var idx = path.indexOf('?');
     final uri = Uri.tryParse(path);
     if (uri == null) return params;
-    if (idx > -1) {
-      params.addAll(uri.queryParameters);
-    }
-    var paramsMatch = routePath.regex.firstMatch(uri.path);
-    if (paramsMatch == null) {
-      return params;
-    }
-    for (var i = 0; i < routePath.keys.length; i++) {
-      var param = Uri.decodeQueryComponent(paramsMatch[i + 1]!);
-      params[routePath.keys[i]!] = param;
+
+    final match = routePath.regex.firstMatch(uri.path);
+    if (match != null) {
+      for (var i = 0; i < routePath.keys.length; i++) {
+        params[routePath.keys[i]!] = Uri.decodeQueryComponent(match[i + 1]!);
+      }
     }
     return params;
   }

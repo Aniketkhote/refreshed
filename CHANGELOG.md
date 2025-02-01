@@ -1,3 +1,55 @@
+# Changelog for Version 3.0.0
+
+## 3.0.0
+
+### Performance Improvements
+
+- **Improved Middleware Implementation**:
+
+  - Optimized for better performance and maintainability.
+  - Enhanced handling of route parameters for smoother navigation.
+
+- **Optimized Route Parsing**:
+  - Streamlined route matching to improve efficiency in path resolution.
+  - Enhanced route tree management for better handling of route additions and deletions.
+  - Optimized handling of parameters and child routes for cleaner, more efficient code.
+- **GetSingleTickerProviderStateMixin & GetTickerProviderStateMixin Refactor**:
+  - Refactored for better performance and memory management.
+  - Improved assertion handling with clearer error messages and prevention of unintended ticker leaks.
+  - Enhanced `didChangeDependencies` to mute tickers properly based on `TickerMode` changes.
+  - Optimized `_WidgetTicker` lifecycle management to prevent redundant operations.
+
+### UI/UX Enhancements
+
+- **Material 3 Snackbar UI**:
+  - Updated Snackbar background to match Material 3 UI design for better consistency.
+
+### Breaking Changes
+
+- **Flutter 3.27+ and Dart 3.6+ Support Only**:
+  - This release only supports Flutter versions greater than or equal to 3.27 and Dart versions greater than or equal to 3.6, due to breaking changes introduced in Flutter 3.27.
+
+### Bug Fixes
+
+- **Route Management Fixes**:
+  - Fixed the issue where unknown routes would not properly navigate to the 404 route. Now, invalid routes are handled correctly.
+
+### Removed Features
+
+- **Deprecated Methods Removed**:
+  - Methods that were not relevant to the core functionality have been removed from the package:
+    - From `RxDouble` and `RxnDouble`: `abs()`, `sign()`, `round()`, `floor()`, `ceil()`, `truncate()`, etc.
+    - From `IntExt` and `IntnExt`: Shift operations, mathematical operations (`modPow`, `gcd`, etc.), bitwise operations (`bitLength`, `toUnsigned()`, `toSigned()`), negation (`operator -()`), and parity checks (`isEven`, `isOdd`).
+    - From `RxString` and `RxnString`: `pad()`, `startsWith()`, `endsWith()`, `contains()`, `toLowerCase()`, `toUpperCase()`, `substring()`, etc.
+
+### API Documentation
+
+- Added detailed doc comments to improved developer experience and clearer API documentation.
+
+---
+
+> **Note**: This release is part of ongoing improvements for performance, memory management, and route handling, with a major update requiring Flutter 3.27 and Dart 3.6 for compatibility.
+
 ## 3.0.0-beta.4
 
 - Removed methods from `RxDouble` and `RxnDouble` as they were not relevant to the package functionality:

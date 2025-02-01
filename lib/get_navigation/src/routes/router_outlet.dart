@@ -1,10 +1,11 @@
-// ignore_for_file: avoid_annotating_with_dynamic
-
 import "package:flutter/material.dart";
 import "package:refreshed/refreshed.dart";
 
+/// A widget that allows custom routing with GetX, helping in managing navigation
+/// and handling routing state across multiple routes in a nested manner.
 class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
     extends StatefulWidget {
+  /// Creates a new [RouterOutlet] with the provided page builder and route handler.
   RouterOutlet({
     required Iterable<GetPage> Function(T currentNavStack) pickPages,
     required Widget Function(
@@ -29,18 +30,23 @@ class RouterOutlet<TDelegate extends RouterDelegate<T>, T extends Object>
           key: key,
         );
 
+  /// Creates a new [RouterOutlet] with a custom builder.
   RouterOutlet.builder({
     required this.builder,
     super.key,
     TDelegate? delegate,
   }) : routerDelegate = delegate ?? Get.delegate<TDelegate, T>()!;
+
   final TDelegate routerDelegate;
   final Widget Function(BuildContext context) builder;
+
   @override
   RouterOutletState<TDelegate, T> createState() =>
       RouterOutletState<TDelegate, T>();
 }
 
+/// State class for [RouterOutlet], handling navigation state updates and back
+/// button handling.
 class RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
     extends State<RouterOutlet<TDelegate, T>> {
   RouterDelegate? delegate;
@@ -78,7 +84,10 @@ class RouterOutletState<TDelegate extends RouterDelegate<T>, T extends Object>
   }
 }
 
+/// A specialized [RouterOutlet] for GetX, handling nested routing and page
+/// generation.
 class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
+  /// Creates a [GetRouterOutlet] that picks pages from the current route configuration.
   GetRouterOutlet({
     required String initialRoute,
     Key? key,
@@ -91,7 +100,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
           pickPages: (RouteDecoder config) {
             Iterable<GetPage<dynamic>> ret;
             if (anchorRoute == null) {
-              // jump the ancestor path
+              // Jump the ancestor path
               final int length = Uri.parse(initialRoute).pathSegments.length;
 
               return config.currentTreeBranch
@@ -111,6 +120,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
           navigatorKey: Get.nestedKey(anchorRoute)?.navigatorKey,
           delegate: delegate,
         );
+
   GetRouterOutlet.pickPages({
     required super.pickPages,
     super.key,
@@ -171,6 +181,7 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
         );
 }
 
+/// An inherited widget for passing navigation state down the widget tree.
 class InheritedNavigator extends InheritedWidget {
   const InheritedNavigator({
     required super.child,
@@ -186,6 +197,7 @@ class InheritedNavigator extends InheritedWidget {
   bool updateShouldNotify(InheritedNavigator oldWidget) => true;
 }
 
+/// Extension on [List<GetPage>] for enhanced routing functionality.
 extension PagesListExt<T> on List<GetPage<T>> {
   /// Returns the route and all following routes after the given route.
   Iterable<GetPage<T>> pickFromRoute(String route) =>
@@ -193,31 +205,32 @@ extension PagesListExt<T> on List<GetPage<T>> {
 
   /// Returns the routes after the given route.
   Iterable<GetPage<T>> pickAfterRoute(String route) {
-    // If the provided route is root, we take the first route after root.
     if (route == "/") {
       return pickFromRoute(route).skip(1).take(1);
     }
-    // Otherwise, we skip the route and take all routes after it.
     return pickFromRoute(route).skip(1);
   }
 }
 
+/// A widget builder for indexed navigation routes.
 typedef NavigatorItemBuilderBuilder = Widget Function(
   BuildContext context,
   List<String> routes,
   int index,
 );
 
+/// A widget that provides indexed routing for navigation items.
 class IndexedRouteBuilder<T> extends StatelessWidget {
   const IndexedRouteBuilder({
     required this.builder,
     required this.routes,
     super.key,
   });
+
   final List<String> routes;
   final NavigatorItemBuilderBuilder builder;
 
-// Method to get the current index based on the route
+  // Method to get the current index based on the route
   int _getCurrentIndex(String currentLocation) {
     for (int i = 0; i < routes.length; i++) {
       if (currentLocation.startsWith(routes[i])) {
@@ -236,6 +249,7 @@ class IndexedRouteBuilder<T> extends StatelessWidget {
   }
 }
 
+/// Mixin to listen to changes in the router delegate state.
 mixin RouterListenerMixin<T extends StatefulWidget> on State<T> {
   RouterDelegate? delegate;
 
@@ -263,6 +277,7 @@ mixin RouterListenerMixin<T extends StatefulWidget> on State<T> {
   }
 }
 
+/// An inherited widget to handle router listener states.
 class RouterListenerInherited extends InheritedWidget {
   const RouterListenerInherited({
     required super.child,
@@ -276,6 +291,7 @@ class RouterListenerInherited extends InheritedWidget {
   bool updateShouldNotify(covariant InheritedWidget oldWidget) => true;
 }
 
+/// A widget that listens to changes in the router delegate state.
 class RouterListener extends StatefulWidget {
   const RouterListener({
     required this.builder,
@@ -294,6 +310,7 @@ class RouteListenerState extends State<RouterListener>
       RouterListenerInherited(child: Builder(builder: widget.builder));
 }
 
+/// A widget that listens to back button events and provides custom back button handling.
 class BackButtonCallback extends StatefulWidget {
   const BackButtonCallback({required this.builder, super.key});
   final WidgetBuilder builder;

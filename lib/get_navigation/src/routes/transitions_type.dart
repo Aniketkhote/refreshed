@@ -1,17 +1,4 @@
-/// This file contains definitions related to transitions and route builders.
-///
-/// [Transition] enum defines various types of transitions that can be applied
-/// when navigating between routes.
-///
-/// [GetPageBuilder] is a typedef representing a function that returns a widget.
-///
-/// [GetRouteAwarePageBuilder] is a typedef representing a function that takes
-/// an optional [GetPageRoute] route parameter and returns a widget.
-///
-library;
-
 import "package:flutter/widgets.dart";
-
 import "package:refreshed/get_navigation/src/routes/default_route.dart";
 
 /// Enum defining various types of transitions that can be applied when
