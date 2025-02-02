@@ -5,7 +5,11 @@
 library;
 
 export "src/bottomsheet/bottomsheet.dart";
-export "src/navigation_extension.dart";
+export 'src/extensions/bottomsheet_extension.dart';
+export "src/extensions/dialog_extension.dart";
+export "src/extensions/navigation_extension.dart";
+export "src/extensions/overlay_extension.dart";
+export "src/extensions/snackbar_extension.dart";
 export "src/root/get_cupertino_app.dart";
 export "src/root/get_material_app.dart";
 export "src/root/internationalization.dart";

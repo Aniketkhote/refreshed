@@ -1,5 +1,3 @@
-# Changelog for Version 3.0.0
-
 ## 3.0.0
 
 ### Performance Improvements
