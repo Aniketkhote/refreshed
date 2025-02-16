@@ -218,7 +218,7 @@ abstract class Bind<T> extends StatelessWidget {
   static Bind<dynamic> lazyPut<S>(
     InstanceBuilderCallback<S> builder, {
     String? tag,
-    bool fenix = true,
+    bool fenix = false,
     VoidCallback? onClose,
   }) {
     Get.lazyPut<S>(builder, tag: tag, fenix: fenix);

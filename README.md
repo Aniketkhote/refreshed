@@ -1,7 +1,7 @@
-[![pub package](https://img.shields.io/pub/v/refreshed.svg?label=refreshed&color=blue)](https://pub.dev/packages/refreshed)
-[![popularity](https://img.shields.io/pub/popularity/refreshed?logo=dart)](https://pub.dev/packages/refreshed/score)
-[![likes](https://img.shields.io/pub/likes/refreshed?logo=dart)](https://pub.dev/packages/refreshed/score)
-[![pub points](https://img.shields.io/pub/points/sentry?logo=dart)](https://pub.dev/packages/refreshed/score)
+[![Pub Version](https://img.shields.io/pub/v/refreshed?logo=dart)](https://pub.dev/packages/refreshed)
+[![likes](https://img.shields.io/pub/likes/refreshed?style=flat&logo=dart)](https://pub.dev/packages/refreshed/score)
+[![pub points](https://img.shields.io/pub/points/refreshed?style=flat&logo=dart)](https://pub.dev/packages/refreshed/score)
+[![GitHub Repo stars](https://img.shields.io/github/stars/Aniketkhote/refreshed?style=flat&logo=github)](https://github.com/Aniketkhote/refreshed)
 ![building](https://github.com/Aniketkhote/refreshed/workflows/build/badge.svg)
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
 

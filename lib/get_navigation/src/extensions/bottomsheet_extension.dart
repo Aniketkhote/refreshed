@@ -48,4 +48,21 @@ extension BottomSheetExtension on GetInterface {
       curve: curve,
     ));
   }
+
+  /// check if dialog is open
+  bool? get isDialogOpen => routing.isDialog;
+
+  /// check if bottomsheet is open
+  bool? get isBottomSheetOpen => routing.isBottomSheet;
+
+  /// Closes all bottom sheets that are currently open.
+  ///
+  /// [id] is for when using nested navigation.
+  void closeAllBottomSheets({
+    String? id,
+  }) {
+    while ((isBottomSheetOpen!)) {
+      searchDelegate(id).navigatorKey.currentState?.pop();
+    }
+  }
 }

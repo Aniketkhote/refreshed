@@ -203,4 +203,16 @@ extension ExtensionSnackbar on GetInterface {
     }
     return controller;
   }
+
+  /// check if snackbar is open
+  bool get isSnackbarOpen =>
+      SnackbarController.isSnackbarBeingShown; //routing.isSnackbar;
+
+  void closeAllSnackbars() {
+    SnackbarController.cancelAllSnackbars();
+  }
+
+  Future<void> closeCurrentSnackbar() async {
+    await SnackbarController.closeCurrentSnackbar();
+  }
 }

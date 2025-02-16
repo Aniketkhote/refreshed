@@ -165,35 +165,41 @@ extension DialogExtension on GetInterface {
     }
 
     // Build the dialog
-    Widget baseAlertDialog = AlertDialog(
-      titlePadding: custom != null
-          ? EdgeInsets.zero
-          : titlePadding ?? const EdgeInsets.all(8),
-      contentPadding: contentPadding ?? const EdgeInsets.all(8),
-      backgroundColor: backgroundColor ?? Colors.white,
-      shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
-      title: custom != null
-          ? const SizedBox.shrink()
-          : Text(title, textAlign: TextAlign.center, style: titleStyle),
-      content: custom ??
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              content ??
-                  Text(middleText,
-                      textAlign: TextAlign.center, style: middleTextStyle),
-              const SizedBox(height: 16),
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 8,
-                runSpacing: 8,
-                children: actions,
-              ),
-            ],
-          ),
-      buttonPadding: EdgeInsets.zero,
-    );
+    Widget baseAlertDialog = Builder(builder: (context) {
+      return AlertDialog(
+        titlePadding: custom != null
+            ? EdgeInsets.zero
+            : titlePadding ?? const EdgeInsets.all(8),
+        contentPadding: contentPadding ?? const EdgeInsets.all(8),
+        backgroundColor:
+            backgroundColor ?? DialogTheme.of(context).backgroundColor,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
+        title: custom != null
+            ? const SizedBox.shrink()
+            : Text(title, textAlign: TextAlign.center, style: titleStyle),
+        content: custom ??
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                content ??
+                    Text(
+                      middleText,
+                      textAlign: TextAlign.center,
+                      style: middleTextStyle,
+                    ),
+                const SizedBox(height: 16),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: actions ?? [],
+                ),
+              ],
+            ),
+        buttonPadding: EdgeInsets.zero,
+      );
+    });
 
     // Return the dialog
     return dialog<T>(
@@ -208,5 +214,34 @@ extension DialogExtension on GetInterface {
       navigatorKey: navigatorKey,
       id: id,
     );
+  }
+
+  /// Closes all dialogs and bottom sheets that are currently open.
+  ///
+  /// [id] is for when using nested navigation.
+  void closeAllDialogsAndBottomSheets(String? id) {
+    // Close both dialogs and bottom sheets concurrently
+    while ((isDialogOpen! || isBottomSheetOpen!)) {
+      closeOverlay(id: id);
+    }
+  }
+
+  /// Close the currently open dialog, returning a [result], if provided
+  void closeDialog<T>({String? id, T? result}) {
+    // Stop if there is no dialog open
+    if (isDialogOpen == null || !isDialogOpen!) return;
+
+    closeOverlay(id: id, result: result);
+  }
+
+  /// Closes all dialogs that are currently open.
+  ///
+  /// [id] is for when using nested navigation.
+  void closeAllDialogs({
+    String? id,
+  }) {
+    while ((isDialogOpen!)) {
+      closeOverlay(id: id);
+    }
   }
 }

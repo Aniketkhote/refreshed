@@ -310,14 +310,6 @@ extension NavigationExtension on GetInterface {
     );
   }
 
-  /// Returns true if a Snackbar, Dialog, or BottomSheet is currently open.
-  bool get isOverlaysOpen =>
-      (isSnackbarOpen || isDialogOpen! || isBottomSheetOpen!);
-
-  /// Returns true if there is no Snackbar, Dialog or BottomSheet open
-  bool get isOverlaysClosed =>
-      (!isSnackbarOpen && !isDialogOpen! && !isBottomSheetOpen!);
-
   /// **Navigation.popUntil()** shortcut.<br><br>
   ///
   /// Pop the current page, snackbar, dialog or bottomsheet in the stack
@@ -352,51 +344,6 @@ extension NavigationExtension on GetInterface {
         return searchDelegate(id).back<T>(result);
       }
     }
-  }
-
-  /// Closes all dialogs and bottom sheets that are currently open.
-  ///
-  /// [id] is for when using nested navigation.
-  void closeAllDialogsAndBottomSheets(String? id) {
-    // Close both dialogs and bottom sheets concurrently
-    while ((isDialogOpen! || isBottomSheetOpen!)) {
-      closeOverlay(id: id);
-    }
-  }
-
-  /// Closes all dialogs that are currently open.
-  ///
-  /// [id] is for when using nested navigation.
-  void closeAllDialogs({
-    String? id,
-  }) {
-    while ((isDialogOpen!)) {
-      closeOverlay(id: id);
-    }
-  }
-
-  /// Closes the currently open overlay (Snackbar, Dialog, or BottomSheet).
-  ///
-  /// [id] is for when using nested navigation.
-  void closeOverlay({String? id}) {
-    searchDelegate(id).navigatorKey.currentState?.pop();
-  }
-
-  /// Closes all bottom sheets that are currently open.
-  ///
-  /// [id] is for when using nested navigation.
-  void closeAllBottomSheets({
-    String? id,
-  }) {
-    while ((isBottomSheetOpen!)) {
-      searchDelegate(id).navigatorKey.currentState?.pop();
-    }
-  }
-
-  /// Closes all overlays (Dialogs, Snackbars, and BottomSheets) at once.
-  void closeAllOverlays() {
-    closeAllDialogsAndBottomSheets(null);
-    closeAllSnackbars();
   }
 
   /// Closes specific overlays based on the provided flags.
@@ -559,7 +506,6 @@ extension NavigationExtension on GetInterface {
       opaque: opaque ?? true,
       popGesture: popGesture,
       id: id,
-      //  routeName routeName,
       arguments: arguments,
       bindings: bindings,
       fullscreenDialog: fullscreenDialog,
@@ -645,24 +591,6 @@ extension NavigationExtension on GetInterface {
   /// give name from previous route
   String get previousRoute => routing.previous;
 
-  /// check if snackbar is open
-  bool get isSnackbarOpen =>
-      SnackbarController.isSnackbarBeingShown; //routing.isSnackbar;
-
-  void closeAllSnackbars() {
-    SnackbarController.cancelAllSnackbars();
-  }
-
-  Future<void> closeCurrentSnackbar() async {
-    await SnackbarController.closeCurrentSnackbar();
-  }
-
-  /// check if dialog is open
-  bool? get isDialogOpen => routing.isDialog;
-
-  /// check if bottomsheet is open
-  bool? get isBottomSheetOpen => routing.isBottomSheet;
-
   /// check a raw current route
   Route<dynamic>? get rawRoute => routing.route;
 
@@ -674,15 +602,6 @@ extension NavigationExtension on GetInterface {
 
   /// give access to currentContext
   BuildContext? get context => key.currentContext;
-
-  /// give access to current Overlay Context
-  BuildContext? get overlayContext {
-    BuildContext? overlay;
-    key.currentState?.overlay?.context.visitChildElements((element) {
-      overlay = element;
-    });
-    return overlay;
-  }
 
   /// give access to Theme.of(context)
   ThemeData get theme {

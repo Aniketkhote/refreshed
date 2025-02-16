@@ -368,7 +368,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     PreventDuplicateHandlingMode preventDuplicateHandlingMode =
         PreventDuplicateHandlingMode.reorderRoutes,
   }) async {
-    routeName = _cleanRouteName("/${page.runtimeType}");
+    routeName ??= _cleanRouteName("/${page.runtimeType}");
 
     final getPage = GetPage<T>(
       name: routeName,
@@ -413,7 +413,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     bool showCupertinoParallax = true,
     double Function(BuildContext context)? gestureWidth,
   }) async {
-    routeName = _cleanRouteName("/${page.runtimeType}");
+    routeName ??= _cleanRouteName("/${page.runtimeType}");
     final route = GetPage<T>(
       name: routeName,
       opaque: opaque ?? true,
@@ -449,7 +449,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     bool showCupertinoParallax = true,
     double Function(BuildContext context)? gestureWidth,
   }) async {
-    routeName = _cleanRouteName("/${page.runtimeType}");
+    routeName ??= _cleanRouteName("/${page.runtimeType}");
     final route = GetPage<T>(
       name: routeName,
       opaque: opaque,

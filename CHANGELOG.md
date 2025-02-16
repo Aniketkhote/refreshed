@@ -1,3 +1,7 @@
+## 3.0.1
+
+- Minor fixes for BottomSheet, Dialog, and Navigation.
+
 ## 3.0.0
 
 ### Performance Improvements
