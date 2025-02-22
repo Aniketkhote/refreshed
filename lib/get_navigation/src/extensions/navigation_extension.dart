@@ -594,9 +594,6 @@ extension NavigationExtension on GetInterface {
   /// check a raw current route
   Route<dynamic>? get rawRoute => routing.route;
 
-  /// check if popGesture is enable
-  bool get isPopGestureEnable => defaultPopGesture;
-
   /// check if default opaque route is enable
   bool get isOpaqueRouteDefault => defaultOpaqueRoute;
 
@@ -671,7 +668,7 @@ extension NavigationExtension on GetInterface {
 
   ConfigData get _getxController => GetRootState.controller.config;
 
-  bool get defaultPopGesture => _getxController.defaultPopGesture;
+  bool? get defaultPopGesture => _getxController.defaultPopGesture;
   bool get defaultOpaqueRoute => _getxController.defaultOpaqueRoute;
 
   Transition? get defaultTransition => _getxController.defaultTransition;

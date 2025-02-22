@@ -55,6 +55,16 @@ extension BottomSheetExtension on GetInterface {
   /// check if bottomsheet is open
   bool? get isBottomSheetOpen => routing.isBottomSheet;
 
+  /// Closes bottom sheet that are currently open.
+  ///
+  /// [id] is for when using nested navigation.
+  void closeBottomSheet<T>({String? id, T? result}) {
+    // Stop if there is no bottomsheet open
+    if (isBottomSheetOpen == null || !isBottomSheetOpen!) return;
+
+    closeOverlay(id: id, result: result);
+  }
+
   /// Closes all bottom sheets that are currently open.
   ///
   /// [id] is for when using nested navigation.

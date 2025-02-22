@@ -222,6 +222,7 @@ class GetMaterialApp extends StatelessWidget {
         theme: theme,
         darkTheme: darkTheme,
         themeMode: themeMode,
+        defaultPopGesture: popGesture,
       ),
       child: Builder(builder: (context) {
         final controller = GetRoot.of(context);

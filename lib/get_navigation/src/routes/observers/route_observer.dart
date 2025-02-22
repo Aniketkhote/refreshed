@@ -155,7 +155,7 @@ class GetObserver extends NavigatorObserver {
       value.route = newRoute;
       value.isBack = false;
       value.removed = "";
-      value.previous = "$oldName";
+      value.previous = oldName ?? '';
       value.isBottomSheet =
           currentRoute.isBottomSheet ? false : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;

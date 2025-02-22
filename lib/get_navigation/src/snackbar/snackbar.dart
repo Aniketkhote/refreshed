@@ -421,7 +421,7 @@ class GetSnackBarState extends State<GetSnackBar>
   }
 
   void _configureLeftBarFuture() {
-    ambiguate(Engine.instance)!.addPostFrameCallback(
+    Engine.instance.addPostFrameCallback(
       (_) {
         final BuildContext? keyContext = _backgroundBoxKey.currentContext;
         if (keyContext != null) {

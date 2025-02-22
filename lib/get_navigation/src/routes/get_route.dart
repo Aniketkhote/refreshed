@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:refreshed/state_manager.dart';
 
 import '../../../get_instance/src/bindings_interface.dart';
-import '../../../get_state_manager/src/simple/get_state.dart';
 import '../../get_navigation.dart';
 
 class GetPage<T> extends Page<T> {

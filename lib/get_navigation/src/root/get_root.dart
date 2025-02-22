@@ -38,7 +38,7 @@ class ConfigData {
   final ThemeData? theme;
   final ThemeData? darkTheme;
   final ThemeMode? themeMode;
-  final bool defaultPopGesture;
+  final bool? defaultPopGesture;
   final bool defaultOpaqueRoute;
   final Duration defaultTransitionDuration;
   final Curve defaultTransitionCurve;
@@ -88,9 +88,8 @@ class ConfigData {
     this.defaultDialogTransitionDuration = const Duration(milliseconds: 300),
     this.parameters = const {},
     Routing? routing,
-    bool? defaultPopGesture,
-  })  : defaultPopGesture = defaultPopGesture ?? GetPlatform.isIOS,
-        routing = routing ?? Routing();
+    required this.defaultPopGesture,
+  }) : routing = routing ?? Routing();
 
   ConfigData copyWith({
     ValueChanged<Routing?>? routingCallback,
@@ -333,7 +332,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
   void initState() {
     config = widget.config;
     GetRootState._controller = this;
-    ambiguate(Engine.instance)!.addObserver(this);
+    Engine.instance.addObserver(this);
     onInit();
     super.initState();
   }
@@ -346,7 +345,7 @@ class GetRootState extends State<GetRoot> with WidgetsBindingObserver {
     RouterReportManager.dispose();
     Get.resetInstance(clearRouteBindings: true);
     _controller = null;
-    ambiguate(Engine.instance)!.removeObserver(this);
+    Engine.instance.removeObserver(this);
   }
 
   @override

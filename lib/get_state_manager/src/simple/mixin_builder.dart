@@ -3,6 +3,9 @@ import "package:refreshed/get_state_manager/src/rx_flutter/rx_obx_widget.dart";
 import "package:refreshed/get_state_manager/src/simple/get_controllers.dart";
 import "package:refreshed/get_state_manager/src/simple/get_state.dart";
 
+import "bind_element.dart";
+import "binder.dart";
+
 /// A widget that facilitates building UI components with GetX controllers and mixins.
 ///
 /// This widget is a convenience wrapper around GetBuilder and Obx widgets from the Get package,

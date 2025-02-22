@@ -84,7 +84,7 @@ extension ExtensionSnackbar on GetInterface {
     if (instantInit) {
       controller.show();
     } else {
-      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
+      Engine.instance.addPostFrameCallback((_) {
         controller.show();
       });
     }
@@ -197,7 +197,7 @@ extension ExtensionSnackbar on GetInterface {
       controller.show();
     } else {
       //routing.isSnackbar = true;
-      ambiguate(Engine.instance)!.addPostFrameCallback((_) {
+      Engine.instance.addPostFrameCallback((_) {
         controller.show();
       });
     }
