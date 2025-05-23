@@ -1,3 +1,7 @@
+## 3.0.3
+
+- I'm back! I'm continuing to maintain and improve Refreshed. I'll do my best to keep up with issues and pull requests. Thanks for your support!
+
 ## 3.0.2
 
 - Fixed defaultPopGesture
