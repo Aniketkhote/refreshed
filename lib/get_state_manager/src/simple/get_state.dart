@@ -85,7 +85,7 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Binder<T>(
-        init: init == null ? null : () => init!,
+        init: init != null ? () => init! : null,
         global: global,
         autoRemove: autoRemove,
         assignId: assignId,
@@ -98,10 +98,7 @@ class GetBuilder<T extends GetxController> extends StatelessWidget {
         didChangeDependencies: didChangeDependencies,
         didUpdateWidget: didUpdateWidget,
         child: Builder(
-          builder: (BuildContext context) {
-            final T controller = Bind.of<T>(context, rebuild: true);
-            return builder(controller);
-          },
+          builder: (context) => builder(Bind.of<T>(context, rebuild: true)),
         ),
       );
 }

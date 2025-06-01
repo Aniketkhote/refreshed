@@ -1,3 +1,45 @@
+## 3.1.0
+
+### Code Modernization
+
+- **Dart 3.8 Pattern Matching**:
+
+  - Modernized state management code with Dart 3.8 pattern matching and concise syntax.
+  - Improved readability and reduced verbosity in reactive extensions and state management classes.
+
+- **Reactive Extensions Improvements**:
+
+  - Enhanced `RxnStringExt` with new utility methods using pattern matching: `isNullOrEmpty`, `orDefault`, and `length`.
+  - Modernized numeric extensions (`RxnNumExt`, `RxnDoubleExt`, `RxnIntExt`) with concise pattern matching for operators.
+  - Improved boolean extensions (`RxnBoolExt`) with modern syntax for logical operations.
+
+- **State Management Enhancements**:
+
+  - Modernized `Bind` class methods with pattern matching and concise syntax.
+  - Improved `BindElement` class with pattern matching for controller subscriptions and lifecycle management.
+  - Enhanced `lazyPut`, `replace`, and `lazyReplace` methods with cleaner syntax and better documentation.
+
+- **Navigation Improvements**:
+
+  - Modernized `GetDelegate` methods with Dart 3.8 pattern matching and switch expressions.
+  - Enhanced `PageSettings` class with pattern matching for equality checks and type handling.
+  - Improved route handling with clearer code structure and better type safety.
+  - Refactored navigation methods for better readability and maintainability.
+  - Modernized route middleware with pattern matching for parameter handling and redirection logic.
+  - Enhanced route parsing with improved null safety and cleaner parameter extraction.
+  
+- **Snackbar Controller Improvements**:
+
+  - Modernized `SnackbarController` with Dart 3.8 pattern matching for animation status handling.
+  - Enhanced snackbar positioning and alignment with cleaner switch expressions.
+  - Improved timer configuration and dismissal behavior with pattern matching.
+  - Modernized `SnackBarQueue` with list pattern matching for better queue management.
+  - Added comprehensive documentation to all modernized methods.
+
+- **Worker Utilities Modernization**:
+  - Refactored worker disposal methods using Dart 3.8 switch expressions.
+  - Improved conditional logic in reactive workers with functional programming style.
+
 ## 3.0.3
 
 - I'm back! I'm continuing to maintain and improve Refreshed. I'll do my best to keep up with issues and pull requests. Thanks for your support!

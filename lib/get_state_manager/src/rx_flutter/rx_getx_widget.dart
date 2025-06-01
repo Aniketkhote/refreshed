@@ -98,18 +98,23 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
     super.initState();
 
     // Register the controller globally if necessary, or use the provided local controller.
-    if (widget.global) {
-      final bool isRegistered = Get.isRegistered<T>(tag: widget.tag);
-      _isCreator = !isRegistered || Get.isPrepared<T>(tag: widget.tag);
-      controller = isRegistered ? Get.find<T>(tag: widget.tag) : widget.init;
-
-      if (!isRegistered) {
-        Get.put<T>(controller!, tag: widget.tag);
-      }
-    } else {
-      controller = widget.init;
-      _isCreator = true;
-      controller?.onStart();
+    switch ((widget.global, Get.isRegistered<T>(tag: widget.tag))) {
+      case (true, false):
+        // Not registered globally, register it
+        controller = widget.init;
+        _isCreator = true;
+        if (controller != null) {
+          Get.put<T>(controller!, tag: widget.tag);
+        }
+      case (true, true):
+        // Already registered globally
+        _isCreator = Get.isPrepared<T>(tag: widget.tag);
+        controller = Get.find<T>(tag: widget.tag);
+      case (false, _):
+        // Local controller only
+        controller = widget.init;
+        _isCreator = true;
+        controller?.onStart();
     }
 
     widget.initState?.call(this);
@@ -157,19 +162,13 @@ class GetXState<T extends GetLifeCycleMixin> extends State<GetX<T>> {
   /// Updates the state of the widget.
   ///
   /// This function triggers a rebuild of the widget by calling [setState].
-  void _update() {
-    if (mounted) {
-      setState(() {});
-    }
-  }
+  void _update() => mounted ? setState(() {}) : null;
 
   @override
-  Widget build(BuildContext context) {
-    return Notifier.instance.append(
-      NotifyData(disposers: disposers, updater: _update),
-      () => widget.builder(controller!),
-    );
-  }
+  Widget build(BuildContext context) => Notifier.instance.append(
+        NotifyData(disposers: disposers, updater: _update),
+        () => widget.builder(controller!),
+      );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

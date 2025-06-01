@@ -59,14 +59,17 @@ class RouteDecoder {
   dynamic get args => pageSettings?.arguments;
 
   /// Retrieves arguments cast to a specific type [T], or `null` if type mismatch.
-  T? arguments<T>() => args is T ? args as T : null;
+  T? arguments<T>() => switch (args) {
+    T t => t,
+    _ => null,
+  };
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is RouteDecoder &&
-          listEquals(other.currentTreeBranch, currentTreeBranch) &&
-          other.pageSettings == pageSettings);
+  bool operator ==(Object other) => switch (other) {
+    RouteDecoder decoder => listEquals(decoder.currentTreeBranch, currentTreeBranch) && 
+                            decoder.pageSettings == pageSettings,
+    _ => identical(this, other),
+  };
 
   @override
   int get hashCode => Object.hash(currentTreeBranch, pageSettings);
@@ -198,17 +201,30 @@ class ParseRouteTree {
       routes.firstWhereOrNull((route) => route.path.regex.hasMatch(name));
 
   /// Parses parameters from the path based on the route's regex.
+  ///
+  /// Extracts named parameters from a URL path using the route's regex pattern
+  /// and path keys. Returns an empty map if no parameters are found.
   Map<String, String> _parseParams(String path, PathDecoded routePath) {
+    // Create an empty map for parameters
     final params = <String, String>{};
+    
+    // Try to parse the URI
     final uri = Uri.tryParse(path);
     if (uri == null) return params;
-
+    
+    // Try to match the path with the route's regex
     final match = routePath.regex.firstMatch(uri.path);
     if (match != null) {
+      // Extract parameters from the match groups
       for (var i = 0; i < routePath.keys.length; i++) {
-        params[routePath.keys[i]!] = Uri.decodeQueryComponent(match[i + 1]!);
+        final key = routePath.keys[i];
+        final value = match[i + 1];
+        if (key != null && value != null) {
+          params[key] = Uri.decodeQueryComponent(value);
+        }
       }
     }
+    
     return params;
   }
 }
@@ -216,10 +232,9 @@ class ParseRouteTree {
 /// Extension on [List] to provide a `firstWhereOrNull` method.
 extension FirstWhereOrNullExt<T> on List<T> {
   /// Returns the first element satisfying [test], or `null` if none are found.
-  T? firstWhereOrNull(bool Function(T element) test) {
-    for (var element in this) {
-      if (test(element)) return element;
-    }
-    return null;
-  }
+  T? firstWhereOrNull(bool Function(T element) test) => switch (this) {
+    [] => null, // Empty list case
+    [var first, ...] when test(first) => first, // First element matches
+    [_, ...var rest] => rest.firstWhereOrNull(test), // Check rest of the list
+  };
 }

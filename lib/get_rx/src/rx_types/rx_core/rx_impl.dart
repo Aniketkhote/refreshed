@@ -7,8 +7,8 @@ part of "../rx_types.dart";
 mixin RxObjectMixin<T> on GetListenable<T> {
   @override
   T call([T? v]) {
-    if (v != null) {
-      value = v;
+    if (v case var val?) {
+      value = val;
     }
     return value;
   }
@@ -43,14 +43,15 @@ mixin RxObjectMixin<T> on GetListenable<T> {
   /// Updates the [value] and adds it to the stream, updating the observer
   /// Widget, only if it's different from the previous value.
   @override
-  set value(T val) {
-    if (isDisposed) return;
-    sentToStream = false;
-    if (value == val && !firstRebuild) return;
-    firstRebuild = false;
-    sentToStream = true;
-    super.value = val;
-  }
+  set value(T val) => switch ((isDisposed, value == val && !firstRebuild)) {
+    (true, _) => null,
+    (_, true) => sentToStream = false,
+    _ => {
+      sentToStream = true,
+      firstRebuild = false,
+      super.value = val
+    }
+  };
 
   /// Returns a [StreamSubscription] similar to [listen], but with the
   /// added benefit that it primes the stream with the current [value], rather
@@ -62,7 +63,7 @@ mixin RxObjectMixin<T> on GetListenable<T> {
     void Function()? onDone,
     bool? cancelOnError,
   }) {
-    final StreamSubscription<T> subscription = listen(
+    final subscription = listen(
       onData,
       onError: onError,
       onDone: onDone,
@@ -70,7 +71,6 @@ mixin RxObjectMixin<T> on GetListenable<T> {
     );
 
     subject.add(value);
-
     return subscription;
   }
 
@@ -79,7 +79,7 @@ mixin RxObjectMixin<T> on GetListenable<T> {
   /// Closing the subscription will happen automatically when the observer
   /// Widget (`GetX` or `Obx`) gets unmounted from the Widget tree.
   void bindStream(Stream<T> stream) {
-    final StreamSubscription sub = stream.listen((va) => value = va);
+    final sub = stream.listen((val) => value = val);
     reportAdd(sub.cancel);
   }
 }
@@ -114,10 +114,7 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
   /// });
   /// print( person );
   /// ```
-  void update(T Function(T? val) fn) {
-    value = fn(value);
-    // subject.add(value);
-  }
+  void update(T Function(T val) fn) => value = fn(value);
 
   /// Following certain practices on Rx data, we might want to react to certain
   /// listeners when a value has been provided, even if the value is the same.
@@ -145,11 +142,10 @@ abstract class _RxImpl<T> extends GetListenable<T> with RxObjectMixin<T> {
   /// ```
   ///
   void trigger(T v) {
-    final bool firstRebuild = this.firstRebuild;
+    final wasFirstRebuild = firstRebuild;
     value = v;
-    // If it's not the first rebuild, the listeners have been called already
-    // So we won't call them again.
-    if (!firstRebuild && !sentToStream) {
+    // Only add to stream if not first rebuild and not already sent to stream
+    if (!wasFirstRebuild && !sentToStream) {
       subject.add(v);
     }
   }
@@ -162,10 +158,16 @@ class Rx<T> extends _RxImpl<T> {
 
   @override
   dynamic toJson() {
+    if (value == null) return null;
+    
     try {
-      return (value as dynamic)?.toJson();
-    } on Exception catch (_) {
-      throw Exception("$T has not method [toJson]");
+      // Use dynamic to safely call toJson if it exists
+      final dynamic val = value;
+      return val.toJson();
+    } on NoSuchMethodError catch (_) {
+      throw Exception("$T has no method [toJson]");
+    } catch (e) {
+      throw Exception("Error in toJson: $e");
     }
   }
 }
@@ -176,10 +178,16 @@ class Rxn<T> extends Rx<T?> {
 
   @override
   dynamic toJson() {
+    if (value == null) return null;
+    
     try {
-      return (value as dynamic)?.toJson();
-    } on Exception catch (_) {
-      throw '$T has not method [toJson]';
+      // Use dynamic to safely call toJson if it exists
+      final dynamic val = value;
+      return val.toJson();
+    } on NoSuchMethodError catch (_) {
+      throw Exception("$T has no method [toJson]");
+    } catch (e) {
+      throw Exception("Error in toJson: $e");
     }
   }
 }
@@ -212,11 +220,18 @@ extension BoolExtension on bool {
 extension RxT<T extends Object> on T {
   /// Returns a `Rx` instance with [this] `T` as initial value.
   Rx<T> get obs => Rx<T>(this);
+  
+  /// Returns a `Rx` instance with [this] `T` as initial value.
+  /// This method is identical to the `obs` getter but allows for more
+  /// explicit type specification when needed.
+  Rx<T> toRx() => Rx<T>(this);
 }
 
 /// A new method to replace the old `.obs` getter. This method avoids conflicts with
 /// Dart 3 features by using contextual type inference to determine [T].
 extension RxTnew on Object {
   /// Returns a `Rx` instance with [this] `T` as initial value.
+  /// This method is preferred over the `obs` getter as it avoids conflicts
+  /// with Dart 3 features by using contextual type inference.
   Rx<T> obs<T>() => Rx<T>(this as T);
 }

@@ -57,12 +57,17 @@ class MiddlewareRunner {
   }
 
   /// Runs the `redirect` hook in sequence.
+  ///
+  /// Returns the first non-null redirect result from any middleware,
+  /// or null if no middleware redirects.
   RouteSettings? runRedirect(String? route) {
-    for (final middleware in _middlewares) {
-      final redirectTo = middleware.redirect(route);
-      if (redirectTo != null) return redirectTo;
-    }
-    return null;
+    // Use firstWhereOrNull with pattern matching to find the first middleware that redirects
+    final redirectingMiddleware = _middlewares.firstWhereOrNull(
+      (middleware) => middleware.redirect(route) != null
+    );
+    
+    // Return the redirect result from the middleware or null if none found
+    return redirectingMiddleware?.redirect(route);
   }
 
   /// Runs the `onBindingsStart` hook in sequence.
@@ -111,10 +116,16 @@ class PageRedirect {
   /// Returns a [GetPageRoute] for the given route.
   GetPageRoute<T> getPageToRoute<T>(
       GetPage rou, GetPage? unk, BuildContext context) {
+    // Check for redirections until we reach a stable state
     while (needRecheck(context)) {
+      // Break if we lose essential state
       if (settings == null || route == null) break;
     }
+    
+    // Determine the final route to use (unknown or regular)
     final r = (isUnknown ? unk : rou)!;
+    
+    // Create and return the page route with all properties from the route
     return GetPageRoute<T>(
       page: r.page,
       parameter: r.parameters,
@@ -131,6 +142,7 @@ class PageRedirect {
       bindings: r.bindings,
       binding: r.binding,
       binds: r.binds,
+      // Use default transition duration if not specified
       transitionDuration: r.transitionDuration ?? Get.defaultTransitionDuration,
       reverseTransitionDuration:
           r.reverseTransitionDuration ?? Get.defaultTransitionDuration,
@@ -141,25 +153,49 @@ class PageRedirect {
     );
   }
 
-  /// Determines if redirection is needed.
+  /// Determines if redirection is needed based on route middlewares.
+  ///
+  /// This method:
+  /// 1. Ensures settings are initialized
+  /// 2. Matches the current route
+  /// 3. Processes middlewares if present
+  /// 4. Returns whether redirection is needed
   bool needRecheck(BuildContext context) {
+    // Ensure settings is initialized
     settings ??= route;
+    
+    // Get the matched route for the current settings
     final match = context.delegate.matchRoute(settings!.name!);
+    
+    // Handle case when no route is found
     if (match.route == null) {
       isUnknown = true;
       return false;
     }
-    if (match.route!.middlewares.isEmpty) return false;
-    final runner = MiddlewareRunner(match.route!.middlewares);
-    route = runner.runOnPageCalled(match.route);
+    
+    // If no middlewares, no need to recheck
+    if (match.route!.middlewares.isEmpty) {
+      return false;
+    }
+    
+    // Process middlewares
+    final matchedRoute = match.route!;
+    final runner = MiddlewareRunner(matchedRoute.middlewares);
+    route = runner.runOnPageCalled(matchedRoute);
     addPageParameter(route!);
     settings = runner.runRedirect(settings!.name) ?? settings;
-    return settings != match.route;
+    
+    // Return true if settings changed (redirection happened)
+    return settings != matchedRoute;
   }
 
   /// Adds parameters from [route] to [Get.parameters].
-  void addPageParameter(GetPage route) {
-    if (route.parameters == null) return;
-    Get.parameters.addAll(route.parameters!);
-  }
+  ///
+  /// Uses pattern matching to handle the nullable parameters map.
+  void addPageParameter(GetPage route) => switch (route.parameters) {
+    // When parameters exist, add them to the global parameters
+    Map<String, String> params => Get.parameters.addAll(params),
+    // When parameters are null, do nothing
+    null => {},
+  };
 }

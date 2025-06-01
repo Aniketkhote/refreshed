@@ -100,14 +100,13 @@ class GetBackGestureDetectorState<T> extends State<GetBackGestureDetector<T>> {
     _backGestureController = null;
   }
 
-  double _convertToLogical(double value) {
-    switch (Directionality.of(context)) {
-      case TextDirection.rtl:
-        return -value;
-      case TextDirection.ltr:
-        return value;
-    }
-  }
+  // Convert a physical horizontal delta to a logical delta based on text direction
+  double _convertToLogical(double value) => switch (Directionality.of(context)) {
+    // For RTL (right-to-left) languages, invert the value
+    TextDirection.rtl => -value,
+    // For LTR (left-to-right) languages, keep the value as is
+    TextDirection.ltr => value,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -809,43 +808,36 @@ Cannot read the previousTitle for a route that has not yet been installed""",
     return route.navigator!.userGestureInProgress;
   }
 
+  /// Determines if a pop gesture is enabled for the given route.
+  ///
+  /// Evaluates various conditions that might prevent a back swipe gesture.
   static bool _isPopGestureEnabled<T>(
     PageRoute<T> route,
     bool canSwipe,
     BuildContext context,
-  ) {
-    // If there's nothing to go back to, then obviously we don't support
-    // the back gesture.
-    if (route.isFirst) return false;
-    // If the route wouldn't actually pop if we popped it, then the gesture
-    // would be really confusing (or would skip internal routes),
-    // so disallow it.
-    if (route.willHandlePopInternally) return false;
-    // If attempts to dismiss this route might be vetoed such as in a page
-    // with forms, then do not allow the user to dismiss the route with a swipe.
-    // support [PopScope]
-    if (route.popDisposition == RoutePopDisposition.doNotPop) return false;
-    // Fullscreen dialogs aren't dismissible by back swipe.
-    if (route.fullscreenDialog) return false;
-    // If we're in an animation already, we cannot be manually swiped.
-    if (route.animation!.status != AnimationStatus.completed) return false;
-    // If we're being popped into, we also cannot be swiped until the pop above
-    // it completes. This translates to our secondary animation being
-    // dismissed.
-    if (route.secondaryAnimation!.status != AnimationStatus.dismissed) {
-      return false;
-    }
-    // If we're in a gesture already, we cannot start another.
-    if (GetPageRouteTransitionMixin.isPopGestureInProgress(context)) {
-      return false;
-    }
-
-    // Don't perfome swipe if canSwipe be false
-    if (!canSwipe) return false;
-
-    // Looks like a back gesture would be welcome!
-    return true;
-  }
+  ) => switch ((
+      route.isFirst,                                                // Is this the first route (nothing to go back to)?
+      route.willHandlePopInternally,                               // Will the route handle pop internally?
+      route.popDisposition,                                        // Route's pop disposition
+      route.fullscreenDialog,                                      // Is this a fullscreen dialog?
+      route.animation?.status,                                     // Animation status
+      route.secondaryAnimation?.status,                            // Secondary animation status
+      GetPageRouteTransitionMixin.isPopGestureInProgress(context), // Is a pop gesture already in progress?
+      canSwipe,                                                    // Is swiping enabled for this route?
+    )) {
+      // Cases where pop gesture is disabled
+      (true, _, _, _, _, _, _, _)                                 => false, // First route, nothing to go back to
+      (_, true, _, _, _, _, _, _)                                 => false, // Route handles pop internally
+      (_, _, RoutePopDisposition.doNotPop, _, _, _, _, _)         => false, // Route pop is vetoed (PopScope)
+      (_, _, _, true, _, _, _, _)                                 => false, // Fullscreen dialogs aren't swipe-dismissible
+      (_, _, _, _, != AnimationStatus.completed, _, _, _)         => false, // Route animation not completed
+      (_, _, _, _, _, != AnimationStatus.dismissed, _, _)         => false, // Secondary animation not dismissed
+      (_, _, _, _, _, _, true, _)                                 => false, // Pop gesture already in progress
+      (_, _, _, _, _, _, _, false)                                => false, // Swiping disabled for this route
+      
+      // Default case - all conditions passed, gesture is enabled
+      _                                                           => true,  // Back gesture is welcome!
+    };
 
   static GetBackGestureController<T> _startPopGesture<T>(
     PageRoute<T> route,

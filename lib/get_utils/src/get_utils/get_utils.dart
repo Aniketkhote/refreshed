@@ -4,18 +4,18 @@ import "package:refreshed/utils.dart";
 /// has the isEmpty getter/method by checking
 /// standard dart types that contains it.
 ///
-/// This is here to for the 'DRY'
+/// This is here for the 'DRY' principle
 bool _isEmpty(dynamic value) {
-  if (value == null) {
-    return true;
+  switch (value) {
+    case null:
+      return true;
+    case String():
+      return value.trim().isEmpty;
+    case Iterable() || Map():
+      return value.isEmpty;
+    default:
+      return false;
   }
-  if (value is String) {
-    return value.trim().isEmpty;
-  }
-  if (value is Iterable || value is Map) {
-    return value.isEmpty;
-  }
-  return false;
 }
 
 /// Utility methods
@@ -23,49 +23,37 @@ class GetUtils {
   GetUtils._();
 
   /// Checks if data is null.
-  static bool isNull(value) => value == null;
+  static bool isNull(dynamic value) => value == null;
 
   /// Checks if data is null or blank (empty or only contains whitespace).
-  static bool? isNullOrBlank(value) {
-    if (isNull(value)) {
-      return true;
-    }
-
-    // Pretty sure that isNullOrBlank should't be validating
-    // iterables... but I'm going to keep this for compatibility.
-    return _isEmpty(value);
-  }
+  static bool isNullOrBlank(dynamic value) => value == null || _isEmpty(value);
 
   /// Checks if data is null or blank (empty or only contains whitespace).
-  static bool isBlank(value) => _isEmpty(value);
+  static bool isBlank(dynamic value) => _isEmpty(value);
 
   /// Checks if string is int or double.
-  static bool isNum(String value) {
-    if (isNull(value)) {
-      return false;
-    }
-
-    return num.tryParse(value) is num;
-  }
+  static bool isNum(String? value) => switch (value) {
+    null => false,
+    _ => num.tryParse(value) is num
+  };
 
   /// Checks if a given [value] matches a [pattern] using a regular expression.
   ///
   /// Returns `true` if the [value] matches the [pattern], `false` otherwise.
-  static bool hasMatch(String? value, String pattern) =>
-      (value == null) ? false : RegExp(pattern).hasMatch(value);
+  static bool hasMatch(String? value, String pattern) => switch (value) {
+    null => false,
+    _ => RegExp(pattern).hasMatch(value)
+  };
 
   /// Creates a path by concatenating the provided [path] and [segments].
   ///
   /// If [segments] is `null` or empty, the original [path] is returned.
   /// Otherwise, the [path] is concatenated with each segment from [segments]
   /// separated by a forward slash ('/').
-  static String createPath(String path, [Iterable<String>? segments]) {
-    if (segments == null || segments.isEmpty) {
-      return path;
-    }
-    final Iterable<String> list = segments.map((String e) => "/$e");
-    return path + list.join();
-  }
+  static String createPath(String path, [Iterable<String>? segments]) => switch (segments) {
+    null || Iterable(isEmpty: true) => path,
+    _ => path + segments.map((e) => "/$e").join()
+  };
 
   /// Utility function for printing logs with a specified prefix and additional information.
   ///

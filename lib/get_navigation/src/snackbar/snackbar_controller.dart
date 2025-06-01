@@ -47,15 +47,20 @@ class SnackbarController {
 
   Future<void> get future => _transitionCompleter.future;
 
-  /// Close the snackbar with animation
-  Future<void> close({bool withAnimations = true}) async {
-    if (!withAnimations) {
-      _removeOverlay();
-      return;
-    }
-    _removeEntry();
-    await future;
-  }
+  /// Close the snackbar with or without animation.
+  ///
+  /// Uses Dart 3.8 pattern matching to handle different close behaviors
+  /// based on whether animations are enabled.
+  Future<void> close({bool withAnimations = true}) async => switch (withAnimations) {
+    // When animations are disabled, immediately remove the overlay
+    false => _removeOverlay(),
+    
+    // When animations are enabled, trigger entry removal and wait for completion
+    true => () async {
+      _removeEntry();
+      await future;
+    }(),
+  };
 
   /// Adds GetSnackbar to a view queue.
   /// Only one GetSnackbar will be displayed at a time, and this method returns
@@ -69,20 +74,20 @@ class SnackbarController {
     }
   }
 
+  /// Configures the initial and end alignments based on snack position.
+  ///
+  /// Uses Dart 3.8 switch expression to set appropriate alignment values
+  /// for different snack positions (top or bottom).
   void _configureAlignment(SnackPosition snackPosition) {
+    // Use switch expression to set alignments based on position
     switch (snackbar.snackPosition) {
       case SnackPosition.top:
-        {
-          _initialAlignment = const Alignment(-1, -2);
-          _endAlignment = const Alignment(-1, -1);
-          break;
-        }
+        _initialAlignment = const Alignment(-1, -2); // Initial: above screen
+        _endAlignment = const Alignment(-1, -1);     // End: at top
+      
       case SnackPosition.bottom:
-        {
-          _initialAlignment = const Alignment(-1, 2);
-          _endAlignment = const Alignment(-1, 1);
-          break;
-        }
+        _initialAlignment = const Alignment(-1, 2);  // Initial: below screen
+        _endAlignment = const Alignment(-1, 1);      // End: at bottom
     }
   }
 
@@ -121,16 +126,25 @@ class SnackbarController {
     _controller.forward();
   }
 
+  /// Configures the timer for auto-dismissing the snackbar.
+  ///
+  /// Uses Dart 3.8 pattern matching to handle the nullable duration
+  /// and ensure any existing timer is properly canceled.
   void _configureTimer() {
-    if (snackbar.duration != null) {
-      if (_timer != null && _timer!.isActive) {
-        _timer!.cancel();
-      }
-      _timer = Timer(snackbar.duration!, _removeEntry);
-    } else {
-      if (_timer != null) {
-        _timer!.cancel();
-      }
+    // Cancel any existing timer
+    if (_timer != null && _timer!.isActive) {
+      _timer!.cancel();
+    }
+    
+    // Configure timer based on duration
+    switch (snackbar.duration) {
+      case null:
+        // No duration specified, snackbar will remain until manually closed
+        break;
+        
+      case var duration:
+        // Create a timer to auto-dismiss after the specified duration
+        _timer = Timer(duration, _removeEntry);
     }
   }
 
@@ -262,16 +276,20 @@ class SnackbarController {
     return DismissDirection.down;
   }
 
+  /// Creates a dismissible snackbar widget.
+  ///
+  /// Uses Dart 3.8 pattern matching to handle dismiss confirmation
+  /// based on the current snackbar status.
   Widget _getDismissibleSnack(Widget child) => Dismissible(
-        behavior: snackbar.hitTestBehavior ?? HitTestBehavior.opaque,
-        direction: snackbar.dismissDirection ?? _getDefaultDismissDirection(),
+        direction: _getDefaultDismissDirection(),
         resizeDuration: null,
-        confirmDismiss: (_) {
-          if (_currentStatus == SnackbarStatus.opening ||
-              _currentStatus == SnackbarStatus.closing) {
-            return Future<bool?>.value(false);
-          }
-          return Future<bool?>.value(true);
+        confirmDismiss: (_) => switch (_currentStatus) {
+          // Prevent dismissal during opening or closing animations
+          SnackbarStatus.opening || SnackbarStatus.closing => 
+              Future<bool?>.value(false),
+          
+          // Allow dismissal in all other states
+          _ => Future<bool?>.value(true),
         },
         key: const Key("dismissible"),
         onDismissed: (_) {
@@ -286,7 +304,12 @@ class SnackbarController {
         child: child,
       );
 
+  /// Handles animation status changes and updates snackbar status accordingly.
+  ///
+  /// Uses Dart 3.8 pattern matching to map animation status to snackbar status
+  /// and perform appropriate actions for each state transition.
   void _handleStatusChanged(AnimationStatus status) {
+    // Map animation status to snackbar status and perform appropriate actions
     switch (status) {
       case AnimationStatus.completed:
         _currentStatus = SnackbarStatus.open;
@@ -298,12 +321,14 @@ class SnackbarController {
       case AnimationStatus.forward:
         _currentStatus = SnackbarStatus.opening;
         _snackbarStatus?.call(_currentStatus);
+        
       case AnimationStatus.reverse:
         _currentStatus = SnackbarStatus.closing;
         _snackbarStatus?.call(_currentStatus);
         if (_overlayEntries.isNotEmpty) {
           _overlayEntries.first.opaque = false;
         }
+        
       case AnimationStatus.dismissed:
         assert(!_overlayEntries.first.opaque);
         _currentStatus = SnackbarStatus.closed;
@@ -312,6 +337,10 @@ class SnackbarController {
     }
   }
 
+  /// Removes the snackbar entry with appropriate animation.
+  ///
+  /// Uses Dart 3.8 pattern matching to handle different removal behaviors
+  /// based on whether the snackbar was dismissed by swipe.
   void _removeEntry() {
     assert(
       !_transitionCompleter.isCompleted,
@@ -321,11 +350,16 @@ class SnackbarController {
 
     _cancelTimer();
 
-    if (_wasDismissedBySwipe) {
-      Timer(const Duration(milliseconds: 200), _controller.reset);
-      _wasDismissedBySwipe = false;
-    } else {
-      _controller.reverse();
+    // Handle different removal behaviors based on dismissal method
+    switch (_wasDismissedBySwipe) {
+      case true:
+        // For swipe dismissal, reset controller after a short delay
+        Timer(const Duration(milliseconds: 200), _controller.reset);
+        _wasDismissedBySwipe = false;
+        
+      case false:
+        // For regular dismissal, reverse the animation
+        _controller.reverse();
     }
   }
 
@@ -365,12 +399,13 @@ class SnackBarQueue<T> {
   final GetQueue<T> _queue = GetQueue<T>();
   final List<SnackbarController> _snackbarList = <SnackbarController>[];
 
-  SnackbarController? get _currentSnackbar {
-    if (_snackbarList.isEmpty) {
-      return null;
-    }
-    return _snackbarList.first;
-  }
+  /// Gets the current active snackbar, if any.
+  ///
+  /// Uses Dart 3.8 pattern matching to handle the empty list case.
+  SnackbarController? get _currentSnackbar => switch (_snackbarList) {
+    [] => null,                  // Empty list case - no active snackbar
+    [var first, ..._] => first,  // Non-empty list - return first item
+  };
 
   bool get isJobInProgress => _snackbarList.isNotEmpty;
 
@@ -387,25 +422,39 @@ class SnackBarQueue<T> {
     _snackbarList.clear();
   }
 
+  /// Disposes all snackbar controllers and cleans up resources.
+  ///
+  /// Uses Dart 3.8 pattern matching to handle the current snackbar disposal
+  /// and cleans up remaining controllers.
   void disposeControllers() {
-    if (_currentSnackbar != null) {
-      _currentSnackbar?._removeOverlay();
-      _currentSnackbar?._controller.dispose();
-      _snackbarList.remove(_currentSnackbar);
+    // Handle current snackbar with pattern matching
+    switch (_currentSnackbar) {
+      case null:
+        // No current snackbar, nothing to do here
+        break;
+        
+      case var current:
+        // Dispose current snackbar and remove from list
+        current._removeOverlay();
+        current._controller.dispose();
+        _snackbarList.remove(current);
     }
 
+    // Cancel all pending jobs
     _queue.cancelAllJobs();
 
-    for (final SnackbarController element in _snackbarList) {
-      element._controller.dispose();
+    // Dispose remaining controllers and clear the list
+    for (final controller in _snackbarList) {
+      controller._controller.dispose();
     }
     _snackbarList.clear();
   }
 
-  Future<void> closeCurrentJob() async {
-    if (_currentSnackbar == null) {
-      return;
-    }
-    await _currentSnackbar!.close();
-  }
+  /// Closes the current active snackbar job, if one exists.
+  ///
+  /// Uses Dart 3.8 pattern matching to handle the nullable current snackbar.
+  Future<void> closeCurrentJob() async => switch (_currentSnackbar) {
+    null => {},                        // No active snackbar - do nothing
+    var snackbar => snackbar.close(),  // Active snackbar - close it
+  };
 }

@@ -62,12 +62,10 @@ mixin ListNotifierSingleMixin on Listenable {
     Notifier.instance.add(disposer);
   }
 
-  void _notifyUpdate() {
-    final List<GetStateUpdate> list = _updaters?.toList() ?? <GetStateUpdate>[];
-    for (final GetStateUpdate element in list) {
-      element();
-    }
-  }
+  void _notifyUpdate() => switch (_updaters) {
+    null => null,
+    var updaters => updaters.toList().forEach((element) => element())
+  };
 
   /// Checks if the notifier has been disposed.
   bool get isDisposed => _updaters == null;
@@ -103,11 +101,10 @@ mixin ListNotifierGroupMixin on Listenable {
   HashMap<Object?, ListNotifierSingleMixin>? _updatersGroupIds =
       HashMap<Object?, ListNotifierSingleMixin>();
 
-  void _notifyGroupUpdate(Object id) {
-    if (_updatersGroupIds!.containsKey(id)) {
-      _updatersGroupIds![id]!._notifyUpdate();
-    }
-  }
+  void _notifyGroupUpdate(Object id) => switch (_updatersGroupIds?[id]) {
+    var updater? => updater._notifyUpdate(),
+    _ => null
+  };
 
   /// Notifies all children of a given group ID.
   @protected
@@ -141,8 +138,11 @@ mixin ListNotifierGroupMixin on Listenable {
   /// Removes a specific listener from a group by ID.
   void removeListenerId(Object id, VoidCallback listener) {
     assert(_debugAssertNotDisposed());
-    if (_updatersGroupIds!.containsKey(id)) {
-      _updatersGroupIds![id]!.removeListener(listener);
+    switch (_updatersGroupIds?[id]) {
+      case var updater?:
+        updater.removeListener(listener);
+      case _:
+        break;
     }
   }
 
@@ -163,10 +163,13 @@ mixin ListNotifierGroupMixin on Listenable {
   }
 
   /// Disposes of a specific ID from future updates.
-  void disposeId(Object id) {
-    _updatersGroupIds?[id]?.dispose();
-    _updatersGroupIds!.remove(id);
-  }
+  void disposeId(Object id) => switch (_updatersGroupIds) {
+    var groupIds? => {
+      groupIds[id]?.dispose(),
+      groupIds.remove(id)
+    },
+    _ => null
+  };
 }
 
 /// A class responsible for managing notifications and listeners.
@@ -188,21 +191,26 @@ class Notifier {
   }
 
   /// Reads data from the provided [updaters] and adds listeners accordingly.
-  void read(ListNotifierSingleMixin updaters) {
-    final GetStateUpdate? listener = _notifyData?.updater;
-    if (listener != null && !updaters.containsListener(listener)) {
-      updaters.addListener(listener);
-      add(() => updaters.removeListener(listener));
-    }
-  }
+  void read(ListNotifierSingleMixin updaters) => switch (_notifyData?.updater) {
+    var listener? when !updaters.containsListener(listener) => {
+      updaters.addListener(listener),
+      add(() => updaters.removeListener(listener))
+    },
+    _ => null
+  };
 
   /// Appends data to the provided [data] and executes the [builder] function.
   T append<T>(NotifyData data, T Function() builder) {
     _notifyData = data;
     final T result = builder();
-    if (data.disposers.isEmpty && data.throwException) {
-      throw ObxError();
+    
+    switch ((data.disposers.isEmpty, data.throwException)) {
+      case (true, true):
+        throw ObxError();
+      case _:
+        break;
     }
+    
     _notifyData = null;
     return result;
   }

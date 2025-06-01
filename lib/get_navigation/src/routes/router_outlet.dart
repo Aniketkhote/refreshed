@@ -98,21 +98,23 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
   }) : this.pickPages(
           restorationScopeId: restorationScopeId,
           pickPages: (RouteDecoder config) {
-            Iterable<GetPage<dynamic>> ret;
+            // Handle based on whether an anchor route is provided
             if (anchorRoute == null) {
-              // Jump the ancestor path
-              final int length = Uri.parse(initialRoute).pathSegments.length;
-
+              // No anchor route - jump the ancestor path
+              final length = Uri.parse(initialRoute).pathSegments.length;
               return config.currentTreeBranch
                   .skip(length)
                   .take(length)
                   .toList();
+            } else {
+              // With anchor route - pick routes after the anchor
+              var result = config.currentTreeBranch.pickAfterRoute(anchorRoute);
+              // Apply filter if provided
+              if (filterPages != null) {
+                result = filterPages(result);
+              }
+              return result;
             }
-            ret = config.currentTreeBranch.pickAfterRoute(anchorRoute);
-            if (filterPages != null) {
-              ret = filterPages(ret);
-            }
-            return ret;
           },
           key: key,
           emptyPage: (GetDelegate delegate) =>
@@ -150,13 +152,12 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
                     Get.rootController.rootDelegate.navigatorKey,
                 child: GetNavigator(
                   restorationScopeId: restorationScopeId,
-                  onPopPage: onPopPage ??
-                      (Route route, result) {
-                        final bool didPop = route.didPop(result);
-                        if (!didPop) {
-                          return false;
-                        }
-                        return true;
+                  onPopPage: onPopPage ?? 
+                      (Route route, result) => switch (route.didPop(result)) {
+                        // If didPop returns false, the route couldn't be popped
+                        false => false,
+                        // If didPop returns true, the route was successfully popped
+                        true => true,
                       },
                   pages: pageRes.toList(),
                   key: navigatorKey,
@@ -204,12 +205,12 @@ extension PagesListExt<T> on List<GetPage<T>> {
       skipWhile((GetPage<T> value) => value.name != route);
 
   /// Returns the routes after the given route.
-  Iterable<GetPage<T>> pickAfterRoute(String route) {
-    if (route == "/") {
-      return pickFromRoute(route).skip(1).take(1);
-    }
-    return pickFromRoute(route).skip(1);
-  }
+  Iterable<GetPage<T>> pickAfterRoute(String route) => switch (route) {
+    // Special case for root route: take only the first route after root
+    "/" => pickFromRoute(route).skip(1).take(1),
+    // For all other routes: take all routes after the specified route
+    _ => pickFromRoute(route).skip(1),
+  };
 }
 
 /// A widget builder for indexed navigation routes.
@@ -232,12 +233,15 @@ class IndexedRouteBuilder<T> extends StatelessWidget {
 
   // Method to get the current index based on the route
   int _getCurrentIndex(String currentLocation) {
-    for (int i = 0; i < routes.length; i++) {
-      if (currentLocation.startsWith(routes[i])) {
-        return i;
+    // Find the first matching route index using pattern matching
+    for (final (index, route) in routes.indexed) {
+      if (currentLocation.startsWith(route)) {
+        return index;
       }
     }
-    return 0; // default index
+    
+    // Default to index 0 if no match found
+    return 0;
   }
 
   @override

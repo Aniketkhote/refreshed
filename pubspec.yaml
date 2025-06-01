@@ -1,6 +1,6 @@
 name: refreshed
 description: "Enhanced GetX for Flutter: Stability, Performance, Beginner-Friendly."
-version: 3.0.3
+version: 3.1.0
 repository: "https://github.com/Aniketkhote/refreshed"
 
 environment:
@@ -15,7 +15,7 @@ dependencies:
   web: ">=1.0.0 <2.0.0"
 
 dev_dependencies:
-  flutter_lints: ">=5.0.0 <7.0.0"
+  flutter_lints: ">=6.0.0 <7.0.0"
   flutter_test:
     sdk: flutter
 

@@ -64,12 +64,7 @@ extension RxNumExt<T extends num> on Rx<T> {
 /// Extension providing additional functionality for nullable numeric values wrapped in an [Rx] object.
 extension RxnNumExt<T extends num> on Rx<T?> {
   /// Multiplication operator.
-  num? operator *(num other) {
-    if (value != null) {
-      return value! * other;
-    }
-    return null;
-  }
+  num? operator *(num other) => value != null ? value! * other : null;
 
   /// Euclidean modulo operator.
   ///
@@ -84,20 +79,10 @@ extension RxnNumExt<T extends num> on Rx<T?> {
   /// The sign of the returned value `r` is always positive.
   ///
   /// See [remainder] for the remainder of the truncating division.
-  num? operator %(num other) {
-    if (value != null) {
-      return value! % other;
-    }
-    return null;
-  }
+  num? operator %(num other) => value != null ? value! % other : null;
 
   /// Division operator.
-  double? operator /(num other) {
-    if (value != null) {
-      return value! / other;
-    }
-    return null;
-  }
+  double? operator /(num other) => value != null ? value! / other : null;
 
   /// Truncating division operator.
   ///
@@ -106,44 +91,19 @@ extension RxnNumExt<T extends num> on Rx<T?> {
   ///
   /// If both operands are [int]s then `a ~/ b` performs the truncating
   /// integer division.
-  int? operator ~/(num other) {
-    if (value != null) {
-      return value! ~/ other;
-    }
-    return null;
-  }
+  int? operator ~/(num other) => value != null ? value! ~/ other : null;
 
   /// Negate operator.
-  num? operator -() {
-    if (value != null) {
-      return -value!;
-    }
-    return null;
-  }
+  num? operator -() => value != null ? -value! : null;
 
   /// Relational less than or equal operator.
-  bool? operator <=(num other) {
-    if (value != null) {
-      return value! <= other;
-    }
-    return null;
-  }
+  bool? operator <=(num other) => value != null ? value! <= other : null;
 
   /// Relational greater than operator.
-  bool? operator >(num other) {
-    if (value != null) {
-      return value! > other;
-    }
-    return null;
-  }
+  bool? operator >(num other) => value != null ? value! > other : null;
 
   /// Relational greater than or equal operator.
-  bool? operator >=(num other) {
-    if (value != null) {
-      return value! >= other;
-    }
-    return null;
-  }
+  bool? operator >=(num other) => value != null ? value! >= other : null;
 
   /// True if the number is the double Not-a-Number value; otherwise, false.
   bool? get isNaN => value?.isNaN;
@@ -281,31 +241,16 @@ extension RxnDoubleExt on Rx<double?> {
   }
 
   /// Division operator.
-  double? operator /(num other) {
-    if (value != null) {
-      return value! / other;
-    }
-    return null;
-  }
+  double? operator /(num other) => value != null ? value! / other : null;
 
   /// Truncating division operator.
   ///
   /// The result of the truncating division `a ~/ b` is equivalent to
   /// `(a / b).truncate()`.
-  int? operator ~/(num other) {
-    if (value != null) {
-      return value! ~/ other;
-    }
-    return null;
-  }
+  int? operator ~/(num other) => value != null ? value! ~/ other : null;
 
   /// Negate operator. */
-  double? operator -() {
-    if (value != null) {
-      return -value!;
-    }
-    return null;
-  }
+  double? operator -() => value != null ? -value! : null;
 }
 
 /// A reactive extension of [double] type, enabling reactive operations on double values.
@@ -411,12 +356,7 @@ extension RxnIntExt on Rx<int?> {
   ///
   /// If both operands are negative, the result is negative, otherwise
   /// the result is non-negative.
-  int? operator &(int other) {
-    if (value != null) {
-      return value! & other;
-    }
-    return null;
-  }
+  int? operator &(int other) => value != null ? value! & other : null;
 
   /// Bit-wise or operator.
   ///
@@ -426,12 +366,7 @@ extension RxnIntExt on Rx<int?> {
   ///
   /// If both operands are non-negative, the result is non-negative,
   /// otherwise the result is negative.
-  int? operator |(int other) {
-    if (value != null) {
-      return value! | other;
-    }
-    return null;
-  }
+  int? operator |(int other) => value != null ? value! | other : null;
 
   /// Bit-wise exclusive-or operator.
   ///
@@ -441,12 +376,7 @@ extension RxnIntExt on Rx<int?> {
   ///
   /// If the operands have the same sign, the result is non-negative,
   /// otherwise the result is negative.
-  int? operator ^(int other) {
-    if (value != null) {
-      return value! ^ other;
-    }
-    return null;
-  }
+  int? operator ^(int other) => value != null ? value! ^ other : null;
 
   /// The bit-wise negate operator.
   ///
@@ -454,12 +384,7 @@ extension RxnIntExt on Rx<int?> {
   /// the result is a number with the opposite bits set.
   ///
   /// This maps any integer `x` to `-x - 1`.
-  int? operator ~() {
-    if (value != null) {
-      return ~value!;
-    }
-    return null;
-  }
+  int? operator ~() => value != null ? ~value! : null;
 }
 
 /// An Rx object for managing boolean values.
@@ -510,37 +435,17 @@ extension RxnBoolExt on Rx<bool?> {
   bool? get isTrue => value;
 
   /// Returns `true` if the value is `false`.
-  bool? get isFalse {
-    if (value != null) {
-      return !isTrue!;
-    }
-    return null;
-  }
+  bool? get isFalse => value != null ? !isTrue! : null;
 
   /// Performs a logical AND operation between the Rx value and [other].
-  bool? operator &(bool other) {
-    if (value != null) {
-      return other && value!;
-    }
-    return null;
-  }
+  bool? operator &(bool other) => value != null ? other && value! : null;
 
   /// Performs a logical OR operation between the Rx value and [other].
-  bool? operator |(bool other) {
-    if (value != null) {
-      return other || value!;
-    }
-    return null;
-  }
+  bool? operator |(bool other) => value != null ? other || value! : null;
 
   /// Performs a logical XOR operation between the Rx value and [other].
   bool? operator ^(bool other) => !other == value;
 
   /// Toggles the boolean value of the Rx object between `true` and `false`.
-  void toggle() {
-    if (value != null) {
-      call(!value!);
-      // return this;
-    }
-  }
+  void toggle() => value != null ? call(!value!) : null;
 }

@@ -103,44 +103,23 @@ class DeepCollectionEquality implements IEquality {
   final bool _unordered = false;
 
   @override
-  bool equals(e1, e2) {
-    if (e1 is Set) {
-      return e2 is Set && SetEquality(this).equals(e1, e2);
-    }
-    if (e1 is Map) {
-      return e2 is Map && MapEquality(keys: this, values: this).equals(e1, e2);
-    }
-
-    if (e1 is List) {
-      return e2 is List && ListEquality(this).equals(e1, e2);
-    }
-    if (e1 is Iterable) {
-      return e2 is Iterable && IterableEquality(this).equals(e1, e2);
-    }
-
-    return _base.equals(e1, e2);
-  }
+  bool equals(e1, e2) => switch ((e1, e2)) {
+    (Set s1, Set s2) => SetEquality(this).equals(s1, s2),
+    (Map m1, Map m2) => MapEquality(keys: this, values: this).equals(m1, m2),
+    (List l1, List l2) => ListEquality(this).equals(l1, l2),
+    (Iterable i1, Iterable i2) => IterableEquality(this).equals(i1, i2),
+    _ => _base.equals(e1, e2)
+  };
 
   @override
-  int hash(Object? o) {
-    if (o is Set) {
-      return SetEquality(this).hash(o);
-    }
-    if (o is Map) {
-      return MapEquality(keys: this, values: this).hash(o);
-    }
-    if (!_unordered) {
-      if (o is List) {
-        return ListEquality(this).hash(o);
-      }
-      if (o is Iterable) {
-        return IterableEquality(this).hash(o);
-      }
-    } else if (o is Iterable) {
-      return UnorderedIterableEquality(this).hash(o);
-    }
-    return _base.hash(o);
-  }
+  int hash(Object? o) => switch (o) {
+    Set s => SetEquality(this).hash(s),
+    Map m => MapEquality(keys: this, values: this).hash(m),
+    List l when !_unordered => ListEquality(this).hash(l),
+    Iterable i when !_unordered => IterableEquality(this).hash(i),
+    Iterable i when _unordered => UnorderedIterableEquality(this).hash(i),
+    _ => _base.hash(o)
+  };
 
   @override
   bool isValidKey(Object? o) =>
@@ -158,45 +137,38 @@ class ListEquality<E> implements IEquality<List<E>> {
   final IEquality<E> _elementEquality;
 
   @override
-  bool equals(List<E>? list1, List<E>? list2) {
-    if (identical(list1, list2)) {
-      return true;
-    }
-    if (list1 == null || list2 == null) {
-      return false;
-    }
-    final int length = list1.length;
-    if (length != list2.length) {
-      return false;
-    }
-    for (int i = 0; i < length; i++) {
-      if (!_elementEquality.equals(list1[i], list2[i])) {
-        return false;
+  bool equals(List<E>? list1, List<E>? list2) => switch ((list1, list2)) {
+    (var l1, var l2) when identical(l1, l2) => true,
+    (null, _) || (_, null) => false,
+    (List<E> l1, List<E> l2) when l1.length != l2.length => false,
+    (List<E> l1, List<E> l2) => () {
+      for (int i = 0; i < l1.length; i++) {
+        if (!_elementEquality.equals(l1[i], l2[i])) return false;
       }
-    }
-    return true;
-  }
+      return true;
+    }()
+  };
 
   @override
-  int hash(List<E>? list) {
-    if (list == null) {
-      return null.hashCode;
-    }
-    // Jenkins's one-at-a-time hash function.
-    // This code is almost identical to the one in IterableEquality, except
-    // that it uses indexing instead of iterating to get the elements.
-    int hash = 0;
-    for (int i = 0; i < list.length; i++) {
-      final int c = _elementEquality.hash(list[i]);
-      hash = (hash + c) & _hashMask;
-      hash = (hash + (hash << 10)) & _hashMask;
-      hash ^= hash >> 6;
-    }
-    hash = (hash + (hash << 3)) & _hashMask;
-    hash ^= hash >> 11;
-    hash = (hash + (hash << 15)) & _hashMask;
-    return hash;
-  }
+  int hash(List<E>? list) => switch (list) {
+    null => null.hashCode,
+    List<E> l => () {
+      // Jenkins's one-at-a-time hash function.
+      // This code is almost identical to the one in IterableEquality, except
+      // that it uses indexing instead of iterating to get the elements.
+      int hash = 0;
+      for (int i = 0; i < l.length; i++) {
+        final int c = _elementEquality.hash(l[i]);
+        hash = (hash + c) & _hashMask;
+        hash = (hash + (hash << 10)) & _hashMask;
+        hash ^= hash >> 6;
+      }
+      hash = (hash + (hash << 3)) & _hashMask;
+      hash ^= hash >> 11;
+      hash = (hash + (hash << 15)) & _hashMask;
+      return hash;
+    }()
+  };
 
   @override
   bool isValidKey(Object? o) => o is List<E>;
@@ -216,50 +188,48 @@ class MapEquality<K, V> implements IEquality<Map<K, V>> {
   final IEquality<V> _valueEquality;
 
   @override
-  bool equals(Map<K, V>? map1, Map<K, V>? map2) {
-    if (identical(map1, map2)) {
-      return true;
-    }
-    if (map1 == null || map2 == null) {
-      return false;
-    }
-    final int length = map1.length;
-    if (length != map2.length) {
-      return false;
-    }
-    final Map<_MapEntry, int> equalElementCounts = HashMap<_MapEntry, int>();
-    for (final K key in map1.keys) {
-      final _MapEntry entry = _MapEntry(this, key, map1[key]);
-      final int count = equalElementCounts[entry] ?? 0;
-      equalElementCounts[entry] = count + 1;
-    }
-    for (final K key in map2.keys) {
-      final _MapEntry entry = _MapEntry(this, key, map2[key]);
-      final int? count = equalElementCounts[entry];
-      if (count == null || count == 0) {
-        return false;
+  bool equals(Map<K, V>? map1, Map<K, V>? map2) => switch ((map1, map2)) {
+    (var m1, var m2) when identical(m1, m2) => true,
+    (null, _) || (_, null) => false,
+    (Map<K, V> m1, Map<K, V> m2) when m1.length != m2.length => false,
+    (Map<K, V> m1, Map<K, V> m2) => () {
+      final Map<_MapEntry, int> equalElementCounts = HashMap<_MapEntry, int>();
+      
+      // Count entries in first map
+      for (final K key in m1.keys) {
+        final _MapEntry entry = _MapEntry(this, key, m1[key]);
+        final int count = equalElementCounts[entry] ?? 0;
+        equalElementCounts[entry] = count + 1;
       }
-      equalElementCounts[entry] = count - 1;
-    }
-    return true;
-  }
+      
+      // Check entries in second map
+      for (final K key in m2.keys) {
+        final _MapEntry entry = _MapEntry(this, key, m2[key]);
+        final int? count = equalElementCounts[entry];
+        if (count == null || count == 0) return false;
+        equalElementCounts[entry] = count - 1;
+      }
+      
+      return true;
+    }()
+  };
 
   @override
-  int hash(Map<K, V>? map) {
-    if (map == null) {
-      return null.hashCode;
-    }
-    int hash = 0;
-    for (final K key in map.keys) {
-      final int keyHash = _keyEquality.hash(key);
-      final int valueHash = _valueEquality.hash(map[key] as V);
-      hash = (hash + 3 * keyHash + 7 * valueHash) & _hashMask;
-    }
-    hash = (hash + (hash << 3)) & _hashMask;
-    hash ^= hash >> 11;
-    hash = (hash + (hash << 15)) & _hashMask;
-    return hash;
-  }
+  int hash(Map<K, V>? map) => switch (map) {
+    null => null.hashCode,
+    Map<K, V> m => () {
+      int hash = 0;
+      for (final K key in m.keys) {
+        final int keyHash = _keyEquality.hash(key);
+        final int valueHash = _valueEquality.hash(m[key] as V);
+        hash = (hash + 3 * keyHash + 7 * valueHash) & _hashMask;
+      }
+      hash = (hash + (hash << 3)) & _hashMask;
+      hash ^= hash >> 11;
+      hash = (hash + (hash << 15)) & _hashMask;
+      return hash;
+    }()
+  };
 
   @override
   bool isValidKey(Object? o) => o is Map<K, V>;
@@ -278,10 +248,11 @@ class _MapEntry {
       _hashMask;
 
   @override
-  bool operator ==(Object other) =>
-      other is _MapEntry &&
-      equality._keyEquality.equals(key, other.key) &&
-      equality._valueEquality.equals(value, other.value);
+  bool operator ==(Object other) => switch (other) {
+    _MapEntry entry => equality._keyEquality.equals(key, entry.key) &&
+                       equality._valueEquality.equals(value, entry.value),
+    _ => false
+  };
 }
 
 /// Equality on iterables.
@@ -294,47 +265,40 @@ class IterableEquality<E> implements IEquality<Iterable<E>> {
   final IEquality<E?> _elementEquality;
 
   @override
-  bool equals(Iterable<E>? elements1, Iterable<E>? elements2) {
-    if (identical(elements1, elements2)) {
-      return true;
-    }
-    if (elements1 == null || elements2 == null) {
-      return false;
-    }
-    final Iterator<E> it1 = elements1.iterator;
-    final Iterator<E> it2 = elements2.iterator;
-    while (true) {
-      final bool hasNext = it1.moveNext();
-      if (hasNext != it2.moveNext()) {
-        return false;
+  bool equals(Iterable<E>? elements1, Iterable<E>? elements2) => switch ((elements1, elements2)) {
+    (var e1, var e2) when identical(e1, e2) => true,
+    (null, _) || (_, null) => false,
+    (Iterable<E> e1, Iterable<E> e2) => () {
+      final Iterator<E> it1 = e1.iterator;
+      final Iterator<E> it2 = e2.iterator;
+      
+      while (true) {
+        final bool hasNext = it1.moveNext();
+        if (hasNext != it2.moveNext()) return false;
+        if (!hasNext) return true;
+        if (!_elementEquality.equals(it1.current, it2.current)) return false;
       }
-      if (!hasNext) {
-        return true;
-      }
-      if (!_elementEquality.equals(it1.current, it2.current)) {
-        return false;
-      }
-    }
-  }
+    }()
+  };
 
   @override
-  int hash(Iterable<E>? elements) {
-    if (elements == null) {
-      return null.hashCode;
-    }
-    // Jenkins's one-at-a-time hash function.
-    int hash = 0;
-    for (final E element in elements) {
-      final int c = _elementEquality.hash(element);
-      hash = (hash + c) & _hashMask;
-      hash = (hash + (hash << 10)) & _hashMask;
-      hash ^= hash >> 6;
-    }
-    hash = (hash + (hash << 3)) & _hashMask;
-    hash ^= hash >> 11;
-    hash = (hash + (hash << 15)) & _hashMask;
-    return hash;
-  }
+  int hash(Iterable<E>? elements) => switch (elements) {
+    null => null.hashCode,
+    Iterable<E> e => () {
+      // Jenkins's one-at-a-time hash function.
+      int hash = 0;
+      for (final E element in e) {
+        final int c = _elementEquality.hash(element);
+        hash = (hash + c) & _hashMask;
+        hash = (hash + (hash << 10)) & _hashMask;
+        hash ^= hash >> 6;
+      }
+      hash = (hash + (hash << 3)) & _hashMask;
+      hash ^= hash >> 11;
+      hash = (hash + (hash << 15)) & _hashMask;
+      return hash;
+    }()
+  };
 
   @override
   bool isValidKey(Object? o) => o is Iterable<E>;
@@ -358,50 +322,51 @@ abstract class _UnorderedEquality<E, T extends Iterable<E>>
   final IEquality<E> _elementEquality;
 
   @override
-  bool equals(T? elements1, T? elements2) {
-    if (identical(elements1, elements2)) {
-      return true;
-    }
-    if (elements1 == null || elements2 == null) {
-      return false;
-    }
-    final HashMap<E, int> counts = HashMap<E, int>(
-      equals: _elementEquality.equals,
-      hashCode: _elementEquality.hash,
-      isValidKey: _elementEquality.isValidKey,
-    );
-    int length = 0;
-    for (final E e in elements1) {
-      final int count = counts[e] ?? 0;
-      counts[e] = count + 1;
-      length++;
-    }
-    for (final E e in elements2) {
-      final int? count = counts[e];
-      if (count == null || count == 0) {
-        return false;
+  bool equals(T? elements1, T? elements2) => switch ((elements1, elements2)) {
+    (var e1, var e2) when identical(e1, e2) => true,
+    (null, _) || (_, null) => false,
+    (T e1, T e2) => () {
+      final HashMap<E, int> counts = HashMap<E, int>(
+        equals: _elementEquality.equals,
+        hashCode: _elementEquality.hash,
+        isValidKey: _elementEquality.isValidKey,
+      );
+      
+      // Count elements in first collection
+      int length = 0;
+      for (final E e in e1) {
+        final int count = counts[e] ?? 0;
+        counts[e] = count + 1;
+        length++;
       }
-      counts[e] = count - 1;
-      length--;
-    }
-    return length == 0;
-  }
+      
+      // Check elements in second collection
+      for (final E e in e2) {
+        final int? count = counts[e];
+        if (count == null || count == 0) return false;
+        counts[e] = count - 1;
+        length--;
+      }
+      
+      return length == 0;
+    }()
+  };
 
   @override
-  int hash(T? elements) {
-    if (elements == null) {
-      return null.hashCode;
-    }
-    int hash = 0;
-    for (final E element in elements) {
-      final int c = _elementEquality.hash(element);
-      hash = (hash + c) & _hashMask;
-    }
-    hash = (hash + (hash << 3)) & _hashMask;
-    hash ^= hash >> 11;
-    hash = (hash + (hash << 15)) & _hashMask;
-    return hash;
-  }
+  int hash(T? elements) => switch (elements) {
+    null => null.hashCode,
+    T e => () {
+      int hash = 0;
+      for (final E element in e) {
+        final int c = _elementEquality.hash(element);
+        hash = (hash + c) & _hashMask;
+      }
+      hash = (hash + (hash << 3)) & _hashMask;
+      hash ^= hash >> 11;
+      hash = (hash + (hash << 15)) & _hashMask;
+      return hash;
+    }()
+  };
 }
 
 /// Equality of the elements of two iterables without considering order.

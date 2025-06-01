@@ -43,14 +43,9 @@ extension LoopEventsExtension on GetInterface {
   FutureOr<T> asap<T>(
     T Function() computation, {
     bool Function()? condition,
-  }) async {
-    T val;
-    if (condition == null || !condition()) {
-      await Future<T>.delayed(Duration.zero);
-      val = computation();
-    } else {
-      val = computation();
-    }
-    return val;
-  }
+  }) async => switch (condition) {
+    null => await Future<T>.delayed(Duration.zero).then((_) => computation()),
+    var cond when !cond() => await Future<T>.delayed(Duration.zero).then((_) => computation()),
+    _ => computation()
+  };
 }

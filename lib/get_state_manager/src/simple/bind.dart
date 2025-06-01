@@ -118,25 +118,27 @@ abstract class Bind<T> extends StatelessWidget {
     Get.lazyPut<S>(builder, tag: tag, fenix: fenix);
     return _FactoryBind<S>(
       tag: tag,
-      dispose: (_) {
-        onClose?.call();
+      dispose: switch (onClose) {
+        null => null,
+        var callback => (_) => callback()
       },
     );
   }
 
-  /// Creates a binding and puts the specified dependency into the GetX service locator.
-  ///
-  /// Returns the binding created.
-  static Bind<dynamic> create<S>(
-    InstanceCreateBuilderCallback<S> builder, {
+  /// Creates a binding with the specified controller factory.
+  /// This is a more flexible way to create a binding, as it allows you to
+  /// specify a custom factory function.
+  static Bind<S> factory<S>(
+    InstanceBuilderCallback<S> builder, {
+    bool autoRemove = true,
+    bool assignId = true,
     String? tag,
-    bool permanent = true,
-  }) =>
-      _FactoryBind<S>(
-        create: builder,
-        tag: tag,
-        global: false,
-      );
+  }) => _FactoryBind<S>(
+    init: () => builder(),
+    autoRemove: autoRemove,
+    assignId: assignId,
+    tag: tag,
+  );
 
   /// Creates a binding and puts the specified dependency into the GetX service locator.
   ///
@@ -162,8 +164,9 @@ abstract class Bind<T> extends StatelessWidget {
       Get.delete<S>(tag: tag, force: force);
 
   /// Deletes all dependencies from the GetX service locator.
-  static Future<void> deleteAll({bool force = false}) async =>
-      Get.deleteAll(force: force);
+  static Future<void> deleteAll({bool force = false}) async {
+    Get.deleteAll(force: force);
+  }
 
   /// Reloads all dependencies from the GetX service locator.
   static void reloadAll({bool force = false}) => Get.reloadAll(force: force);
@@ -180,8 +183,10 @@ abstract class Bind<T> extends StatelessWidget {
 
   /// Replaces the specified child widget with a new one.
   static Future<void> replace<P>(P child, {String? tag}) async {
-    final InstanceInfo info = Get.getInstanceInfo<P>(tag: tag);
-    final bool permanent = info.isPermanent ?? false;
+    final info = Get.getInstanceInfo<P>(tag: tag);
+    final permanent = info.isPermanent ?? false;
+    
+    // Delete existing instance and put the new one
     await delete<P>(tag: tag, force: permanent);
     Get.put(child, tag: tag, permanent: permanent);
   }
@@ -192,10 +197,20 @@ abstract class Bind<T> extends StatelessWidget {
     String? tag,
     bool? fenix,
   }) async {
-    final InstanceInfo info = Get.getInstanceInfo<P>(tag: tag);
-    final bool permanent = info.isPermanent ?? false;
+    // Get instance info and determine if it should be permanent
+    final info = Get.getInstanceInfo<P>(tag: tag);
+    final permanent = info.isPermanent ?? false;
+    
+    // Delete existing instance and register the new lazy builder
     await delete<P>(tag: tag, force: permanent);
-    Get.lazyPut(builder, tag: tag, fenix: fenix ?? permanent);
+    Get.lazyPut(
+      builder, 
+      tag: tag, 
+      fenix: switch (fenix) {
+        null => permanent,
+        var value => value
+      }
+    );
   }
 
   /// Retrieves the dependency of type [T] from the nearest ancestor [Binder] widget.
@@ -203,25 +218,17 @@ abstract class Bind<T> extends StatelessWidget {
     BuildContext context, {
     bool rebuild = false,
     // Object Function(T value)? filter,
-  }) {
-    final BindElement<T>? inheritedElement =
-        context.getElementForInheritedWidgetOfExactType<Binder<T>>()
-            as BindElement<T>?;
+  }) =>
+      switch (context.getElementForInheritedWidgetOfExactType<Binder<T>>()
+          as BindElement<T>?) {
+        null => throw BindError<String>(controller: "$T"),
+        var element => () {
+            if (rebuild) context.dependOnInheritedElement(element);
+            return element.controller;
+          }()
+      };
 
-    if (inheritedElement == null) {
-      throw BindError<String>(controller: "$T");
-    }
-
-    if (rebuild) {
-      context.dependOnInheritedElement(inheritedElement);
-    }
-
-    final T controller = inheritedElement.controller;
-
-    return controller;
-  }
-
-  @factory
+  // Factory method to create a copy of this binding with a different child widget
   Bind<T> _copyWithChild(Widget child);
 }
 
@@ -242,6 +249,7 @@ class _FactoryBind<T> extends Bind<T> {
     this.didChangeDependencies,
     this.didUpdateWidget,
   }) : super(child: child);
+
   @override
   final InitBuilder<T>? init;
 
@@ -275,36 +283,29 @@ class _FactoryBind<T> extends Bind<T> {
 
   @override
   Bind<T> _copyWithChild(Widget child) => Bind<T>.builder(
-        init: init,
-        create: create,
-        global: global,
-        autoRemove: autoRemove,
-        assignId: assignId,
-        initState: initState,
-        filter: filter,
-        tag: tag,
-        dispose: dispose,
-        id: id,
-        didChangeDependencies: didChangeDependencies,
-        didUpdateWidget: didUpdateWidget,
-        child: child,
-      );
+    init: init,
+    create: create,
+    global: global,
+    autoRemove: autoRemove,
+    assignId: assignId,
+    initState: initState,
+    filter: filter,
+    tag: tag,
+    dispose: dispose,
+    id: id,
+    didChangeDependencies: didChangeDependencies,
+    didUpdateWidget: didUpdateWidget,
+    child: child,
+  );
 
   @override
-  Widget build(BuildContext context) => Binder<T>(
-        create: create,
-        global: global,
-        autoRemove: autoRemove,
-        assignId: assignId,
-        initState: initState,
-        filter: filter,
-        tag: tag,
-        dispose: dispose,
-        id: id,
-        didChangeDependencies: didChangeDependencies,
-        didUpdateWidget: didUpdateWidget,
-        child: child!,
-      );
+  Widget build(BuildContext context) => switch ((create, child)) {
+        (final createFn?, _) => createFn(context) is Widget
+            ? createFn(context) as Widget
+            : const SizedBox.shrink(),
+        (_, final childWidget?) => childWidget,
+        _ => const SizedBox.shrink(),
+      };
 }
 
 /// A widget responsible for managing a list of bindings and providing them to its child widget.
@@ -323,6 +324,8 @@ class Binds<S> extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => binds.reversed
-      .fold(child, (Widget widget, Bind<S> e) => e._copyWithChild(widget));
+  Widget build(BuildContext context) => binds.reversed.fold(
+        child,
+        (widget, bind) => bind._copyWithChild(widget),
+      );
 }

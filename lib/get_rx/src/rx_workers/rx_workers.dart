@@ -10,12 +10,12 @@ import "package:refreshed/get_rx/src/rx_workers/utils/debouncer.dart";
 /// If [condition] is `null`, returns `true`. If [condition] is already a boolean value,
 /// returns it as is. If [condition] is a function that returns a boolean value, invokes
 /// the function and returns its result. Otherwise, returns `true`.
-bool _conditional(dynamic condition) {
-  if (condition == null) return true;
-  if (condition is bool) return condition;
-  if (condition is bool Function()) return condition();
-  return true;
-}
+bool _conditional(dynamic condition) => switch (condition) {
+  null => true,
+  bool b => b,
+  bool Function() func => func(),
+  _ => true
+};
 
 /// A typedef representing a callback function used by workers.
 ///
@@ -32,13 +32,9 @@ class Workers {
   final List<Worker> workers;
 
   /// Disposes all workers in the collection that have not already been disposed.
-  void dispose() {
-    for (final worker in workers) {
-      if (!worker._disposed) {
-        worker.dispose();
-      }
-    }
-  }
+  void dispose() => workers
+    .where((worker) => !worker._disposed)
+    .forEach((worker) => worker.dispose());
 }
 
 ///
@@ -156,12 +152,14 @@ Worker once<T>(
   late Worker ref;
   StreamSubscription? sub;
   sub = listener.listen(
-    (event) {
-      if (!_conditional(condition)) return;
-      ref._disposed = true;
-      ref._log("called");
-      sub?.cancel();
-      callback(event);
+    (event) => switch (_conditional(condition)) {
+      false => null,
+      true => {
+        ref._disposed = true,
+        ref._log("called"),
+        sub?.cancel(),
+        callback(event)
+      }
     },
     onError: onError,
     onDone: onDone,
@@ -199,12 +197,14 @@ Worker interval<T>(
 }) {
   var debounceActive = false;
   final StreamSubscription sub = listener.listen(
-    (event) async {
-      if (debounceActive || !_conditional(condition)) return;
-      debounceActive = true;
-      await Future.delayed(time);
-      debounceActive = false;
-      callback(event);
+    (event) async => switch ((debounceActive, _conditional(condition))) {
+      (true, _) || (_, false) => null,
+      _ => {
+        debounceActive = true,
+        await Future.delayed(time),
+        debounceActive = false,
+        callback(event)
+      }
     },
     onError: onError,
     onDone: onDone,
@@ -243,11 +243,7 @@ Worker debounce<T>(
   final newDebouncer =
       Debouncer(delay: time ?? const Duration(milliseconds: 800));
   final StreamSubscription sub = listener.listen(
-    (event) {
-      newDebouncer(() {
-        callback(event);
-      });
-    },
+    (event) => newDebouncer(() => callback(event)),
     onError: onError,
     onDone: onDone,
     cancelOnError: cancelOnError,
@@ -280,15 +276,14 @@ class Worker {
   /// Disposes of the worker, cancelling its associated asynchronous task.
   ///
   /// If the worker has already been disposed, this method does nothing.
-  void dispose() {
-    if (_disposed) {
-      _log("already disposed");
-      return;
+  void dispose() => switch (_disposed) {
+    true => _log("already disposed"),
+    false => {
+      _disposed = true,
+      worker(),
+      _log("disposed")
     }
-    _disposed = true;
-    worker();
-    _log("disposed");
-  }
+  };
 
   /// Alias for the [dispose] method, allowing the [Worker] instance to be called directly for disposal.
   void call() => dispose();
