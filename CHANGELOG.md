@@ -9,6 +9,31 @@
   - Simplified controller hierarchy with modern Dart 3.8 pattern matching while maintaining backward compatibility.
   - Converted `ScrollMixin` to a proper controller class (`GetxScrollController`) for better type safety and usability.
   - Added backward compatibility aliases with deprecation notices to ensure smooth migration.
+  - Improved `GetxScrollController` with more concise scroll event handling and better documentation.
+  - Enhanced scroll edge detection with cleaner conditional logic and improved error handling.
+
+- **Reactive Classes Improvements**:
+
+  - Created a shared utility (`RxJsonUtils`) for safer JSON conversion in reactive classes.
+  - Eliminated duplicated error handling code in `toJson()` methods across `Rx` and `Rxn` classes.
+  - Improved error messages with more specific type information.
+  - Added JSON serialization support for reactive collections (`RxList`, `RxMap`, `RxSet`).
+  - Implemented specialized collection conversion utilities for handling nested objects.
+  - Added fallback mechanism for safer JSON conversion with `tryToJson` method.
+  - Simplified the value setter in `RxObjectMixin` with clearer conditional statements for better readability.
+  - Refactored `BindElement._subscribeToController` to use helper methods for each controller type, improving maintainability.
+  - Removed redundant field declarations in `_FactoryBind` class by properly using constructor parameter forwarding.
+
+- **State Management Modernization**:
+
+  - Modernized `Bind` class static methods with improved type safety and consistent return types.
+  - Enhanced error handling in `replace` and `lazyReplace` methods with more descriptive error messages.
+  - Improved documentation across all `Bind` class methods with detailed parameter descriptions and usage examples.
+  - Refactored `Bind.of` method with clearer pattern matching and better error reporting.
+  - Fixed inconsistent behavior in `put` and `spawn` methods regarding the `autoRemove` parameter.
+  - Leveraged Dart 3.8 pattern matching in state management utilities for more readable code.
+  - Created a shared `BindInterface` to eliminate code duplication between `Bind` and `Binder` classes.
+  - Improved maintainability by standardizing common fields and methods across binding implementations.
 
 ## 3.1.0
 

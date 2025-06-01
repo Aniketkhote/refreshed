@@ -78,6 +78,14 @@ class RxSet<E> extends GetListenable<Set<E>>
     value.retainWhere(test);
     refresh();
   }
+
+  /// Converts this reactive set to a JSON array by applying toJson to each element.
+  ///
+  /// Since JSON doesn't have a native set type, this converts the set to a list first.
+  /// If any element doesn't support toJson, an exception will be thrown with
+  /// specific information about the type that caused the error.
+  @override
+  dynamic toJson() => RxJsonUtils.listToJson(value.toList(), E.toString());
 }
 
 extension SetExtension<E> on Set<E> {

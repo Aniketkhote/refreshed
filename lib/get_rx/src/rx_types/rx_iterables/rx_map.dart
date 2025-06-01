@@ -46,6 +46,14 @@ class RxMap<K, V> extends GetListenable<Map<K, V>>
   void refresh() {
     super.refresh();
   }
+
+  /// Converts this reactive map to a JSON object by applying toJson to each value.
+  ///
+  /// The keys are converted to strings, and the values are converted using toJson.
+  /// If any value doesn't support toJson, an exception will be thrown with
+  /// specific information about the type that caused the error.
+  @override
+  dynamic toJson() => RxJsonUtils.mapToJson(value, V.toString());
 }
 
 extension MapExtension<K, V> on Map<K, V> {

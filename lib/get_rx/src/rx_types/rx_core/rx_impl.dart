@@ -43,11 +43,21 @@ mixin RxObjectMixin<T> on GetListenable<T> {
   /// Updates the [value] and adds it to the stream, updating the observer
   /// Widget, only if it's different from the previous value.
   @override
-  set value(T val) => switch ((isDisposed, value == val && !firstRebuild)) {
-        (true, _) => null,
-        (_, true) => sentToStream = false,
-        _ => {sentToStream = true, firstRebuild = false, super.value = val}
-      };
+  set value(T val) {
+    // Don't update if the object is disposed
+    if (isDisposed) return;
+
+    // If value hasn't changed or it's the first rebuild, just update the stream status
+    if (value == val && !firstRebuild) {
+      sentToStream = false;
+      return;
+    }
+
+    // Otherwise update the value and mark as sent to stream
+    sentToStream = true;
+    firstRebuild = false;
+    super.value = val;
+  }
 
   /// Returns a [StreamSubscription] similar to [listen], but with the
   /// added benefit that it primes the stream with the current [value], rather
@@ -153,19 +163,7 @@ class Rx<T> extends _RxImpl<T> {
   Rx(super.initial);
 
   @override
-  dynamic toJson() {
-    if (value == null) return null;
-
-    try {
-      // Use dynamic to safely call toJson if it exists
-      final dynamic val = value;
-      return val.toJson();
-    } on NoSuchMethodError catch (_) {
-      throw Exception("$T has no method [toJson]");
-    } catch (e) {
-      throw Exception("Error in toJson: $e");
-    }
-  }
+  dynamic toJson() => RxJsonUtils.safeToJson(value, T.toString());
 }
 
 /// A specialized version of [Rx] for nullable types ([T?]).
@@ -173,19 +171,7 @@ class Rxn<T> extends Rx<T?> {
   Rxn([super.initial]);
 
   @override
-  dynamic toJson() {
-    if (value == null) return null;
-
-    try {
-      // Use dynamic to safely call toJson if it exists
-      final dynamic val = value;
-      return val.toJson();
-    } on NoSuchMethodError catch (_) {
-      throw Exception("$T has no method [toJson]");
-    } catch (e) {
-      throw Exception("Error in toJson: $e");
-    }
-  }
+  dynamic toJson() => RxJsonUtils.safeToJson(value, T.toString());
 }
 
 /// Extension on [String] providing methods to create reactive strings.

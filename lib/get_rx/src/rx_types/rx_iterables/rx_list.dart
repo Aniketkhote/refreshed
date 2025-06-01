@@ -140,6 +140,13 @@ class RxList<E> extends GetListenable<List<E>>
 
   @override
   String toString() => 'RxList(${value.join(', ')})';
+
+  /// Converts this reactive list to a JSON array by applying toJson to each element.
+  ///
+  /// If any element doesn't support toJson, an exception will be thrown with
+  /// specific information about the type that caused the error.
+  @override
+  dynamic toJson() => RxJsonUtils.listToJson(value, E.toString());
 }
 
 extension ListExtension<E> on List<E> {

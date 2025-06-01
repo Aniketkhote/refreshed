@@ -92,21 +92,46 @@ class BindElement<T> extends InheritedElement {
     _remove?.call();
 
     // Set up new subscription based on controller type
-    _remove = switch (localController) {
-      GetxController controller => widget.id == null
-          ? controller.addListener(updateFn)
-          : controller.addListenerId(widget.id, updateFn),
-      Listenable listenable => () {
-          listenable.addListener(updateFn);
-          return () => listenable.removeListener(updateFn);
-        }(),
-      StreamController<T> streamController => () {
-          final subscription =
-              streamController.stream.listen((_) => updateFn());
-          return subscription.cancel;
-        }(),
-      _ => null
-    };
+    _remove = _setupControllerListener(localController, updateFn);
+  }
+
+  /// Sets up a listener for a GetxController.
+  /// Returns a disposer function to remove the listener.
+  Disposer? _setupGetxControllerListener(
+      GetxController controller, VoidCallback updateFn) {
+    return widget.id == null
+        ? controller.addListener(updateFn)
+        : controller.addListenerId(widget.id, updateFn);
+  }
+
+  /// Sets up a listener for a Listenable (like ChangeNotifier).
+  /// Returns a disposer function to remove the listener.
+  Disposer _setupListenableListener(
+      Listenable listenable, VoidCallback updateFn) {
+    listenable.addListener(updateFn);
+    return () => listenable.removeListener(updateFn);
+  }
+
+  /// Sets up a listener for a StreamController.
+  /// Returns a disposer function to cancel the subscription.
+  Disposer _setupStreamControllerListener(
+      StreamController<dynamic> streamController, VoidCallback updateFn) {
+    final subscription = streamController.stream.listen((_) => updateFn());
+    return subscription.cancel;
+  }
+
+  /// Sets up the appropriate listener based on the controller type.
+  /// Returns a disposer function or null if the controller type is not supported.
+  Disposer? _setupControllerListener(
+      dynamic controller, VoidCallback updateFn) {
+    if (controller is GetxController) {
+      return _setupGetxControllerListener(controller, updateFn);
+    } else if (controller is Listenable) {
+      return _setupListenableListener(controller, updateFn);
+    } else if (controller is StreamController) {
+      return _setupStreamControllerListener(controller, updateFn);
+    }
+    return null;
   }
 
   void _filterUpdate() => switch (widget.filter?.call(controller)) {

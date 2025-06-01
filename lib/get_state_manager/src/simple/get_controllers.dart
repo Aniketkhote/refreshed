@@ -17,7 +17,7 @@ mixin UpdateMixin on ListNotifier {
   /// The [condition] parameter determines whether the rebuild should occur.
   void update([List<Object>? ids, bool condition = true]) {
     if (!condition) return;
-    
+
     switch (ids) {
       case null:
         refresh();
@@ -45,12 +45,12 @@ mixin AppLifecycleMixin on WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) => switch (state) {
-    AppLifecycleState.resumed => onResumed(),
-    AppLifecycleState.inactive => onInactive(),
-    AppLifecycleState.paused => onPaused(),
-    AppLifecycleState.detached => onDetached(),
-    AppLifecycleState.hidden => onHidden(),
-  };
+        AppLifecycleState.resumed => onResumed(),
+        AppLifecycleState.inactive => onInactive(),
+        AppLifecycleState.paused => onPaused(),
+        AppLifecycleState.detached => onDetached(),
+        AppLifecycleState.hidden => onHidden(),
+      };
 
   /// Called when the app is resumed from a paused state.
   void onResumed() {}
@@ -72,55 +72,60 @@ mixin AppLifecycleMixin on WidgetsBindingObserver {
 
 /// Base controller class that provides state management capabilities.
 /// This is the foundation for all other controllers.
-abstract class GetxController extends ListNotifier with GetLifeCycleMixin, UpdateMixin {}
+abstract class GetxController extends ListNotifier
+    with GetLifeCycleMixin, UpdateMixin {}
 
-/// A controller for managing scroll events.
-/// Instead of a mixin, this is now a concrete controller class that can be extended.
+/// A controller for managing scroll events at the top and bottom of scrollable content.
+/// Provides automatic handling of scroll edge detection with debouncing.
 abstract class GetxScrollController extends GetxController {
+  /// The scroll controller that monitors scroll position.
   late final ScrollController scroll;
-  
+
+  /// Debounce flag to prevent multiple calls when at the bottom edge.
   bool _canFetchBottom = true;
+
+  /// Debounce flag to prevent multiple calls when at the top edge.
   bool _canFetchTop = true;
 
   @override
   void onInit() {
     super.onInit();
-    scroll = ScrollController();
-    scroll.addListener(_scrollListener);
+    scroll = ScrollController()..addListener(_scrollListener);
   }
 
-  Future<void> _scrollListener() async {
-    if (scroll.position.atEdge) {
-      await _handleScrollEdge();
+  /// Monitors scroll position and triggers edge handling when needed.
+  void _scrollListener() => scroll.position.atEdge ? _handleScrollEdge() : null;
+
+  /// Handles scroll edge events based on the current position.
+  Future<void> _handleScrollEdge() async {
+    final isAtTop = scroll.position.pixels == 0;
+
+    if (isAtTop && _canFetchTop) {
+      _canFetchTop = false;
+      await _safeScrollCallback(onTopScroll);
+      _canFetchTop = true;
+    } else if (!isAtTop && _canFetchBottom) {
+      _canFetchBottom = false;
+      await _safeScrollCallback(onEndScroll);
+      _canFetchBottom = true;
     }
   }
 
-  Future<void> _handleScrollEdge() async => switch (scroll.position.pixels) {
-    0 when _canFetchTop => {
-      _canFetchTop = false,
-      await _safeScrollCallback(onTopScroll),
-      _canFetchTop = true
-    },
-    _ when _canFetchBottom => {
-      _canFetchBottom = false,
-      await _safeScrollCallback(onEndScroll),
-      _canFetchBottom = true
-    },
-    _ => null
-  };
-
+  /// Safely executes a callback with error handling.
   Future<void> _safeScrollCallback(Future<void> Function() callback) async {
     try {
       await callback();
     } catch (e) {
-      // Optionally handle any exceptions here
+      // Subclasses can override this method to handle errors differently
     }
   }
 
   /// Called when the scroll reaches the bottom.
+  /// Implement this method to load more content or perform other actions.
   Future<void> onEndScroll();
 
   /// Called when the scroll reaches the top.
+  /// Implement this method to refresh content or perform other actions.
   Future<void> onTopScroll();
 
   @override
@@ -138,7 +143,8 @@ abstract class RxController extends ListNotifier with GetLifeCycleMixin {}
 abstract class StateController<T> extends GetxController with StateMixin<T> {}
 
 /// A controller with full app lifecycle observation capabilities.
-abstract class LifecycleController extends GetxController with WidgetsBindingObserver, AppLifecycleMixin {
+abstract class LifecycleController extends GetxController
+    with WidgetsBindingObserver, AppLifecycleMixin {
   @override
   void onInit() {
     super.onInit();
@@ -153,7 +159,8 @@ abstract class LifecycleController extends GetxController with WidgetsBindingObs
 }
 
 /// A controller with both state management and lifecycle observation capabilities.
-abstract class FullController<T> extends LifecycleController with StateMixin<T> {}
+abstract class FullController<T> extends LifecycleController
+    with StateMixin<T> {}
 
 // Backward compatibility aliases
 
