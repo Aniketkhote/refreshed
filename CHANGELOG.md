@@ -1,3 +1,15 @@
+## 3.2.0
+
+### State Management Improvements
+
+- **Controller Lifecycle Refactoring**:
+
+  - Refactored controller lifecycle management with a more composable architecture and fewer inheritance layers.
+  - Introduced focused mixins (`UpdateMixin`, `AppLifecycleMixin`) to separate concerns and reduce code duplication.
+  - Simplified controller hierarchy with modern Dart 3.8 pattern matching while maintaining backward compatibility.
+  - Converted `ScrollMixin` to a proper controller class (`GetxScrollController`) for better type safety and usability.
+  - Added backward compatibility aliases with deprecation notices to ensure smooth migration.
+
 ## 3.1.0
 
 ### Code Modernization
