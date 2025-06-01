@@ -27,9 +27,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Screen'),
-      ),
+      appBar: AppBar(title: Text('Home Screen')),
       body: Center(
         child: Column(
           spacing: 16,
@@ -63,9 +61,7 @@ class ScreenA extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Screen A'),
-      ),
+      appBar: AppBar(title: Text('Screen A')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -91,9 +87,7 @@ class ScreenB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Screen B'),
-      ),
+      appBar: AppBar(title: Text('Screen B')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -120,9 +114,7 @@ class DetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final id = Get.parameters['id'];
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Details Screen'),
-      ),
+      appBar: AppBar(title: Text('Details Screen')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

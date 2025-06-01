@@ -20,11 +20,14 @@ class BindElement<T> extends InheritedElement {
   T? _controller;
 
   /// Getter for the controller instance.
-  T get controller => _controller ?? (() {
+  T get controller =>
+      _controller ??
+      (() {
         final instance = _controllerBuilder?.call();
         _controller = instance;
         _subscribeToController();
-        return _controller ?? (throw BindError<String>(controller: "$T", tag: widget.tag));
+        return _controller ??
+            (throw BindError<String>(controller: "$T", tag: widget.tag));
       })();
 
   bool? _isCreator = false;
@@ -43,14 +46,16 @@ class BindElement<T> extends InheritedElement {
         case (true, _):
           _isCreator = Get.isPrepared<T>(tag: widget.tag);
           _controllerBuilder = () => Get.find<T>(tag: widget.tag);
-        
+
         case (false, true):
-          _controllerBuilder = () => (widget.create?.call(this) ?? widget.init?.call()) as T;
+          _controllerBuilder =
+              () => (widget.create?.call(this) ?? widget.init?.call()) as T;
           _isCreator = true;
           Get.lazyPut<T>(_controllerBuilder!, tag: widget.tag);
-        
+
         case (false, false):
-          _controllerBuilder = () => (widget.create?.call(this) ?? widget.init?.call()) as T;
+          _controllerBuilder =
+              () => (widget.create?.call(this) ?? widget.init?.call()) as T;
           _isCreator = true;
           Get.put<T>(_controllerBuilder!(), tag: widget.tag);
       }
@@ -71,7 +76,7 @@ class BindElement<T> extends InheritedElement {
   void _subscribeToController() {
     // Apply filter if provided
     _filter = widget.filter?.call(controller);
-    
+
     // Determine which update function to use based on filter
     final updateFn = _filter != null ? _filterUpdate : getUpdate;
     final localController = _controller;
@@ -85,46 +90,44 @@ class BindElement<T> extends InheritedElement {
 
     // Clean up previous subscription if any
     _remove?.call();
-    
+
     // Set up new subscription based on controller type
     _remove = switch (localController) {
       GetxController controller => widget.id == null
           ? controller.addListener(updateFn)
           : controller.addListenerId(widget.id, updateFn),
-          
       Listenable listenable => () {
-        listenable.addListener(updateFn);
-        return () => listenable.removeListener(updateFn);
-      }(),
-        
+          listenable.addListener(updateFn);
+          return () => listenable.removeListener(updateFn);
+        }(),
       StreamController<T> streamController => () {
-        final subscription = streamController.stream.listen((_) => updateFn());
-        return subscription.cancel;
-      }(),
-        
+          final subscription =
+              streamController.stream.listen((_) => updateFn());
+          return subscription.cancel;
+        }(),
       _ => null
     };
   }
 
   void _filterUpdate() => switch (widget.filter?.call(controller)) {
-    var newFilter when newFilter != _filter => {
-      _filter = newFilter,
-      getUpdate()
-    },
-    _ => null
-  };
+        var newFilter when newFilter != _filter => {
+            _filter = newFilter,
+            getUpdate()
+          },
+        _ => null
+      };
 
   /// Disposes the resources associated with this element.
   void dispose() {
     // Call custom dispose callback if provided
     widget.dispose?.call(this);
-    
+
     // Clean up controller if this element created it or has assignId
     switch ((_isCreator == true || widget.assignId, widget.autoRemove)) {
       case (true, true) when Get.isRegistered<T>(tag: widget.tag):
         Get.delete<T>(tag: widget.tag);
       case _:
-        // No action needed
+      // No action needed
     }
 
     // Execute all registered disposers and clear the list
@@ -135,7 +138,7 @@ class BindElement<T> extends InheritedElement {
 
     // Clean up listener
     _remove?.call();
-    
+
     // Reset all fields
     _controller = null;
     _isCreator = null;
@@ -157,9 +160,9 @@ class BindElement<T> extends InheritedElement {
       case (true, true):
         _subscribeToController();
       case _:
-        // No resubscription needed
+      // No resubscription needed
     }
-    
+
     // Call custom update callback if provided
     widget.didUpdateWidget?.call(widget, this);
     super.update(newWidget);
@@ -183,10 +186,7 @@ class BindElement<T> extends InheritedElement {
   ///
   /// This method sets the `_dirty` flag to `true`, indicating that the widget needs to be updated.
   /// It then schedules a rebuild of the widget by calling [markNeedsBuild()].
-  void getUpdate() => {
-    _dirty = true,
-    markNeedsBuild()
-  };
+  void getUpdate() => {_dirty = true, markNeedsBuild()};
 
   @override
   void notifyClients(Binder<T> oldWidget) {

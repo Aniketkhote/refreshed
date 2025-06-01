@@ -11,9 +11,9 @@ extension PageArgExtension<T> on BuildContext {
 
   /// Retrieves the [PageSettings] associated with the current modal route's settings arguments.
   PageSettings? get pageSettings => switch (settings?.arguments) {
-    PageSettings ps => ps,
-    _ => null,
-  };
+        PageSettings ps => ps,
+        _ => null,
+      };
 
   /// Retrieves the arguments associated with the current modal route's settings.
   dynamic get arguments => pageSettings?.arguments ?? settings?.arguments;
@@ -25,17 +25,18 @@ extension PageArgExtension<T> on BuildContext {
   Router<T> get router => Router.of(this);
 
   /// Retrieves the location (path) associated with the current build context.
-  String get location => switch ((delegate.currentConfiguration, router.routeInformationParser)) {
-    // No configuration available, return root path
-    (null, _) => "/",
-    
-    // Configuration exists and parser is compatible
-    (RouteDecoder config, RouteInformationParser<RouteDecoder> parser) => 
-        parser.restoreRouteInformation(config)?.uri.path ?? "/",
-    
-    // Configuration exists but parser is not compatible
-    _ => "/",
-  };
+  String get location =>
+      switch ((delegate.currentConfiguration, router.routeInformationParser)) {
+        // No configuration available, return root path
+        (null, _) => "/",
+
+        // Configuration exists and parser is compatible
+        (RouteDecoder config, RouteInformationParser<RouteDecoder> parser) =>
+          parser.restoreRouteInformation(config)?.uri.path ?? "/",
+
+        // Configuration exists but parser is not compatible
+        _ => "/",
+      };
 
   /// Retrieves the delegate associated with the current router.
   GetDelegate get delegate => router.routerDelegate as GetDelegate;
@@ -80,16 +81,17 @@ class PageSettings extends RouteSettings {
   PageSettings copy({
     Uri? uri,
     Object? arguments,
-  }) => PageSettings(
-    uri ?? this.uri,
-    arguments ?? this.arguments,
-  );
+  }) =>
+      PageSettings(
+        uri ?? this.uri,
+        arguments ?? this.arguments,
+      );
 
   @override
   bool operator ==(Object other) => switch (other) {
-    PageSettings ps => uri == ps.uri && arguments == ps.arguments,
-    _ => identical(this, other),
-  };
+        PageSettings ps => uri == ps.uri && arguments == ps.arguments,
+        _ => identical(this, other),
+      };
 
   @override
   int get hashCode => Object.hash(uri, arguments);

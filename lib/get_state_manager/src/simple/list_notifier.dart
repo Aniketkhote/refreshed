@@ -63,9 +63,9 @@ mixin ListNotifierSingleMixin on Listenable {
   }
 
   void _notifyUpdate() => switch (_updaters) {
-    null => null,
-    var updaters => updaters.toList().forEach((element) => element())
-  };
+        null => null,
+        var updaters => updaters.toList().forEach((element) => element())
+      };
 
   /// Checks if the notifier has been disposed.
   bool get isDisposed => _updaters == null;
@@ -102,9 +102,9 @@ mixin ListNotifierGroupMixin on Listenable {
       HashMap<Object?, ListNotifierSingleMixin>();
 
   void _notifyGroupUpdate(Object id) => switch (_updatersGroupIds?[id]) {
-    var updater? => updater._notifyUpdate(),
-    _ => null
-  };
+        var updater? => updater._notifyUpdate(),
+        _ => null
+      };
 
   /// Notifies all children of a given group ID.
   @protected
@@ -164,12 +164,9 @@ mixin ListNotifierGroupMixin on Listenable {
 
   /// Disposes of a specific ID from future updates.
   void disposeId(Object id) => switch (_updatersGroupIds) {
-    var groupIds? => {
-      groupIds[id]?.dispose(),
-      groupIds.remove(id)
-    },
-    _ => null
-  };
+        var groupIds? => {groupIds[id]?.dispose(), groupIds.remove(id)},
+        _ => null
+      };
 }
 
 /// A class responsible for managing notifications and listeners.
@@ -192,25 +189,25 @@ class Notifier {
 
   /// Reads data from the provided [updaters] and adds listeners accordingly.
   void read(ListNotifierSingleMixin updaters) => switch (_notifyData?.updater) {
-    var listener? when !updaters.containsListener(listener) => {
-      updaters.addListener(listener),
-      add(() => updaters.removeListener(listener))
-    },
-    _ => null
-  };
+        var listener? when !updaters.containsListener(listener) => {
+            updaters.addListener(listener),
+            add(() => updaters.removeListener(listener))
+          },
+        _ => null
+      };
 
   /// Appends data to the provided [data] and executes the [builder] function.
   T append<T>(NotifyData data, T Function() builder) {
     _notifyData = data;
     final T result = builder();
-    
+
     switch ((data.disposers.isEmpty, data.throwException)) {
       case (true, true):
         throw ObxError();
       case _:
         break;
     }
-    
+
     _notifyData = null;
     return result;
   }

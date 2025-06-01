@@ -60,16 +60,17 @@ class RouteDecoder {
 
   /// Retrieves arguments cast to a specific type [T], or `null` if type mismatch.
   T? arguments<T>() => switch (args) {
-    T t => t,
-    _ => null,
-  };
+        T t => t,
+        _ => null,
+      };
 
   @override
   bool operator ==(Object other) => switch (other) {
-    RouteDecoder decoder => listEquals(decoder.currentTreeBranch, currentTreeBranch) && 
-                            decoder.pageSettings == pageSettings,
-    _ => identical(this, other),
-  };
+        RouteDecoder decoder =>
+          listEquals(decoder.currentTreeBranch, currentTreeBranch) &&
+              decoder.pageSettings == pageSettings,
+        _ => identical(this, other),
+      };
 
   @override
   int get hashCode => Object.hash(currentTreeBranch, pageSettings);
@@ -207,11 +208,11 @@ class ParseRouteTree {
   Map<String, String> _parseParams(String path, PathDecoded routePath) {
     // Create an empty map for parameters
     final params = <String, String>{};
-    
+
     // Try to parse the URI
     final uri = Uri.tryParse(path);
     if (uri == null) return params;
-    
+
     // Try to match the path with the route's regex
     final match = routePath.regex.firstMatch(uri.path);
     if (match != null) {
@@ -224,7 +225,7 @@ class ParseRouteTree {
         }
       }
     }
-    
+
     return params;
   }
 }
@@ -233,8 +234,9 @@ class ParseRouteTree {
 extension FirstWhereOrNullExt<T> on List<T> {
   /// Returns the first element satisfying [test], or `null` if none are found.
   T? firstWhereOrNull(bool Function(T element) test) => switch (this) {
-    [] => null, // Empty list case
-    [var first, ...] when test(first) => first, // First element matches
-    [_, ...var rest] => rest.firstWhereOrNull(test), // Check rest of the list
-  };
+        [] => null, // Empty list case
+        [var first, ...] when test(first) => first, // First element matches
+        [_, ...var rest] =>
+          rest.firstWhereOrNull(test), // Check rest of the list
+      };
 }

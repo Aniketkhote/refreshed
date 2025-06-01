@@ -31,10 +31,10 @@ class GetInformationParser extends RouteInformationParser<RouteDecoder> {
   ) {
     final uri = routeInformation.uri;
     final pathString = uri.toString();
-    
+
     // Determine the location using pattern matching on the path and root route existence
     final String location;
-    
+
     // Check empty/root path with pattern matching on root route existence
     if (pathString.isEmpty || pathString == '/') {
       if (!_hasRegisteredRootRoute()) {
@@ -56,12 +56,11 @@ class GetInformationParser extends RouteInformationParser<RouteDecoder> {
     // Return the RouteDecoder based on the final location
     return SynchronousFuture(RouteDecoder.fromRoute(location));
   }
-  
+
   /// Helper method to check if a root route ('/') is registered
-  bool _hasRegisteredRootRoute() => 
-      (Get.rootController.rootDelegate)
-          .registeredRoutes
-          .any((element) => element.name == '/');
+  bool _hasRegisteredRootRoute() => (Get.rootController.rootDelegate)
+      .registeredRoutes
+      .any((element) => element.name == '/');
 
   /// Restores route information from a RouteDecoder for platform navigation
   ///

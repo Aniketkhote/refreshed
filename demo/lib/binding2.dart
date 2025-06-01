@@ -54,9 +54,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeController controller = Get.find();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
+      appBar: AppBar(title: const Text('Home')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -98,12 +96,8 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ProfileController controller = Get.find();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: Center(
-        child: Text('Profile Screen ${controller.initialized}'),
-      ),
+      appBar: AppBar(title: const Text('Profile')),
+      body: Center(child: Text('Profile Screen ${controller.initialized}')),
     );
   }
 }

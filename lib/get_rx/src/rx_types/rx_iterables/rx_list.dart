@@ -149,10 +149,8 @@ extension ListExtension<E> on List<E> {
   /// Add [item] to [List<E>] only if [item] is not null.
   ///
   /// If [item] is not null, it is added to the list.
-  void addNonNull(E? item) => switch (item) {
-    var value? => add(value),
-    _ => null
-  };
+  void addNonNull(E? item) =>
+      switch (item) { var value? => add(value), _ => null };
 
   /// Add [item] to `List<E>` only if [condition] is true.
   ///
@@ -162,33 +160,22 @@ extension ListExtension<E> on List<E> {
   /// Adds [Iterable<E>] to [List<E>] only if [condition] is true.
   ///
   /// If [condition] is a boolean value and evaluates to true, [items] are added to the list.
-  void addAllIf(bool condition, Iterable<E> items) => condition ? addAll(items) : null;
+  void addAllIf(bool condition, Iterable<E> items) =>
+      condition ? addAll(items) : null;
 
   /// Replaces all existing items of this list with [item].
   ///
   /// Clears the list and adds [item].
   void assign(E item) => switch (this) {
-    RxList<E> rxList => {
-      rxList.value.clear(),
-      add(item)
-    },
-    _ => {
-      clear(),
-      add(item)
-    }
-  };
+        RxList<E> rxList => {rxList.value.clear(), add(item)},
+        _ => {clear(), add(item)}
+      };
 
   /// Replaces all existing items of this list with [items].
   ///
   /// Clears the list and adds all elements from [items].
   void assignAll(Iterable<E> items) => switch (this) {
-    RxList<E> rxList => {
-      rxList.value.clear(),
-      addAll(items)
-    },
-    _ => {
-      clear(),
-      addAll(items)
-    }
-  };
+        RxList<E> rxList => {rxList.value.clear(), addAll(items)},
+        _ => {clear(), addAll(items)}
+      };
 }

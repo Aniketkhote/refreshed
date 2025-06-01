@@ -11,11 +11,11 @@ import "package:refreshed/get_rx/src/rx_workers/utils/debouncer.dart";
 /// returns it as is. If [condition] is a function that returns a boolean value, invokes
 /// the function and returns its result. Otherwise, returns `true`.
 bool _conditional(dynamic condition) => switch (condition) {
-  null => true,
-  bool b => b,
-  bool Function() func => func(),
-  _ => true
-};
+      null => true,
+      bool b => b,
+      bool Function() func => func(),
+      _ => true
+    };
 
 /// A typedef representing a callback function used by workers.
 ///
@@ -33,8 +33,8 @@ class Workers {
 
   /// Disposes all workers in the collection that have not already been disposed.
   void dispose() => workers
-    .where((worker) => !worker._disposed)
-    .forEach((worker) => worker.dispose());
+      .where((worker) => !worker._disposed)
+      .forEach((worker) => worker.dispose());
 }
 
 ///
@@ -155,11 +155,11 @@ Worker once<T>(
     (event) => switch (_conditional(condition)) {
       false => null,
       true => {
-        ref._disposed = true,
-        ref._log("called"),
-        sub?.cancel(),
-        callback(event)
-      }
+          ref._disposed = true,
+          ref._log("called"),
+          sub?.cancel(),
+          callback(event)
+        }
     },
     onError: onError,
     onDone: onDone,
@@ -200,11 +200,11 @@ Worker interval<T>(
     (event) async => switch ((debounceActive, _conditional(condition))) {
       (true, _) || (_, false) => null,
       _ => {
-        debounceActive = true,
-        await Future.delayed(time),
-        debounceActive = false,
-        callback(event)
-      }
+          debounceActive = true,
+          await Future.delayed(time),
+          debounceActive = false,
+          callback(event)
+        }
     },
     onError: onError,
     onDone: onDone,
@@ -277,13 +277,9 @@ class Worker {
   ///
   /// If the worker has already been disposed, this method does nothing.
   void dispose() => switch (_disposed) {
-    true => _log("already disposed"),
-    false => {
-      _disposed = true,
-      worker(),
-      _log("disposed")
-    }
-  };
+        true => _log("already disposed"),
+        false => {_disposed = true, worker(), _log("disposed")}
+      };
 
   /// Alias for the [dispose] method, allowing the [Worker] instance to be called directly for disposal.
   void call() => dispose();

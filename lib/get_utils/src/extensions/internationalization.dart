@@ -87,34 +87,42 @@ extension TranslationExtension on String {
     return translationsWithNoCountry[Get.locale!.languageCode.split("_").first];
   }
 
-  String get tr => switch ((Get.locale?.languageCode, _fullLocaleAndKey, _getSimilarLanguageTranslation)) {
-    // Returns the key if locale is null
-    (null, _, _) => this,
-    
-    // Full locale and key match
-    (_, true, _) => Get.translations["${Get.locale!.languageCode}_${Get.locale!.countryCode}"]![this]!,
-    
-    // Similar language translation available
-    (_, _, Map<String, String> similar) when similar.containsKey(this) => similar[this]!,
-    
-    // Fallback locale handling
-    (_, _, _) when Get.fallbackLocale != null => () {
-      final fallback = Get.fallbackLocale!;
-      final String key = "${fallback.languageCode}_${fallback.countryCode}";
-      
-      if (Get.translations.containsKey(key) && Get.translations[key]!.containsKey(this)) {
-        return Get.translations[key]![this]!;
-      }
-      if (Get.translations.containsKey(fallback.languageCode) && 
-          Get.translations[fallback.languageCode]!.containsKey(this)) {
-        return Get.translations[fallback.languageCode]![this]!;
-      }
-      return this;
-    }(),
-    
-    // Default case - return the key itself
-    _ => this
-  };
+  String get tr => switch ((
+        Get.locale?.languageCode,
+        _fullLocaleAndKey,
+        _getSimilarLanguageTranslation
+      )) {
+        // Returns the key if locale is null
+        (null, _, _) => this,
+
+        // Full locale and key match
+        (_, true, _) => Get.translations[
+            "${Get.locale!.languageCode}_${Get.locale!.countryCode}"]![this]!,
+
+        // Similar language translation available
+        (_, _, Map<String, String> similar) when similar.containsKey(this) =>
+          similar[this]!,
+
+        // Fallback locale handling
+        (_, _, _) when Get.fallbackLocale != null => () {
+            final fallback = Get.fallbackLocale!;
+            final String key =
+                "${fallback.languageCode}_${fallback.countryCode}";
+
+            if (Get.translations.containsKey(key) &&
+                Get.translations[key]!.containsKey(this)) {
+              return Get.translations[key]![this]!;
+            }
+            if (Get.translations.containsKey(fallback.languageCode) &&
+                Get.translations[fallback.languageCode]!.containsKey(this)) {
+              return Get.translations[fallback.languageCode]![this]!;
+            }
+            return this;
+          }(),
+
+        // Default case - return the key itself
+        _ => this
+      };
 
   /// Returns a translated string with arguments replaced.
   ///
@@ -136,10 +144,8 @@ extension TranslationExtension on String {
     String? pluralKey,
     int? i,
     List<String> args = const <String>[],
-  ]) => switch (i) {
-    1 => trArgs(args),
-    _ => pluralKey!.trArgs(args)
-  };
+  ]) =>
+      switch (i) { 1 => trArgs(args), _ => pluralKey!.trArgs(args) };
 
   /// Returns a translated string with parameters replaced.
   ///
@@ -161,8 +167,6 @@ extension TranslationExtension on String {
     String? pluralKey,
     int? i,
     Map<String, String> params = const <String, String>{},
-  ]) => switch (i) {
-    1 => trParams(params),
-    _ => pluralKey!.trParams(params)
-  };
+  ]) =>
+      switch (i) { 1 => trParams(params), _ => pluralKey!.trParams(params) };
 }

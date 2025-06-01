@@ -203,12 +203,12 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   // returns the popped page
   Future<T?> _doPopPage<T>(T result) async {
     final currentBranch = currentConfiguration?.currentTreeBranch;
-    
+
     // If we don't have a current branch or it only has one item, just pop history
     if (currentBranch == null || currentBranch.length <= 1) {
       return await _popHistory(result);
     }
-    
+
     // We have a branch with multiple items, so we need to handle partial popping
     final remaining = currentBranch.take(currentBranch.length - 1);
     final prevHistoryEntry = switch (_activePages.length) {
@@ -220,7 +220,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     if (prevHistoryEntry != null) {
       final newLocation = remaining.last.name;
       final prevLocation = prevHistoryEntry.pageSettings?.name;
-      
+
       if (newLocation == prevLocation) {
         return await _popHistory(result);
       }
@@ -238,9 +238,9 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   Future<T?> _pop<T>(PopMode mode, T result) => switch (mode) {
-    PopMode.history => _popHistory<T>(result),
-    PopMode.page => _popPage<T>(result),
-  };
+        PopMode.history => _popHistory<T>(result),
+        PopMode.page => _popPage<T>(result),
+      };
 
   Future<T?> popHistory<T>(T result) async {
     return await _popHistory<T>(result);
@@ -265,9 +265,9 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }
 
   bool _canPop(PopMode mode) => switch (mode) {
-    PopMode.history => _canPopHistory(),
-    PopMode.page || _ => _canPopPage(),
-  };
+        PopMode.history => _canPopHistory(),
+        PopMode.page || _ => _canPopPage(),
+      };
 
   /// gets the visual pages from the current _activePages entry
   ///
@@ -593,7 +593,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }) async {
     // Remove history or page entries until we reach the target route
     var iterator = currentConfiguration;
-    
+
     // Keep popping until we can't pop anymore or we find the target route
     while (iterator != null && _canPop(popMode)) {
       // Check if we've reached the target route
@@ -602,12 +602,12 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       if (iterator.pageSettings?.name == fullRoute) {
         break;
       }
-      
+
       // Pop one level and update our iterator to the new configuration
       await _pop(popMode, null);
       iterator = currentConfiguration;
     }
-    
+
     // Notify listeners about the navigation changes
     notifyListeners();
   }
@@ -697,10 +697,10 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       var p when p.isEmpty => arguments.query,
       var p => p,
     };
-    
+
     // Add query parameters to params for complete parameter set
     arguments.params.addAll(arguments.query);
-    
+
     // Add parameters to decoder if it doesn't have any
     if (decoder.parameters.isEmpty) {
       decoder.parameters.addAll(parameters);
@@ -754,19 +754,22 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
 
       // Duplicate found with reorderRoutes or recreate mode
       // Both modes remove the existing page and add the new one
-      case (var existingPage, PreventDuplicateHandlingMode.reorderRoutes) ||  
-           (var existingPage, PreventDuplicateHandlingMode.recreate):
+      case (var existingPage, PreventDuplicateHandlingMode.reorderRoutes) ||
+            (var existingPage, PreventDuplicateHandlingMode.recreate):
         _activePages.remove(existingPage);
         _activePages.add(res);
 
       // Duplicate found with popUntilOriginalRoute mode
-      case (var existingPage, PreventDuplicateHandlingMode.popUntilOriginalRoute):
+      case (
+          var existingPage,
+          PreventDuplicateHandlingMode.popUntilOriginalRoute
+        ):
         // Pop until we reach the original route
         while (_activePages.last == existingPage) {
           _popWithResult();
         }
     }
-    
+
     // Notify listeners if needed
     if (rebuildStack) {
       notifyListeners();
@@ -805,7 +808,7 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
       currentRoute = route;
       return true;
     });
-    
+
     // Handle the route based on its type
     return switch (currentRoute) {
       // If it's a popup route (dialog, bottom sheet, etc.), try to pop it
@@ -828,13 +831,13 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
   }) async {
     // First handle any popup routes (dialogs, bottom sheets, etc.)
     final wasPopup = await handlePopupRoutes(result: result);
-    
+
     // Return early if a popup was handled
     if (wasPopup) return true;
 
     // Use the provided popMode or fall back to the default backButtonPopMode
     final mode = popMode ?? backButtonPopMode;
-    
+
     // Handle pop based on whether we can pop with the current mode
     if (_canPop(mode)) {
       // We can pop something, so do it and notify listeners
@@ -865,13 +868,13 @@ class GetDelegate extends RouterDelegate<RouteDecoder>
     if (!route.didPop(result)) {
       return false;
     }
-    
+
     // Route was successfully popped, update navigation state
     _popWithResult(result);
-    
+
     // Notify listeners of the change
     notifyListeners();
-    
+
     // Return success
     return true;
   }

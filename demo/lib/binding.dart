@@ -34,9 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'GetX Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       binds: HomeBinding().dependencies(),
       home: const HomeScreen(),
     );
@@ -51,15 +49,14 @@ class HomeScreen extends StatelessWidget {
     final CountController controller = Get.find();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('GetX Example'),
-      ),
+      appBar: AppBar(title: const Text('GetX Example')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Obx(() =>
-                Text('Count: ${controller.count}')), // Observe count changes
+            Obx(
+              () => Text('Count: ${controller.count}'),
+            ), // Observe count changes
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => controller.increment(),
@@ -83,9 +80,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ProfileController controller = Get.find();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('GetX Example'),
-      ),
+      appBar: AppBar(title: const Text('GetX Example')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

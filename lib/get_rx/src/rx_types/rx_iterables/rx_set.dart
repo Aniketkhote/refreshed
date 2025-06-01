@@ -88,17 +88,12 @@ extension SetExtension<E> on Set<E> {
   void addIf(bool condition, E item) => condition ? add(item) : null;
 
   /// Adds [Iterable<E>] to the Set only if [condition] is true.
-  void addAllIf(bool condition, Iterable<E> items) => condition ? addAll(items) : null;
+  void addAllIf(bool condition, Iterable<E> items) =>
+      condition ? addAll(items) : null;
 
   /// Replaces all existing items of this Set with [item]
-  void assign(E item) => {
-    clear(),
-    add(item)
-  };
+  void assign(E item) => {clear(), add(item)};
 
   /// Replaces all existing items of this Set with [items]
-  void assignAll(Iterable<E> items) => {
-    clear(),
-    addAll(items)
-  };
+  void assignAll(Iterable<E> items) => {clear(), addAll(items)};
 }

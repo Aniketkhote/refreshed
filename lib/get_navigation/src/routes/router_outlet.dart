@@ -152,13 +152,13 @@ class GetRouterOutlet extends RouterOutlet<GetDelegate, RouteDecoder> {
                     Get.rootController.rootDelegate.navigatorKey,
                 child: GetNavigator(
                   restorationScopeId: restorationScopeId,
-                  onPopPage: onPopPage ?? 
+                  onPopPage: onPopPage ??
                       (Route route, result) => switch (route.didPop(result)) {
-                        // If didPop returns false, the route couldn't be popped
-                        false => false,
-                        // If didPop returns true, the route was successfully popped
-                        true => true,
-                      },
+                            // If didPop returns false, the route couldn't be popped
+                            false => false,
+                            // If didPop returns true, the route was successfully popped
+                            true => true,
+                          },
                   pages: pageRes.toList(),
                   key: navigatorKey,
                 ),
@@ -206,11 +206,11 @@ extension PagesListExt<T> on List<GetPage<T>> {
 
   /// Returns the routes after the given route.
   Iterable<GetPage<T>> pickAfterRoute(String route) => switch (route) {
-    // Special case for root route: take only the first route after root
-    "/" => pickFromRoute(route).skip(1).take(1),
-    // For all other routes: take all routes after the specified route
-    _ => pickFromRoute(route).skip(1),
-  };
+        // Special case for root route: take only the first route after root
+        "/" => pickFromRoute(route).skip(1).take(1),
+        // For all other routes: take all routes after the specified route
+        _ => pickFromRoute(route).skip(1),
+      };
 }
 
 /// A widget builder for indexed navigation routes.
@@ -239,7 +239,7 @@ class IndexedRouteBuilder<T> extends StatelessWidget {
         return index;
       }
     }
-    
+
     // Default to index 0 if no match found
     return 0;
   }

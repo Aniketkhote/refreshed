@@ -53,23 +53,18 @@ extension MapExtension<K, V> on Map<K, V> {
   RxMap<K, V> get obs => RxMap<K, V>(this);
 
   /// Adds a key-value pair to the map if the condition is true.
-  void addIf(bool condition, K key, V value) => condition ? this[key] = value : null;
+  void addIf(bool condition, K key, V value) =>
+      condition ? this[key] = value : null;
 
   /// Adds all key-value pairs from another map if the condition is true.
-  void addAllIf(bool condition, Map<K, V> values) => condition ? addAll(values) : null;
+  void addAllIf(bool condition, Map<K, V> values) =>
+      condition ? addAll(values) : null;
 
   /// Assigns a new key-value pair to the map, clearing the existing map if it's an RxMap.
   void assign(K key, V val) => switch (this) {
-    RxMap<K, V> map => {
-      map.value.clear(),
-      map[key] = val,
-      map.refresh()
-    },
-    _ => {
-      clear(),
-      this[key] = val
-    }
-  };
+        RxMap<K, V> map => {map.value.clear(), map[key] = val, map.refresh()},
+        _ => {clear(), this[key] = val}
+      };
 
   /// Assigns all key-value pairs from another map to this map.
   void assignAll(Map<K, V> val) {

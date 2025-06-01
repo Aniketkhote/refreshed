@@ -62,10 +62,9 @@ class MiddlewareRunner {
   /// or null if no middleware redirects.
   RouteSettings? runRedirect(String? route) {
     // Use firstWhereOrNull with pattern matching to find the first middleware that redirects
-    final redirectingMiddleware = _middlewares.firstWhereOrNull(
-      (middleware) => middleware.redirect(route) != null
-    );
-    
+    final redirectingMiddleware = _middlewares
+        .firstWhereOrNull((middleware) => middleware.redirect(route) != null);
+
     // Return the redirect result from the middleware or null if none found
     return redirectingMiddleware?.redirect(route);
   }
@@ -121,10 +120,10 @@ class PageRedirect {
       // Break if we lose essential state
       if (settings == null || route == null) break;
     }
-    
+
     // Determine the final route to use (unknown or regular)
     final r = (isUnknown ? unk : rou)!;
-    
+
     // Create and return the page route with all properties from the route
     return GetPageRoute<T>(
       page: r.page,
@@ -163,28 +162,28 @@ class PageRedirect {
   bool needRecheck(BuildContext context) {
     // Ensure settings is initialized
     settings ??= route;
-    
+
     // Get the matched route for the current settings
     final match = context.delegate.matchRoute(settings!.name!);
-    
+
     // Handle case when no route is found
     if (match.route == null) {
       isUnknown = true;
       return false;
     }
-    
+
     // If no middlewares, no need to recheck
     if (match.route!.middlewares.isEmpty) {
       return false;
     }
-    
+
     // Process middlewares
     final matchedRoute = match.route!;
     final runner = MiddlewareRunner(matchedRoute.middlewares);
     route = runner.runOnPageCalled(matchedRoute);
     addPageParameter(route!);
     settings = runner.runRedirect(settings!.name) ?? settings;
-    
+
     // Return true if settings changed (redirection happened)
     return settings != matchedRoute;
   }
@@ -193,9 +192,9 @@ class PageRedirect {
   ///
   /// Uses pattern matching to handle the nullable parameters map.
   void addPageParameter(GetPage route) => switch (route.parameters) {
-    // When parameters exist, add them to the global parameters
-    Map<String, String> params => Get.parameters.addAll(params),
-    // When parameters are null, do nothing
-    null => {},
-  };
+        // When parameters exist, add them to the global parameters
+        Map<String, String> params => Get.parameters.addAll(params),
+        // When parameters are null, do nothing
+        null => {},
+      };
 }

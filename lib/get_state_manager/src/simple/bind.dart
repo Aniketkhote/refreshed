@@ -133,12 +133,13 @@ abstract class Bind<T> extends StatelessWidget {
     bool autoRemove = true,
     bool assignId = true,
     String? tag,
-  }) => _FactoryBind<S>(
-    init: () => builder(),
-    autoRemove: autoRemove,
-    assignId: assignId,
-    tag: tag,
-  );
+  }) =>
+      _FactoryBind<S>(
+        init: () => builder(),
+        autoRemove: autoRemove,
+        assignId: assignId,
+        tag: tag,
+      );
 
   /// Creates a binding and puts the specified dependency into the GetX service locator.
   ///
@@ -185,7 +186,7 @@ abstract class Bind<T> extends StatelessWidget {
   static Future<void> replace<P>(P child, {String? tag}) async {
     final info = Get.getInstanceInfo<P>(tag: tag);
     final permanent = info.isPermanent ?? false;
-    
+
     // Delete existing instance and put the new one
     await delete<P>(tag: tag, force: permanent);
     Get.put(child, tag: tag, permanent: permanent);
@@ -200,17 +201,12 @@ abstract class Bind<T> extends StatelessWidget {
     // Get instance info and determine if it should be permanent
     final info = Get.getInstanceInfo<P>(tag: tag);
     final permanent = info.isPermanent ?? false;
-    
+
     // Delete existing instance and register the new lazy builder
     await delete<P>(tag: tag, force: permanent);
-    Get.lazyPut(
-      builder, 
-      tag: tag, 
-      fenix: switch (fenix) {
-        null => permanent,
-        var value => value
-      }
-    );
+    Get.lazyPut(builder,
+        tag: tag,
+        fenix: switch (fenix) { null => permanent, var value => value });
   }
 
   /// Retrieves the dependency of type [T] from the nearest ancestor [Binder] widget.
@@ -283,20 +279,20 @@ class _FactoryBind<T> extends Bind<T> {
 
   @override
   Bind<T> _copyWithChild(Widget child) => Bind<T>.builder(
-    init: init,
-    create: create,
-    global: global,
-    autoRemove: autoRemove,
-    assignId: assignId,
-    initState: initState,
-    filter: filter,
-    tag: tag,
-    dispose: dispose,
-    id: id,
-    didChangeDependencies: didChangeDependencies,
-    didUpdateWidget: didUpdateWidget,
-    child: child,
-  );
+        init: init,
+        create: create,
+        global: global,
+        autoRemove: autoRemove,
+        assignId: assignId,
+        initState: initState,
+        filter: filter,
+        tag: tag,
+        dispose: dispose,
+        id: id,
+        didChangeDependencies: didChangeDependencies,
+        didUpdateWidget: didUpdateWidget,
+        child: child,
+      );
 
   @override
   Widget build(BuildContext context) => switch ((create, child)) {

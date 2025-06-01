@@ -44,14 +44,10 @@ mixin RxObjectMixin<T> on GetListenable<T> {
   /// Widget, only if it's different from the previous value.
   @override
   set value(T val) => switch ((isDisposed, value == val && !firstRebuild)) {
-    (true, _) => null,
-    (_, true) => sentToStream = false,
-    _ => {
-      sentToStream = true,
-      firstRebuild = false,
-      super.value = val
-    }
-  };
+        (true, _) => null,
+        (_, true) => sentToStream = false,
+        _ => {sentToStream = true, firstRebuild = false, super.value = val}
+      };
 
   /// Returns a [StreamSubscription] similar to [listen], but with the
   /// added benefit that it primes the stream with the current [value], rather
@@ -159,7 +155,7 @@ class Rx<T> extends _RxImpl<T> {
   @override
   dynamic toJson() {
     if (value == null) return null;
-    
+
     try {
       // Use dynamic to safely call toJson if it exists
       final dynamic val = value;
@@ -179,7 +175,7 @@ class Rxn<T> extends Rx<T?> {
   @override
   dynamic toJson() {
     if (value == null) return null;
-    
+
     try {
       // Use dynamic to safely call toJson if it exists
       final dynamic val = value;
@@ -220,7 +216,7 @@ extension BoolExtension on bool {
 extension RxT<T extends Object> on T {
   /// Returns a `Rx` instance with [this] `T` as initial value.
   Rx<T> get obs => Rx<T>(this);
-  
+
   /// Returns a `Rx` instance with [this] `T` as initial value.
   /// This method is identical to the `obs` getter but allows for more
   /// explicit type specification when needed.

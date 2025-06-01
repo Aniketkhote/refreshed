@@ -97,10 +97,7 @@ class Menu extends GetView {
               //   onConfirm: () => Get.close(),
               // );
             },
-            leading: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
+            leading: const Icon(Icons.delete, color: Colors.red),
             title: Text('Delete post ${index + 1}'),
           ),
         ),

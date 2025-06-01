@@ -27,16 +27,14 @@ extension RxnStringExt on Rx<String?> {
 
   /// Returns the string without any leading and trailing whitespace.
   String? trim() => value?.trim();
-  
+
   /// Returns true if the string is null or empty.
-  bool get isNullOrEmpty => switch (value) {
-    null => true,
-    var str => str.isEmpty
-  };
-  
+  bool get isNullOrEmpty =>
+      switch (value) { null => true, var str => str.isEmpty };
+
   /// Returns the string or a default value if the string is null.
   String orDefault(String defaultValue) => value ?? defaultValue;
-  
+
   /// Returns the length of the string or 0 if the string is null.
   int get length => value?.length ?? 0;
 }

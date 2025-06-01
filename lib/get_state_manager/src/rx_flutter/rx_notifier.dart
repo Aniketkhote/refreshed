@@ -12,11 +12,11 @@ extension _Empty on Object {
   ///
   /// Returns `true` if the object is `null`, an empty `Iterable`, an empty `String`, or an empty `Map`.
   bool _isEmpty() => switch (this) {
-    Iterable val => val.isEmpty,
-    String val => val.trim().isEmpty,
-    Map val => val.isEmpty,
-    _ => false
-  };
+        Iterable val => val.isEmpty,
+        String val => val.trim().isEmpty,
+        Map val => val.isEmpty,
+        _ => false
+      };
 }
 
 /// A mixin that provides state management capabilities.
@@ -44,7 +44,7 @@ mixin StateMixin<T> on ListNotifier {
   /// Sets the status of the state.
   set status(GetStatus<T> newStatus) {
     if (newStatus == status) return;
-    
+
     _status = newStatus;
     if (newStatus case SuccessStatus<T> success) {
       _value = success.data;
@@ -61,13 +61,13 @@ mixin StateMixin<T> on ListNotifier {
   @protected
   set value(T newValue) {
     if (_value == newValue) return;
-    
+
     _value = newValue;
     refresh();
   }
 
   @protected
-  void change(GetStatus<T> status) => 
+  void change(GetStatus<T> status) =>
       status != this.status ? this.status = status : null;
 
   /// Fetches data asynchronously and updates the state accordingly.
@@ -104,8 +104,9 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
 
   /// The subject stream controller for broadcasting updates.
   StreamController<T> get subject {
-    _controller ??= StreamController<T>.broadcast(
-        onCancel: addListener(_streamListener))..add(_value);
+    _controller ??=
+        StreamController<T>.broadcast(onCancel: addListener(_streamListener))
+          ..add(_value);
     return _controller!;
   }
 
@@ -132,15 +133,13 @@ class GetListenable<T> extends ListNotifierSingle implements RxInterface<T> {
 
   void _notify() => refresh();
 
-  set value(T newValue) => newValue == _value ? null : {
-    _value = newValue,
-    _notify()
-  };
+  set value(T newValue) =>
+      newValue == _value ? null : {_value = newValue, _notify()};
 
   T? call([T? v]) => switch (v) {
-    var newValue? => (value = newValue, value),
-    _ => value
-  } as T?;
+        var newValue? => (value = newValue, value),
+        _ => value
+      } as T?;
 
   @override
   StreamSubscription<T> listen(
@@ -198,10 +197,8 @@ class Value<T> extends ListNotifier
   /// Converts the current value to JSON.
   ///
   /// This method assumes that the generic type `T` has a `toJson` method defined.
-  dynamic toJson() => switch (value) {
-    Map map => map,
-    var val => (val as dynamic).toJson()
-  };
+  dynamic toJson() =>
+      switch (value) { Map map => map, var val => (val as dynamic).toJson() };
 }
 
 /// A class representing a state notifier with a Get lifecycle.
@@ -226,17 +223,14 @@ extension StateExtension<T> on StateMixin<T> {
   }) =>
       Observer(
         builder: (context) => switch (status) {
-          var s when s.isLoading => 
+          var s when s.isLoading =>
             onLoading ?? const Center(child: CircularProgressIndicator()),
-          var s when s.isError => 
-            onError != null
+          var s when s.isError => onError != null
               ? onError(s.errorMessage)
               : Center(child: Text("An error occurred: ${s.errorMessage}")),
-          var s when s.isEmpty => 
-            onEmpty ?? const SizedBox.shrink(),
-          var s when s.isSuccess => 
-            widget(value),
-          var s when s.isCustom => 
+          var s when s.isEmpty => onEmpty ?? const SizedBox.shrink(),
+          var s when s.isSuccess => widget(value),
+          var s when s.isCustom =>
             onCustom?.call(context) ?? const SizedBox.shrink(),
           _ => widget(value)
         },
@@ -311,23 +305,19 @@ extension StatusDataExtension<T, S> on GetStatus<T> {
   /// Checks if the status is a custom status.
   bool get isCustom => !isLoading && !isSuccess && !isError && !isEmpty;
 
-  dynamic get error => switch (this) {
-    ErrorStatus err => err.error,
-    _ => null
-  };
+  dynamic get error =>
+      switch (this) { ErrorStatus err => err.error, _ => null };
 
   /// Gets the error message associated with the status.
   String get errorMessage => switch (this) {
-    ErrorStatus<T, S> err when err.error != null => 
-      err.error is String ? err.error as String : err.error.toString(),
-    _ => ""
-  };
+        ErrorStatus<T, S> err when err.error != null =>
+          err.error is String ? err.error as String : err.error.toString(),
+        _ => ""
+      };
 
   /// Gets the data associated with the status if it is a success status.
-  T? get data => switch (this) {
-    SuccessStatus<T> success => success.data,
-    _ => null
-  };
+  T? get data =>
+      switch (this) { SuccessStatus<T> success => success.data, _ => null };
 }
 
 /// A status indicating that the state has been successfully updated with data of type `T`.

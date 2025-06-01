@@ -69,13 +69,14 @@ class Binder<T> extends InheritedWidget {
 
   @override
   bool updateShouldNotify(Binder<T> oldWidget) => switch ((oldWidget, this)) {
-    (var old, var current) when 
-        old.id != current.id || 
-        old.global != current.global || 
-        old.autoRemove != current.autoRemove || 
-        old.assignId != current.assignId => true,
-    _ => false
-  };
+        (var old, var current)
+            when old.id != current.id ||
+                old.global != current.global ||
+                old.autoRemove != current.autoRemove ||
+                old.assignId != current.assignId =>
+          true,
+        _ => false
+      };
 
   @override
   InheritedElement createElement() => BindElement<T>(this);

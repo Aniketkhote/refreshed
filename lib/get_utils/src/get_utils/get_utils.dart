@@ -32,28 +32,25 @@ class GetUtils {
   static bool isBlank(dynamic value) => _isEmpty(value);
 
   /// Checks if string is int or double.
-  static bool isNum(String? value) => switch (value) {
-    null => false,
-    _ => num.tryParse(value) is num
-  };
+  static bool isNum(String? value) =>
+      switch (value) { null => false, _ => num.tryParse(value) is num };
 
   /// Checks if a given [value] matches a [pattern] using a regular expression.
   ///
   /// Returns `true` if the [value] matches the [pattern], `false` otherwise.
-  static bool hasMatch(String? value, String pattern) => switch (value) {
-    null => false,
-    _ => RegExp(pattern).hasMatch(value)
-  };
+  static bool hasMatch(String? value, String pattern) =>
+      switch (value) { null => false, _ => RegExp(pattern).hasMatch(value) };
 
   /// Creates a path by concatenating the provided [path] and [segments].
   ///
   /// If [segments] is `null` or empty, the original [path] is returned.
   /// Otherwise, the [path] is concatenated with each segment from [segments]
   /// separated by a forward slash ('/').
-  static String createPath(String path, [Iterable<String>? segments]) => switch (segments) {
-    null || Iterable(isEmpty: true) => path,
-    _ => path + segments.map((e) => "/$e").join()
-  };
+  static String createPath(String path, [Iterable<String>? segments]) =>
+      switch (segments) {
+        null || Iterable(isEmpty: true) => path,
+        _ => path + segments.map((e) => "/$e").join()
+      };
 
   /// Utility function for printing logs with a specified prefix and additional information.
   ///

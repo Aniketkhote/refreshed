@@ -8,13 +8,13 @@ import 'package:refreshed/instance_manager.dart';
 
 /// Extracts the name of a route based on its instance type or returns null if not possible.
 String? _extractRouteName(Route? route) => switch (route) {
-  null => null,
-  _ when route.settings.name != null => route.settings.name,
-  GetPageRoute() => route.routeName,
-  GetDialogRoute() => "DIALOG ${route.hashCode}",
-  GetModalBottomSheetRoute() => "BOTTOMSHEET ${route.hashCode}",
-  _ => null,
-};
+      null => null,
+      _ when route.settings.name != null => route.settings.name,
+      GetPageRoute() => route.routeName,
+      GetDialogRoute() => "DIALOG ${route.hashCode}",
+      GetModalBottomSheetRoute() => "BOTTOMSHEET ${route.hashCode}",
+      _ => null,
+    };
 
 /// A custom NavigatorObserver for tracking route changes and managing routing data.
 class GetObserver extends NavigatorObserver {
@@ -132,9 +132,10 @@ class GetObserver extends NavigatorObserver {
       value.isBack = false;
       value.removed = routeName ?? "";
       value.previous = previousRouteName ?? '';
-      
+
       // Reset bottom sheet and dialog flags if needed
-      value.isBottomSheet = currentRoute.isBottomSheet ? false : value.isBottomSheet;
+      value.isBottomSheet =
+          currentRoute.isBottomSheet ? false : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
 
@@ -183,9 +184,10 @@ class GetObserver extends NavigatorObserver {
       value.isBack = false;
       value.removed = "";
       value.previous = oldName ?? '';
-      
+
       // Reset bottom sheet and dialog flags if needed
-      value.isBottomSheet = currentRoute.isBottomSheet ? false : value.isBottomSheet;
+      value.isBottomSheet =
+          currentRoute.isBottomSheet ? false : value.isBottomSheet;
       value.isDialog = currentRoute.isDialog ? false : value.isDialog;
     });
 
@@ -236,19 +238,19 @@ class _RouteData {
   });
 
   factory _RouteData.ofRoute(Route? route) => switch (route) {
-    null => _RouteData(
-      name: null,
-      isGetPageRoute: false,
-      isDialog: false,
-      isBottomSheet: false,
-    ),
-    _ => _RouteData(
-      name: _extractRouteName(route),
-      isGetPageRoute: route is GetPageRoute,
-      isDialog: route is GetDialogRoute,
-      isBottomSheet: route is GetModalBottomSheetRoute,
-    ),
-  };
+        null => _RouteData(
+            name: null,
+            isGetPageRoute: false,
+            isDialog: false,
+            isBottomSheet: false,
+          ),
+        _ => _RouteData(
+            name: _extractRouteName(route),
+            isGetPageRoute: route is GetPageRoute,
+            isDialog: route is GetDialogRoute,
+            isBottomSheet: route is GetModalBottomSheetRoute,
+          ),
+      };
 
   final bool isGetPageRoute;
   final bool isBottomSheet;
